@@ -1,0 +1,60 @@
+.flex-stretch {
+  flex: 1 0 auto;
+}
+.container-fluid {
+  width: 95%;
+  margin: auto;
+  margin-bottom: 1.5rem;
+}
+mat-sidenav-container {
+  height: 100%;
+
+  mat-sidenav {
+    overflow-x: hidden;
+    border: none;
+    box-shadow: -4px 7px 26px 3px rgba(0, 0, 0, 0.1);
+  }
+  .chevron-button {
+    transition: 300ms ease-in-out;
+    transform: rotate(0deg);
+    left: 0;
+    float: left;
+    position: absolute;
+    z-index: 999;
+    cursor: pointer;
+    border-radius: 50%;
+  }
+  .chevron-button:hover {
+    background: rgba(78, 110, 155, 0.579);
+  }
+
+  .chevron-button.rotated {
+    transform: rotate(180deg);
+  }
+}
+.img {
+  width: auto;
+  height: 75%;
+  //   margin-left: 0.3rem;
+}
+.text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0rem 1.1rem;
+  p {
+    font-size: 9px;
+    margin: 0;
+    letter-spacing: 0.1rem;
+    line-height: 0.6rem;
+    margin-top: 0.6rem;
+    color: #fff;
+  }
+  h3 {
+    margin: 0;
+    font-family: "Tomatoes" !important;
+    line-height: 1.3rem;
+    color: #fff;
+  }
+}

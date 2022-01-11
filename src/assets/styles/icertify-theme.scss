@@ -1,0 +1,53 @@
+@use "~@angular/material" as mat;
+@import "~@angular/material/theming";
+@include mat-core();
+
+$primary: (
+  300: #26184a,
+  500: #26184a,
+  900: #26184a,
+  contrast: (
+    300: #fff,
+    500: #fff,
+    900: #fff,
+  ),
+);
+
+$accent: (
+  300: #1d1d1d,
+  500: #1d1d1d,
+  900: #1d1d1d,
+  contrast: (
+    300: #fff,
+    500: #fff,
+    900: #fff,
+  ),
+);
+
+$warn: (
+  300: #e55353,
+  500: #e55353,
+  900: #e55353,
+  contrast: (
+    300: #fff,
+    500: #fff,
+    900: #fff,
+  ),
+);
+
+$icertify-primary: mat-palette($primary);
+$icertify-accent: mat-palette($accent);
+$icertify-warn: mat-palette($warn);
+
+$icertify-theme: mat-light-theme(
+  (
+    color: (
+      primary: $icertify-primary,
+      accent: $icertify-accent,
+      warn: $icertify-warn,
+    ),
+  )
+);
+
+@include angular-material-theme($icertify-theme);
+@include mat.all-component-themes($icertify-theme);
