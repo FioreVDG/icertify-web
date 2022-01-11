@@ -22,16 +22,21 @@ $amount: 18px;
 }
 
 .wrapper {
-  height: 100vh;
+  height: 100%;
   width: 100vw;
 }
 
 h3 {
   text-align: center;
-  color: #565656;
+  color: #646464;
   font-weight: 600;
   letter-spacing: 0.1rem;
   font-size: 15px;
+}
+
+b {
+  color: #26184a;
+  text-transform: uppercase;
 }
 
 .container {

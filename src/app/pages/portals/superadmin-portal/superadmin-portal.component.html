@@ -58,6 +58,7 @@
   <mat-toolbar
     class="shadow-1"
     style="height: 2rem; background: #fff; color: #26184a"
+    *ngIf="!navigationLoading"
   >
     <small style="font-size: 13px; letter-spacing: 0.1rem">{{
       routeLabel
@@ -68,7 +69,11 @@
     <router-outlet></router-outlet>
   </div>
   <div style="overflow-x: hidden; overflow-y: hidden">
-    <app-loading *ngIf="loading && !loggingOut"></app-loading>
+    <app-loading
+      [label]="'Navigating to'"
+      [route]="routeLabel"
+      *ngIf="navigationLoading && !loggingOut"
+    ></app-loading>
   </div>
 </mat-sidenav-container>
 <app-loading *ngIf="loggingOut"></app-loading>
