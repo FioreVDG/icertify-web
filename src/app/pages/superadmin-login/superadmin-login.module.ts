@@ -1,5 +1,5 @@
-import { ComponentModule } from './../../../shared/components/component.module';
-import { MaterialModule } from './../../../shared/material/material.module';
+import { ComponentModule } from '../../shared/components/component.module';
+import { MaterialModule } from '../../shared/material/material.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 

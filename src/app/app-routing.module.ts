@@ -15,7 +15,7 @@ const routes: Routes = [
   {
     path: 'superadmin-login',
     loadChildren: () =>
-      import('./pages/logins/superadmin-login/superadmin-login.module').then(
+      import('./pages/superadmin-login/superadmin-login.module').then(
         (m) => m.SuperadminLoginModule
       ),
   },

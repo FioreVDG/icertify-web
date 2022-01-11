@@ -45,6 +45,10 @@
     "karma-jasmine-html-reporter": "~1.7.0",
     "typescript": "~4.3.2"
   },
+  "browser": {
+    "crypto": false,
+    "stream": false
+  },
   "engines": {
     "node": "14.17.4",
     "npm": "6.14.14"
