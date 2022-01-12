@@ -1,12 +1,12 @@
 @import "../../../../../../../assets/styles/variables.scss";
 .box {
   width: 90%;
-  border: 1px solid #ffff;
-  background: #ffff;
-  border-radius: 4px;
+  border: 1px solid $primary;
+  background: $primary;
+  border-radius: 10px;
   height: 12rem;
   cursor: pointer;
-  color: $primary;
+  color: #ffff;
   mat-icon {
     font-size: 5rem;
   }
@@ -15,7 +15,7 @@
   width: 90%;
   border: 1px solid #ffff;
   background: #53369f;
-  border-radius: 4px;
+  border-radius: 10px;
   height: 12rem;
   cursor: pointer;
   color: #ffff;

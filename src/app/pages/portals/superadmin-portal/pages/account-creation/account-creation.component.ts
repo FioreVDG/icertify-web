@@ -18,7 +18,9 @@ export class AccountCreationComponent implements OnInit {
     switch (action) {
       case 'barangay':
         this.dialog
-          .open(SelectBarangayComponent, { disableClose: true })
+          .open(SelectBarangayComponent, {
+            disableClose: true,
+          })
           .afterClosed()
           .subscribe((res: any) => {
             console.log(res);
@@ -29,12 +31,27 @@ export class AccountCreationComponent implements OnInit {
                   height: '50%',
                   panelClass: ['dialog-no-background'],
                   disableClose: true,
+                  backdropClass: 'bdrop',
                 })
                 .afterClosed()
                 .subscribe((res: any) => {
                   console.log(res);
                 });
             }
+          });
+        break;
+      case 'icertify':
+        this.dialog
+          .open(ActionMenuComponent, {
+            width: '70%',
+            height: '50%',
+            panelClass: ['dialog-no-background'],
+            disableClose: true,
+            backdropClass: 'bdrop',
+          })
+          .afterClosed()
+          .subscribe((res: any) => {
+            console.log(res);
           });
         break;
 
