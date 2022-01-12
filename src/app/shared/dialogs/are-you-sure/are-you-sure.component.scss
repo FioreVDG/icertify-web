@@ -1,0 +1,117 @@
+@import "../../../../assets/styles/variables.scss";
+
+.mat-dialog-container {
+  padding: 0 !important;
+  width: 30vw;
+  overflow: hidden;
+}
+
+.header-wrapper {
+  width: 100%;
+  height: 10vh;
+  padding: 1.5rem 0rem;
+  background: $primary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  mat-icon {
+    color: #fff;
+    transform: scale(4);
+  }
+}
+.header-add {
+  width: 100%;
+  height: 10vh;
+  padding: 1.5rem 0rem;
+  background: #2b7abf;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  mat-icon {
+    color: #fff;
+    transform: scale(4);
+  }
+}
+.header-delete {
+  width: 100%;
+  height: 10vh;
+  padding: 1.5rem 0rem;
+  background: #da4b5d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  mat-icon {
+    color: #fff;
+    transform: scale(4);
+  }
+}
+.header-update {
+  width: 100%;
+  height: 10vh;
+  padding: 1.5rem 0rem;
+  background: #3bbb95;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  mat-icon {
+    color: #fff;
+    transform: scale(4);
+  }
+}
+
+.content {
+  width: 90%;
+  margin: auto;
+  h3 {
+    color: $text-darken;
+    text-align: center;
+    letter-spacing: 0.1rem;
+  }
+  p {
+    text-align: center;
+  }
+}
+
+.btn-container {
+  width: 100%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .btn-yes {
+    width: 40%;
+    height: 3rem;
+    outline: none;
+    cursor: pointer;
+    border: none;
+    margin: 1rem;
+  }
+  .btn-no {
+    width: 40%;
+    height: 3rem;
+    outline: none;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+    background: $warn;
+    margin: 1rem;
+  }
+}
+
+.btn-others {
+  background: $primary;
+  color: #fff;
+}
+.btn-add {
+  background: #2b7abf;
+  color: #fff;
+}
+.btn-update {
+  background: #3bbb95;
+  color: #fff;
+}
+
+.btn-delete {
+  background: #f4f4f4;
+  color: #da4b5d;
+}

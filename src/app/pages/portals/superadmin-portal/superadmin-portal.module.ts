@@ -1,3 +1,4 @@
+import { DialogsModule } from './../../../shared/dialogs/dialogs.module';
 import { ComponentModule } from './../../../shared/components/component.module';
 import { MaterialModule } from './../../../shared/material/material.module';
 import { NgModule } from '@angular/core';
@@ -13,6 +14,7 @@ import { SuperadminPortalComponent } from './superadmin-portal.component';
     SuperadminPortalRoutingModule,
     MaterialModule,
     ComponentModule,
+    DialogsModule,
   ],
 })
 export class SuperadminPortalModule {}

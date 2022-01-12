@@ -54,3 +54,11 @@ h5 {
 ::-webkit-scrollbar-thumb:hover {
   background: #9b9b9b;
 }
+
+//DIALOG CLASSES
+.dialog-no-padding {
+  mat-dialog-container {
+    padding: 0;
+    border-radius: 0;
+  }
+}

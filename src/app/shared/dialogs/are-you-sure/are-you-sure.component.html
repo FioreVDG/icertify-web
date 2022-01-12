@@ -1,0 +1,34 @@
+<div mat-dialog-content>
+  <div
+    [ngClass]="{
+      'header-wrapper': data.isOthers,
+      'header-add': data.isAdd,
+      'header-update': data.isUpdate,
+      'header-delete': data.isDelete
+    }"
+  >
+    <mat-icon *ngIf="data.isOthers">help_outline</mat-icon>
+    <mat-icon *ngIf="data.isAdd">add_circle_outline</mat-icon>
+    <mat-icon *ngIf="data.isUpdate">edit</mat-icon>
+    <mat-icon *ngIf="data.isDelete">highlight_off</mat-icon>
+  </div>
+  <div class="content">
+    <h3>Are you sure?</h3>
+    <p>{{ "Are you sure you want to " + data.msg + "?" }}</p>
+  </div>
+  <div class="btn-container">
+    <button
+      mat-flat-button
+      class="btn-yes"
+      [ngClass]="{
+        'btn-others': data.isOthers,
+        'btn-add': data.isAdd,
+        'btn-update': data.isUpdate,
+        'btn-delete': data.isDelete
+      }"
+    >
+      Yes
+    </button>
+    <button mat-flat-button class="btn-no">No</button>
+  </div>
+</div>
