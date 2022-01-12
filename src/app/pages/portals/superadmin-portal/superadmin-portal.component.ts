@@ -1,3 +1,5 @@
+import { AreYouSureComponent } from './../../../shared/dialogs/are-you-sure/are-you-sure.component';
+import { MatDialog } from '@angular/material/dialog';
 import { SUPERADMIN_NAVS } from './../../../config/NAVIGATION';
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import {
@@ -24,13 +26,18 @@ export class SuperadminPortalComponent implements OnInit {
   routeLabel: string = '';
   page: any;
 
-  constructor(public router: Router, private util: UtilService) {}
+  constructor(
+    public router: Router,
+    private dialog: MatDialog,
+    private util: UtilService
+  ) {}
 
   ngOnInit(): void {
     this.loading = true;
     setTimeout(() => {
       this.loading = false;
     }, 1000);
+    this.onLogout();
     const currRoute = this.router.url.split('/').pop();
     console.log(currRoute);
     let temp: Array<String> = [];
@@ -64,5 +71,25 @@ export class SuperadminPortalComponent implements OnInit {
 
     this.changeLabel.emit(nav);
     this.routeLabel = nav.label;
+  }
+
+  onLogout() {
+    this.dialog
+      .open(AreYouSureComponent, {
+        width: 'auto',
+        height: 'auto',
+        data: {
+          isDelete: false,
+          isAdd: false,
+          isUpdate: false,
+          isOthers: true,
+          msg: 'logout',
+        },
+      })
+      .afterClosed()
+      .subscribe((res: any) => {
+        if (res) {
+        }
+      });
   }
 }
