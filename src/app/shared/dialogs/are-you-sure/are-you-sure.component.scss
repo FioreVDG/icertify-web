@@ -115,3 +115,40 @@
   background: #f4f4f4;
   color: #da4b5d;
 }
+
+.triangle-others {
+  width: 0;
+  height: 0;
+  border: 30px solid transparent;
+  border-top: 0;
+  border-bottom: 20px solid #26184a;
+  margin: auto;
+  transform: rotate(180deg);
+}
+.triangle-add {
+  width: 0;
+  height: 0;
+  border: 30px solid transparent;
+  border-top: 0;
+  border-bottom: 20px solid #2b7abf;
+  margin: auto;
+  transform: rotate(180deg);
+}
+.triangle-update {
+  width: 0;
+  height: 0;
+  border: 30px solid transparent;
+  border-top: 0;
+  border-bottom: 20px solid #3bbb95;
+  margin: auto;
+  transform: rotate(180deg);
+}
+.triangle-delete {
+  width: 0;
+  height: 0;
+  border: 30px solid transparent;
+  border-top: 0;
+  border-bottom: 20px solid #da4b5d;
+  margin: auto;
+  transform: rotate(180deg);
+}
