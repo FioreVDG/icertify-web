@@ -6,6 +6,7 @@ import {
   Router,
   Event as NavigationEvent,
 } from '@angular/router';
+import { UtilService } from 'src/app/service/util/util.service';
 
 @Component({
   selector: 'app-superadmin-portal',
@@ -23,7 +24,7 @@ export class SuperadminPortalComponent implements OnInit {
   routeLabel: string = '';
   page: any;
 
-  constructor(public router: Router) {}
+  constructor(public router: Router, private util: UtilService) {}
 
   ngOnInit(): void {
     this.loading = true;
