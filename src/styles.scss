@@ -62,3 +62,9 @@ h5 {
     border-radius: 0;
   }
 }
+.dialog-no-background {
+  mat-dialog-container {
+    background: none;
+    box-shadow: none;
+  }
+}

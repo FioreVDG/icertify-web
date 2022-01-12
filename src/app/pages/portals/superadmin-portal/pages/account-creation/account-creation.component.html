@@ -1,1 +1,26 @@
-<p>account-creation works!</p>
+<div class="grid" align="center">
+  <div class="col-12" style="position: absolute; top: 25%">
+    <div class="grid" align="center">
+      <div
+        class="col-4"
+        align="center"
+        *ngFor="let m of menu"
+        style="width: 24%"
+      >
+        <div class="box" (click)="openMenu(m.action)">
+          <div align="center">
+            <mat-icon
+              color="primary"
+              inline="true"
+              style="font-size: 5rem"
+              *ngIf="m.icon"
+              >{{ m.icon }}</mat-icon
+            >
+            <img style="height: 5rem" *ngIf="m.logo" [src]="m.logo" />
+          </div>
+          <span>{{ m.title }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

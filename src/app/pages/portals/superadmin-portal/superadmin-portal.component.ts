@@ -37,7 +37,6 @@ export class SuperadminPortalComponent implements OnInit {
     setTimeout(() => {
       this.loading = false;
     }, 1000);
-    this.onLogout();
     const currRoute = this.router.url.split('/').pop();
     console.log(currRoute);
     let temp: Array<String> = [];

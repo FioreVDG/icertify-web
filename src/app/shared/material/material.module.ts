@@ -25,6 +25,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 @NgModule({
   imports: [
     CommonModule,
@@ -53,6 +54,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatCheckboxModule,
     MatPaginatorModule,
     MatListModule,
+    MatAutocompleteModule,
   ],
   exports: [
     MatDialogModule,
@@ -80,6 +82,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatCheckboxModule,
     MatPaginatorModule,
     MatListModule,
+    MatAutocompleteModule,
   ],
 })
 export class MaterialModule {}

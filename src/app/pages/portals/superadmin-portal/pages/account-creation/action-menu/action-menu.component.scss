@@ -1,0 +1,25 @@
+@import "../../../../../../../assets/styles/variables.scss";
+.box {
+  width: 90%;
+  border: 1px solid #ffff;
+  background: #ffff;
+  border-radius: 4px;
+  height: 12rem;
+  cursor: pointer;
+  color: $primary;
+  mat-icon {
+    font-size: 5rem;
+  }
+}
+.box:hover {
+  width: 90%;
+  border: 1px solid #ffff;
+  background: #53369f;
+  border-radius: 4px;
+  height: 12rem;
+  cursor: pointer;
+  color: #ffff;
+  mat-icon {
+    font-size: 5rem;
+  }
+}
