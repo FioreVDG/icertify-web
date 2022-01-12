@@ -14,11 +14,8 @@ export class SuperadminLoginComponent implements OnInit {
   isLoggingIn: boolean = false;
   isLoggedIn: boolean = false;
   credential = this.fb.group({
-    email: new FormControl('testuser@gmail.com', [
-      Validators.required,
-      Validators.email,
-    ]),
-    password: new FormControl('123qweasdzxc123', [Validators.required]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required]),
   });
   constructor(
     private fb: FormBuilder,
@@ -28,4 +25,14 @@ export class SuperadminLoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {}
+
+  formFieldErrMessage(fcName: string) {
+    let formControl = this.credential.controls[fcName];
+    if (formControl.hasError('required')) return 'You must enter a value';
+    if (formControl.hasError('email')) return 'Invalid email';
+
+    return '';
+  }
+
+  login() {}
 }
