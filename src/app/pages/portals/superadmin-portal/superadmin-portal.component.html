@@ -1,7 +1,17 @@
 <app-loading [label]="'Loading'" *ngIf="loading"></app-loading>
 <app-loading [label]="'Logging Out'" *ngIf="loggingOut"></app-loading>
-<mat-sidenav-container *ngIf="!loading && !loggingOut" autosize>
-  <mat-sidenav class="nav" #sidenav mode="side" opened="true">
+<mat-sidenav-container
+  style="overflow: hidden"
+  *ngIf="!loading && !loggingOut"
+  autosize
+>
+  <mat-sidenav
+    style="overflow: hidden"
+    class="nav"
+    #sidenav
+    mode="side"
+    opened="true"
+  >
     <mat-nav-list style="padding-top: 0">
       <mat-toolbar
         color="primary"
@@ -54,6 +64,14 @@
       >chevron_right</mat-icon
     >
     <div class="flex-stretch"></div>
+    <app-profile-menu
+      class="avatar"
+      *ngIf="me"
+      [me]="me"
+      [avatarColors]="menuColors"
+      [menuItems]="adminMenu"
+      (onMenuClick)="menuClick($event)"
+    ></app-profile-menu>
   </mat-toolbar>
   <mat-toolbar
     class="shadow-1"
@@ -65,7 +83,11 @@
     }}</small>
     <div class="flex-stretch"></div>
   </mat-toolbar>
-  <div *ngIf="!navigationLoading && !loggingOut" class="container-fluid">
+  <div
+    style="overflow: hidden"
+    *ngIf="!navigationLoading && !loggingOut"
+    class="container-fluid"
+  >
     <router-outlet></router-outlet>
   </div>
   <div style="overflow-x: hidden; overflow-y: hidden">

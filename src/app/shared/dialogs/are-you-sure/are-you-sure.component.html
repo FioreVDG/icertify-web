@@ -20,7 +20,7 @@
       'triangle-delete': data.isDelete
     }"
   ></div>
-  <div class="content">
+  <div class="contents">
     <h3>Are you sure?</h3>
     <p>{{ "Are you sure you want to " + data.msg + "?" }}</p>
   </div>
@@ -34,9 +34,12 @@
         'btn-update': data.isUpdate,
         'btn-delete': data.isDelete
       }"
+      (click)="dialogRef.close(true)"
     >
       Yes
     </button>
-    <button mat-flat-button class="btn-no">No</button>
+    <button mat-flat-button class="btn-no" (click)="dialogRef.close()">
+      No
+    </button>
   </div>
 </div>
