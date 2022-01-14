@@ -19,7 +19,7 @@ export class HttpService {
       s_auth: session_token || '',
       authorization: `Bearer ${bearer_token}` || '',
     });
-    // console.log(headers);
+    // console.log(headers);//
     return { headers };
   }
   start(method: Methods, endpoint: string, body?: object, query?: QueryParams) {
