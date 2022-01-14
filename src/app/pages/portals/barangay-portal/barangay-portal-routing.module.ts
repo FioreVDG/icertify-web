@@ -6,7 +6,27 @@ const routes: Routes = [
   {
     path: '',
     component: BarangayPortalComponent,
-    children: [],
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'dashboard',
+      },
+      {
+        path: 'barangay-dashboard',
+        loadChildren: () =>
+          import('./pages/dashboard/dashboard.module').then(
+            (m) => m.DashboardModule
+          ),
+      },
+      {
+        path: 'registration',
+        loadChildren: () =>
+          import('./pages/registration/registration.module').then(
+            (m) => m.RegistrationModule
+          ),
+      },
+    ],
   },
 ];
 
