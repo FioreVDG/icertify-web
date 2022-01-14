@@ -47,13 +47,14 @@
         (click)="login()"
       >
         <mat-spinner
-          style="margin-left: 40%"
+          style="margin-left: 46%"
           color="primary"
           *ngIf="isLoggingIn"
           [diameter]="30"
         ></mat-spinner>
         <span *ngIf="!isLoggingIn"> Login</span>
       </button>
+      <p class="forgot">Forgot password?</p>
     </div>
   </div>
 </div>

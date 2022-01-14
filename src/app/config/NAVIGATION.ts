@@ -12,6 +12,11 @@ export const BARANGAY_NAVS = [
     icon: 'dashboard',
     route: 'barangay-dashboard',
   },
+  {
+    label: 'Registration',
+    icon: 'person_add_alt',
+    route: 'registration',
+  },
 ];
 
 export const SUPERADMIN_NAVS = [

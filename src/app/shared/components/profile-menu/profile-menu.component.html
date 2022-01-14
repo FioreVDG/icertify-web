@@ -1,0 +1,40 @@
+<ngx-avatar
+  *ngIf="me"
+  name="{{ me ? me.firstName + ' ' + me.lastName : '' }}"
+  value="def"
+  [bgColor]="avatarColors ? avatarColors.bgColor : '#FFF'"
+  [fgColor]="avatarColors ? avatarColors.textColor : '#26184a'"
+  size="40"
+  [round]="true"
+  class="my-avatar"
+  [matMenuTriggerFor]="menu"
+></ngx-avatar>
+
+<mat-menu style="padding-top: 0; padding-bottom: 0px" #menu="matMenu">
+  <mat-card>
+    <div class="wrap">
+      <ngx-avatar
+        name="{{ me ? me.firstName + ' ' + me.lastName : '' }}"
+        bgColor="#26184a"
+        fgColor="#fff"
+        size="80"
+        [round]="true"
+      ></ngx-avatar>
+    </div>
+    <mat-card-header class="mt-3">
+      <mat-card-title class="wrap">
+        {{ me.firstName + " " + me.lastName }}
+      </mat-card-title>
+      <mat-card-subtitle class="wrap">{{ me.mobileNumber }}</mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+
+  <button
+    mat-menu-item
+    *ngFor="let item of menuItems"
+    (click)="onMenuClick.emit(item.action)"
+  >
+    <mat-icon *ngIf="item.icon">{{ item.icon }}</mat-icon
+    ><span>{{ item.name }}</span>
+  </button>
+</mat-menu>

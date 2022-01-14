@@ -1,0 +1,62 @@
+// :host ::ng-deep .mat-dialog-container {
+//   width: 30vw;
+//   overflow: hidden;
+// }
+.main-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+// .icon-wrapper {
+//   height: 6rem;
+//   padding: 1rem;
+//   overflow: hidden;
+//   width: 100%;
+//   margin: auto;
+// }
+.icon-success {
+  color: #3bbb95;
+  transform: scale(6);
+  display: block;
+  padding-top: 0.9rem;
+  margin: auto;
+}
+.icon-failed {
+  color: #da4b5d;
+  transform: scale(6);
+  display: block;
+  padding-top: 0.9rem;
+  margin: auto;
+}
+h2 {
+  color: #565656;
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: 0.1rem;
+  margin-top: 0;
+  text-transform: uppercase;
+}
+p {
+  text-align: center;
+  font-size: 14px;
+}
+.btn-failed {
+  background: #da4b5d;
+  color: #fff;
+  margin: auto;
+  display: block;
+  height: 3rem;
+  width: 100%;
+}
+.btn-success {
+  background: #3bbb95;
+  color: #fff;
+  margin: auto;
+  display: block;
+  height: 3rem;
+  width: 100%;
+}
+.content {
+  padding-top: 5rem;
+}

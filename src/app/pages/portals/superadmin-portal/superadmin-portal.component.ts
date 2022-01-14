@@ -1,3 +1,5 @@
+import { SUPERADMIN_MENU_COLORS } from './../../../config/USER_MENU';
+import { ActionResultComponent } from './../../../shared/dialogs/action-result/action-result.component';
 import { AreYouSureComponent } from './../../../shared/dialogs/are-you-sure/are-you-sure.component';
 import { MatDialog } from '@angular/material/dialog';
 import { SUPERADMIN_NAVS } from './../../../config/NAVIGATION';
@@ -9,6 +11,8 @@ import {
   Event as NavigationEvent,
 } from '@angular/router';
 import { UtilService } from 'src/app/service/util/util.service';
+import { AuthService } from 'src/app/service/auth/auth.service';
+import { SUPERADMIN_MENU } from 'src/app/config/USER_MENU';
 
 @Component({
   selector: 'app-superadmin-portal',
@@ -26,17 +30,19 @@ export class SuperadminPortalComponent implements OnInit {
   routeLabel: string = '';
   page: any;
 
+  //For Menu
+  adminMenu = SUPERADMIN_MENU;
+  menuColors = SUPERADMIN_MENU_COLORS;
+
   constructor(
     public router: Router,
     private dialog: MatDialog,
-    private util: UtilService
+    private util: UtilService,
+    private auth: AuthService
   ) {}
 
   ngOnInit(): void {
-    this.loading = true;
-    setTimeout(() => {
-      this.loading = false;
-    }, 1000);
+    this.getMe();
     const currRoute = this.router.url.split('/').pop();
     console.log(currRoute);
     let temp: Array<String> = [];
@@ -45,6 +51,41 @@ export class SuperadminPortalComponent implements OnInit {
     });
     this.page = this.superadminNav.find((o: any) => o.route === currRoute);
     if (this.page) this.routeLabel = this.page.label;
+  }
+
+  getMe() {
+    this.loading = true;
+    this.auth.me().subscribe(
+      (res: any) => {
+        console.log(res);
+        this.me = res.env.user;
+        this.loading = false;
+      },
+      (err) => {
+        console.log(err);
+        if (err) this.checkSession();
+      }
+    );
+  }
+
+  checkSession() {
+    let csurf_token = localStorage.getItem('SESSION_CSURF_TOKEN');
+    let session_token = localStorage.getItem('SESSION_AUTH');
+
+    console.log(csurf_token, session_token);
+
+    if (csurf_token == null || session_token == null) {
+      this.loading = true;
+      this.dialog
+        .open(ActionResultComponent, {
+          data: { msg: 'Log in to continue', button: 'Okay', success: false },
+          disableClose: true,
+        })
+        .afterClosed()
+        .subscribe((res: any) => {
+          this.router.navigate(['/superadmin-login']);
+        });
+    }
   }
 
   changeRoute(nav: any) {
@@ -72,11 +113,23 @@ export class SuperadminPortalComponent implements OnInit {
     this.routeLabel = nav.label;
   }
 
+  menuClick(event: any) {
+    switch (event) {
+      case 'logout':
+        this.onLogout();
+        break;
+      case 'change-password':
+        this.changePassword();
+        break;
+      default:
+    }
+  }
+
+  changePassword() {}
+
   onLogout() {
     this.dialog
       .open(AreYouSureComponent, {
-        width: 'auto',
-        height: 'auto',
         data: {
           isDelete: false,
           isAdd: false,
@@ -84,10 +137,17 @@ export class SuperadminPortalComponent implements OnInit {
           isOthers: true,
           msg: 'logout',
         },
+        disableClose: true,
       })
       .afterClosed()
       .subscribe((res: any) => {
         if (res) {
+          localStorage.removeItem('SESSION_CSURF_TOKEN');
+          localStorage.removeItem('SESSION_AUTH');
+          this.loggingOut = true;
+          setTimeout(() => {
+            this.router.navigate(['/superadmin-login']);
+          }, 1500);
         }
       });
   }

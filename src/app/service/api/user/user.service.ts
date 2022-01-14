@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { QueryParams } from 'src/app/models/queryparams.interface';
 import { HttpService } from '../../http/http.service';
 
 @Injectable({
