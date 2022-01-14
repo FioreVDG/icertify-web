@@ -1,6 +1,6 @@
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UtilService } from 'src/app/service/util/util.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 
@@ -14,41 +14,24 @@ import { map, startWith } from 'rxjs/operators';
 export class SelectBarangayComponent implements OnInit {
   barangayForm = new FormControl('', [Validators.required]);
   brgys = [];
+  selectedBrgy: any;
   filteredBrgys: Observable<any> | undefined;
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private util: UtilService,
     private dialogRef: MatDialogRef<SelectBarangayComponent>
   ) {
-    this.getListOfBarangay();
     this.filteredBrgys = this.barangayForm.valueChanges.pipe(
       startWith(''),
       map((value) => this._filter(value))
     );
   }
 
-  ngOnInit(): void {}
-  getListOfBarangay() {
-    this.util
-      .getRPC('barangays', {
-        group: {
-          field: 'citymunCode',
-          id: '137404',
-        },
-      })
-      .subscribe((res: any) => {
-        res.data = res.data.sort((a: any, b: any) => {
-          if (a.brgyCode < b.brgyCode) {
-            return -1;
-          }
-          if (a.brgyCode > b.brgyCode) {
-            return 1;
-          }
-          return 0;
-        });
-        this.brgys = res.data;
-        console.log(this.brgys);
-      });
+  ngOnInit(): void {
+    console.log(this.data);
+    this.brgys = this.data.brgys;
   }
+
   private _filter(value: any) {
     if (typeof value !== 'object' && value !== '') {
       return this.brgys.filter((option: any) =>
@@ -59,6 +42,7 @@ export class SelectBarangayComponent implements OnInit {
   }
   onOptionSelect(event: any) {
     let brgy = event?.option?.value || event;
+    this.selectedBrgy = event?.option?.value || event;
     this.barangayForm.setValue(brgy.brgyDesc);
   }
   onClose(option?: any) {

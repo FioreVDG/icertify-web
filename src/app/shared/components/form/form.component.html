@@ -1,0 +1,212 @@
+<form [formGroup]="form">
+  <div class="grid">
+    <!-- Main Loop -->
+    <ng-container *ngFor="let formfield of formfields">
+      <!-- Section -->
+      <div class="col-12" *ngIf="formfield.section && formfield.show">
+        <h5>{{ formfield.section }}</h5>
+      </div>
+
+      <!-- Field Loop -->
+      <ng-container *ngFor="let field of formfield.items" class="col-12">
+        <div *ngIf="field.show" class="{{ css[field.fcname] }}">
+          <!-- Text -->
+          <mat-form-field *ngIf="field.type === 'text'" appearance="outline">
+            <mat-label>{{ field.label }}</mat-label>
+            <input
+              matInput
+              type="text"
+              [formControlName]="field.fcname"
+              [readonly]="field.readonly"
+              [placeholder]="
+                field.placeholder ? field.placeholder : field.label
+              "
+              oninput="this.value = this.value.toUpperCase()"
+            />
+            <button
+              *ngIf="form.controls[field.fcname].value && field.addCopyText"
+              matSuffix
+              mat-icon-button
+              (click)="copyMessage(form.controls[field.fcname].value)"
+            >
+              <mat-icon
+                matTooltip="Copy to clipboard"
+                style="color: rgb(71, 71, 71)"
+              >
+                content_paste
+              </mat-icon>
+            </button>
+
+            <mat-error *ngIf="form.get(field.fcname)?.hasError('required')"
+              >{{ field.label }} is required</mat-error
+            >
+          </mat-form-field>
+
+          <!-- Number -->
+          <mat-form-field *ngIf="field.type === 'number'" appearance="outline">
+            <mat-label>{{ field.label }}</mat-label>
+            <input
+              matInput
+              type="text"
+              [formControlName]="field.fcname"
+              (keypress)="numberInputOnly($event)"
+            />
+            <mat-error *ngIf="form.get(field.fcname)?.hasError('required')"
+              >{{ field.label }} is required</mat-error
+            >
+          </mat-form-field>
+
+          <!-- Mobile -->
+          <mat-form-field
+            *ngIf="field.type === 'mobileNumber'"
+            appearance="outline"
+          >
+            <mat-label>{{ field.label }}</mat-label>
+            <input
+              matInput
+              type="text"
+              [placeholder]="
+                field.placeholder ? field.placeholder : field.label
+              "
+              [formControlName]="field.fcname"
+              (keypress)="numberInputOnly($event)"
+              maxlength="10"
+            />
+            <span matPrefix class="mobile-prefix">(+63)&nbsp;</span>
+            <mat-error *ngIf="form.get(field.fcname)?.hasError('required')"
+              >{{ field.label }} is required</mat-error
+            >
+            <mat-error *ngIf="form.get(field.fcname)?.hasError('minlength')"
+              >Enter valid mobile number</mat-error
+            >
+          </mat-form-field>
+
+          <!-- Email -->
+          <mat-form-field *ngIf="field.type === 'email'" appearance="outline">
+            <mat-label>{{ field.label }}</mat-label>
+            <input matInput type="text" [formControlName]="field.fcname" />
+            <mat-error *ngIf="form.get(field.fcname)?.hasError('required')"
+              >{{ field.label }} is required</mat-error
+            >
+            <mat-error
+              *ngIf="
+                form.get(field.fcname)?.hasError('pattern') ||
+                form.get(field.fcname)?.hasError('email')
+              "
+            >
+              Enter valid email
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Date -->
+          <mat-form-field *ngIf="field.type === 'date'" appearance="outline">
+            <mat-label>{{ field.label }}</mat-label>
+            <input
+              matInput
+              type="text"
+              [matDatepicker]="picker"
+              [formControlName]="field.fcname"
+              readonly
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker
+              #picker
+              [disabled]="field.disabled ? field.disabled : false"
+              [touchUi]="true"
+            ></mat-datepicker>
+            <mat-error *ngIf="form.get(field.fcname)?.hasError('required')">
+              Please pick a date
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Date Range -->
+          <!-- <mat-form-field
+            *ngIf="field.type === 'date-range'"
+            appearance="outline"
+          >
+            <mat-label>{{ field.label }}</mat-label>
+            <mat-date-range-input [rangePicker]="picker">
+              <input
+                matStartDate
+                placeholder="Start date"
+                [formControlName]="field.fcname"
+                readonly
+              />
+              <input
+                matEndDate
+                placeholder="End date"
+                [formControlName]="field.fcname"
+                readonly
+              />
+            </mat-date-range-input>
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field> -->
+
+          <!-- Text Area -->
+          <mat-form-field
+            class="full-width"
+            *ngIf="field.type == 'textarea'"
+            appearance="outline"
+          >
+            <mat-label>{{ field.label }}</mat-label>
+            <textarea
+              matInput
+              [formControlName]="field.fcname"
+              [rows]="field.rowspan"
+              style="max-height: 10rem; min-height: 2rem; overflow-y: auto"
+              oninput="this.value = this.value.toUpperCase()"
+            ></textarea>
+            <mat-error *ngIf="form.get(field.fcname)?.hasError('required')">
+              {{ field.label }} is required
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Select -->
+          <mat-form-field
+            class="full-width"
+            *ngIf="field.type == 'select'"
+            appearance="outline"
+          >
+            <mat-label>{{ field.label }}</mat-label>
+            <mat-select [formControlName]="field.fcname">
+              <mat-option
+                *ngFor="let item of field.choices"
+                [value]="
+                  field.choiceValue
+                    ? utilService.deepFind(item, field.choiceValue)
+                    : item
+                "
+              >
+                {{
+                  field.choiceLabel
+                    ? utilService.deepFind(item, field.choiceLabel)
+                    : item
+                }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get(field.fcname)?.hasError('required')">
+              You must select one.
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Checkbox -->
+          <mat-checkbox
+            *ngIf="field.type == 'checkbox'"
+            [formControlName]="field.fcname"
+            color="accent"
+            style="align-self: center"
+          >
+            {{ field.label }}
+          </mat-checkbox>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+</form>

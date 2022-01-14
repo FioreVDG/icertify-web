@@ -1,4 +1,4 @@
-<div class="grid" align="center">
+<div class="grid" align="center" *ngIf="this.currRoute.length < 4">
   <div class="col-12" style="position: absolute; top: 25%">
     <div class="grid" align="center">
       <div
@@ -24,3 +24,4 @@
     </div>
   </div>
 </div>
+<router-outlet *ngIf="this.currRoute.length > 3"></router-outlet>

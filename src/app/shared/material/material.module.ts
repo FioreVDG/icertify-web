@@ -26,6 +26,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatStepperModule } from '@angular/material/stepper';
 @NgModule({
   imports: [
     CommonModule,
@@ -55,6 +56,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatPaginatorModule,
     MatListModule,
     MatAutocompleteModule,
+    MatStepperModule,
   ],
   exports: [
     MatDialogModule,
@@ -83,6 +85,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatPaginatorModule,
     MatListModule,
     MatAutocompleteModule,
+    MatStepperModule,
   ],
 })
 export class MaterialModule {}

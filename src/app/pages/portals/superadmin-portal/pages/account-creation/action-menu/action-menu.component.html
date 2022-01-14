@@ -1,6 +1,6 @@
 <div class="grid">
   <div class="col" align="center">
-    <div align="center" class="box">
+    <div align="center" class="box" (click)="redirectTo(0)">
       <div style="margin-top: 2rem">
         <mat-icon inline="true">people</mat-icon>
       </div>
@@ -8,14 +8,14 @@
     </div>
   </div>
   <div class="col" align="center">
-    <div align="center" class="box">
+    <div align="center" class="box" (click)="redirectTo(1)">
       <div style="margin-top: 2rem">
         <mat-icon inline="true">manage_accounts</mat-icon>
       </div>
       <p style="margin: 0">Access Roles</p>
     </div>
   </div>
-  <div class="col" align="center">
+  <div class="col" align="center" (click)="redirectTo(2)">
     <div align="center" class="box" (click)="dialogRef.close()">
       <div style="margin-top: 2rem">
         <mat-icon inline="true">exit_to_app</mat-icon>
