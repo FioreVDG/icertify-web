@@ -5,7 +5,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   selector: 'app-action-result',
   templateUrl: './action-result.component.html',
   styleUrls: ['./action-result.component.scss'],
-  encapsulation: ViewEncapsulation.None,
 })
 export class ActionResultComponent implements OnInit {
   constructor(
