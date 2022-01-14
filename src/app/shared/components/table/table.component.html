@@ -6,7 +6,15 @@
           {{ col.title }}
         </th>
         <td mat-cell *matCellDef="let element">
-          {{ util.deepFind(element, col.path) }}
+          <span *ngIf="col.type !== 'special'"
+            >{{ col.path === "mobileNumber" ? "(+63)" : ""
+            }}{{ util.deepFind(element, col.path) }}</span
+          >
+          <ng-container *ngIf="col.type === 'special'">
+            <span *ngFor="let c of col.paths"
+              >{{ util.deepFind(element, c) | uppercase }}
+            </span></ng-container
+          >
         </td>
       </ng-container>
     </ng-container>

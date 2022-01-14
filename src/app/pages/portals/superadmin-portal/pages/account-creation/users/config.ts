@@ -33,7 +33,15 @@ export const USERS: Column[] = [
     title: 'Address',
     breakpoint: 'sm',
     path: 'address',
-    type: 'text',
+    paths: [
+      'address.address1',
+      'address.address2',
+      'address.barangay.brgyDesc',
+      'address.cityMun.citymunDesc',
+      'address.province.provDesc',
+      'address.region.regDesc',
+    ],
+    type: 'special',
     selected: true,
   },
   {

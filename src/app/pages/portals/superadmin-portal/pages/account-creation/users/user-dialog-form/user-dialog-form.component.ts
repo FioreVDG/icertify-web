@@ -7,6 +7,7 @@ import { Section } from 'src/app/models/form.interface';
 import { FormComponent } from 'src/app/shared/components/form/form.component';
 import { USER_FORM, ADDRESS_SELECT } from './config';
 import { ActivatedRoute } from '@angular/router';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-user-dialog-form',
@@ -139,13 +140,22 @@ export class UserDialogFormComponent implements OnInit {
       });
   }
   onSave() {
+    let omitField = ['address1', 'address2'];
     let toSaveData = {
-      ...this.userDetails.form.getRawValue(),
-      ...this.brgyForm.getRawValue(),
+      ...this.userDetails.form.value,
+
       _brgyId:
         this.data._brgyId !== 'undefined' ? this.data._brgyId : undefined,
       type: this.data.type,
     };
+    toSaveData['address'] = {
+      ...this.brgyForm.value,
+      address1: toSaveData.address1,
+      address2: toSaveData.address2,
+    };
+
+    toSaveData = _.omit(toSaveData, omitField);
+
     console.log(toSaveData);
     this.api.user.createAdmin(toSaveData).subscribe((res: any) => {
       console.log(res);

@@ -1,3 +1,5 @@
+import { QueryParams } from 'src/app/models/queryparams.interface';
+import { ApiService } from './../../../../../../service/api/api.service';
 import { UserDialogFormComponent } from './user-dialog-form/user-dialog-form.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,27 +15,18 @@ export class UsersComponent implements OnInit {
   column = USERS;
   _brgyId: any;
   userType: any;
-  dataSource = [
-    {
-      firstName: 'Leo',
-      lastName: 'Galora',
-      middleName: 'Arsaga',
-      userRole: 'N/A',
-      address: 'Buick',
-      email: 'leonard.galora@lgusuite.com',
-      mobileNumber: '09357176384',
-      status: 'Active',
-    },
-  ];
+  dataSource = [];
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private api: ApiService
   ) {}
 
   ngOnInit(): void {
     this._brgyId = this.route.snapshot.paramMap.get('brgyId');
     this.userType = this.route.snapshot.paramMap.get('userType');
+    this.fetchUser();
   }
   onAdd() {
     this.dialog
@@ -48,5 +41,19 @@ export class UsersComponent implements OnInit {
           console.log(err);
         }
       );
+  }
+  fetchUser() {
+    let qry: QueryParams = {
+      find: [],
+    };
+    if (this.userType === 'Barangay') {
+      qry.find.push({ field: 'type', operator: '=', value: this.userType });
+    }
+    if (this._brgyId !== 'undefined')
+      qry.find.push({ field: '_brgyId', operator: '=', value: this._brgyId });
+    this.api.user.getAllUser(qry).subscribe((res: any) => {
+      console.log(res.env.users);
+      this.dataSource = res.env.users;
+    });
   }
 }

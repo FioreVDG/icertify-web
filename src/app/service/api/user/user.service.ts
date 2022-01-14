@@ -7,6 +7,9 @@ import { HttpService } from '../../http/http.service';
 })
 export class UserService {
   constructor(@Inject(HttpService) private http: HttpService) {}
+  getAllUser(query: QueryParams) {
+    return this.http.start('get', `/users`, {}, query);
+  }
   createAdmin(body: Object) {
     return this.http.start('post', '/users/admins', body);
   }

@@ -12,14 +12,14 @@ export class HttpService {
   constructor(private http: HttpClient) {}
 
   private getHeaders() {
-    var session_token = localStorage.getItem('SESSION_TOKEN');
+    var session_token = localStorage.getItem('SESSION_CSURF_TOKEN');
     var bearer_token = localStorage.getItem('SESSION_AUTH');
 
     var headers = new HttpHeaders({
-      s_auth: session_token || '',
+      c_auth: session_token || '',
       authorization: `Bearer ${bearer_token}` || '',
     });
-    // console.log(headers);//
+    // console.log(headers); //
     return { headers };
   }
   start(method: Methods, endpoint: string, body?: object, query?: QueryParams) {
@@ -62,7 +62,7 @@ export class HttpService {
     // console.log(option);
     endpoint = URL + endpoint;
     var queryStr = queryArray.join('&') ? '?' + queryArray.join('&') : '';
-    // console.log(endpoint + queryStr);
+    console.log(endpoint + queryStr);
     switch (method) {
       case 'get': // get
         return this.http.get(endpoint + queryStr, option);
