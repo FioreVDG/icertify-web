@@ -1,0 +1,21 @@
+<div mat-dialog-content>
+  <div class="main-wrapper">
+    <div class="icon-wrapper">
+      <mat-icon [class]="data.success ? 'icon-success' : 'icon-failed'">{{
+        data.success ? "check_circle" : "error"
+      }}</mat-icon>
+    </div>
+    <div class="content">
+      <h2>{{ data.success ? "Success!" : "Failed!" }}</h2>
+      <p>{{ data.msg }}</p>
+
+      <button
+        mat-stroked-button
+        [class]="data.success ? 'btn-success' : 'btn-failed'"
+        (click)="data.success ? dialogRef.close(true) : dialogRef.close()"
+      >
+        {{ data.button }}
+      </button>
+    </div>
+  </div>
+</div>

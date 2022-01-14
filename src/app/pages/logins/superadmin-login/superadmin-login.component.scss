@@ -1,3 +1,5 @@
+@import "../../../../assets/styles/variables.scss";
+
 .container {
   height: 100%;
   max-width: 100%;
@@ -117,6 +119,12 @@
       }
     }
   }
+}
+.forgot {
+  text-align: right;
+  color: $primary;
+  text-decoration: underline;
+  cursor: pointer;
 }
 .register-row {
   display: flex;
