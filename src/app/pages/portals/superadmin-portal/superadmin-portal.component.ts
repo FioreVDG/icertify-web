@@ -147,7 +147,6 @@ export class SuperadminPortalComponent implements OnInit {
           this.loggingOut = true;
           setTimeout(() => {
             this.router.navigate(['/superadmin-login']);
-            this.loggingOut = false;
           }, 1500);
         }
       });
