@@ -1,5 +1,10 @@
+import { ActionResultComponent } from './../../../../../../../shared/dialogs/action-result/action-result.component';
 import { ApiService } from './../../../../../../../service/api/api.service';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { UtilService } from './../../../../../../../service/util/util.service';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
@@ -24,12 +29,15 @@ export class UserDialogFormComponent implements OnInit {
   brgyForm = this.fb.group({});
 
   loading = true;
+  saving = false;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public util: UtilService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private api: ApiService
+    private api: ApiService,
+    private dialog: MatDialog,
+    private dialogRef: MatDialogRef<UserDialogFormComponent>
   ) {}
 
   ngOnInit(): void {
@@ -140,6 +148,7 @@ export class UserDialogFormComponent implements OnInit {
       });
   }
   onSave() {
+    this.saving = true;
     let omitField = ['address1', 'address2'];
     let toSaveData = {
       ...this.userDetails.form.value,
@@ -157,8 +166,31 @@ export class UserDialogFormComponent implements OnInit {
     toSaveData = _.omit(toSaveData, omitField);
 
     console.log(toSaveData);
-    this.api.user.createAdmin(toSaveData).subscribe((res: any) => {
-      console.log(res);
-    });
+    this.api.user.createAdmin(toSaveData).subscribe(
+      (res: any) => {
+        console.log(res);
+        this.saving = false;
+        this.dialog
+          .open(ActionResultComponent, {
+            data: {
+              success: true,
+              button: 'Okay',
+            },
+          })
+          .afterClosed()
+          .subscribe((res: any) => {
+            this.dialogRef.close(true);
+          });
+      },
+      (err) => {
+        this.saving = false;
+        this.dialog.open(ActionResultComponent, {
+          data: {
+            success: false,
+            msg: err.error.message,
+          },
+        });
+      }
+    );
   }
 }

@@ -36,7 +36,9 @@ export class UsersComponent implements OnInit {
       })
       .afterClosed()
       .subscribe(
-        (res: any) => {},
+        (res: any) => {
+          if (res) this.fetchUser();
+        },
         (err) => {
           console.log(err);
         }

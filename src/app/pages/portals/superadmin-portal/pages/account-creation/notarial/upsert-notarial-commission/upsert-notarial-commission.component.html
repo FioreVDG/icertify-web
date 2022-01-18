@@ -1,0 +1,54 @@
+<div mat-dialog-content *ngIf="loading">
+  <app-loading [label]="'Loading Form'"></app-loading>
+</div>
+<ng-container>
+  <h1 mat-dialog-title>
+    {{ dialogTitle }}
+    <mat-icon class="close-btn" mat-dialog-close color="warn"> close </mat-icon>
+  </h1>
+  <div mat-dialog-content>
+    <app-form
+      #notarialDetails
+      [formfields]="notarialFields"
+      (formInitiated)="formInitialized()"
+      (formListener)="formListener($event)"
+    ></app-form>
+    <form #brgyDetails [formGroup]="brgyForm" class="grid">
+      <ng-container *ngFor="let f of brgyFields">
+        <mat-form-field class="col-3" appearance="fill" *ngIf="f.show">
+          <mat-label>{{ f.label }}</mat-label>
+
+          <mat-select [formControlName]="f.fcname">
+            <mat-option *ngFor="let o of f.choices" [value]="o">{{
+              util.deepFind(o, f.choiceLabel)
+            }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="brgyForm.get(f.fcname)?.hasError('required')"
+            >{{ f.label }} is required</mat-error
+          >
+        </mat-form-field></ng-container
+      >
+    </form>
+    <app-form
+      #validityDetails
+      [formfields]="period_of_validity"
+      (formInitiated)="formInitialized()"
+      (formListener)="formListener($event)"
+    ></app-form>
+  </div>
+  <mat-dialog-actions>
+    <button
+      mat-button
+      color="primary"
+      [disabled]="
+        (!notarialDetails.form.valid &&
+          !brgyDetails.valid &&
+          !validityDetails.form.valid) ||
+        saving
+      "
+      (click)="onSave()"
+    >
+      {{ saving ? "Saving..." : "Save" }}
+    </button>
+  </mat-dialog-actions>
+</ng-container>

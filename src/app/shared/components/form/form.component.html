@@ -11,7 +11,11 @@
       <ng-container *ngFor="let field of formfield.items" class="col-12">
         <div *ngIf="field.show" class="{{ css[field.fcname] }}">
           <!-- Text -->
-          <mat-form-field *ngIf="field.type === 'text'" appearance="outline">
+          <mat-form-field
+            floatLabel="always"
+            *ngIf="field.type === 'text'"
+            appearance="outline"
+          >
             <mat-label>{{ field.label }}</mat-label>
             <input
               matInput
@@ -43,7 +47,11 @@
           </mat-form-field>
 
           <!-- Number -->
-          <mat-form-field *ngIf="field.type === 'number'" appearance="outline">
+          <mat-form-field
+            floatLabel="always"
+            *ngIf="field.type === 'number'"
+            appearance="outline"
+          >
             <mat-label>{{ field.label }}</mat-label>
             <input
               matInput
@@ -58,6 +66,7 @@
 
           <!-- Mobile -->
           <mat-form-field
+            floatLabel="always"
             *ngIf="field.type === 'mobileNumber'"
             appearance="outline"
           >
@@ -82,7 +91,11 @@
           </mat-form-field>
 
           <!-- Email -->
-          <mat-form-field *ngIf="field.type === 'email'" appearance="outline">
+          <mat-form-field
+            floatLabel="always"
+            *ngIf="field.type === 'email'"
+            appearance="outline"
+          >
             <mat-label>{{ field.label }}</mat-label>
             <input matInput type="text" [formControlName]="field.fcname" />
             <mat-error *ngIf="form.get(field.fcname)?.hasError('required')"
@@ -99,7 +112,11 @@
           </mat-form-field>
 
           <!-- Date -->
-          <mat-form-field *ngIf="field.type === 'date'" appearance="outline">
+          <mat-form-field
+            floatLabel="always"
+            *ngIf="field.type === 'date'"
+            appearance="outline"
+          >
             <mat-label>{{ field.label }}</mat-label>
             <input
               matInput
@@ -123,7 +140,7 @@
           </mat-form-field>
 
           <!-- Date Range -->
-          <!-- <mat-form-field
+          <!-- <mat-form-field floatLabel="always"
             *ngIf="field.type === 'date-range'"
             appearance="outline"
           >
@@ -151,6 +168,7 @@
 
           <!-- Text Area -->
           <mat-form-field
+            floatLabel="always"
             class="full-width"
             *ngIf="field.type == 'textarea'"
             appearance="outline"
@@ -170,6 +188,7 @@
 
           <!-- Select -->
           <mat-form-field
+            floatLabel="always"
             class="full-width"
             *ngIf="field.type == 'select'"
             appearance="outline"
