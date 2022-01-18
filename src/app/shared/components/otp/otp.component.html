@@ -1,0 +1,90 @@
+<div mat-dialog-title>
+  <h3>Verify OTP</h3>
+  <mat-icon mat-dialog-close class="close-btn" color="warn">close</mat-icon>
+</div>
+<mat-divider></mat-divider>
+<div mat-dialog-content>
+  <p>
+    A 4-digit One-Time-Password (OTP) was sent to your mobile number:
+    <b>{{ data.mobileNumber }}</b>
+  </p>
+
+  <br />
+  <div class="otpField">
+    <h4>ENTER OTP:</h4>
+    <form [formGroup]="otpVal">
+      <div class="grid">
+        <mat-form-field class="col-3" color="primary" appearance="outline">
+          <input
+            style="color: #fff"
+            matInput
+            type="text"
+            formControlName="otp1"
+            #otp1
+            required
+            maxlength="1"
+            formControlName="otp1"
+            (keyup)="otpController($event, otp2, '')"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-3" color="primary" appearance="outline">
+          <input
+            matInput
+            type="text"
+            formControlName="otp1"
+            #otp2
+            required
+            maxlength="1"
+            formControlName="otp2"
+            (keyup)="otpController($event, otp3, otp1)"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-3" color="primary" appearance="outline">
+          <input
+            matInput
+            type="text"
+            formControlName="otp1"
+            #otp3
+            required
+            maxlength="1"
+            formControlName="otp3"
+            (keyup)="otpController($event, otp4, otp2)"
+          />
+        </mat-form-field>
+
+        <mat-form-field class="col-3" color="primary" appearance="outline">
+          <input
+            matInput
+            type="text"
+            formControlName="otp1"
+            #otp4
+            required
+            maxlength="1"
+            formControlName="otp4"
+            (keyup)="otpController($event, '', otp3)"
+          />
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+</div>
+<mat-divider></mat-divider>
+<div mat-dialog-actions align="center">
+  <button
+    mat-raised-button
+    style="background: black; color: #fff"
+    [disabled]="!otpVal.valid || verifying"
+    (click)="submit()"
+  >
+    {{ verifying ? "Verifying..." : "Submit" }}
+  </button>
+  <button
+    color="accent"
+    style="color: #fff"
+    mat-stroked-button
+    [disabled]="!isTimerOff"
+    (click)="resend()"
+  >
+    Resend {{ !isTimerOff ? "(" + timeLeft + ")" : "" }}
+  </button>
+</div>

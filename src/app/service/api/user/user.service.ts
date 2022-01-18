@@ -7,10 +7,18 @@ import { HttpService } from '../../http/http.service';
 })
 export class UserService {
   constructor(@Inject(HttpService) private http: HttpService) {}
+  createUser(body: Object) {
+    return this.http.start('post', '/users', body);
+  }
   getAllUser(query: QueryParams) {
     return this.http.start('get', `/users`, {}, query);
   }
   createAdmin(body: Object) {
     return this.http.start('post', '/users/admins', body);
+  }
+  checkExistingMobileNumber(mobileNumber: string) {
+    return this.http.start('post', `/users/checkExistingMobileNumber`, {
+      mobileNumber,
+    });
   }
 }

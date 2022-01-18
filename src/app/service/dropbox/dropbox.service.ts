@@ -6,9 +6,8 @@ declare var require: any;
   providedIn: 'root',
 })
 export class DropboxService {
-  // ACCESS TOKEN DzRw_RqKzxEAAAAAAAAAAWb2306de5LGMnq_VFFW_Fm_fdw0ZnsTUKF3PQrpPBA6
   accessToken =
-    'Pw_dfDl2_aAAAAAAAAAAAScT4Ou8MOMfnmon3uJxlGH0PyiHNyPZKrI8Z5Gpj3mR'; //QCLD Dropbox
+    'grG-786_nYcAAAAAAAAAASZmkKtn8u4U73zIEwMUfUMsl4vqhoEXmrSL68uswJ4I';
   dbx: any;
 
   constructor() {
@@ -114,6 +113,7 @@ export class DropboxService {
   }
 
   uploadFile(path: string, filename: string, file: any): Observable<any> {
+    console.log(filename);
     return Observable.create((observer: any) => {
       this.dbx
         .filesUpload({

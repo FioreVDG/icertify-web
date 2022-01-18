@@ -1,1 +1,33 @@
-<p>registration works!</p>
+<div class="form-wrapper">
+  <mat-progress-bar *ngIf="verifying" mode="indeterminate"></mat-progress-bar>
+  <div class="pt-6"></div>
+  <img src="../../../../assets/images/smartphone.svg" alt="" />
+  <p>
+    Enter <b>Mobile Number</b> to verify and to proceed. Check the
+    <b>OTP</b> that was sent to your mobile number.
+  </p>
+
+  <mat-form-field appearance="standard"
+    ><span matPrefix>+63</span>
+    <mat-icon matSuffix>phone_iphone</mat-icon>
+    <mat-label>Mobile Number</mat-label>
+    <input
+      type="text"
+      matInput
+      [(ngModel)]="mobileNumber"
+      maxlength="10"
+      minlength="10"
+      placeholder="9201234567"
+      (keypress)="numberInputOnly($event)"
+    />
+  </mat-form-field>
+
+  <button
+    mat-flat-button
+    (click)="send()"
+    color="primary"
+    [disabled]="verifying"
+  >
+    {{ verifying ? "Verifying..." : "Verify" }}
+  </button>
+</div>

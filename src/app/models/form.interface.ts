@@ -13,6 +13,8 @@ type FieldType =
 
 type Collection = 'users';
 
+type Appearance = 'fill' | 'outline' | 'standard' | 'legacy';
+
 export type ColumnSizes = 'sm' | 'md' | 'lg' | 'xl';
 
 export interface Field {
@@ -46,6 +48,7 @@ export interface Field {
   prefix?: string;
   collection?: Collection;
   isPercentage?: boolean;
+  appearance: Appearance;
 }
 
 export interface Section {

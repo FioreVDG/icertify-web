@@ -9,6 +9,21 @@
       <h2>{{ data.success ? "Success!" : "Failed!" }}</h2>
       <p>{{ data.msg }}</p>
 
+      <div class="misc" align="center" *ngIf="data.misc">
+        <p>The default password for this account is</p>
+        <button
+          mat-stroked-button
+          class="mb-2"
+          color="primary"
+          (click)="hide = !hide"
+        >
+          {{ hide ? "Show password" : "Hide password" }}
+        </button>
+        <h3 align="center" *ngIf="!hide" class="secret">
+          {{ data.misc }}
+        </h3>
+      </div>
+
       <button
         mat-stroked-button
         [class]="data.success ? 'btn-success' : 'btn-failed'"

@@ -1,3 +1,4 @@
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DialogsModule } from './../../../../../shared/dialogs/dialogs.module';
 import { ComponentModule } from './../../../../../shared/components/component.module';
 import { MaterialModule } from './../../../../../shared/material/material.module';
@@ -15,6 +16,8 @@ import { RegistrationComponent } from './registration.component';
     MaterialModule,
     ComponentModule,
     DialogsModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
 })
 export class RegistrationModule {}

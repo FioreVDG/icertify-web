@@ -106,3 +106,26 @@ h5 {
   transform: rotate(90deg);
   transition: 0.2s;
 }
+.mat-drawer-content {
+  overflow-x: hidden !important;
+}
+.dialog-responsive-dark {
+  width: 35%;
+  mat-dialog-container {
+    background-color: #26184a;
+  }
+}
+.dialog-darken {
+  width: "auto";
+  mat-dialog-container {
+    background-color: #26184a;
+    color: #fff;
+  }
+}
+.mat-dialog-actions {
+  border-top: 1px solid rgb(223, 223, 223);
+}
+.mat-dialog-title {
+  border-bottom: 1px solid rgb(223, 223, 223);
+  padding-bottom: 0.5rem;
+}
