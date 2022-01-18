@@ -64,6 +64,7 @@
 
           <!-- Mobile -->
           <mat-form-field
+            floatLabel="always"
             *ngIf="field.type === 'mobileNumber'"
             [appearance]="field.appearance"
           >
@@ -135,7 +136,7 @@
           </mat-form-field>
 
           <!-- Date Range -->
-          <!-- <mat-form-field
+          <!-- <mat-form-field floatLabel="always"
             *ngIf="field.type === 'date-range'"
             appearance="outline"
           >
@@ -163,6 +164,7 @@
 
           <!-- Text Area -->
           <mat-form-field
+            floatLabel="always"
             class="full-width"
             *ngIf="field.type == 'textarea'"
             [appearance]="field.appearance"
@@ -182,6 +184,7 @@
 
           <!-- Select -->
           <mat-form-field
+            floatLabel="always"
             class="full-width"
             *ngIf="field.type == 'select'"
             [appearance]="field.appearance"

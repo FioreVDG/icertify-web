@@ -1,20 +1,10 @@
 import { Section } from 'src/app/models/form.interface';
 
-export const USER_FORM: Section[] = [
+export const NOTARIAL_FORM: Section[] = [
   {
-    section: 'Personal Details',
+    section: 'Notarial Commission',
     show: true,
     items: [
-      {
-        label: 'First Name',
-        type: 'text',
-        colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
-        fcname: 'firstName',
-        show: true,
-        default: '',
-        path: 'firstName',
-        appearance: 'outline',
-      },
       {
         label: 'Last Name',
         type: 'text',
@@ -26,6 +16,16 @@ export const USER_FORM: Section[] = [
         appearance: 'outline',
       },
       {
+        label: 'First Name',
+        type: 'text',
+        colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
+        fcname: 'firstName',
+        show: true,
+        default: '',
+        path: 'firstName',
+        appearance: 'outline',
+      },
+      {
         label: 'Middle Name',
         type: 'text',
         colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
@@ -33,7 +33,6 @@ export const USER_FORM: Section[] = [
         show: true,
         default: '',
         path: 'middleName',
-        optional: true,
         appearance: 'outline',
       },
       {
@@ -45,44 +44,27 @@ export const USER_FORM: Section[] = [
         default: '',
         path: 'others.suffix',
         optional: true,
+        placeholder: 'Suffix(optional)',
         appearance: 'outline',
       },
       {
-        label: 'Sex',
-        type: 'select',
+        label: 'Roll Number',
+        type: 'text',
         colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
-        fcname: 'sex',
-        choices: ['Male', 'Female'],
+        fcname: 'roll_number',
         show: true,
         default: '',
-        path: 'sex',
-        appearance: 'outline',
-      },
-    ],
-  },
-  {
-    section: 'Contact Information',
-    show: true,
-    items: [
-      {
-        label: 'Email',
-        type: 'email',
-        colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
-        fcname: 'email',
-        show: true,
-        default: '',
-        path: 'email',
+        path: 'roll_number',
         appearance: 'outline',
       },
       {
-        label: 'Mobile Number',
-        type: 'mobileNumber',
+        label: 'IBP Chapter',
+        type: 'text',
         colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
-        fcname: 'mobileNumber',
+        fcname: 'ibp_chapter',
         show: true,
         default: '',
-        path: 'mobileNumber',
-        placeholder: '9123456789',
+        path: 'ibo_chapter',
         appearance: 'outline',
       },
       {
@@ -94,8 +76,8 @@ export const USER_FORM: Section[] = [
         default: '',
         path: 'address1',
         placeholder: 'Street No./Building',
-        appearance: 'outline',
         optional: true,
+        appearance: 'outline',
       },
       {
         label: 'Address Line 2',
@@ -105,9 +87,38 @@ export const USER_FORM: Section[] = [
         show: true,
         default: '',
         path: 'address2',
-        appearance: 'outline',
         placeholder: 'Village/Apartment/Unit/Building/Etc.',
         optional: true,
+        appearance: 'outline',
+      },
+    ],
+  },
+];
+
+export const PERIOD_OF_VALIDITY: Section[] = [
+  {
+    section: 'Period of Validity',
+    show: true,
+    items: [
+      {
+        label: 'Start Date',
+        type: 'date',
+        colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
+        fcname: 'period_startDate',
+        show: true,
+        default: '',
+        path: 'period_startDate',
+        appearance: 'outline',
+      },
+      {
+        label: 'End Date',
+        type: 'date',
+        colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
+        fcname: 'period_endDate',
+        show: true,
+        default: '',
+        path: 'period_endDate',
+        appearance: 'outline',
       },
     ],
   },
