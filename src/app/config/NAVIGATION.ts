@@ -17,6 +17,11 @@ export const BARANGAY_NAVS = [
     icon: 'person_add_alt',
     route: 'registration',
   },
+  {
+    label: 'New Transaction',
+    icon: 'post_add',
+    route: 'new-transaction',
+  },
 ];
 
 export const SUPERADMIN_NAVS = [

@@ -26,6 +26,13 @@ const routes: Routes = [
             (m) => m.RegistrationModule
           ),
       },
+      {
+        path: 'new-transaction',
+        loadChildren: () =>
+          import('./pages/new-transaction/new-transaction.module').then(
+            (m) => m.NewTransactionModule
+          ),
+      },
     ],
   },
 ];

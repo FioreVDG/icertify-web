@@ -30,7 +30,6 @@ export class UploadComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.data);
-    this.randomString = this.generateRandomChar('6');
     console.log(this.randomString);
   }
 
@@ -70,17 +69,6 @@ export class UploadComponent implements OnInit {
     }
   }
 
-  generateRandomChar(number: any) {
-    var result = '';
-    var characters =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for (var i = 0; i < number; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-  }
-
   public fileOver(event: any) {
     // console.log(event);
   }
@@ -95,14 +83,8 @@ export class UploadComponent implements OnInit {
     console.log(fileNameArray);
     this.dbx
       .uploadFile(
-        '/' + 'ICertify' + '/' + this.data.path,
-        this.randomString +
-          '_' +
-          this.data.name +
-          '_' +
-          fileNameArray[0] +
-          '.' +
-          fileNameArray[fileNameArray.length - 1],
+        '/' + 'ICertify' + '/' + this.data.path + this.data.mobileNumber + '/',
+        this.data.name + '.' + fileNameArray[fileNameArray.length - 1],
         file
       )
       .subscribe(

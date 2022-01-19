@@ -6,7 +6,10 @@
     (formInitiated)="formInitialized()"
     (formListener)="formListener($event)"
   ></app-form>
-  <app-image-form (imageEmitter)="imageEmitter($event)"></app-image-form>
+  <app-image-form
+    [mobileNumber]="this.data.mobileNumber"
+    (imageEmitter)="imageEmitter($event)"
+  ></app-image-form>
 </div>
 
 <div mat-dialog-actions align="center">

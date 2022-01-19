@@ -15,6 +15,7 @@ export class ImageFormComponent implements OnInit {
   images = IMAGE_FORM;
   @Output() imageEmitter = new EventEmitter<any>();
   @Input() obj: any = {};
+  @Input() mobileNumber: string = '';
   imgArray: Array<any> = [];
   me: any;
   imageForm = this.fb.group({});
@@ -71,7 +72,11 @@ export class ImageFormComponent implements OnInit {
     this.dialog
       .open(UploadComponent, {
         panelClass: 'dialog-darken',
-        data: { name: fcname, path: 'INDIGENT/' },
+        data: {
+          name: fcname,
+          path: 'INDIGENT/',
+          mobileNumber: this.mobileNumber,
+        },
       })
       .afterClosed()
       .subscribe((res: any) => {
