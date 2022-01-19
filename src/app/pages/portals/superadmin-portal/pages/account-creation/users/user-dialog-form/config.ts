@@ -13,6 +13,7 @@ export const USER_FORM: Section[] = [
         show: true,
         default: '',
         path: 'firstName',
+        appearance: 'outline',
       },
       {
         label: 'Last Name',
@@ -22,6 +23,7 @@ export const USER_FORM: Section[] = [
         show: true,
         default: '',
         path: 'lastName',
+        appearance: 'outline',
       },
       {
         label: 'Middle Name',
@@ -32,6 +34,7 @@ export const USER_FORM: Section[] = [
         default: '',
         path: 'middleName',
         optional: true,
+        appearance: 'outline',
       },
       {
         label: 'Suffix',
@@ -42,6 +45,7 @@ export const USER_FORM: Section[] = [
         default: '',
         path: 'others.suffix',
         optional: true,
+        appearance: 'outline',
       },
       {
         label: 'Sex',
@@ -52,6 +56,7 @@ export const USER_FORM: Section[] = [
         show: true,
         default: '',
         path: 'sex',
+        appearance: 'outline',
       },
     ],
   },
@@ -67,6 +72,7 @@ export const USER_FORM: Section[] = [
         show: true,
         default: '',
         path: 'email',
+        appearance: 'outline',
       },
       {
         label: 'Mobile Number',
@@ -77,6 +83,7 @@ export const USER_FORM: Section[] = [
         default: '',
         path: 'mobileNumber',
         placeholder: '9123456789',
+        appearance: 'outline',
       },
       {
         label: 'Address Line 1',
@@ -87,6 +94,7 @@ export const USER_FORM: Section[] = [
         default: '',
         path: 'address1',
         placeholder: 'Street No./Building',
+        appearance: 'outline',
         optional: true,
       },
       {
@@ -97,6 +105,7 @@ export const USER_FORM: Section[] = [
         show: true,
         default: '',
         path: 'address2',
+        appearance: 'outline',
         placeholder: 'Village/Apartment/Unit/Building/Etc.',
         optional: true,
       },

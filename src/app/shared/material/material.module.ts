@@ -27,6 +27,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 @NgModule({
   imports: [
     CommonModule,
@@ -57,6 +58,7 @@ import { MatStepperModule } from '@angular/material/stepper';
     MatListModule,
     MatAutocompleteModule,
     MatStepperModule,
+    MatProgressBarModule,
   ],
   exports: [
     MatDialogModule,
@@ -86,6 +88,7 @@ import { MatStepperModule } from '@angular/material/stepper';
     MatListModule,
     MatAutocompleteModule,
     MatStepperModule,
+    MatProgressBarModule,
   ],
 })
 export class MaterialModule {}

@@ -81,12 +81,13 @@ export class SuperadminLoginComponent implements OnInit {
           }
         },
         (err) => {
+          console.log(err);
           this.isLoggedIn = false;
           this.isLoggingIn = false;
           this.dialog
             .open(ActionResultComponent, {
               data: {
-                msg: 'Unauthorized / Login Failed',
+                msg: `${err.error.message} / Login Failed`,
                 success: false,
                 button: 'Got it!',
               },

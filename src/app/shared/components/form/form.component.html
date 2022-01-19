@@ -12,9 +12,8 @@
         <div *ngIf="field.show" class="{{ css[field.fcname] }}">
           <!-- Text -->
           <mat-form-field
-            floatLabel="always"
             *ngIf="field.type === 'text'"
-            appearance="outline"
+            [appearance]="field.appearance"
           >
             <mat-label>{{ field.label }}</mat-label>
             <input
@@ -48,9 +47,8 @@
 
           <!-- Number -->
           <mat-form-field
-            floatLabel="always"
             *ngIf="field.type === 'number'"
-            appearance="outline"
+            [appearance]="field.appearance"
           >
             <mat-label>{{ field.label }}</mat-label>
             <input
@@ -68,7 +66,7 @@
           <mat-form-field
             floatLabel="always"
             *ngIf="field.type === 'mobileNumber'"
-            appearance="outline"
+            [appearance]="field.appearance"
           >
             <mat-label>{{ field.label }}</mat-label>
             <input
@@ -92,9 +90,8 @@
 
           <!-- Email -->
           <mat-form-field
-            floatLabel="always"
             *ngIf="field.type === 'email'"
-            appearance="outline"
+            [appearance]="field.appearance"
           >
             <mat-label>{{ field.label }}</mat-label>
             <input matInput type="text" [formControlName]="field.fcname" />
@@ -113,9 +110,8 @@
 
           <!-- Date -->
           <mat-form-field
-            floatLabel="always"
             *ngIf="field.type === 'date'"
-            appearance="outline"
+            [appearance]="field.appearance"
           >
             <mat-label>{{ field.label }}</mat-label>
             <input
@@ -171,7 +167,7 @@
             floatLabel="always"
             class="full-width"
             *ngIf="field.type == 'textarea'"
-            appearance="outline"
+            [appearance]="field.appearance"
           >
             <mat-label>{{ field.label }}</mat-label>
             <textarea
@@ -191,7 +187,7 @@
             floatLabel="always"
             class="full-width"
             *ngIf="field.type == 'select'"
-            appearance="outline"
+            [appearance]="field.appearance"
           >
             <mat-label>{{ field.label }}</mat-label>
             <mat-select [formControlName]="field.fcname">

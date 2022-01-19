@@ -1,12 +1,8 @@
 <app-loading [label]="'Loading'" *ngIf="loading"></app-loading>
 <app-loading [label]="'Logging Out'" *ngIf="loggingOut"></app-loading>
-<mat-sidenav-container
-  style="overflow: hidden"
-  *ngIf="!loading && !loggingOut"
-  autosize
->
+<mat-sidenav-container *ngIf="!loading && !loggingOut" autosize>
   <mat-sidenav
-    style="overflow: hidden"
+    style="overflow-x: hidden"
     class="nav"
     #sidenav
     mode="side"

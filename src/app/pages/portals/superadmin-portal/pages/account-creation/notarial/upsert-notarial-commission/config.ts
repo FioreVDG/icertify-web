@@ -14,6 +14,7 @@ export const NOTARIAL_FORM: Section[] = [
         show: true,
         default: '',
         path: 'lastName',
+        appearance: 'outline',
       },
       {
         label: 'First Name',
@@ -23,6 +24,7 @@ export const NOTARIAL_FORM: Section[] = [
         show: true,
         default: '',
         path: 'firstName',
+        appearance: 'outline',
       },
       {
         label: 'Middle Name',
@@ -32,6 +34,7 @@ export const NOTARIAL_FORM: Section[] = [
         show: true,
         default: '',
         path: 'middleName',
+        appearance: 'outline',
       },
       {
         label: 'Suffix',
@@ -43,6 +46,7 @@ export const NOTARIAL_FORM: Section[] = [
         path: 'others.suffix',
         optional: true,
         placeholder: 'Suffix(optional)',
+        appearance: 'outline',
       },
       {
         label: 'Email',
@@ -52,6 +56,7 @@ export const NOTARIAL_FORM: Section[] = [
         show: true,
         default: '',
         path: 'email',
+        appearance: 'outline',
       },
       {
         label: 'Mobile Number',
@@ -62,6 +67,7 @@ export const NOTARIAL_FORM: Section[] = [
         default: '',
         path: 'mobileNumber',
         placeholder: '9123456789',
+        appearance: 'outline',
       },
       {
         label: 'Roll Number',
@@ -71,6 +77,7 @@ export const NOTARIAL_FORM: Section[] = [
         show: true,
         default: '',
         path: 'roll_number',
+        appearance: 'outline',
       },
     ],
   },
@@ -91,6 +98,7 @@ export const HOME_ADDRESS_FIELD: Section[] = [
         path: 'address.address1',
         placeholder: 'Street No./Building',
         optional: true,
+        appearance: 'outline',
       },
       {
         label: 'Address Line 2',
@@ -102,6 +110,7 @@ export const HOME_ADDRESS_FIELD: Section[] = [
         path: 'address.address2',
         placeholder: 'Village/Apartment/Unit/Building/Etc.',
         optional: true,
+        appearance: 'outline',
       },
     ],
   },
@@ -121,6 +130,7 @@ export const OFFICE_ADDRESS_FIELD: Section[] = [
         path: 'office_address.address1',
         placeholder: 'Street No./Building',
         optional: true,
+        appearance: 'outline',
       },
       {
         label: 'Address Line 2',
@@ -132,6 +142,7 @@ export const OFFICE_ADDRESS_FIELD: Section[] = [
         path: 'office_address.address2',
         placeholder: 'Village/Apartment/Unit/Building/Etc.',
         optional: true,
+        appearance: 'outline',
       },
     ],
   },
@@ -149,6 +160,7 @@ export const PERIOD_OF_VALIDITY: Section[] = [
         show: true,
         default: '',
         path: 'period_startDate',
+        appearance: 'outline',
       },
       {
         label: 'End Date',
@@ -158,6 +170,7 @@ export const PERIOD_OF_VALIDITY: Section[] = [
         show: true,
         default: '',
         path: 'period_endDate',
+        appearance: 'outline',
       },
     ],
   },

@@ -10,7 +10,7 @@ const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'dashboard',
+        redirectTo: 'barangay-dashboard',
       },
       {
         path: 'barangay-dashboard',
@@ -24,6 +24,13 @@ const routes: Routes = [
         loadChildren: () =>
           import('./pages/registration/registration.module').then(
             (m) => m.RegistrationModule
+          ),
+      },
+      {
+        path: 'new-transaction',
+        loadChildren: () =>
+          import('./pages/new-transaction/new-transaction.module').then(
+            (m) => m.NewTransactionModule
           ),
       },
     ],
