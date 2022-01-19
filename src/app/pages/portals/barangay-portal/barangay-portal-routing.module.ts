@@ -33,6 +33,13 @@ const routes: Routes = [
             (m) => m.NewTransactionModule
           ),
       },
+      {
+        path: 'document-receiving',
+        loadChildren: () =>
+          import('./pages/document-receiving/document-receiving.module').then(
+            (m) => m.DocumentReceivingModule
+          ),
+      },
     ],
   },
 ];

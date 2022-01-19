@@ -22,6 +22,11 @@ export const BARANGAY_NAVS = [
     icon: 'post_add',
     route: 'new-transaction',
   },
+  {
+    label: 'Document Receiving',
+    icon: 'file_copy',
+    route: 'document-receiving',
+  },
 ];
 
 export const SUPERADMIN_NAVS = [
