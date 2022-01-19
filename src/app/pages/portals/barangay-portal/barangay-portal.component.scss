@@ -20,6 +20,7 @@
 mat-sidenav-container {
   height: 100%;
   background: #f7f8fb;
+  overflow-x: hidden;
 
   mat-sidenav {
     overflow-x: hidden;

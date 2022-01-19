@@ -1,0 +1,35 @@
+<div class="wrapper" align="center">
+  <ngx-file-drop
+    dropZoneClassName="drop-zone"
+    contentClassName="drop-zone-content"
+    browseBtnClassName="drop-zone-btn"
+    dropZoneLabel="Drop files here"
+    (onFileOver)="fileOver($event)"
+    (onFileLeave)="fileLeave($event)"
+    (onFileDrop)="dropped($event)"
+  >
+    <ng-template
+      ngx-file-drop-content-tmp
+      let-openFileSelector="openFileSelector"
+    >
+      <ng-container *ngIf="!uploading">
+        <div class="d-none d-md-block">
+          <mat-icon color="primary" style="font-size: 40px; color: #fff"
+            >cloud_upload</mat-icon
+          >
+          <h3 style="margin: 0">Drop file to upload</h3>
+          <p>or</p>
+        </div>
+
+        <button (click)="openFileSelector()">Browse Files</button>
+
+        <p>Accepted Format/s: {{ accepted }}</p>
+      </ng-container>
+      <ng-container *ngIf="uploading">
+        <span class="loader"></span>
+        <br /><br />
+        <p>Uploading Selected File. Please Wait.</p>
+      </ng-container>
+    </ng-template>
+  </ngx-file-drop>
+</div>

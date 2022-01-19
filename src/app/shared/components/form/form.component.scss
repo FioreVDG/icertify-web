@@ -17,14 +17,14 @@ h5 {
 }
 
 :host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
-  color: #51637e;
+  color: $primary;
 }
 :host
   ::ng-deep
   .mat-form-field-appearance-outline.mat-focused
   .mat-form-field-outline-thick {
-  color: #51637e !important;
+  color: $primary !important;
 }
 :host ::ng-deep .mat-form-field-label {
-  color: #51637e !important;
+  color: $primary !important;
 }

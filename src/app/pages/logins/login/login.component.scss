@@ -1,0 +1,201 @@
+// .login-bg {
+//   height: 100vh;
+//   max-width: 100vw;
+//   background-color: #26184a;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   overflow: hidden !important;
+
+//   .login-container {
+//     z-index: 1;
+//     height: 75vh;
+//     width: 80vw;
+//     border-radius: 25px;
+//     background: rgb(60, 55, 103);
+//     background: linear-gradient(
+//       90deg,
+//       rgba(60, 55, 103, 1) 19%,
+//       rgba(60, 55, 104, 1) 54%,
+//       rgba(66, 64, 117, 0.7318277652858018) 100%
+//     );
+//   }
+// }
+@import "../../../../assets/styles/variables.scss";
+
+.container {
+  height: 100%;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  margin: auto;
+  background: #f5f6f9;
+  .form-container {
+    width: 75%;
+    height: 75%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // flex-wrap: wrap;
+    animation: scale-in-center 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    @keyframes scale-in-center {
+      0% {
+        transform: scale(0);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    .left {
+      background: #fff;
+      height: 100%;
+      width: 30%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 2rem 3rem;
+      border-top-left-radius: 15px;
+      border-bottom-left-radius: 15px;
+      background-image: linear-gradient(
+          90deg,
+          rgba(44, 19, 82, 0.511) 0%,
+          rgba(44, 19, 82, 0.6449930313922444) 100%
+        ),
+        url("./../../../../assets/images/register-bg.jpg");
+      .img-container {
+        height: 15rem;
+        width: 15rem;
+        background: radial-gradient(#f1f1f1 30%, #ddd 50%, #aeadaf 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      img {
+        width: 50%;
+      }
+      h3 {
+        font-weight: 500;
+        color: #fff;
+        font-family: "Tomatoes" !important;
+        font-size: 37px;
+        letter-spacing: 0.1rem;
+        margin-bottom: 0;
+      }
+      p {
+        margin-top: 0.2rem;
+        color: #fff;
+        letter-spacing: 0.3rem;
+        font-size: 11px;
+      }
+      button {
+        // border: 3px #fff solid;
+        outline: none;
+        border: none;
+        border-radius: 0;
+        margin-top: 1.5rem;
+        height: 3.5rem;
+        width: 100%;
+        background-color: #000;
+        color: #fff;
+        letter-spacing: 0.1rem;
+        cursor: pointer;
+        font-weight: 500;
+        letter-spacing: 0.1rem;
+      }
+      button:hover {
+        background: #26184a;
+        color: #fff;
+      }
+    }
+    .right {
+      width: 70%;
+      background: #fff;
+      height: 100%;
+      padding: 2rem 7rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      h2 {
+        font-weight: 600;
+        color: #565656;
+        letter-spacing: 0.1rem;
+        text-transform: uppercase;
+      }
+
+      mat-form-field {
+        margin-top: 1rem;
+      }
+
+      .login-btn {
+        font-size: 16px;
+        height: 3rem;
+        margin-top: 0.8rem;
+      }
+    }
+  }
+}
+.forgot {
+  text-align: right;
+  color: $primary;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.register-row {
+  display: flex;
+}
+.roll-in-blurred-left {
+  -webkit-animation: roll-in-blurred-left 0.65s cubic-bezier(0.23, 1, 0.32, 1)
+    both;
+  animation: roll-in-blurred-left 0.65s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+@media only screen and (max-width: 760px) {
+  .container {
+    height: auto;
+    min-width: 100%;
+    padding: 1rem 0rem;
+    .form-container {
+      width: 95%;
+      height: auto;
+      .left {
+        width: 100%;
+        height: auto;
+        border-radius: 0%;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        padding: 1rem 2rem;
+        .img-container {
+          height: 5rem;
+          width: 5rem;
+        }
+        h3 {
+          font-size: 11.5px;
+        }
+        button {
+          margin-top: 0;
+          height: 2rem;
+          width: 55%;
+        }
+      }
+      .right {
+        width: 100%;
+        height: auto;
+        padding: 1.2rem;
+        h2 {
+          text-align: center;
+          color: #565656;
+          font-size: 19px;
+        }
+      }
+    }
+  }
+}

@@ -37,7 +37,19 @@ export class AuthService {
     );
   }
 
+  login(email: string, password: string) {
+    return this.http.post(
+      this.url + '/auth/login',
+      { email, password },
+      this.getHeaders()
+    );
+  }
+
   me() {
     return this.http.get(this.url + '/auth/me', this.getHeaders());
+  }
+
+  registerUser(body: Object) {
+    return this.http.post(this.url + '/auth/register', body);
   }
 }

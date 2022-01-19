@@ -1,4 +1,3 @@
-import { UsersModule } from './users/users.module';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AccountCreationComponent } from './account-creation.component';
@@ -13,6 +12,13 @@ const routes: Routes = [
         loadChildren: () =>
           import('./../account-creation/users/users.module').then(
             (m) => m.UsersModule
+          ),
+      },
+      {
+        path: 'notarial',
+        loadChildren: () =>
+          import('./../account-creation/notarial/notarial.module').then(
+            (m) => m.NotarialModule
           ),
       },
     ],

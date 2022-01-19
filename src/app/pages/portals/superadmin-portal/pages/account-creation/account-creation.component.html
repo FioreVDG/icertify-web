@@ -24,4 +24,7 @@
     </div>
   </div>
 </div>
-<router-outlet *ngIf="this.currRoute.length > 3"></router-outlet>
+<router-outlet
+  (activate)="onRouteActive()"
+  *ngIf="this.currRoute.length >= 3"
+></router-outlet>

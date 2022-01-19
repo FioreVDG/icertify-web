@@ -1,0 +1,24 @@
+<h3 mat-dialog-title>{{ data.header }}</h3>
+<div mat-dialog-content>
+  <app-form
+    #registrantDetails
+    [formfields]="registrantFromFields"
+    (formInitiated)="formInitialized()"
+    (formListener)="formListener($event)"
+  ></app-form>
+  <app-image-form
+    [mobileNumber]="this.data.mobileNumber"
+    (imageEmitter)="imageEmitter($event)"
+  ></app-image-form>
+</div>
+
+<div mat-dialog-actions align="center">
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="submit()"
+    [disabled]="!imageFormValid || !registrantDetails.form.valid || saving"
+  >
+    <mat-icon>save_as</mat-icon>&nbsp;Save
+  </button>
+</div>

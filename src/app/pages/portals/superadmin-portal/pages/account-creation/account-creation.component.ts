@@ -21,9 +21,11 @@ export class AccountCreationComponent implements OnInit {
     private router: Router
   ) {
     this.getListOfBarangay();
+    this.onRouteActive();
+  }
+  onRouteActive() {
     this.currRoute = this.router.url.split('/');
   }
-
   ngOnInit(): void {}
   openMenu(action: string) {
     switch (action) {
@@ -49,7 +51,7 @@ export class AccountCreationComponent implements OnInit {
                 .afterClosed()
                 .subscribe((res: any) => {
                   console.log(res);
-                  this.currRoute = this.router.url.split('/');
+                  this.onRouteActive();
                 });
             }
           });
@@ -67,8 +69,14 @@ export class AccountCreationComponent implements OnInit {
           .afterClosed()
           .subscribe((res: any) => {
             console.log(res);
-            this.currRoute = this.router.url.split('/');
+            this.onRouteActive();
           });
+        break;
+      case 'notary':
+        this.router.navigate([
+          `${this.currRoute[1]}/account-creation/notarial`,
+        ]);
+        this.onRouteActive();
         break;
 
       default:

@@ -41,6 +41,19 @@ export class UtilService {
     else return this.deepFind(obj[path[0]], path.slice(1));
   }
 
+  formNumberInputOnly(event: any) {
+    return (
+      // backspace
+      (event.charCode > 7 && event.charCode < 9) ||
+      // period ('.')
+      (event.charCode > 45 && event.charCode < 47) ||
+      // 0-9
+      (event.charCode > 47 && event.charCode < 58) ||
+      // delete
+      (event.charCode > 126 && event.charCode < 128)
+    );
+  }
+
   // findAccessRoute(me: User, currRoute: any) {
   //   let route: any = {};
   //   if (me._role && me._role.access) {

@@ -46,10 +46,12 @@
   </div>
   <mat-dialog-actions>
     <button
-      [disabled]="!userDetails.form.valid && brgyDetails.valid"
+      mat-button
+      color="primary"
+      [disabled]="(!userDetails.form.valid && !brgyDetails.valid) || saving"
       (click)="onSave()"
     >
-      Save
+      {{ saving ? "Saving..." : "Save" }}
     </button>
   </mat-dialog-actions>
 </ng-container>

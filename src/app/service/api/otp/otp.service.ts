@@ -16,7 +16,7 @@ export class OtpService {
   ) {}
 
   setHeaders() {
-    let otp_token = localStorage.getItem('SESSION_OTP_TOKEN');
+    let otp_token = localStorage.getItem('OTP_TOKEN');
 
     let headers = new HttpHeaders({
       o_auth: otp_token || '',
