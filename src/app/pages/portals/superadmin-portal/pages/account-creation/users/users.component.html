@@ -1,5 +1,10 @@
 <h3>Users</h3>
-<app-table [columns]="column" [dataSource]="dataSource"></app-table>
+<app-table
+  [columns]="column"
+  [dataSource]="dataSource"
+  [bottomSheet]="bsConfig"
+  (onRowClick)="onRowClick($event)"
+></app-table>
 <button (click)="onAdd()" mat-fab color="primary" class="bottom-right-button">
   <mat-icon>add</mat-icon>
 </button>

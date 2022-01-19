@@ -1,6 +1,8 @@
+import { BottomSheetComponent } from './../bottom-sheet/bottom-sheet.component';
 import { UtilService } from './../../../service/util/util.service';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Column } from 'src/app/models/column.interface';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'app-table',
@@ -11,11 +13,12 @@ export class TableComponent implements OnInit {
   @Input() dataSource: any = [];
   @Input() dataLength: number = 0;
   @Input() columns!: Array<Column>;
-
+  @Input() bottomSheet: any;
+  @Output() onRowClick: any = new EventEmitter<any>();
   duplicateColumns!: Array<Column>;
 
   displayedColumns: Array<string> = [];
-  constructor(public util: UtilService) {}
+  constructor(public util: UtilService, private _bs: MatBottomSheet) {}
 
   ngOnInit(): void {
     this.duplicateColumns = JSON.parse(JSON.stringify(this.columns));
@@ -51,5 +54,17 @@ export class TableComponent implements OnInit {
     this.columns.forEach((d) => {
       if (d.selected) this.displayedColumns.push(d.path);
     });
+  }
+  rowClick(element: any) {
+    this._bs
+      .open(BottomSheetComponent, { data: { config: this.bottomSheet } })
+      .afterDismissed()
+      .subscribe((res: any) => {
+        let event = {
+          obj: element,
+          action: res,
+        };
+        this.onRowClick.emit(event);
+      });
   }
 }

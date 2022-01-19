@@ -16,7 +16,7 @@ export class NotarialService {
   updateNotarial(notarialId: string, body: object) {
     return this.http.start('patch', `/notarial/${notarialId}`, body);
   }
-  deleteNotarial(notarialId: string, query: QueryParams) {
+  deleteNotarial(notarialId: string) {
     return this.http.start('delete', `/notarial/${notarialId}`);
   }
 }

@@ -7,14 +7,24 @@ import { HttpService } from '../../http/http.service';
 })
 export class UserService {
   constructor(@Inject(HttpService) private http: HttpService) {}
-  createUser(body: Object) {
-    return this.http.start('post', '/users', body);
-  }
+
   getAllUser(query: QueryParams) {
     return this.http.start('get', `/users`, {}, query);
   }
   createAdmin(body: Object) {
     return this.http.start('post', '/users/admins', body);
+  }
+  updateUser(id: string, body: object) {
+    return this.http.start('patch', `/user/${id}`);
+  }
+  deleteAdmin(id: string) {
+    return this.http.start('delete', `/users/admin/${id}`);
+  }
+  createUser(body: Object) {
+    return this.http.start('post', '/users/users', body);
+  }
+  deleteUser(id: string) {
+    return this.http.start('delete', `/users/user/${id}`);
   }
   checkExistingMobileNumber(mobileNumber: string) {
     return this.http.start('post', `/users/checkExistingMobileNumber`, {
