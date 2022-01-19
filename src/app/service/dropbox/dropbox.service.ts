@@ -8,7 +8,7 @@ declare var require: any;
 export class DropboxService {
   // ACCESS TOKEN DzRw_RqKzxEAAAAAAAAAAWb2306de5LGMnq_VFFW_Fm_fdw0ZnsTUKF3PQrpPBA6
   accessToken =
-    'Pw_dfDl2_aAAAAAAAAAAAScT4Ou8MOMfnmon3uJxlGH0PyiHNyPZKrI8Z5Gpj3mR'; //QCLD Dropbox
+    'sl.BASj_hJfXDW_GxNLdDmIkv-6IH-t_aYxAI3t3-AFoxq5aElKcseGLaMX5fqCaUA-lTYutuLiwffD2nGm0ZJb_Pq7Z7Kas01LdOResYCDtcfM7AnJFUwCbdFFCwCGGSuA1fDhR4Q'; //QCLD Dropbox
   dbx: any;
 
   constructor() {
