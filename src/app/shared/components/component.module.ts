@@ -7,6 +7,8 @@ import { NgModule } from '@angular/core';
 import { LoadingComponent } from './loading/loading.component';
 import { AvatarModule } from 'ngx-avatar';
 import { ProfileMenuComponent } from './profile-menu/profile-menu.component';
+import { AutoCompleteComponent } from './auto-complete/auto-complete.component';
+import { BottomSheetComponent } from './bottom-sheet/bottom-sheet.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +16,8 @@ import { ProfileMenuComponent } from './profile-menu/profile-menu.component';
     ProfileMenuComponent,
     FormComponent,
     TableComponent,
+    AutoCompleteComponent,
+    BottomSheetComponent,
   ],
   imports: [MaterialModule, CommonModule, AvatarModule, ReactiveFormsModule],
   exports: [
@@ -21,6 +25,8 @@ import { ProfileMenuComponent } from './profile-menu/profile-menu.component';
     ProfileMenuComponent,
     FormComponent,
     TableComponent,
+    AutoCompleteComponent,
+    BottomSheetComponent,
   ],
   schemas: [],
 })

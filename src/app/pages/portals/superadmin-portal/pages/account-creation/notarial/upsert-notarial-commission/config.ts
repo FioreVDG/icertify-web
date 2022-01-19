@@ -1,3 +1,4 @@
+import { AUTO_COMPLETE_FIELDS } from './../../../../../../../models/auto-complete.interface';
 import { Section } from 'src/app/models/form.interface';
 
 export const NOTARIAL_FORM: Section[] = [
@@ -44,6 +45,25 @@ export const NOTARIAL_FORM: Section[] = [
         placeholder: 'Suffix(optional)',
       },
       {
+        label: 'Email',
+        type: 'email',
+        colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
+        fcname: 'email',
+        show: true,
+        default: '',
+        path: 'email',
+      },
+      {
+        label: 'Mobile Number',
+        type: 'mobileNumber',
+        colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
+        fcname: 'mobileNumber',
+        show: true,
+        default: '',
+        path: 'mobileNumber',
+        placeholder: '9123456789',
+      },
+      {
         label: 'Roll Number',
         type: 'text',
         colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
@@ -52,15 +72,15 @@ export const NOTARIAL_FORM: Section[] = [
         default: '',
         path: 'roll_number',
       },
-      {
-        label: 'IBP Chapter',
-        type: 'text',
-        colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
-        fcname: 'ibp_chapter',
-        show: true,
-        default: '',
-        path: 'ibo_chapter',
-      },
+    ],
+  },
+];
+
+export const HOME_ADDRESS_FIELD: Section[] = [
+  {
+    section: 'Home Address Details',
+    show: true,
+    items: [
       {
         label: 'Address Line 1',
         type: 'text',
@@ -68,7 +88,7 @@ export const NOTARIAL_FORM: Section[] = [
         fcname: 'address1',
         show: true,
         default: '',
-        path: 'address1',
+        path: 'address.address1',
         placeholder: 'Street No./Building',
         optional: true,
       },
@@ -79,14 +99,43 @@ export const NOTARIAL_FORM: Section[] = [
         fcname: 'address2',
         show: true,
         default: '',
-        path: 'address2',
+        path: 'address.address2',
         placeholder: 'Village/Apartment/Unit/Building/Etc.',
         optional: true,
       },
     ],
   },
 ];
-
+export const OFFICE_ADDRESS_FIELD: Section[] = [
+  {
+    section: 'Office Address Details',
+    show: true,
+    items: [
+      {
+        label: 'Address Line 1',
+        type: 'text',
+        colspan: { xs: 12, sm: 12, md: 12, lg: 12, xl: 12 },
+        fcname: 'office_address1',
+        show: true,
+        default: '',
+        path: 'office_address.address1',
+        placeholder: 'Street No./Building',
+        optional: true,
+      },
+      {
+        label: 'Address Line 2',
+        type: 'text',
+        colspan: { xs: 12, sm: 12, md: 12, lg: 12, xl: 12 },
+        fcname: 'office_address2',
+        show: true,
+        default: '',
+        path: 'office_address.address2',
+        placeholder: 'Village/Apartment/Unit/Building/Etc.',
+        optional: true,
+      },
+    ],
+  },
+];
 export const PERIOD_OF_VALIDITY: Section[] = [
   {
     section: 'Period of Validity',
@@ -114,7 +163,7 @@ export const PERIOD_OF_VALIDITY: Section[] = [
   },
 ];
 
-export const ADDRESS_SELECT = [
+export const HOME_ADDRESS_SELECT = [
   {
     label: 'Region',
     type: 'select',
@@ -134,7 +183,7 @@ export const ADDRESS_SELECT = [
     required: true,
     colspan: { xs: 3, sm: 3, md: 3, lg: 3, xl: 3 },
     fcname: 'province',
-    show: false,
+    show: true,
     choices: [],
     choiceLabel: 'provDesc',
     choiceValue: 'provCode',
@@ -147,7 +196,7 @@ export const ADDRESS_SELECT = [
     required: false,
     colspan: { xs: 3, sm: 3, md: 3, lg: 3, xl: 3 },
     fcname: 'cityMun',
-    show: false,
+    show: true,
     choices: [],
     choiceLabel: 'citymunDesc',
     choiceValue: 'citymunCode',
@@ -160,7 +209,7 @@ export const ADDRESS_SELECT = [
     required: true,
     colspan: { xs: 3, sm: 3, md: 3, lg: 3, xl: 3 },
     fcname: 'barangay',
-    show: false,
+    show: true,
     default: '',
     choices: [],
     choiceLabel: 'brgyDesc',
@@ -168,3 +217,196 @@ export const ADDRESS_SELECT = [
     path: 'barangay',
   },
 ];
+export const OFFICE_ADDRESS_SELECT = [
+  {
+    label: 'Region',
+    type: 'select',
+    required: true,
+    colspan: { xs: 3, sm: 3, md: 3, lg: 3, xl: 3 },
+    fcname: 'office_region',
+    show: true,
+    choices: [],
+    choiceLabel: 'regDesc',
+    choiceValue: 'regCode',
+    default: '',
+    path: 'office_region',
+  },
+  {
+    label: 'Province',
+    type: 'select',
+    required: true,
+    colspan: { xs: 3, sm: 3, md: 3, lg: 3, xl: 3 },
+    fcname: 'office_province',
+    show: true,
+    choices: [],
+    choiceLabel: 'provDesc',
+    choiceValue: 'provCode',
+    default: '',
+    path: 'office_province',
+  },
+  {
+    label: 'City',
+    type: 'select',
+    required: false,
+    colspan: { xs: 3, sm: 3, md: 3, lg: 3, xl: 3 },
+    fcname: 'office_cityMun',
+    show: true,
+    choices: [],
+    choiceLabel: 'citymunDesc',
+    choiceValue: 'citymunCode',
+    default: '',
+    path: 'office_cityMun',
+  },
+  {
+    label: 'Barangay',
+    type: 'select',
+    required: true,
+    colspan: { xs: 3, sm: 3, md: 3, lg: 3, xl: 3 },
+    fcname: 'office_barangay',
+    show: true,
+    default: '',
+    choices: [],
+    choiceLabel: 'brgyDesc',
+    choiceValue: 'brgyCode',
+    path: 'office_barangay',
+  },
+];
+
+export const IBP_CHAPTER_REGION_PROVINCE: AUTO_COMPLETE_FIELDS = {
+  title: 'Select IBP CHAPTER',
+  item: [
+    {
+      label: 'NORTHERN LUZON',
+      sub_opt: [
+        'Abra',
+        'Apayao',
+        'Baguio-Benguet',
+        'Batanes',
+        'Cagayan',
+        'Ifugao',
+        'Ilocos Norte',
+        'Ilocos Sur',
+        'Isabela',
+        'Kalinga',
+        'La Union',
+        'Mountain Province',
+        'Nueva Vizcaya',
+        'Quirino',
+      ],
+    },
+
+    {
+      label: 'CENTRAL LUZON',
+      sub_opt: [
+        'Bataan',
+        'Bulacan',
+        'Nueva Ecija',
+        'Pampanga',
+        'Pangasinan',
+        'Tarlac',
+        'Zambales',
+      ],
+    },
+    {
+      label: 'SOUTHERN LUZON',
+      sub_opt: [
+        'Aurora',
+        'Batangas',
+        'CAL-MA-NA',
+        'Cavite',
+        'Laguna',
+        'Makati',
+        'Marinduque',
+        'Occidental Mindoro',
+        'Oriental Mindoro',
+        'PPLM',
+        'Quezon',
+        'RSM',
+      ],
+    },
+
+    {
+      label: 'GREATER MANILA',
+      sub_opt: [
+        'Manila I',
+        'Manila II',
+        'Manila III',
+        'Manila IV',
+        'Quezon City',
+      ],
+    },
+    {
+      label: 'BICOLANDIA',
+      sub_opt: [
+        'Albay',
+        'Camarines Norte',
+        'Camarines Sur',
+        'Catanduanes',
+        'Masbate',
+        'Sorsogon',
+      ],
+    },
+    {
+      label: 'EASTERN VISAYAS',
+      sub_opt: [
+        'Biliran',
+        'Bohol',
+        'Cebu',
+        'Cebu City',
+        'Eastern Samar',
+        'Leyte',
+        'Northern Samar',
+        'Samar',
+        'Southern Leyte',
+      ],
+    },
+    {
+      label: 'WESTERN VISAYAS',
+      sub_opt: [
+        'Aklan',
+        'Antique',
+        'Capiz',
+        'Guimaras',
+        'Iloilo',
+        'Negros Occidental',
+        'Negros Oriental',
+        'Palawan',
+        'Romblon',
+        'Siquijor',
+      ],
+    },
+    {
+      label: 'EASTERN MINDANAO',
+      sub_opt: [
+        'Agusan Del Norte',
+        'Agusan Del Sur',
+        'Bukidnon',
+        'Camiguin',
+        'Davao City',
+        'Davao Del Norte',
+        'Davao Del Sur',
+        'Davao Oriental',
+        'Misamis Oriental',
+        'Surigao Del Norte',
+        'Surigao Del Sur',
+      ],
+    },
+    {
+      label: 'WESTERN MINDANAO',
+      sub_opt: [
+        'Cotabato',
+        'Lanao Del Norte',
+        'Lanao Del Sur',
+        'Misamis Occidental',
+        'North Cotabato',
+        'South Cotabato',
+        'Sarangani',
+        'Zambasulta',
+        'Zamboanga Del Norte',
+        'Zamboanga Del Sur',
+        'Zamboanga-Sibugay',
+        'Sultan Kudara',
+      ],
+    },
+  ],
+};
