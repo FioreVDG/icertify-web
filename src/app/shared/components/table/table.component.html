@@ -1,4 +1,4 @@
-<div class="btn-section">
+<div class="btn-section" *ngIf="filterButtonConfig">
   <button
     mat-raised-button
     *ngFor="let btn of filterButtonConfig; let i = index"
