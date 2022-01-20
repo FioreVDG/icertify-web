@@ -1,10 +1,10 @@
 export interface NavNode {
-  label: String;
-  icon: String;
-  routeTo?: String;
+  label: string;
+  icon: string;
+  route?: string;
   children?: NavNode[];
-  hasAccess: Boolean;
-  action?: String;
-  css?: String;
-  hidden?: Boolean;
+  hasAccess: boolean;
+  action?: string;
+  css?: string;
+  hidden?: boolean;
 }

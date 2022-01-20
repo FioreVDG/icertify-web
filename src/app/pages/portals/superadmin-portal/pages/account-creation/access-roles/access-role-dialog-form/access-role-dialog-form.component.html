@@ -1,1 +1,125 @@
-<p>access-role-dialog-form works!</p>
+<h1 mat-dialog-title>
+  {{ dialogTitle | titlecase }}
+  <mat-icon (click)="onClose()" class="close-btn" color="warn">close</mat-icon>
+</h1>
+<div mat-dialog-content>
+  <mat-stepper orientation="vertical" [linear]="data.action === 'add'" #stepper>
+    <mat-step [stepControl]="roleDetails.form">
+      <ng-template matStepLabel>ROLE DETAILS</ng-template>
+      <app-form
+        #roleDetails
+        [formfields]="roleFormFields"
+        (formInitiated)="formInitialized()"
+        (formListener)="formListener($event)"
+        [obj]="Roleinterface"
+      ></app-form>
+      <div>
+        <button
+          mat-stroked-button
+          color="primary"
+          matStepperNext
+          [disabled]="!roleDetails.form.valid"
+        >
+          Next&nbsp;
+          <mat-icon>fast_forward</mat-icon>
+        </button>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>ACCESSIBLE MODULES</ng-template>
+      <div *ngFor="let a of accesses; let i = index" class="py-2">
+        <div class="p-3 mb-2 main-module">
+          <div class="flex justify-content-between">
+            <mat-checkbox [(ngModel)]="a.hasAccess" (change)="check(a)">
+              <b class="upper">{{ a.label }}</b>
+            </mat-checkbox>
+            <mat-icon fontSet="material-icons-outlined">{{ a.icon }}</mat-icon>
+          </div>
+          <ng-container *ngIf="a.children?.length && a.hasAccess && a.route">
+            <mat-divider class="my-3"></mat-divider>
+            <div class="grid">
+              <div class="col-12 px-3" *ngFor="let childInitial of a.children">
+                <div class="flex justify-content-between">
+                  <mat-checkbox
+                    color="primary"
+                    [(ngModel)]="childInitial.hasAccess"
+                    (change)="check(childInitial)"
+                  >
+                    {{ childInitial.label }}
+                  </mat-checkbox>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <div
+            class="mt-3"
+            @onOff
+            *ngIf="a.children?.length && a.hasAccess && !a.route"
+          >
+            <div *ngFor="let child of a.children">
+              <div class="p-3 mb-2 sub-module">
+                <div class="flex justify-content-between">
+                  <mat-checkbox
+                    [(ngModel)]="child.hasAccess"
+                    (change)="check(child)"
+                    ><b style="font-weight: 500">
+                      {{ child.label }}
+                    </b>
+                  </mat-checkbox>
+                  <mat-icon>{{ child.icon }}</mat-icon>
+                </div>
+                <ng-container *ngIf="child.children?.length && child.hasAccess">
+                  <mat-divider class="my-3"></mat-divider>
+                  <div class="grid">
+                    <div
+                      class="col-12 px-3"
+                      *ngFor="let childFinal of child.children"
+                    >
+                      <div class="flex justify-content-between">
+                        <mat-checkbox
+                          color="primary"
+                          [(ngModel)]="childFinal.hasAccess"
+                          (change)="check(childFinal)"
+                        >
+                          {{ childFinal.label }}
+                        </mat-checkbox>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button
+        mat-stroked-button
+        color="primary"
+        matStepperPrevious
+        [disabled]="!roleDetails.form.valid"
+      >
+        <mat-icon>fast_rewind</mat-icon>&nbsp;Go Back
+      </button>
+    </mat-step>
+  </mat-stepper>
+</div>
+<div mat-dialog-actions align="end">
+  <button
+    mat-raised-button
+    *ngIf="roleDetails.form.dirty || accessChanged"
+    [disabled]="saving || !roleDetails.form.valid || !accessChanged"
+    color="secondary"
+    (click)="resetForm()"
+  >
+    UNDO CHANGES
+  </button>
+  <button
+    mat-raised-button
+    *ngIf="roleDetails.form.dirty || accessChanged"
+    [disabled]="saving || !roleDetails.form.valid || !accessChanged"
+    color="primary"
+    (click)="onSubmit()"
+  >
+    {{ saving ? "SAVING..." : "SUBMIT" }}
+  </button>
+</div>
