@@ -40,6 +40,13 @@ const routes: Routes = [
             (m) => m.DocumentReceivingModule
           ),
       },
+      {
+        path: 'batch-delivery-management',
+        loadChildren: () =>
+          import(
+            './pages/batch-delivery-management/batch-delivery-management.module'
+          ).then((m) => m.BatchDeliveryManagementModule),
+      },
     ],
   },
 ];

@@ -19,6 +19,11 @@ export class UsersComponent implements OnInit {
   userType: any;
   _notarialId: any;
   dataSource = [];
+  page = {
+    pageSize: 10,
+    pageIndex: 1,
+  };
+  dataLength: number = 0;
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -30,7 +35,7 @@ export class UsersComponent implements OnInit {
     this._brgyId = this.route.snapshot.paramMap.get('brgyId');
     this._notarialId = this.route.snapshot.paramMap.get('notarialId');
     this.userType = this.route.snapshot.paramMap.get('userType');
-    this.fetchUser();
+    this.fetchUser(this.page);
   }
   onAdd() {
     this.dialog
@@ -45,19 +50,27 @@ export class UsersComponent implements OnInit {
       .afterClosed()
       .subscribe(
         (res: any) => {
-          if (res) this.fetchUser();
+          if (res) this.fetchUser(this.page);
         },
         (err) => {
           console.log(err);
         }
       );
   }
-  fetchUser() {
+  fetchUser(event?: any) {
     let qry: QueryParams = {
       find: [],
+      page: event.pageIndex,
+      limit: event.pageSize + '',
+      filter: event.filter,
     };
-    if (this.userType === 'Barangay') {
-      qry.find.push({ field: 'type', operator: '=', value: this.userType });
+
+    if (this.userType) {
+      qry.find.push({
+        field: 'type',
+        operator: '=',
+        value: this.userType === 'iCertify' ? 'Admin' : this.userType,
+      });
     }
     if (this._brgyId && this._brgyId !== 'undefined')
       qry.find.push({ field: '_brgyId', operator: '=', value: this._brgyId });
@@ -67,9 +80,14 @@ export class UsersComponent implements OnInit {
         operator: '=',
         value: this._notarialId,
       });
+    if (event && event.filter) {
+      qry['filter'] = event.filter;
+    }
+    console.log(qry);
     this.api.user.getAllUser(qry).subscribe((res: any) => {
-      console.log(res.env.users);
+      console.log(res);
       this.dataSource = res.env.users;
+      this.dataLength = res.count;
     });
   }
   onRowClick(event: any) {
@@ -94,5 +112,9 @@ export class UsersComponent implements OnInit {
       default:
         break;
     }
+  }
+  onTableUpdate(event: any) {
+    console.log(event);
+    this.fetchUser(event);
   }
 }

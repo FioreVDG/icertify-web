@@ -1,4 +1,27 @@
-<div class="table-responsive">
+<div class="btn-section">
+  <button
+    mat-raised-button
+    *ngFor="let btn of filterButtonConfig; let i = index"
+    [color]="btn.selected ? 'primary' : ''"
+    (click)="onFilterButtonClick(btn.label)"
+  >
+    {{ btn.label }}
+  </button>
+</div>
+<div class="search-section">
+  <mat-form-field class="search-area" appearance="outline">
+    <input
+      class="search-area"
+      matInput
+      type="text"
+      placeholder="Search"
+      [(ngModel)]="keyword"
+      (keyup.enter)="onTriggerSearch()"
+    />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+</div>
+<div class="table-responsive" *ngIf="!loading">
   <table mat-table [dataSource]="dataSource">
     <ng-container *ngFor="let col of columns">
       <ng-container matColumnDef="{{ col.path }}">
@@ -23,5 +46,19 @@
       mat-row
       *matRowDef="let row; columns: displayedColumns; let i = index"
     ></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" style="text-align: center" colspan="9999">
+        No Records Found
+      </td>
+    </tr>
   </table>
+  <mat-paginator
+    [length]="dataLength"
+    [pageSize]="pagination.pageSize"
+    [pageIndex]="pagination.pageIndex - 1"
+    [pageSizeOptions]="[5, 10, 15, 25, 50]"
+    showFirstLastButtons
+    (page)="onClickPagination($event)"
+  >
+  </mat-paginator>
 </div>

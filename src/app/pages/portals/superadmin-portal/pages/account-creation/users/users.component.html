@@ -4,6 +4,9 @@
   [dataSource]="dataSource"
   [bottomSheet]="bsConfig"
   (onRowClick)="onRowClick($event)"
+  [pagination]="page"
+  [dataLength]="dataLength"
+  (onUpdateTableEmit)="onTableUpdate($event)"
 ></app-table>
 <button (click)="onAdd()" mat-fab color="primary" class="bottom-right-button">
   <mat-icon>add</mat-icon>

@@ -15,6 +15,11 @@ export class NotarialComponent implements OnInit {
   column = NOTARIAL;
   dataSource = [];
   bottomSheet = NOTARIAL_BOTTOMSHEET;
+  page = {
+    pageSize: 10,
+    pageIndex: 1,
+  };
+  dataLength: number = 0;
   constructor(
     private dialog: MatDialog,
     private api: ApiService,
@@ -22,7 +27,7 @@ export class NotarialComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.fetchNotarial();
+    this.fetchNotarial(this.page);
   }
   openDialog() {
     this.dialog
@@ -31,33 +36,39 @@ export class NotarialComponent implements OnInit {
       .subscribe(
         (res: any) => {
           console.log(res);
-          if (res) this.fetchNotarial();
+          if (res) this.fetchNotarial(this.page);
         },
         (err) => {
           console.log(err);
         }
       );
   }
-  fetchNotarial() {
-    this.api.user
-      .getAllUser({
-        find: [
-          {
-            field: 'type',
-            operator: '=',
-            value: 'Notary',
-          },
-          {
-            field: 'isMain',
-            operator: '=',
-            value: true,
-          },
-        ],
-      })
-      .subscribe((res: any) => {
-        console.log(res);
-        this.dataSource = res.env.users;
-      });
+  fetchNotarial(event?: any) {
+    let qry: any = {
+      find: [
+        {
+          field: 'type',
+          operator: '=',
+          value: 'Notary',
+        },
+        {
+          field: 'isMain',
+          operator: '=',
+          value: true,
+        },
+      ],
+      page: event.pageIndex,
+      limit: event.pageSize + '',
+      filter: event.filter,
+    };
+    if (event && event.filter) {
+      qry['filter'] = event.filter;
+    }
+    this.api.user.getAllUser(qry).subscribe((res: any) => {
+      console.log(res);
+      this.dataSource = res.env.users;
+      this.dataLength = res.count;
+    });
   }
   onRowClick(event: any) {
     console.log(event);
@@ -69,7 +80,7 @@ export class NotarialComponent implements OnInit {
           })
           .afterClosed()
           .subscribe((res: any) => {
-            if (res) this.fetchNotarial();
+            if (res) this.fetchNotarial(this.page);
           });
         break;
       case 'delete':
@@ -81,7 +92,7 @@ export class NotarialComponent implements OnInit {
           .subscribe((res: any) => {
             if (res)
               this.api.user.deleteAdmin(event.obj._id).subscribe((res: any) => {
-                this.fetchNotarial();
+                this.fetchNotarial(this.page);
               });
           });
         break;
@@ -95,5 +106,9 @@ export class NotarialComponent implements OnInit {
       default:
         break;
     }
+  }
+  onTableUpdate(event: any) {
+    console.log(event);
+    this.fetchNotarial(event);
   }
 }

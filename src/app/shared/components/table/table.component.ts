@@ -1,8 +1,17 @@
 import { BottomSheetComponent } from './../bottom-sheet/bottom-sheet.component';
 import { UtilService } from './../../../service/util/util.service';
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  Output,
+  EventEmitter,
+  ViewChild,
+} from '@angular/core';
 import { Column } from 'src/app/models/column.interface';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { TableOutput } from 'src/app/models/tableemit.interface';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-table',
@@ -14,14 +23,25 @@ export class TableComponent implements OnInit {
   @Input() dataLength: number = 0;
   @Input() columns!: Array<Column>;
   @Input() bottomSheet: any;
+  @Input() pagination: any;
   @Output() onRowClick: any = new EventEmitter<any>();
+  @Input() filterButtonConfig: any = [];
   duplicateColumns!: Array<Column>;
-
+  @Output() onUpdateTableEmit: any = new EventEmitter<any>();
+  @Input() loading = false;
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   displayedColumns: Array<string> = [];
+  keyword: any;
+  curPageIndex: number = 1;
   constructor(public util: UtilService, private _bs: MatBottomSheet) {}
-
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
   ngOnInit(): void {
-    this.duplicateColumns = JSON.parse(JSON.stringify(this.columns));
+    console.log('Here');
+    this.duplicateColumns = JSON.parse(
+      JSON.stringify(this.columns ? this.columns : this.defaultColumn())
+    );
     this.updateBreakpoint();
   }
   updateBreakpoint() {
@@ -50,10 +70,13 @@ export class TableComponent implements OnInit {
     this.columns = this.duplicateColumns.filter((o) =>
       bps.includes(o.breakpoint)
     );
-
+    console.log(this.columns);
     this.columns.forEach((d) => {
       if (d.selected) this.displayedColumns.push(d.path);
     });
+    setTimeout(() => {
+      this.loading = false;
+    }, 1000);
   }
   rowClick(element: any) {
     this._bs
@@ -66,5 +89,81 @@ export class TableComponent implements OnInit {
         };
         this.onRowClick.emit(event);
       });
+  }
+  defaultColumn() {
+    return this.filterButtonConfig[0].column;
+  }
+  onFilterButtonClick(index: any) {
+    this.keyword = '';
+    this.loading = true;
+    this.duplicateColumns = [];
+    this.filterButtonConfig.forEach((i: any) => {
+      if (i.label === index) {
+        this.duplicateColumns = i.column;
+        i.selected = true;
+        this.onUpdateTableEmit.emit(i);
+      } else {
+        i.selected = false;
+      }
+    });
+    // console.log(this.duplicateColumns);
+    this.updateBreakpoint();
+  }
+  onTriggerSearch() {
+    this.dataSource = [];
+    var fields: Array<string> = [];
+    this.duplicateColumns.forEach((c) => {
+      if (
+        c.path &&
+        !['date', 'special'].includes(c.type) &&
+        c.path !== '_roleId'
+      )
+        fields.push(c.path);
+      if (c.type === 'special') {
+        c.paths?.forEach((p: any) => {
+          fields.push(p);
+        });
+      }
+    });
+    let toEmit: TableOutput = {
+      pageIndex: 0,
+      pageSize: 10,
+      find: [],
+    };
+    console.log(this.keyword);
+    console.log(this.duplicateColumns);
+    console.log(fields);
+    if (this.keyword)
+      toEmit['filter'] = {
+        value: this.keyword,
+        fields,
+      };
+    else {
+      toEmit['filter'] = {
+        value: '',
+        fields,
+      };
+    }
+    console.log(this.keyword);
+    this.onUpdateTableEmit.emit(toEmit);
+  }
+  onClickPagination(event: TableOutput) {
+    console.log(event);
+    event['pageIndex'] = event.pageIndex + 1;
+    this.curPageIndex = event.pageIndex;
+    this.dataSource = [];
+    var fields: Array<string> = [];
+    this.duplicateColumns.forEach((c) => {
+      if (c.path) fields.push(c.path);
+    });
+    if (this.keyword)
+      event['filter'] = {
+        value: this.keyword,
+        fields,
+      };
+
+    this.pagination.pageIndex = event.pageIndex;
+    this.pagination.pageSize = event.pageSize;
+    this.onUpdateTableEmit.emit(this.pagination);
   }
 }
