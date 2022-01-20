@@ -12,9 +12,29 @@
       [formfields]="notarialFields"
       (formInitiated)="formInitialized()"
       (formListener)="formListener($event)"
+      [obj]="data ? data.obj : undefined"
     ></app-form>
-    <form #brgyDetails [formGroup]="brgyForm" class="grid">
-      <ng-container *ngFor="let f of brgyFields">
+    <app-auto-complete
+      #ibpchapterDetails
+      [opt]="ibp_chapter"
+      [defaultValue]="data ? data.obj['ibp_chapter_region'] : undefined"
+      (onSelect)="initializeIbpProv($event, 'ibp_chapter_region')"
+    ></app-auto-complete>
+    <app-auto-complete
+      #ibpprovDetails
+      [opt]="ibp_provinces"
+      (onSelect)="initializeIbpProv($event, 'ibp_chapter_city_prov')"
+      [defaultValue]="data ? data.obj['ibp_chapter_city_prov'] : undefined"
+    ></app-auto-complete>
+    <app-form
+      #officeaddressDetails
+      [formfields]="officeAddrFields"
+      (formInitiated)="formInitialized()"
+      (formListener)="formListener($event)"
+      [obj]="data ? data.obj : undefined"
+    ></app-form>
+    <form #officebrgyDetails [formGroup]="officeBrgyForm" class="grid">
+      <ng-container *ngFor="let f of office_brgyFields">
         <mat-form-field class="col-3" appearance="fill" *ngIf="f.show">
           <mat-label>{{ f.label }}</mat-label>
 
@@ -23,17 +43,42 @@
               util.deepFind(o, f.choiceLabel)
             }}</mat-option>
           </mat-select>
-          <mat-error *ngIf="brgyForm.get(f.fcname)?.hasError('required')"
+          <mat-error *ngIf="officeBrgyForm.get(f.fcname)?.hasError('required')"
             >{{ f.label }} is required</mat-error
           >
         </mat-form-field></ng-container
       >
     </form>
     <app-form
+      #homeaddressDetails
+      [formfields]="addrFields"
+      (formInitiated)="formInitialized()"
+      (formListener)="formListener($event)"
+      [obj]="data ? data.obj : undefined"
+    ></app-form>
+    <form #homebrgyDetails [formGroup]="homeBrgyForm" class="grid">
+      <ng-container *ngFor="let f of home_brgyFields">
+        <mat-form-field class="col-3" appearance="fill" *ngIf="f.show">
+          <mat-label>{{ f.label }}</mat-label>
+
+          <mat-select [formControlName]="f.fcname">
+            <mat-option *ngFor="let o of f.choices" [value]="o">{{
+              util.deepFind(o, f.choiceLabel)
+            }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="homeBrgyForm.get(f.fcname)?.hasError('required')"
+            >{{ f.label }} is required</mat-error
+          >
+        </mat-form-field></ng-container
+      >
+    </form>
+
+    <app-form
       #validityDetails
       [formfields]="period_of_validity"
       (formInitiated)="formInitialized()"
       (formListener)="formListener($event)"
+      [obj]="data ? data.obj : undefined"
     ></app-form>
   </div>
   <mat-dialog-actions>
@@ -42,7 +87,7 @@
       color="primary"
       [disabled]="
         (!notarialDetails.form.valid &&
-          !brgyDetails.valid &&
+          !homeBrgyForm.valid &&
           !validityDetails.form.valid) ||
         saving
       "

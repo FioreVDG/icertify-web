@@ -1,5 +1,13 @@
 <h3>Notarial Commission</h3>
-<app-table [columns]="column" [dataSource]="dataSource"></app-table>
+<app-table
+  [bottomSheet]="bottomSheet"
+  [columns]="column"
+  [dataSource]="dataSource"
+  (onRowClick)="onRowClick($event)"
+  [pagination]="page"
+  [dataLength]="dataLength"
+  (onUpdateTableEmit)="onTableUpdate($event)"
+></app-table>
 <button
   mat-fab
   color="primary"

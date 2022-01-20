@@ -155,6 +155,10 @@ export class UserDialogFormComponent implements OnInit {
 
       _brgyId:
         this.data._brgyId !== 'undefined' ? this.data._brgyId : undefined,
+      _notarialId:
+        this.data._notarialId !== 'undefined'
+          ? this.data._notarialId
+          : undefined,
       type: this.data.type,
     };
     toSaveData['address'] = {
@@ -166,7 +170,7 @@ export class UserDialogFormComponent implements OnInit {
     toSaveData = _.omit(toSaveData, omitField);
 
     console.log(toSaveData);
-    this.api.user.createAdmin(toSaveData).subscribe(
+    this.api.user.createUser(toSaveData).subscribe(
       (res: any) => {
         console.log(res);
         this.saving = false;

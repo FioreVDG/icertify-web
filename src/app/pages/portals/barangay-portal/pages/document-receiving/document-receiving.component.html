@@ -1,0 +1,11 @@
+<app-table
+  [columns]="columns"
+  [dataSource]="dataSource"
+  [dataLength]="dataLength"
+  [pagination]="page"
+  [bottomSheet]="bottomSheet"
+  (onRowClick)="onRowClick($event)"
+  [loading]="loading"
+  (onUpdateTableEmit)="fetchData($event)"
+>
+</app-table>

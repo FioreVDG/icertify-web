@@ -1,3 +1,5 @@
+import { AutoCompleteComponent } from './auto-complete/auto-complete.component';
+import { BottomSheetComponent } from './bottom-sheet/bottom-sheet.component';
 import { TableComponent } from './table/table.component';
 import { FormComponent } from 'src/app/shared/components/form/form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -24,6 +26,9 @@ import { ImageFormComponent } from './image-form/image-form.component';
     UploadComponent,
     RegistrantFormComponent,
     ImageFormComponent,
+    BottomSheetComponent,
+
+    AutoCompleteComponent,
   ],
   imports: [
     MaterialModule,
@@ -42,6 +47,8 @@ import { ImageFormComponent } from './image-form/image-form.component';
     ImageFormComponent,
     RegistrantFormComponent,
     OtpComponent,
+    BottomSheetComponent,
+    AutoCompleteComponent,
   ],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

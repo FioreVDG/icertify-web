@@ -66,3 +66,8 @@ export const USERS: Column[] = [
     selected: true,
   },
 ];
+
+export const USER_BOTTOMSHEET = [
+  { label: 'Edit Details', action: 'edit' },
+  { label: 'Delete', action: 'delete' },
+];

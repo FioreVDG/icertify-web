@@ -1,3 +1,5 @@
+@import "../../../../assets/styles/variables.scss";
+
 table.table-responsive.mat-table {
   /* row spacing / margin */
   border-spacing: 0 0px !important;
@@ -5,4 +7,20 @@ table.table-responsive.mat-table {
 }
 table {
   width: 100%;
+}
+.btn-section {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: end;
+  button {
+    margin: 0 0.5rem;
+    border-radius: 10px;
+    width: 10rem;
+  }
+}
+.search-section {
+  margin-bottom: 1rem;
+  .search-area {
+    width: 25%;
+  }
 }

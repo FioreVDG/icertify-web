@@ -33,6 +33,20 @@ const routes: Routes = [
             (m) => m.NewTransactionModule
           ),
       },
+      {
+        path: 'document-receiving',
+        loadChildren: () =>
+          import('./pages/document-receiving/document-receiving.module').then(
+            (m) => m.DocumentReceivingModule
+          ),
+      },
+      {
+        path: 'batch-delivery-management',
+        loadChildren: () =>
+          import(
+            './pages/batch-delivery-management/batch-delivery-management.module'
+          ).then((m) => m.BatchDeliveryManagementModule),
+      },
     ],
   },
 ];
