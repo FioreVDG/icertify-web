@@ -13,6 +13,9 @@ import {
 import { UtilService } from 'src/app/service/util/util.service';
 import { AuthService } from 'src/app/service/auth/auth.service';
 import { SUPERADMIN_MENU } from 'src/app/config/USER_MENU';
+import { Store } from '@ngrx/store';
+import { User } from 'src/app/models/user.interface';
+import { resetUser, setUser } from 'src/app/store/user/user.action';
 
 @Component({
   selector: 'app-superadmin-portal',
@@ -38,7 +41,8 @@ export class SuperadminPortalComponent implements OnInit {
     public router: Router,
     private dialog: MatDialog,
     private util: UtilService,
-    private auth: AuthService
+    private auth: AuthService,
+    private store: Store<{ user: User }>
   ) {}
 
   ngOnInit(): void {
@@ -59,6 +63,7 @@ export class SuperadminPortalComponent implements OnInit {
       (res: any) => {
         console.log(res);
         this.me = res.env.user;
+        this.store.dispatch(setUser({ user: res.env.user }));
         this.loading = false;
       },
       (err) => {
@@ -144,6 +149,7 @@ export class SuperadminPortalComponent implements OnInit {
         if (res) {
           localStorage.removeItem('SESSION_CSURF_TOKEN');
           localStorage.removeItem('SESSION_AUTH');
+          this.store.dispatch(resetUser());
           this.loggingOut = true;
           setTimeout(() => {
             this.router.navigate(['/superadmin-login']);
