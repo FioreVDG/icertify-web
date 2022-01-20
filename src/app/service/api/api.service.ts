@@ -7,6 +7,7 @@ import { UserService } from './user/user.service';
 import { DocumentService } from './document/document.service';
 import { FolderService } from './folder/folder.service';
 import { TransactionService } from './transaction/transaction.service';
+import { RoleService } from './role/role.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +20,7 @@ export class ApiService {
     public notarial: NotarialService,
     public document: DocumentService,
     public folder: FolderService,
-    public transaction: TransactionService
+    public transaction: TransactionService,
+    public role: RoleService
   ) {}
 }

@@ -2,5 +2,8 @@
   [columns]="columns"
   [dataSource]="dataSource"
   [dataLength]="dataLength"
+  [pagination]="page"
+  [loading]="loading"
+  (onUpdateTableEmit)="fetchData($event)"
 >
 </app-table>
