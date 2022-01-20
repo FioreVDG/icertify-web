@@ -1,12 +1,12 @@
-<div *ngIf="!loadingImage">
+<div>
   <h5>Upload Requirements</h5>
   <div class="grid">
     <ng-container *ngFor="let image of imgArray">
       <div class="col-6 mt-1">
         <h4>{{ image.label }}</h4>
         <div [class]="image.hasError ? 'img-container-error' : 'img-container'">
-          <p *ngIf="image.imgLink === ''">No Image Uploaded</p>
-          <img [src]="image.imgLink" alt="" />
+          <p *ngIf="image?.imgLink === ''">No Image Uploaded</p>
+          <img *ngIf="image?.imgLink !== ''" [src]="image?.imgLink" alt="" />
           <button
             mat-fab
             color="primary"

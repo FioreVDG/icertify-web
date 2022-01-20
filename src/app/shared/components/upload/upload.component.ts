@@ -8,6 +8,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
 import FILETYPES from './file-extensions.json';
+import VIDFILETYPES from './vid-file-extensions.json';
 import { Inject } from '@angular/core';
 @Component({
   selector: 'app-upload',
@@ -16,11 +17,14 @@ import { Inject } from '@angular/core';
 })
 export class UploadComponent implements OnInit {
   uploading: boolean = false;
-  accepted: string = '.png, .jpeg, .jpg';
-  fileTypes: any = FILETYPES;
+  acceptedDocs: string = '.png, .jpeg, .jpg, .pdf';
+  acceptedVids: string = '.mp4';
+  accepted: string = '';
+  fileTypes: any;
+  docFileTypes: any = FILETYPES;
+  vidFileTypes: any = VIDFILETYPES;
   uploadedFile: string = '';
   filename: string = '';
-  randomString: string = '';
   constructor(
     public sb: MatSnackBar,
     public dbx: DropboxService,
@@ -30,7 +34,10 @@ export class UploadComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.data);
-    console.log(this.randomString);
+    this.fileTypes =
+      this.data.format === 'VIDEO' ? this.vidFileTypes : this.docFileTypes;
+    this.accepted =
+      this.data.format === 'VIDEO' ? this.acceptedVids : this.acceptedDocs;
   }
 
   public files: NgxFileDropEntry[] = [];
@@ -43,10 +50,11 @@ export class UploadComponent implements OnInit {
       if (droppedFile.fileEntry.isFile) {
         const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
         fileEntry.file((file: File) => {
+          console.log(file.type);
           var flag = false;
+
           this.accepted.split(',').forEach((a) => {
             console.log(a);
-
             if (file.type === this.fileTypes[a.trim()]) flag = true;
           });
           if (flag) {
@@ -80,11 +88,14 @@ export class UploadComponent implements OnInit {
     console.log(file);
     this.uploading = true;
     let fileNameArray = file.name.split('.');
+    let path: any = this.data.path ? this.data.path : 'INDIGENT/';
+    let mobilenum: any = this.data.mobileNumber ? this.data.mobileNumber : '';
+    let filename: any = this.data.name ? this.data.name : fileNameArray[0];
     console.log(fileNameArray);
     this.dbx
       .uploadFile(
-        '/' + 'ICertify' + '/' + this.data.path + this.data.mobileNumber + '/',
-        this.data.name + '.' + fileNameArray[fileNameArray.length - 1],
+        '/' + 'ICertify' + '/' + path + mobilenum + '/',
+        filename + '.' + fileNameArray[fileNameArray.length - 1],
         file
       )
       .subscribe(

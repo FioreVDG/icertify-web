@@ -7,9 +7,11 @@ import { CommonModule } from '@angular/common';
 
 import { NewTransactionRoutingModule } from './new-transaction-routing.module';
 import { NewTransactionComponent } from './new-transaction.component';
+import { AddTransactionComponent } from './add-transaction/add-transaction.component';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
 @NgModule({
-  declarations: [NewTransactionComponent],
+  declarations: [NewTransactionComponent, AddTransactionComponent],
   imports: [
     CommonModule,
     NewTransactionRoutingModule,
@@ -18,6 +20,7 @@ import { NewTransactionComponent } from './new-transaction.component';
     ComponentModule,
     FormsModule,
     ReactiveFormsModule,
+    NgxDocViewerModule,
   ],
 })
 export class NewTransactionModule {}
