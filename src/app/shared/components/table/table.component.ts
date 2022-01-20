@@ -79,16 +79,20 @@ export class TableComponent implements OnInit {
     }, 1000);
   }
   rowClick(element: any) {
-    this._bs
-      .open(BottomSheetComponent, { data: { config: this.bottomSheet } })
-      .afterDismissed()
-      .subscribe((res: any) => {
-        let event = {
-          obj: element,
-          action: res,
-        };
-        this.onRowClick.emit(event);
-      });
+    if (this.bottomSheet) {
+      this._bs
+        .open(BottomSheetComponent, { data: { config: this.bottomSheet } })
+        .afterDismissed()
+        .subscribe((res: any) => {
+          let event = {
+            obj: element,
+            action: res,
+          };
+          this.onRowClick.emit(event);
+        });
+    } else {
+      this.onRowClick.emit(element);
+    }
   }
   defaultColumn() {
     return this.filterButtonConfig[0].column;

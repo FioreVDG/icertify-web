@@ -33,6 +33,7 @@
             >{{ col.path === "mobileNumber" ? "(+63)" : ""
             }}{{ util.deepFind(element, col.path) }}</span
           >
+
           <ng-container *ngIf="col.type === 'special'">
             <span *ngFor="let c of col.paths"
               >{{ util.deepFind(element, c) | uppercase }}

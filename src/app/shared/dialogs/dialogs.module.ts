@@ -4,10 +4,16 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AreYouSureComponent } from './are-you-sure/are-you-sure.component';
 import { ActionResultComponent } from './action-result/action-result.component';
+import { ViewDocumentComponent } from './view-document/view-document.component';
+import { ComponentModule } from '../components/component.module';
 
 @NgModule({
-  declarations: [AreYouSureComponent, ActionResultComponent],
-  imports: [CommonModule, MaterialModule],
+  declarations: [
+    AreYouSureComponent,
+    ActionResultComponent,
+    ViewDocumentComponent,
+  ],
+  imports: [CommonModule, MaterialModule, ComponentModule],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

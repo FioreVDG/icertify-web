@@ -29,4 +29,5 @@ type ColumnType =
   | 'array'
   | 'special'
   | 'checkbox'
-  | 'fileSize';
+  | 'fileSize'
+  | 'count';
