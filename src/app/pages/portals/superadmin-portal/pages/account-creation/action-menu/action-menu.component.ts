@@ -33,6 +33,11 @@ export class ActionMenuComponent implements OnInit {
         this.dialogRef.close();
         break;
 
+      case 1:
+        this.router.navigate([`/${type[1]}/account-creation/access-roles`]);
+        this.dialogRef.close();
+        break;
+
       default:
         break;
     }

@@ -6,6 +6,8 @@ import { CommonModule } from '@angular/common';
 
 import { SuperadminPortalRoutingModule } from './superadmin-portal-routing.module';
 import { SuperadminPortalComponent } from './superadmin-portal.component';
+import { userReducer } from 'src/app/store/user/user.reducer';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   declarations: [SuperadminPortalComponent],
@@ -15,6 +17,7 @@ import { SuperadminPortalComponent } from './superadmin-portal.component';
     MaterialModule,
     ComponentModule,
     DialogsModule,
+    StoreModule.forFeature('user', userReducer),
   ],
 })
 export class SuperadminPortalModule {}
