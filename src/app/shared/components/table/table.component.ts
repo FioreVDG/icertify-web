@@ -12,6 +12,7 @@ import { Column } from 'src/app/models/column.interface';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { TableOutput } from 'src/app/models/tableemit.interface';
 import { MatPaginator } from '@angular/material/paginator';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-table',
@@ -19,7 +20,9 @@ import { MatPaginator } from '@angular/material/paginator';
   styleUrls: ['./table.component.scss'],
 })
 export class TableComponent implements OnInit {
+  checkedRows = new SelectionModel<any>(true, []);
   @Input() dataSource: any = [];
+  @Input() checkBox: any;
   @Input() dataLength: number = 0;
   @Input() columns!: Array<Column>;
   @Input() bottomSheet: any;
@@ -28,6 +31,8 @@ export class TableComponent implements OnInit {
   @Input() filterButtonConfig: any = [];
   duplicateColumns!: Array<Column>;
   @Output() onUpdateTableEmit: any = new EventEmitter<any>();
+
+  @Output() onCheckBoxSelect = new EventEmitter<any>();
   @Input() loading = false;
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   displayedColumns: Array<string> = [];
@@ -38,7 +43,6 @@ export class TableComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
   }
   ngOnInit(): void {
-    console.log('Here');
     this.duplicateColumns = JSON.parse(
       JSON.stringify(this.columns ? this.columns : this.defaultColumn())
     );
@@ -74,6 +78,8 @@ export class TableComponent implements OnInit {
     this.columns.forEach((d) => {
       if (d.selected) this.displayedColumns.push(d.path);
     });
+
+    if (this.checkBox) this.displayedColumns.unshift('select');
     setTimeout(() => {
       this.loading = false;
     }, 1000);
@@ -165,5 +171,20 @@ export class TableComponent implements OnInit {
     this.pagination.pageIndex = event.pageIndex;
     this.pagination.pageSize = event.pageSize;
     this.onUpdateTableEmit.emit(this.pagination);
+  }
+  onCheckBoxChange(row: any) {
+    this.checkedRows.toggle(row);
+    this.onCheckBoxSelect.emit(this.checkedRows.selected);
+  }
+
+  checkAll() {
+    if (this.checkedRows.selected.length === this.dataSource.length) {
+      this.onCheckBoxSelect.emit([]);
+      this.checkedRows.clear();
+      return;
+    }
+
+    this.checkedRows.select(...this.dataSource);
+    this.onCheckBoxSelect.emit(this.checkedRows.selected);
   }
 }

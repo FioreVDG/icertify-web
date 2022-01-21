@@ -108,7 +108,21 @@ export class UsersComponent implements OnInit {
           });
 
         break;
-
+      case 'edit':
+        this.dialog
+          .open(UserDialogFormComponent, {
+            data: {
+              obj: event.obj,
+              action: event.action,
+            },
+          })
+          .afterClosed()
+          .subscribe((res: any) => {
+            if (res) {
+              this.fetchUser(this.page);
+            }
+          });
+        break;
       default:
         break;
     }

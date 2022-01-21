@@ -4,4 +4,5 @@ export interface FILTER_BUTTON_COLUMN {
   label: String;
   selected: boolean;
   column?: Array<Column>;
+  populate?: Array<any>;
 }

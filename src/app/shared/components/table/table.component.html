@@ -23,6 +23,38 @@
 </div>
 <div class="table-responsive" *ngIf="!loading">
   <table mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="select" *ngIf="checkBox">
+      <th mat-header-cell class="pr-2" *matHeaderCellDef>
+        <mat-checkbox
+          [indeterminate]="
+            checkedRows.hasValue() &&
+            dataSource.length !== checkedRows.selected.length
+          "
+          [checked]="
+            checkedRows.hasValue() &&
+            dataSource.length === checkedRows.selected.length
+          "
+          (click)="$event.stopPropagation()"
+          (change)="$event ? checkAll() : null"
+        >
+        </mat-checkbox>
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let row"
+        class="pr-2"
+        (click)="$event.stopPropagation()"
+      >
+        <span>
+          <mat-checkbox
+            [checked]="checkedRows.isSelected(row)"
+            (click)="$event.stopPropagation()"
+            (change)="$event ? onCheckBoxChange(row) : null"
+          >
+          </mat-checkbox>
+        </span>
+      </td>
+    </ng-container>
     <ng-container *ngFor="let col of columns">
       <ng-container matColumnDef="{{ col.path }}">
         <th mat-header-cell class="pr-2" *matHeaderCellDef mat-sort-header>
@@ -46,7 +78,7 @@
       mat-row
       *matRowDef="let row; columns: displayedColumns; let i = index"
     ></tr>
-    <tr class="mat-row" *matNoDataRow>
+    <tr class="mat-row" *ngIf="dataSource.length">
       <td class="mat-cell" style="text-align: center" colspan="9999">
         No Records Found
       </td>
