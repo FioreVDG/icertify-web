@@ -117,6 +117,10 @@ export class RegistrantFormComponent implements OnInit {
     this.imgObj = event.images;
   }
 
+  close() {
+    this.dialogRef.close();
+  }
+
   submit() {
     this.saving = true;
     delete this.toAddData.address1;

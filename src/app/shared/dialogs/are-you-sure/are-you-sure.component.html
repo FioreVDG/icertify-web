@@ -22,7 +22,8 @@
   ></div>
   <div class="contents">
     <h3>Are you sure?</h3>
-    <p>{{ "Are you sure you want to " + data.msg + "?" }}</p>
+    <p *ngIf="data.msg">{{ "Are you sure you want to " + data.msg + "?" }}</p>
+    <p *ngIf="data.others">{{ data.others }}</p>
   </div>
   <div class="btn-container">
     <button

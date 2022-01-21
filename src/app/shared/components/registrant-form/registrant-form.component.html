@@ -1,4 +1,11 @@
 <h3 mat-dialog-title>{{ data.header }}</h3>
+<mat-icon
+  *ngIf="data.header === 'Review Details'"
+  (click)="close()"
+  class="close-btn"
+  color="warn"
+  >close</mat-icon
+>
 <div mat-dialog-content>
   <app-form
     #registrantDetails

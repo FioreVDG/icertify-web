@@ -1,7 +1,7 @@
 <h3 mat-dialog-title>Add Transaction</h3>
 <div mat-dialog-content>
   <div *ngIf="step === 1">
-    <h3 class="upper">Upload Document for Notarization</h3>
+    <h3 class="upper">STEP 1 - Upload Document for Notarization</h3>
     <div class="grid">
       <mat-form-field appearance="fill" class="col-8">
         <mat-label>Select Document Type</mat-label>
@@ -53,12 +53,28 @@
   <div *ngIf="step === 2">
     <div class="grid">
       <div class="col-12">
-        <button mat-flat-button color="primary" (click)="uploadVid()">
-          Upload Video
-        </button>
-        <video *ngIf="video !== ''" width="320" height="240" controls>
-          <source [src]="video" type="video/mp4" />
-        </video>
+        <h3 class="upper">STEP 2 - Upload Video of Signing</h3>
+        <div class="grid flex align-items-center justify-content-center">
+          <div class="col-8">
+            <div class="vid-container">
+              <video
+                *ngIf="video !== ''"
+                style="max-width: 95%; min-height: 100%"
+                controls
+              >
+                <source [src]="video" type="video/mp4" />
+              </video>
+              <button
+                mat-fab
+                color="primary"
+                (click)="uploadVid()"
+                matTooltip="Upload video"
+              >
+                <mat-icon>upload</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -81,7 +97,7 @@
     Back
   </button>
   <button
-    *ngIf="step < 3"
+    *ngIf="step < 2"
     mat-stroked-button
     [disabled]="!docsArray.length"
     color="primary"
@@ -90,8 +106,9 @@
     Next
   </button>
   <button
-    *ngIf="step === 3"
+    *ngIf="step === 2"
     mat-stroked-button
+    [disabled]="video === ''"
     color="primary"
     (click)="submit()"
   >

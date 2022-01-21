@@ -1,3 +1,5 @@
+import { TransactionService } from './../../../../../../service/api/transaction/transaction.service';
+import { AreYouSureComponent } from './../../../../../../shared/dialogs/are-you-sure/are-you-sure.component';
 import { ActionResultComponent } from './../../../../../../shared/dialogs/action-result/action-result.component';
 import { DropboxService } from './../../../../../../service/dropbox/dropbox.service';
 import { UploadComponent } from './../../../../../../shared/components/upload/upload.component';
@@ -14,7 +16,7 @@ import {
   styleUrls: ['./add-transaction.component.scss'],
 })
 export class AddTransactionComponent implements OnInit {
-  step: any = 1;
+  step: number = 1;
   documentType: string = '';
   docTypes: Array<string> = [
     'Power of Attorney',
@@ -27,15 +29,23 @@ export class AddTransactionComponent implements OnInit {
   ];
   docsArray: Array<any> = [];
   video: string = '';
+  videoOfSignature: any;
+  brgyId: any;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<AddTransactionComponent>,
     private dialog: MatDialog,
-    private dbx: DropboxService
+    private dbx: DropboxService,
+    private transaction: TransactionService
   ) {}
 
   ngOnInit(): void {
     console.log(this.data);
+
+    let tempInfo: any = localStorage.getItem('BARANGAY_INFORMATION');
+    console.log(tempInfo);
+    this.brgyId = JSON.parse(tempInfo);
+    console.log(this.brgyId);
   }
 
   eventSelection(event: any) {
@@ -84,6 +94,8 @@ export class AddTransactionComponent implements OnInit {
           } else {
             this.docsArray.push({
               documentType: res.result.document_type,
+              sender: this.data,
+              documentName: res.result.name,
               dropbox: res.result,
               link: await this.getTempLink(res.result.path_display),
             });
@@ -111,6 +123,7 @@ export class AddTransactionComponent implements OnInit {
       .subscribe(async (res: any) => {
         console.log(res);
         this.video = await this.getTempLink(res.result.path_display);
+        this.videoOfSignature = res.result;
       });
   }
 
@@ -121,5 +134,41 @@ export class AddTransactionComponent implements OnInit {
     return resp.result.link;
   }
 
-  submit() {}
+  submit() {
+    this.dialog
+      .open(AreYouSureComponent, {
+        data: {
+          others:
+            'Clicking Yes will generate the Transaction Reference Code and the reference code for the document you will submit.',
+          isOthers: true,
+        },
+      })
+      .afterClosed()
+      .subscribe((res: any) => {
+        console.log(res);
+        if (res) {
+          this.saveTransaction();
+        }
+      });
+  }
+
+  saveTransaction() {
+    let toSaveData: any = {};
+    toSaveData.sender = this.data;
+    toSaveData.videoOfSignature = this.videoOfSignature;
+    toSaveData.documents = this.docsArray;
+    toSaveData._brgyId = this.brgyId._id;
+
+    console.log(toSaveData);
+    this.transaction.create(toSaveData).subscribe(
+      (res: any) => {
+        console.log(res);
+        if (res) {
+        }
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
 }

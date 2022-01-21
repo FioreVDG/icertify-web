@@ -11,6 +11,25 @@
   position: relative;
 }
 
+.vid-container {
+  height: 23rem;
+  padding: 0.7rem;
+  border: 2px solid #acacac;
+  border-radius: 0.25rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    opacity: 0.9;
+  }
+}
+
 .doc-title {
   text-align: center;
 }
