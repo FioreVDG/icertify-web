@@ -64,7 +64,9 @@ export class RegistrationComponent implements OnInit {
                 this.dialog
                   .open(ActionResultComponent, {
                     data: {
-                      msg: 'Complete your registration, Please provide first all the basic information to be eligible to start a transaction. Thank you!',
+                      msg:
+                        'Complete your registration, Please provide first all the basic information to be eligible to start a transaction. Thank you!' ||
+                        'Something went wrong! Please try again.',
                       success: true,
                       button: 'Proceed',
                     },

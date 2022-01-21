@@ -28,33 +28,41 @@ export class ImageFormComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    // if (this.obj !== null)
     await this.getImage();
   }
 
   getImage() {
     //Not yet final
+    console.log(this.obj);
     this.loadingImage = true;
     let temp: any = {};
+    let tempImg: any;
 
     this.images.forEach((img) => {
       img.fields.forEach(async (field: any) => {
         console.log(field.visible);
-        if (field.visible) {
-          temp[field.fcname] = new FormControl(
-            this.obj && this.obj[field.fcname] ? this.obj[field.fcname] : '',
-            [Validators.required]
-          );
-        }
+        temp[field.fcname] = new FormControl(
+          this.obj && this.obj[field.fcname] ? this.obj[field.fcname] : '',
+          [Validators.required]
+        );
+        // console.log(this.obj[field.fcname]);
+
+        tempImg =
+          this.obj && this.obj[field.fcname]
+            ? await this.getTempLink(this.obj[field.fcname]['path_display'])
+            : '';
+
+        console.log(tempImg);
         this.imgArray.push({
           visible: field.visible,
           fcname: field.fcname,
           label: field.label,
           hasError: field.hasError,
-          imgLink:
-            this.obj && this.obj[field.fcName]
-              ? await this.getTempLink(this.obj[field.fcName]['path_display'])
-              : '',
+          imgLink: tempImg ? tempImg : '',
         });
+
+        // console.log(this.obj[field.fcname]['path_display']);
         console.log(this.imgArray);
       });
       console.log(temp);

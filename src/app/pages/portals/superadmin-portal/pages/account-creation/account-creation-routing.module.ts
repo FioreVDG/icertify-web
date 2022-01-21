@@ -21,6 +21,13 @@ const routes: Routes = [
             (m) => m.NotarialModule
           ),
       },
+      {
+        path: 'access-roles',
+        loadChildren: () =>
+          import('./../account-creation/access-roles/access-roles.module').then(
+            (m) => m.AccessRolesModule
+          ),
+      },
     ],
   },
 ];

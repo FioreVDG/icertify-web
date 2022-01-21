@@ -1,24 +1,42 @@
 <h3 mat-dialog-title>{{ data.header }}</h3>
+<mat-icon
+  *ngIf="data.header === 'Review Details'"
+  (click)="close()"
+  class="close-btn"
+  color="warn"
+  >close</mat-icon
+>
 <div mat-dialog-content>
   <app-form
     #registrantDetails
     [formfields]="registrantFromFields"
     (formInitiated)="formInitialized()"
     (formListener)="formListener($event)"
+    [obj]="this.data.obj"
   ></app-form>
   <app-image-form
     [mobileNumber]="this.data.mobileNumber"
+    [obj]="this.data.obj?.images ? this.data.obj.images : {}"
     (imageEmitter)="imageEmitter($event)"
   ></app-image-form>
 </div>
 
 <div mat-dialog-actions align="center">
   <button
+    *ngIf="data.header === 'Add Indigent'"
     mat-flat-button
     color="primary"
     (click)="submit()"
     [disabled]="!imageFormValid || !registrantDetails.form.valid || saving"
   >
     <mat-icon>save_as</mat-icon>&nbsp;Save
+  </button>
+  <button
+    *ngIf="data.header === 'Review Details'"
+    mat-flat-button
+    color="primary"
+    (click)="dialogRef.close(true)"
+  >
+    Next
   </button>
 </div>

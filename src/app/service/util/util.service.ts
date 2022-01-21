@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { REG_PROV_CITYMUN } from 'src/app/config/url';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { User } from 'src/app/models/user.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -54,21 +55,21 @@ export class UtilService {
     );
   }
 
-  // findAccessRoute(me: User, currRoute: any) {
-  //   let route: any = {};
-  //   if (me._role && me._role.access) {
-  //     me._role.access.forEach((o) => {
-  //       o.routeTo == currRoute ? (route = o) : '';
-  //       if (o.children && o.children.length) {
-  //         o.children.forEach((c) => {
-  //           c.routeTo == currRoute ? (route = c) : '';
-  //         });
-  //       }
-  //     });
-  //   }
-  //   console.log(route);
-  //   return route;
-  // }
+  findAccessRoute(me: User, currRoute: any) {
+    let route: any = {};
+    if (me._roleId && me._roleId.access) {
+      me._roleId.access.forEach((o) => {
+        o.route == currRoute ? (route = o) : '';
+        if (o.children && o.children.length) {
+          o.children.forEach((c) => {
+            c.route == currRoute ? (route = c) : '';
+          });
+        }
+      });
+    }
+    console.log(route);
+    return route;
+  }
 
   stringSlugify(str: string): string {
     str = str.replace(/^\s+|\s+$/g, ''); // trim

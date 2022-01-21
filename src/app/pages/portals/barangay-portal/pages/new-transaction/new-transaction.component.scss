@@ -1,0 +1,32 @@
+@import "../../../../../../assets/styles/variables.scss";
+
+.form-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 40%;
+  margin: auto;
+  border: 2px solid #5656561a;
+  padding-bottom: 3rem;
+  background: #fff;
+  border-radius: 8px;
+
+  img {
+    width: 25%;
+  }
+  p {
+    width: 70%;
+    text-align: center;
+  }
+  b {
+    color: $primary;
+  }
+  mat-form-field {
+    width: 70%;
+  }
+
+  button {
+    width: 70%;
+  }
+}

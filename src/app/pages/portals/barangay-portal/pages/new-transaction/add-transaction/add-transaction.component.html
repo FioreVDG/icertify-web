@@ -1,0 +1,117 @@
+<h3 mat-dialog-title>Add Transaction</h3>
+<div mat-dialog-content>
+  <div *ngIf="step === 1">
+    <h3 class="upper">STEP 1 - Upload Document for Notarization</h3>
+    <div class="grid">
+      <mat-form-field appearance="fill" class="col-8">
+        <mat-label>Select Document Type</mat-label>
+        <mat-select
+          [(ngModel)]="documentType"
+          (ngModelChange)="eventSelection($event)"
+        >
+          <mat-option *ngFor="let doc of docTypes" [value]="doc">{{
+            doc
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="col-4 flex align-items-center justify-content-center">
+        <button
+          *ngIf="documentType !== ''"
+          mat-flat-button
+          style="width: 100%"
+          color="primary"
+          (click)="upload()"
+        >
+          Click to upload file for {{ documentType }}
+        </button>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="empty" *ngIf="!docsArray.length">
+        <mat-icon>warning</mat-icon>
+        <p>No Document uploaded.</p>
+      </div>
+      <div class="col-12" *ngIf="docsArray.length">
+        <div class="grid">
+          <ng-container *ngFor="let doc of docsArray">
+            <div class="col-6">
+              <h3 class="doc-title">{{ doc.documentType }}</h3>
+              <div class="img-container">
+                <img [src]="doc.link" alt="" />
+                <ngx-doc-viewer
+                  style="min-width: 100%; min-height: 100%"
+                  [url]="doc.link"
+                  viewer="google"
+                ></ngx-doc-viewer>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="step === 2">
+    <div class="grid">
+      <div class="col-12">
+        <h3 class="upper">STEP 2 - Upload Video of Signing</h3>
+        <div class="grid flex align-items-center justify-content-center">
+          <div class="col-8">
+            <div class="vid-container">
+              <video
+                *ngIf="video !== ''"
+                style="max-width: 95%; min-height: 100%"
+                controls
+              >
+                <source [src]="video" type="video/mp4" />
+              </video>
+              <button
+                mat-fab
+                color="primary"
+                (click)="uploadVid()"
+                matTooltip="Upload video"
+              >
+                <mat-icon>upload</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions align="end">
+  <button
+    mat-stroked-button
+    color="warn"
+    *ngIf="step === 1"
+    (click)="dialogRef.close()"
+  >
+    Close
+  </button>
+  <button
+    mat-stroked-button
+    color="warn"
+    *ngIf="step > 1"
+    (click)="step = step - 1"
+  >
+    Back
+  </button>
+  <button
+    *ngIf="step < 2"
+    mat-stroked-button
+    [disabled]="!docsArray.length"
+    color="primary"
+    (click)="step = step + 1"
+  >
+    Next
+  </button>
+  <button
+    *ngIf="step === 2"
+    mat-stroked-button
+    [disabled]="video === ''"
+    color="primary"
+    (click)="submit()"
+  >
+    Submit
+  </button>
+</div>

@@ -26,6 +26,7 @@ export class RegistrantFormComponent implements OnInit {
   saving: boolean = false;
   imgObj: any = {};
   toAddData: any = {};
+  toUpdataData: any = {};
   addressTemp: any = {};
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -43,6 +44,8 @@ export class RegistrantFormComponent implements OnInit {
     this.findDefaultValue('cityMun');
     this.findDefaultValue('province');
     this.findDefaultValue('region');
+    // this.toUpdataData = this.data.obj;
+    // console.log(this.toUpdataData);
   }
 
   findDefaultValue(fcname: any) {
@@ -114,18 +117,24 @@ export class RegistrantFormComponent implements OnInit {
     this.imgObj = event.images;
   }
 
+  close() {
+    this.dialogRef.close();
+  }
+
   submit() {
     this.saving = true;
     delete this.toAddData.address1;
     delete this.toAddData.address2;
     this.toAddData.address = this.addressTemp;
     this.toAddData.images = this.imgObj;
+    this.toAddData.birthDate = new Date(this.toAddData.birthDate);
     this.toAddData.mobileNumber = this.data.mobileNumber;
     console.log(this.toAddData);
 
     this.auth.registerUser(this.toAddData).subscribe(
       (res: any) => {
         console.log(res);
+        this.saving = false;
         let userData = res.env.data;
         if (res) {
           this.dialog
@@ -146,8 +155,13 @@ export class RegistrantFormComponent implements OnInit {
       },
       (err) => {
         console.log(err);
+        this.saving = false;
         this.dialog.open(ActionResultComponent, {
-          data: { msg: err.error.message, success: false, button: 'Okay' },
+          data: {
+            msg: err.error.message || 'Server Error, Please try again!',
+            success: false,
+            button: 'Okay',
+          },
         });
       }
     );

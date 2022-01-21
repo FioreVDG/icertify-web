@@ -15,7 +15,11 @@ export class ActionMenuComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(
+      this.data && this.data.userType ? this.data.userType : undefined
+    );
+  }
   redirectTo(route: any) {
     let type = this.router.url.split('/');
     let userType =
@@ -28,6 +32,14 @@ export class ActionMenuComponent implements OnInit {
       case 0:
         this.router.navigate([
           `/${type[1]}/account-creation/users`,
+          { brgyId, userType },
+        ]);
+        this.dialogRef.close();
+        break;
+
+      case 1:
+        this.router.navigate([
+          `/${type[1]}/account-creation/access-roles`,
           { brgyId, userType },
         ]);
         this.dialogRef.close();
