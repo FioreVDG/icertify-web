@@ -59,10 +59,10 @@ export class UtilService {
     let route: any = {};
     if (me._roleId && me._roleId.access) {
       me._roleId.access.forEach((o) => {
-        o.routeTo == currRoute ? (route = o) : '';
+        o.route == currRoute ? (route = o) : '';
         if (o.children && o.children.length) {
           o.children.forEach((c) => {
-            c.routeTo == currRoute ? (route = c) : '';
+            c.route == currRoute ? (route = c) : '';
           });
         }
       });

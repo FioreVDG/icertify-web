@@ -63,29 +63,9 @@ export const ROLE_TABLE: Column[] = [
   },
 ];
 
-export const ROLE_OPTIONS: NavNode[] = [
-  {
-    action: 'add',
-    label: 'Add Role',
-    icon: 'add',
-    css: '',
-    hasAccess: false,
-    hidden: true,
-  },
-  {
-    action: 'update',
-    label: 'View/Manage Role Details',
-    icon: 'edit',
-    css: '',
-    hasAccess: false,
-  },
-  {
-    action: 'delete',
-    label: 'Delete Role',
-    icon: 'delete',
-    css: 'bsDanger',
-    hasAccess: false,
-  },
+export const ROLE_BOTTOMSHEET = [
+  { label: 'Edit Details', action: 'update' },
+  { label: 'Delete', action: 'delete' },
 ];
 
 export const ROLE_POPULATES: Populate[] = [
