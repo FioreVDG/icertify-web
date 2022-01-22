@@ -1,11 +1,13 @@
 <mat-icon mat-dialog-close class="close-btn" color="warn">close</mat-icon>
 
-<div *ngIf="!data.link">Loading...</div>
+<div *ngIf="loading">Loading...</div>
 
 <ngx-extended-pdf-viewer
-  *ngIf="data.link"
   [src]="data.link"
   [useBrowserLocale]="true"
+  height="80vh"
+  (pagesLoaded)="onFileLoad()"
+  [zoom]="'page-fit'"
 ></ngx-extended-pdf-viewer>
 
 <mat-dialog-actions *ngIf="data.downloadButton">

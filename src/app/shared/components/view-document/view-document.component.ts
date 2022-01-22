@@ -84,7 +84,7 @@ export class ViewDocumentComponent implements OnInit {
       this.dialog.open(ViewAttachmentsComponent, {
         data: { link: res.result.link },
         height: 'auto',
-        width: 'auto',
+        width: '70%',
       });
     });
   }
