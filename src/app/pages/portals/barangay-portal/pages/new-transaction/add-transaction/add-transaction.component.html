@@ -17,7 +17,7 @@
       <div class="col-4 flex align-items-center justify-content-center">
         <button
           *ngIf="documentType !== ''"
-          mat-flat-button
+          mat-raised-button
           style="width: 100%"
           color="primary"
           (click)="upload()"
@@ -98,9 +98,10 @@
     </div>
   </div>
 </div>
-<div mat-dialog-actions align="end">
+<div mat-dialog-actions align="center">
   <button
-    mat-stroked-button
+    mat-flat-button
+    class="btn-width"
     color="warn"
     *ngIf="step === 1"
     (click)="closeDialog()"
@@ -108,7 +109,8 @@
     Close
   </button>
   <button
-    mat-stroked-button
+    mat-flat-button
+    class="btn-width"
     color="warn"
     *ngIf="(step > 1 && step < 3) || step === 2"
     (click)="step = step - 1"
@@ -117,7 +119,8 @@
   </button>
   <button
     *ngIf="step < 2"
-    mat-stroked-button
+    mat-flat-button
+    class="btn-width"
     [disabled]="!docsArray.length"
     color="primary"
     (click)="step = step + 1"
@@ -126,7 +129,8 @@
   </button>
   <button
     *ngIf="step === 2"
-    mat-stroked-button
+    mat-flat-button
+    class="btn-width"
     [disabled]="video === ''"
     color="primary"
     (click)="submit()"
@@ -135,7 +139,8 @@
   </button>
   <button
     *ngIf="step === 3"
-    mat-stroked-button
+    mat-flat-button
+    class="btn-width"
     color="primary"
     (click)="dialogRef.close(true)"
   >
