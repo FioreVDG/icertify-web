@@ -8,6 +8,7 @@
           <p *ngIf="image?.imgLink === ''">No Image Uploaded</p>
           <img *ngIf="image?.imgLink !== ''" [src]="image?.imgLink" alt="" />
           <button
+            *ngIf="!image.disable"
             mat-fab
             [disabled]="image.disable"
             color="primary"
