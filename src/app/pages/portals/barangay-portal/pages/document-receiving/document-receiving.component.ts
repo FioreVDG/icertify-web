@@ -59,7 +59,7 @@ export class DocumentReceivingComponent implements OnInit {
 
     this.api.transaction.getAll(query).subscribe(
       (res: any) => {
-        // console.log(res.env.transactions[0]._documents.length);
+        // console.log(res);
         this.dataSource = res.env.transactions;
         this.dataLength = res.total;
         this.loading = false;

@@ -22,7 +22,7 @@ export const DOCUMENT_RECEIVING_TABLE: Column[] = [
     breakpoint: 'sm',
     path: '_createdBy',
     paths: ['_createdBy.firstName', '_createdBy.lastName'],
-    type: 'text',
+    type: 'special',
     selected: true,
   },
   {
