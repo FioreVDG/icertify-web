@@ -45,6 +45,11 @@ export class DocumentReceivingComponent implements OnInit {
       find: [],
       page: event.pageIndex,
       limit: event.pageSize + '',
+      populates: [
+        {
+          field: '_createdBy',
+        },
+      ],
     };
     if (event.filter) query.filter = event.filter;
     if (event.sort) {
