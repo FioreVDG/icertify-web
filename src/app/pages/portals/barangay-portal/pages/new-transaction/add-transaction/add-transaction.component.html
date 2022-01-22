@@ -78,6 +78,17 @@
       </div>
     </div>
   </div>
+  <div *ngIf="step === 3">
+    <div class="grid">
+      <div class="col-12">
+        <h3 class="upper">STEP 3 - Video Conference Schedule</h3>
+        <p>
+          Your transaction reference code is <b>{{ refCode }}</b>
+        </p>
+        <p>Reference Code:</p>
+      </div>
+    </div>
+  </div>
 </div>
 <div mat-dialog-actions align="end">
   <button
@@ -91,7 +102,7 @@
   <button
     mat-stroked-button
     color="warn"
-    *ngIf="step > 1"
+    *ngIf="(step > 1 && step < 3) || step === 2"
     (click)="step = step - 1"
   >
     Back
@@ -113,5 +124,13 @@
     (click)="submit()"
   >
     Submit
+  </button>
+  <button
+    *ngIf="step === 3"
+    mat-stroked-button
+    color="primary"
+    (click)="dialogRef.close(true)"
+  >
+    New transaction
   </button>
 </div>
