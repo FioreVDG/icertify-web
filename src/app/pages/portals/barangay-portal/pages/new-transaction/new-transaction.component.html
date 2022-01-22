@@ -29,6 +29,10 @@
   </button>
 </div>
 <section *ngIf="isUserVerified">
+  <button mat-button color="primary" (click)="isUserVerified = false">
+    <mat-icon>arrow_back_ios</mat-icon>&nbsp;Back
+  </button>
+  <div></div>
   <button mat-raised-button color="primary" (click)="startTransaction()">
     Start transaction here
   </button>

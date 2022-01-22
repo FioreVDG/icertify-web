@@ -31,6 +31,7 @@ export class AddTransactionComponent implements OnInit {
   video: string = '';
   videoOfSignature: any;
   brgyId: any;
+  refCode: any;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<AddTransactionComponent>,
@@ -164,10 +165,19 @@ export class AddTransactionComponent implements OnInit {
       (res: any) => {
         console.log(res);
         if (res) {
+          this.step = this.step + 1;
+          this.refCode = res.env.transaction.refCode;
         }
       },
       (err) => {
         console.log(err);
+        this.dialog.open(ActionResultComponent, {
+          data: {
+            msg: `${err.error.message}` || 'Server error, Please try again',
+            success: false,
+            button: 'Okay',
+          },
+        });
       }
     );
   }

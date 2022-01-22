@@ -105,6 +105,9 @@ export class NewTransactionComponent implements OnInit {
       .afterClosed()
       .subscribe((res: any) => {
         console.log(res);
+        if (res) {
+          this.isUserVerified = false;
+        }
       });
   }
 }
