@@ -17,14 +17,14 @@ export const DOCUMENT_RECEIVING_TABLE: Column[] = [
     type: 'special',
     selected: true,
   },
-  // {
-  //   title: 'Uploaded By',
-  //   breakpoint: 'sm',
-  //   path: 'sender',
-  //   paths: ['sender.firstName', 'sender.lastName'],
-  //   type: 'text',
-  //   selected: true,
-  // },
+  {
+    title: 'Uploaded By',
+    breakpoint: 'sm',
+    path: '_createdBy',
+    paths: ['_createdBy.firstName', '_createdBy.lastName'],
+    type: 'special',
+    selected: true,
+  },
   {
     title: 'Date and Time Received',
     breakpoint: 'sm',

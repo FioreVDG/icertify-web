@@ -4,10 +4,13 @@ import {
   MatDialogRef,
   MatDialog,
 } from '@angular/material/dialog';
+import { Dropbox } from 'dropbox';
 import { Column } from 'src/app/models/column.interface';
 import { QueryParams } from 'src/app/models/queryparams.interface';
 import { TableOutput } from 'src/app/models/tableemit.interface';
 import { ApiService } from 'src/app/service/api/api.service';
+import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
+import { ViewAttachmentsComponent } from '../view-attachments/view-attachments.component';
 import { VIEW_DOC_TABLE } from './config';
 
 @Component({
@@ -28,7 +31,9 @@ export class ViewDocumentComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<ViewDocumentComponent>,
-    private api: ApiService
+    private api: ApiService,
+    private dbx: DropboxService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -73,6 +78,14 @@ export class ViewDocumentComponent implements OnInit {
   }
 
   onRowClick(event: any) {
-    console.log(event);
+    // console.log(event);
+    this.dbx.getTempLink(event.dropbox.path_display).subscribe((res: any) => {
+      console.log(res);
+      this.dialog.open(ViewAttachmentsComponent, {
+        data: { link: res.result.link },
+        height: 'auto',
+        width: '70%',
+      });
+    });
   }
 }

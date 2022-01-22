@@ -20,6 +20,7 @@
     "allowSyntheticDefaultImports": true,
     "lib": ["es2018", "dom"],
     "paths": {
+      "path": ["./node_modules/path-browserify"],
       "crypto": ["node_modules/crypto-js"]
     }
   },
