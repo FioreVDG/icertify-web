@@ -13,6 +13,7 @@ export const ROLE_FORM: Section[] = [
         show: true,
         default: '',
         path: 'name',
+        appearance: 'outline',
       },
       {
         label: 'Description',
@@ -22,6 +23,7 @@ export const ROLE_FORM: Section[] = [
         show: true,
         default: '',
         path: 'description',
+        appearance: 'outline',
       },
     ],
   },

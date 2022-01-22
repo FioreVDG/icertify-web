@@ -4,11 +4,19 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
   {
     label: 'For Pick Up',
     selected: true,
+    isCheckbox: true,
+    populate: [
+      {
+        field: '_createdBy',
+        select: 'firstName,lastName,middleName',
+      },
+    ],
+
     column: [
       {
         title: 'Transaction Reference Code',
         breakpoint: 'sm',
-        path: 'transaction_ref_code',
+        path: 'refCode',
 
         type: 'text',
         selected: true,
@@ -16,17 +24,17 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
       {
         title: 'Owner',
         breakpoint: 'sm',
-        path: 'owner',
-
-        type: 'text',
+        path: 'sender',
+        paths: ['sender.firstName', 'sender.lastName'],
+        type: 'special',
         selected: true,
       },
       {
         title: 'Uploaded by',
         breakpoint: 'sm',
-        path: 'uploadedby',
-
-        type: 'text',
+        path: '_createdBy',
+        paths: ['_createdBy.firstName', '_createdBy.lastName'],
+        type: 'special',
         selected: true,
       },
       {
@@ -40,7 +48,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
       {
         title: 'No. of Documents',
         breakpoint: 'sm',
-        path: 'no_doc',
+        path: 'documentCount',
 
         type: 'text',
         selected: true,
@@ -50,11 +58,18 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
   {
     label: 'Enroute',
     selected: false,
+    isCheckbox: false,
+    populate: [
+      {
+        field: '_batchedBy',
+        select: 'firstName,lastName,middleName',
+      },
+    ],
     column: [
       {
         title: 'Batch Name',
         breakpoint: 'sm',
-        path: 'batchname',
+        path: 'folderName',
 
         type: 'text',
         selected: true,
@@ -62,31 +77,18 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
       {
         title: 'Batched by',
         breakpoint: 'sm',
-        path: 'batchby',
+        path: '_batchedBy',
+        paths: ['_batchedBy.firstName', '_batchedBy.lastName'],
 
-        type: 'text',
+        type: 'special',
         selected: true,
       },
       {
         title: 'Date and Time Picked up',
         breakpoint: 'sm',
-        path: 'dtp',
+        path: 'datePickedFromBarangay',
 
-        type: 'text',
-        selected: true,
-      },
-    ],
-  },
-  {
-    label: 'Delivered',
-    selected: false,
-    column: [
-      {
-        title: 'Hey',
-        breakpoint: 'sm',
-        path: 'hey',
-        paths: ['firstName', 'middleName', 'lastName'],
-        type: 'special',
+        type: 'date',
         selected: true,
       },
     ],

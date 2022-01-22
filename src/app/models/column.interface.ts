@@ -10,6 +10,7 @@ export interface Column {
   referencePath?: string;
   alternativePath?: string;
   textColor?: Array<Color>;
+  isCheckbox?: boolean;
 }
 
 interface Color {

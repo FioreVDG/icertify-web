@@ -15,6 +15,7 @@
           [formfields]="userFormFields"
           (formInitiated)="formInitialized()"
           (formListener)="formListener($event)"
+          [obj]="data && data.obj ? data.obj : undefined"
         ></app-form>
         <form #brgyDetails [formGroup]="brgyForm" class="grid">
           <ng-container *ngFor="let f of brgyFields">

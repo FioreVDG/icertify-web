@@ -61,6 +61,13 @@ export const NOTARIAL: Column[] = [
     selected: true,
   },
   {
+    title: 'No. of Users',
+    breakpoint: 'sm',
+    path: 'user_count',
+    type: 'text',
+    selected: true,
+  },
+  {
     title: 'Status',
     breakpoint: 'sm',
     path: 'status',

@@ -1,1 +1,23 @@
-<p>access-roles works!</p>
+<h3>Roles</h3>
+<app-table
+  [columns]="columns"
+  [dataSource]="dataSource"
+  [bottomSheet]="bsConfig"
+  (onRowClick)="onRowClick($event)"
+  [pagination]="page"
+  [dataLength]="dataLength"
+  (onUpdateTableEmit)="fetchData($event)"
+></app-table>
+
+<button
+  mat-fab
+  *ngIf="addBtnAccess"
+  id="addBtn"
+  color="accent"
+  class="bottom-right-button"
+  [disabled]="loading"
+  matTooltip="Add Role"
+  (click)="onAdd()"
+>
+  <mat-icon>add</mat-icon>
+</button>

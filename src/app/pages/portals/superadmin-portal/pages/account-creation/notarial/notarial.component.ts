@@ -66,6 +66,7 @@ export class NotarialComponent implements OnInit {
     }
     this.api.user.getAllUser(qry).subscribe((res: any) => {
       console.log(res);
+
       this.dataSource = res.env.users;
       this.dataLength = res.count;
     });
