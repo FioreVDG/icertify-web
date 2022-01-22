@@ -33,16 +33,24 @@
       </div>
       <div class="col-12" *ngIf="docsArray.length">
         <div class="grid">
-          <ng-container *ngFor="let doc of docsArray">
+          <ng-container *ngFor="let doc of docsArray; let i = index">
             <div class="col-6">
               <h3 class="doc-title">{{ doc.documentType }}</h3>
               <div class="img-container">
-                <img [src]="doc.link" alt="" />
                 <ngx-doc-viewer
                   style="min-width: 100%; min-height: 100%"
                   [url]="doc.link"
                   viewer="google"
                 ></ngx-doc-viewer>
+                <button
+                  mat-fab
+                  color="warn"
+                  class="delete"
+                  (click)="deleteDoc(doc)"
+                  matTooltip="Delete document"
+                >
+                  <mat-icon>delete_forever</mat-icon>
+                </button>
               </div>
             </div>
           </ng-container>
@@ -95,7 +103,7 @@
     mat-stroked-button
     color="warn"
     *ngIf="step === 1"
-    (click)="dialogRef.close()"
+    (click)="closeDialog()"
   >
     Close
   </button>
