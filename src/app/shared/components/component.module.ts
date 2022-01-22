@@ -17,8 +17,7 @@ import { RegistrantFormComponent } from './registrant-form/registrant-form.compo
 import { ViewDocumentComponent } from './view-document/view-document.component';
 import { ImageFormComponent } from './image-form/image-form.component';
 import { ViewAttachmentsComponent } from './view-attachments/view-attachments.component';
-import { PdfViewerModule } from 'ng2-pdf-viewer';
-
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 @NgModule({
   declarations: [
     LoadingComponent,
@@ -35,10 +34,10 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
     ViewAttachmentsComponent,
   ],
   imports: [
-    PdfViewerModule,
     MaterialModule,
     CommonModule,
     AvatarModule,
+    NgxExtendedPdfViewerModule,
     ReactiveFormsModule,
     FormsModule,
     NgxFileDropModule,
