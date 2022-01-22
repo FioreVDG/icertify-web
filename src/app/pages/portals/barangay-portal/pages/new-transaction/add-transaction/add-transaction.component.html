@@ -17,7 +17,7 @@
       <div class="col-4 flex align-items-center justify-content-center">
         <button
           *ngIf="documentType !== ''"
-          mat-flat-button
+          mat-raised-button
           style="width: 100%"
           color="primary"
           (click)="upload()"
@@ -33,16 +33,24 @@
       </div>
       <div class="col-12" *ngIf="docsArray.length">
         <div class="grid">
-          <ng-container *ngFor="let doc of docsArray">
+          <ng-container *ngFor="let doc of docsArray; let i = index">
             <div class="col-6">
               <h3 class="doc-title">{{ doc.documentType }}</h3>
               <div class="img-container">
-                <img [src]="doc.link" alt="" />
                 <ngx-doc-viewer
                   style="min-width: 100%; min-height: 100%"
                   [url]="doc.link"
                   viewer="google"
                 ></ngx-doc-viewer>
+                <button
+                  mat-fab
+                  color="warn"
+                  class="delete"
+                  (click)="deleteDoc(doc)"
+                  matTooltip="Delete document"
+                >
+                  <mat-icon>delete_forever</mat-icon>
+                </button>
               </div>
             </div>
           </ng-container>
@@ -90,17 +98,19 @@
     </div>
   </div>
 </div>
-<div mat-dialog-actions align="end">
+<div mat-dialog-actions align="center">
   <button
-    mat-stroked-button
+    mat-flat-button
+    class="btn-width"
     color="warn"
     *ngIf="step === 1"
-    (click)="dialogRef.close()"
+    (click)="closeDialog()"
   >
     Close
   </button>
   <button
-    mat-stroked-button
+    mat-flat-button
+    class="btn-width"
     color="warn"
     *ngIf="(step > 1 && step < 3) || step === 2"
     (click)="step = step - 1"
@@ -109,7 +119,8 @@
   </button>
   <button
     *ngIf="step < 2"
-    mat-stroked-button
+    mat-flat-button
+    class="btn-width"
     [disabled]="!docsArray.length"
     color="primary"
     (click)="step = step + 1"
@@ -118,7 +129,8 @@
   </button>
   <button
     *ngIf="step === 2"
-    mat-stroked-button
+    mat-flat-button
+    class="btn-width"
     [disabled]="video === ''"
     color="primary"
     (click)="submit()"
@@ -127,7 +139,8 @@
   </button>
   <button
     *ngIf="step === 3"
-    mat-stroked-button
+    mat-flat-button
+    class="btn-width"
     color="primary"
     (click)="dialogRef.close(true)"
   >

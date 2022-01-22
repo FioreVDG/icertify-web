@@ -53,6 +53,19 @@ export class AddTransactionComponent implements OnInit {
     console.log(event);
   }
 
+  closeDialog() {
+    if (this.docsArray.length) {
+      this.dialog
+        .open(AreYouSureComponent, {
+          data: { msg: 'cancel adding new transaction', isOthers: true },
+        })
+        .afterClosed()
+        .subscribe((res: any) => {
+          if (res) this.dialogRef.close();
+        });
+    } else this.dialogRef.close();
+  }
+
   upload() {
     console.log(this.docsArray.length);
     if (this.docsArray.length === 3) {
@@ -108,6 +121,22 @@ export class AddTransactionComponent implements OnInit {
           console.log(this.docsArray);
         });
     }
+  }
+
+  deleteDoc(doc: any) {
+    console.log(doc);
+    this.dialog
+      .open(AreYouSureComponent, {
+        data: { msg: `remove ${doc.documentType}`, isDelete: true },
+      })
+      .afterClosed()
+      .subscribe((res: any) => {
+        if (res) {
+          this.docsArray = this.docsArray.filter(
+            (o: any) => o.documentType !== doc.documentType
+          );
+        }
+      });
   }
 
   uploadVid() {
