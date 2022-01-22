@@ -44,8 +44,13 @@ export class RegistrantFormComponent implements OnInit {
     this.findDefaultValue('cityMun');
     this.findDefaultValue('province');
     this.findDefaultValue('region');
-    // this.toUpdataData = this.data.obj;
-    // console.log(this.toUpdataData);
+
+    this.registrantFromFields.forEach((el: any) => {
+      el.items.forEach((item: any) => {
+        if (this.data.header === 'Review Details') item.disabled = true;
+        else item.disabled = false;
+      });
+    });
   }
 
   findDefaultValue(fcname: any) {

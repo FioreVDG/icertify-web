@@ -101,6 +101,7 @@ export class NewTransactionComponent implements OnInit {
         width: '75vw',
         height: 'auto',
         data: this.details,
+        disableClose: true,
       })
       .afterClosed()
       .subscribe((res: any) => {

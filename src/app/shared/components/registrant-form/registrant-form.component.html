@@ -15,6 +15,7 @@
     [obj]="this.data.obj"
   ></app-form>
   <app-image-form
+    [disable]="data.header === 'Review Details' ? true : false"
     [mobileNumber]="this.data.mobileNumber"
     [obj]="this.data.obj?.images ? this.data.obj.images : {}"
     (imageEmitter)="imageEmitter($event)"

@@ -9,6 +9,7 @@
           <img *ngIf="image?.imgLink !== ''" [src]="image?.imgLink" alt="" />
           <button
             mat-fab
+            [disabled]="image.disable"
             color="primary"
             (click)="uploadImage(image.fcname)"
             matTooltip="Upload an image"
