@@ -61,7 +61,7 @@
           {{ col.title }}
         </th>
         <td mat-cell *matCellDef="let element" (click)="rowClick(element)">
-          <span *ngIf="col.type !== 'special'"
+          <span *ngIf="col.type !== 'special' && col.type !== 'date'"
             >{{ col.path === "mobileNumber" ? "(+63)" : ""
             }}{{ util.deepFind(element, col.path) }}</span
           >
@@ -71,6 +71,9 @@
               >{{ util.deepFind(element, c) | uppercase }}
             </span></ng-container
           >
+          <span *ngIf="col.type === 'date'">{{
+            util.deepFind(element, col.path) | date: "medium"
+          }}</span>
         </td>
       </ng-container>
     </ng-container>

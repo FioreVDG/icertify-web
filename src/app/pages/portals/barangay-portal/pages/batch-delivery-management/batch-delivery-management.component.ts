@@ -13,7 +13,8 @@ import { MatDialog } from '@angular/material/dialog';
 export class BatchDeliveryManagementComponent implements OnInit {
   filtBtnConfig = FILT_BTN_CONFIG;
   selected = [];
-  currTable = '';
+  currTable: any;
+  currPopulate: any;
   loading = true;
   page = {
     pageSize: 10,
@@ -34,6 +35,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
   }
   fetchData(event: any) {
     console.log(event);
+
     let qry = {
       find: [],
       page: event.pageIndex || 1,
@@ -41,12 +43,12 @@ export class BatchDeliveryManagementComponent implements OnInit {
       filter: event.filter,
       populates: event.populate,
     };
-    let api = this.api.transaction.getAll(qry);
-    this.currTable = event.label || 'For Pick Up';
+
+    console.log(qry);
+    let api: any;
     if (event && event.label === 'Enroute') {
-      this.currTable = event.label;
       api = this.api.transaction.getAllFolder(qry);
-    }
+    } else api = this.api.transaction.getAll(qry);
 
     api.subscribe((res: any) => {
       console.log(res);
@@ -54,8 +56,12 @@ export class BatchDeliveryManagementComponent implements OnInit {
         res.env && res.env.transactions ? res.env.transactions : res.folders;
       this.dataLength = res.count;
     });
+    this.currTable = event.label;
+    this.page.populate = event.populate;
   }
   tableUpdateEmit(event: any) {
+    event['label'] = event.label || this.currTable;
+    console.log(event.populate);
     this.fetchData(event);
     setTimeout(() => {
       this.loading = false;
@@ -91,7 +97,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
                 .open(ActionResultComponent, {
                   data: {
                     success: true,
-                    msg: `Batch Folder ${res.env.batched.folderName} created!`,
+                    msg: `Batch ${res.env.batched.folderName} successfully marked as enroute!`,
                     button: 'Okay',
                   },
                 })

@@ -1,6 +1,7 @@
-import { Find } from './queryparams.interface';
+import { Find, Populate } from './queryparams.interface';
 
 export interface TableOutput {
+  populate?: Populate;
   pageSize: number;
   length?: number;
   pageIndex: number;

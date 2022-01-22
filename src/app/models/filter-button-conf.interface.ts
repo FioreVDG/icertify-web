@@ -5,4 +5,5 @@ export interface FILTER_BUTTON_COLUMN {
   selected: boolean;
   column?: Array<Column>;
   populate?: Array<any>;
+  isCheckbox?: boolean;
 }

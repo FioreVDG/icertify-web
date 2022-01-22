@@ -79,7 +79,9 @@ export class TableComponent implements OnInit {
       if (d.selected) this.displayedColumns.push(d.path);
     });
 
-    if (this.checkBox) this.displayedColumns.unshift('select');
+    if (this.checkBox) {
+      this.displayedColumns.unshift('select');
+    }
     setTimeout(() => {
       this.loading = false;
     }, 1000);
@@ -107,6 +109,7 @@ export class TableComponent implements OnInit {
     this.keyword = '';
     this.loading = true;
     this.duplicateColumns = [];
+    this.displayedColumns = [];
     this.filterButtonConfig.forEach((i: any) => {
       if (i.label === index) {
         this.duplicateColumns = i.column;
@@ -154,6 +157,7 @@ export class TableComponent implements OnInit {
         fields,
       };
     }
+    if (this.pagination.populate) toEmit['populate'] = this.pagination.populate;
     console.log(this.keyword);
     this.onUpdateTableEmit.emit(toEmit);
   }

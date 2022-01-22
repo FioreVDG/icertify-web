@@ -4,6 +4,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
   {
     label: 'For Pick Up',
     selected: true,
+    isCheckbox: true,
     populate: [
       {
         field: '_createdBy',
@@ -57,10 +58,11 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
   {
     label: 'Enroute',
     selected: false,
+    isCheckbox: false,
     populate: [
       {
         field: '_batchedBy',
-        select: 'firstName,lastName',
+        select: 'firstName,lastName,middleName',
       },
     ],
     column: [
@@ -84,9 +86,9 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
       {
         title: 'Date and Time Picked up',
         breakpoint: 'sm',
-        path: 'dtp',
+        path: 'datePickedFromBarangay',
 
-        type: 'text',
+        type: 'date',
         selected: true,
       },
     ],
