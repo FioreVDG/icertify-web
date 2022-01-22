@@ -18,6 +18,7 @@ import {
 export class AddTransactionComponent implements OnInit {
   step: number = 1;
   documentType: string = '';
+  others: string = '';
   docTypes: Array<string> = [
     'Power of Attorney',
     'Medical Documents',
@@ -111,6 +112,7 @@ export class AddTransactionComponent implements OnInit {
               sender: this.data,
               documentName: res.result.name,
               dropbox: res.result,
+              documentTypeSpecific: this.others,
               link: await this.getTempLink(res.result.path_display),
             });
           }

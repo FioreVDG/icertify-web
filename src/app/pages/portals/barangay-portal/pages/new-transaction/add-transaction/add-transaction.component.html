@@ -19,11 +19,24 @@
           *ngIf="documentType !== ''"
           mat-raised-button
           style="width: 100%"
+          [disabled]="documentType === 'Others' && !others.length"
           color="primary"
           (click)="upload()"
         >
           Click to upload file for {{ documentType }}
         </button>
+      </div>
+    </div>
+    <div class="grid" *ngIf="documentType === 'Others'">
+      <div class="col-8">
+        <mat-form-field
+          class="full-width"
+          appearance="fill"
+          *ngIf="documentType === 'Others'"
+        >
+          <mat-label>Specify type of document</mat-label>
+          <input type="text" matInput [(ngModel)]="others" />
+        </mat-form-field>
       </div>
     </div>
     <div class="grid">
@@ -35,7 +48,13 @@
         <div class="grid">
           <ng-container *ngFor="let doc of docsArray; let i = index">
             <div class="col-6">
-              <h3 class="doc-title">{{ doc.documentType }}</h3>
+              <h3 class="doc-title">
+                {{
+                  doc.documentType === "Others"
+                    ? doc.documentTypeSpecific
+                    : doc.documentType
+                }}
+              </h3>
               <div class="img-container">
                 <ngx-doc-viewer
                   style="min-width: 100%; min-height: 100%"
