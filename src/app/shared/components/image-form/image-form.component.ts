@@ -59,7 +59,7 @@ export class ImageFormComponent implements OnInit {
           visible: field.visible,
           fcname: field.fcname,
           label: field.label,
-          hasError: field.hasError,
+          hasError: this.disable ? false : field.hasError,
           imgLink: tempImg ? tempImg : '',
           disable: this.disable,
         });
