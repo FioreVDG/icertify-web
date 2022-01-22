@@ -49,7 +49,11 @@ export const DOCUMENT_RECEIVING_TABLE: Column[] = [
 ];
 
 export const DOC_RECEIVING_BOTTOMSHEET: BottomSheetItem[] = [
-  { label: 'View Document/s', action: 'viewDoc' },
-  { label: 'View Personal Information/Proof of Identity', action: 'viewInfo' },
-  { label: 'View Video Of Signing', action: 'viewVid' },
+  { label: 'View Document/s', action: 'viewDoc', icon: 'description' },
+  {
+    label: 'View Personal Information/Proof of Identity',
+    action: 'viewInfo',
+    icon: 'assignment_ind',
+  },
+  { label: 'View Video Of Signing', action: 'viewVid', icon: 'duo' },
 ];
