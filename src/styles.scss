@@ -129,3 +129,13 @@ h5 {
   border-bottom: 1px solid rgb(223, 223, 223);
   padding-bottom: 0.5rem;
 }
+.bdrop {
+  background-color: #c4c4c4ee;
+  backdrop-filter: blur(0.5px);
+}
+.dialog-transparent {
+  mat-dialog-container {
+    background-color: transparent !important;
+    box-shadow: none;
+  }
+}
