@@ -18,6 +18,7 @@ import { ViewDocumentComponent } from './view-document/view-document.component';
 import { ImageFormComponent } from './image-form/image-form.component';
 import { ViewAttachmentsComponent } from './view-attachments/view-attachments.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { ViewVideoComponent } from './view-video/view-video.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
     BottomSheetComponent,
     AutoCompleteComponent,
     ViewAttachmentsComponent,
+    ViewVideoComponent,
   ],
   imports: [
     MaterialModule,
