@@ -1,3 +1,4 @@
+import { UtilService } from 'src/app/service/util/util.service';
 import { TransactionService } from './../../../../../../service/api/transaction/transaction.service';
 import { AreYouSureComponent } from './../../../../../../shared/dialogs/are-you-sure/are-you-sure.component';
 import { ActionResultComponent } from './../../../../../../shared/dialogs/action-result/action-result.component';
@@ -33,12 +34,14 @@ export class AddTransactionComponent implements OnInit {
   videoOfSignature: any;
   brgyId: any;
   refCode: any;
+  docs: Array<any> = [];
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<AddTransactionComponent>,
     private dialog: MatDialog,
     private dbx: DropboxService,
-    private transaction: TransactionService
+    private transaction: TransactionService,
+    private util: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -192,16 +195,20 @@ export class AddTransactionComponent implements OnInit {
     toSaveData._brgyId = this.brgyId._id;
 
     console.log(toSaveData);
+    const loader = this.util.startLoading();
     this.transaction.create(toSaveData).subscribe(
       (res: any) => {
         console.log(res);
         if (res) {
           this.step = this.step + 1;
           this.refCode = res.env.transaction.refCode;
+          this.docs = res.env.documents;
+          this.util.stopLoading(loader);
         }
       },
       (err) => {
         console.log(err);
+        this.util.stopLoading(loader);
         this.dialog.open(ActionResultComponent, {
           data: {
             msg: `${err.error.message}` || 'Server error, Please try again',

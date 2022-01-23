@@ -5,9 +5,10 @@ import { CommonModule } from '@angular/common';
 import { AreYouSureComponent } from './are-you-sure/are-you-sure.component';
 import { ActionResultComponent } from './action-result/action-result.component';
 import { ComponentModule } from '../components/component.module';
+import { SpinnerLoadingComponent } from './spinner-loading/spinner-loading.component';
 
 @NgModule({
-  declarations: [AreYouSureComponent, ActionResultComponent],
+  declarations: [AreYouSureComponent, ActionResultComponent, SpinnerLoadingComponent],
   imports: [CommonModule, MaterialModule, ComponentModule],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

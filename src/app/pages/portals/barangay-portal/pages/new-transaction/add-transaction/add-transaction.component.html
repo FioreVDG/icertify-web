@@ -113,6 +113,25 @@
           Your transaction reference code is <b>{{ refCode }}</b>
         </p>
         <p>Reference Code:</p>
+        <ng-container *ngFor="let doc of docs; let i = index">
+          <p>
+            {{
+              doc.documentTypeSpecific
+                ? doc.documentTypeSpecific
+                : doc.documentType
+            }}: <b>{{ doc.refCode }}</b>
+          </p>
+        </ng-container>
+        <p>
+          Please wait for the schedule of your video conference with <br />
+          Atty.Carlo Javier as part of the RON process of the document that you
+          have submitted.
+        </p>
+
+        <p>You can track your document through this link:</p>
+
+        <p>For more information, contact iCertify: 09123456789</p>
+        <p>Thank you.</p>
       </div>
     </div>
   </div>
