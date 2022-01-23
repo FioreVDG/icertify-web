@@ -56,7 +56,13 @@
                 }}
               </h3>
               <div class="img-container">
+                <img
+                  *ngIf="doc.fileExtension !== 'pdf'"
+                  [src]="doc.link"
+                  alt=""
+                />
                 <ngx-doc-viewer
+                  *ngIf="doc.fileExtension === 'pdf'"
                   style="min-width: 100%; min-height: 100%"
                   [url]="doc.link"
                   viewer="google"
