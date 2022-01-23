@@ -1,3 +1,4 @@
+import { BottomSheetItem } from './bottomsheet.interface';
 import { Column } from './column.interface';
 
 export interface FILTER_BUTTON_COLUMN {
@@ -6,4 +7,5 @@ export interface FILTER_BUTTON_COLUMN {
   column?: Array<Column>;
   populate?: Array<any>;
   isCheckbox?: boolean;
+  bottomSheet?: Array<BottomSheetItem>;
 }

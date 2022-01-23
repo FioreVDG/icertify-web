@@ -1,3 +1,4 @@
+import { BottomSheetItem } from 'src/app/models/bottomsheet.interface';
 import { FILTER_BUTTON_COLUMN } from 'src/app/models/filter-button-conf.interface';
 
 export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
@@ -5,6 +6,14 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     label: 'For Pick Up',
     selected: true,
     isCheckbox: true,
+    bottomSheet: [
+      { label: 'View Document/s', action: 'viewDoc' },
+      {
+        label: 'View Personal Information/Proof of Identity',
+        action: 'viewInfo',
+      },
+      { label: 'View Video Of Signing', action: 'viewVid' },
+    ],
     populate: [
       {
         field: '_createdBy',
@@ -59,6 +68,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     label: 'Enroute',
     selected: false,
     isCheckbox: false,
+    bottomSheet: [{ label: 'View Transaction/s', action: 'viewTransac' }],
     populate: [
       {
         field: '_batchedBy',
@@ -93,4 +103,10 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
       },
     ],
   },
+];
+
+export const BATCH_DELIVERY_BOTTOMSHEET: BottomSheetItem[] = [
+  { label: 'View Document/s', action: 'viewDoc' },
+  { label: 'View Personal Information/Proof of Identity', action: 'viewInfo' },
+  { label: 'View Video Of Signing', action: 'viewVid' },
 ];

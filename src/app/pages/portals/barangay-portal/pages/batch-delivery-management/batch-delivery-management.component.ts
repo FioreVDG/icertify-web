@@ -1,9 +1,11 @@
 import { ActionResultComponent } from './../../../../../shared/dialogs/action-result/action-result.component';
 import { AreYouSureComponent } from './../../../../../shared/dialogs/are-you-sure/are-you-sure.component';
 import { ApiService } from './../../../../../service/api/api.service';
-import { FILT_BTN_CONFIG } from './config';
+import { FILT_BTN_CONFIG, BATCH_DELIVERY_BOTTOMSHEET } from './config';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ViewDocumentComponent } from 'src/app/shared/dialogs/view-document/view-document.component';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-batch-delivery-management',
@@ -12,10 +14,12 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class BatchDeliveryManagementComponent implements OnInit {
   filtBtnConfig = FILT_BTN_CONFIG;
+  isCheckbox: boolean = true;
   selected = [];
   currTable: any;
   currPopulate: any;
   loading = true;
+  bsConfig = BATCH_DELIVERY_BOTTOMSHEET;
   page = {
     pageSize: 10,
     pageIndex: 1,
@@ -26,9 +30,15 @@ export class BatchDeliveryManagementComponent implements OnInit {
       },
     ],
   };
+  routeLength = 3;
   dataSource = [];
   dataLength: number = 0;
-  constructor(private api: ApiService, private dialog: MatDialog) {}
+  constructor(
+    private api: ApiService,
+    private dialog: MatDialog,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.fetchData(this.page);
@@ -58,6 +68,8 @@ export class BatchDeliveryManagementComponent implements OnInit {
     });
     this.currTable = event.label;
     this.page.populate = event.populate;
+    this.isCheckbox = event.isCheckbox || true;
+    this.bsConfig = event.bottomSheet;
   }
   tableUpdateEmit(event: any) {
     event['label'] = event.label || this.currTable;
@@ -66,7 +78,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
     setTimeout(() => {
       this.loading = false;
       console.log(this.loading);
-    }, 3000);
+    }, 1000);
     console.log(event);
   }
   onCheckBoxSelect(event: any) {
@@ -109,5 +121,38 @@ export class BatchDeliveryManagementComponent implements OnInit {
             });
         }
       });
+  }
+  onRowClick(event: any) {
+    console.log(event);
+    switch (event.action) {
+      case 'viewDoc':
+        this.dialog.open(ViewDocumentComponent, {
+          data: event.obj,
+          disableClose: true,
+          width: 'auto',
+          height: 'auto',
+        });
+        break;
+      case 'viewInfo':
+        break;
+      case 'viewTransac':
+        this.onViewTransac(event.obj);
+        break;
+      default:
+    }
+  }
+
+  onViewTransac(obj: any) {
+    this.router.navigate([
+      `/barangay-portal/batch-delivery-management/batch-folder`,
+      obj._id,
+    ]);
+  }
+
+  onRouteActivate() {
+    console.log('Here');
+    let count = this.router.url.split('/').length;
+    console.log(count);
+    this.routeLength = count;
   }
 }

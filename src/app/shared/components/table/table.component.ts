@@ -43,6 +43,7 @@ export class TableComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
   }
   ngOnInit(): void {
+    console.log(this.checkBox);
     this.duplicateColumns = JSON.parse(
       JSON.stringify(this.columns ? this.columns : this.defaultColumn())
     );
@@ -84,7 +85,7 @@ export class TableComponent implements OnInit {
     }
     setTimeout(() => {
       this.loading = false;
-    }, 1000);
+    }, 500);
   }
   rowClick(element: any) {
     if (this.bottomSheet) {
@@ -112,6 +113,7 @@ export class TableComponent implements OnInit {
     this.displayedColumns = [];
     this.filterButtonConfig.forEach((i: any) => {
       if (i.label === index) {
+        this.checkBox = i.isCheckbox;
         this.duplicateColumns = i.column;
         i.selected = true;
         this.onUpdateTableEmit.emit(i);

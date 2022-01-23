@@ -1,3 +1,4 @@
+import { BatchFolderComponent } from './batch-folder/batch-folder.component';
 import { MaterialModule } from './../../../../../shared/material/material.module';
 import { ComponentModule } from 'src/app/shared/components/component.module';
 import { NgModule } from '@angular/core';
