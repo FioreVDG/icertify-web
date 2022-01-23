@@ -21,8 +21,6 @@ export class NewTransactionComponent implements OnInit {
   details: any;
   constructor(
     private util: UtilService,
-    private auth: AuthService,
-    private otp: OtpService,
     private user: UserService,
     private dialog: MatDialog
   ) {}
@@ -44,9 +42,11 @@ export class NewTransactionComponent implements OnInit {
         },
       ],
     };
+    const loader = this.util.startLoading('Verifying...');
     this.user.getAllUser(query).subscribe(
       (res: any) => {
         this.verifying = false;
+        this.util.stopLoading(loader);
         console.log(res);
         let details: any;
 
@@ -82,6 +82,7 @@ export class NewTransactionComponent implements OnInit {
       (err) => {
         this.verifying = false;
         this.isUserVerified = false;
+        this.util.stopLoading(loader);
         console.log(err);
         this.dialog.open(ActionResultComponent, {
           data: {
@@ -101,10 +102,14 @@ export class NewTransactionComponent implements OnInit {
         width: '75vw',
         height: 'auto',
         data: this.details,
+        disableClose: true,
       })
       .afterClosed()
       .subscribe((res: any) => {
         console.log(res);
+        if (res) {
+          this.isUserVerified = false;
+        }
       });
   }
 }

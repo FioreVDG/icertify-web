@@ -1,0 +1,17 @@
+<mat-icon mat-dialog-close class="close-btn" color="warn">close</mat-icon>
+
+<!-- // ADD IMAGE VIEWRR -->
+<ngx-extended-pdf-viewer
+  *ngIf="!data.isImg"
+  [src]="data.link"
+  [useBrowserLocale]="true"
+  height="80vh"
+  (pagesLoaded)="onFileLoad()"
+  [zoom]="'auto'"
+></ngx-extended-pdf-viewer>
+
+<mat-dialog-actions *ngIf="data.downloadButton">
+  <button mat-button color="primary" (click)="downloadFile()">
+    Download File <mat-icon>download</mat-icon>
+  </button>
+</mat-dialog-actions>

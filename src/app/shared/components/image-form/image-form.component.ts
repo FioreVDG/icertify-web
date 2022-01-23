@@ -16,6 +16,7 @@ export class ImageFormComponent implements OnInit {
   @Output() imageEmitter = new EventEmitter<any>();
   @Input() obj: any = {};
   @Input() mobileNumber: string = '';
+  @Input() disable: any;
   imgArray: Array<any> = [];
   me: any;
   imageForm = this.fb.group({});
@@ -58,8 +59,9 @@ export class ImageFormComponent implements OnInit {
           visible: field.visible,
           fcname: field.fcname,
           label: field.label,
-          hasError: field.hasError,
+          hasError: this.disable ? false : field.hasError,
           imgLink: tempImg ? tempImg : '',
+          disable: this.disable,
         });
 
         // console.log(this.obj[field.fcname]['path_display']);

@@ -1,3 +1,5 @@
+import { SpinnerLoadingComponent } from './../../shared/dialogs/spinner-loading/spinner-loading.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { REG_PROV_CITYMUN } from 'src/app/config/url';
@@ -9,7 +11,26 @@ import { User } from 'src/app/models/user.interface';
 })
 export class UtilService {
   empties = [null, undefined];
-  constructor(private http: HttpClient, public clipboard: Clipboard) {}
+  constructor(
+    private http: HttpClient,
+    public clipboard: Clipboard,
+    private dialog: MatDialog
+  ) {}
+
+  startLoading(message?: any): MatDialogRef<SpinnerLoadingComponent> {
+    const dialogRef = this.dialog.open(SpinnerLoadingComponent, {
+      disableClose: true,
+      data: message == '' || message == undefined ? 'Loading...' : message,
+      backdropClass: 'bdrop',
+      panelClass: 'dialog-transparent',
+    });
+    return dialogRef;
+  }
+
+  stopLoading(ref: MatDialogRef<SpinnerLoadingComponent>) {
+    ref.close();
+  }
+
   getRPC(collection: string, config: object) {
     return this.http.post(
       REG_PROV_CITYMUN + '/u-getMany/' + collection,

@@ -1,3 +1,4 @@
+import { UtilService } from 'src/app/service/util/util.service';
 import { TransactionService } from './../../../../../../service/api/transaction/transaction.service';
 import { AreYouSureComponent } from './../../../../../../shared/dialogs/are-you-sure/are-you-sure.component';
 import { ActionResultComponent } from './../../../../../../shared/dialogs/action-result/action-result.component';
@@ -18,11 +19,12 @@ import {
 export class AddTransactionComponent implements OnInit {
   step: number = 1;
   documentType: string = '';
+  others: string = '';
   docTypes: Array<string> = [
     'Power of Attorney',
-    'Medical Documents',
+    'Medical Records',
     'Sworn Statements',
-    'Affidavits',
+    'Affidavit',
     'Deeds',
     'Wills and Trusts',
     'Others',
@@ -31,12 +33,15 @@ export class AddTransactionComponent implements OnInit {
   video: string = '';
   videoOfSignature: any;
   brgyId: any;
+  refCode: any;
+  docs: Array<any> = [];
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<AddTransactionComponent>,
     private dialog: MatDialog,
     private dbx: DropboxService,
-    private transaction: TransactionService
+    private transaction: TransactionService,
+    private util: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -50,6 +55,19 @@ export class AddTransactionComponent implements OnInit {
 
   eventSelection(event: any) {
     console.log(event);
+  }
+
+  closeDialog() {
+    if (this.docsArray.length) {
+      this.dialog
+        .open(AreYouSureComponent, {
+          data: { msg: 'cancel adding new transaction', isOthers: true },
+        })
+        .afterClosed()
+        .subscribe((res: any) => {
+          if (res) this.dialogRef.close();
+        });
+    } else this.dialogRef.close();
   }
 
   upload() {
@@ -97,6 +115,7 @@ export class AddTransactionComponent implements OnInit {
               sender: this.data,
               documentName: res.result.name,
               dropbox: res.result,
+              documentTypeSpecific: this.others,
               link: await this.getTempLink(res.result.path_display),
             });
           }
@@ -107,6 +126,22 @@ export class AddTransactionComponent implements OnInit {
           console.log(this.docsArray);
         });
     }
+  }
+
+  deleteDoc(doc: any) {
+    console.log(doc);
+    this.dialog
+      .open(AreYouSureComponent, {
+        data: { msg: `remove ${doc.documentType}`, isDelete: true },
+      })
+      .afterClosed()
+      .subscribe((res: any) => {
+        if (res) {
+          this.docsArray = this.docsArray.filter(
+            (o: any) => o.documentType !== doc.documentType
+          );
+        }
+      });
   }
 
   uploadVid() {
@@ -160,14 +195,27 @@ export class AddTransactionComponent implements OnInit {
     toSaveData._brgyId = this.brgyId._id;
 
     console.log(toSaveData);
+    const loader = this.util.startLoading();
     this.transaction.create(toSaveData).subscribe(
       (res: any) => {
         console.log(res);
         if (res) {
+          this.step = this.step + 1;
+          this.refCode = res.env.transaction.refCode;
+          this.docs = res.env.documents;
+          this.util.stopLoading(loader);
         }
       },
       (err) => {
         console.log(err);
+        this.util.stopLoading(loader);
+        this.dialog.open(ActionResultComponent, {
+          data: {
+            msg: `${err.error.message}` || 'Server error, Please try again',
+            success: false,
+            button: 'Okay',
+          },
+        });
       }
     );
   }

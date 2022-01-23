@@ -17,13 +17,26 @@
       <div class="col-4 flex align-items-center justify-content-center">
         <button
           *ngIf="documentType !== ''"
-          mat-flat-button
+          mat-raised-button
           style="width: 100%"
+          [disabled]="documentType === 'Others' && !others.length"
           color="primary"
           (click)="upload()"
         >
           Click to upload file for {{ documentType }}
         </button>
+      </div>
+    </div>
+    <div class="grid" *ngIf="documentType === 'Others'">
+      <div class="col-8">
+        <mat-form-field
+          class="full-width"
+          appearance="fill"
+          *ngIf="documentType === 'Others'"
+        >
+          <mat-label>Specify type of document</mat-label>
+          <input type="text" matInput [(ngModel)]="others" />
+        </mat-form-field>
       </div>
     </div>
     <div class="grid">
@@ -33,16 +46,30 @@
       </div>
       <div class="col-12" *ngIf="docsArray.length">
         <div class="grid">
-          <ng-container *ngFor="let doc of docsArray">
+          <ng-container *ngFor="let doc of docsArray; let i = index">
             <div class="col-6">
-              <h3 class="doc-title">{{ doc.documentType }}</h3>
+              <h3 class="doc-title">
+                {{
+                  doc.documentType === "Others"
+                    ? doc.documentTypeSpecific
+                    : doc.documentType
+                }}
+              </h3>
               <div class="img-container">
-                <img [src]="doc.link" alt="" />
                 <ngx-doc-viewer
                   style="min-width: 100%; min-height: 100%"
                   [url]="doc.link"
                   viewer="google"
                 ></ngx-doc-viewer>
+                <button
+                  mat-fab
+                  color="warn"
+                  class="delete"
+                  (click)="deleteDoc(doc)"
+                  matTooltip="Delete document"
+                >
+                  <mat-icon>delete_forever</mat-icon>
+                </button>
               </div>
             </div>
           </ng-container>
@@ -78,27 +105,60 @@
       </div>
     </div>
   </div>
+  <div *ngIf="step === 3">
+    <div class="grid">
+      <div class="col-12">
+        <h3 class="upper">STEP 3 - Video Conference Schedule</h3>
+        <p>
+          Your transaction reference code is <b>{{ refCode }}</b>
+        </p>
+        <p>Reference Code:</p>
+        <ng-container *ngFor="let doc of docs; let i = index">
+          <p>
+            {{
+              doc.documentTypeSpecific
+                ? doc.documentTypeSpecific
+                : doc.documentType
+            }}: <b>{{ doc.refCode }}</b>
+          </p>
+        </ng-container>
+        <p>
+          Please wait for the schedule of your video conference with <br />
+          Atty.Carlo Javier as part of the RON process of the document that you
+          have submitted.
+        </p>
+
+        <p>You can track your document through this link:</p>
+
+        <p>For more information, contact iCertify: 09123456789</p>
+        <p>Thank you.</p>
+      </div>
+    </div>
+  </div>
 </div>
-<div mat-dialog-actions align="end">
+<div mat-dialog-actions align="center">
   <button
-    mat-stroked-button
+    mat-flat-button
+    class="btn-width"
     color="warn"
     *ngIf="step === 1"
-    (click)="dialogRef.close()"
+    (click)="closeDialog()"
   >
     Close
   </button>
   <button
-    mat-stroked-button
+    mat-flat-button
+    class="btn-width"
     color="warn"
-    *ngIf="step > 1"
+    *ngIf="(step > 1 && step < 3) || step === 2"
     (click)="step = step - 1"
   >
     Back
   </button>
   <button
     *ngIf="step < 2"
-    mat-stroked-button
+    mat-flat-button
+    class="btn-width"
     [disabled]="!docsArray.length"
     color="primary"
     (click)="step = step + 1"
@@ -107,11 +167,21 @@
   </button>
   <button
     *ngIf="step === 2"
-    mat-stroked-button
+    mat-flat-button
+    class="btn-width"
     [disabled]="video === ''"
     color="primary"
     (click)="submit()"
   >
     Submit
+  </button>
+  <button
+    *ngIf="step === 3"
+    mat-flat-button
+    class="btn-width"
+    color="primary"
+    (click)="dialogRef.close(true)"
+  >
+    New transaction
   </button>
 </div>
