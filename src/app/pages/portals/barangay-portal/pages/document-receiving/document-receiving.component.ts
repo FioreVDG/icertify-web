@@ -9,6 +9,7 @@ import { UtilService } from 'src/app/service/util/util.service';
 import { AutoCompleteComponent } from 'src/app/shared/components/auto-complete/auto-complete.component';
 import { DOCUMENT_RECEIVING_TABLE, DOC_RECEIVING_BOTTOMSHEET } from './config';
 import { ViewDocumentComponent } from 'src/app/shared/components/view-document/view-document.component';
+import { RegistrantFormComponent } from 'src/app/shared/components/registrant-form/registrant-form.component';
 
 @Component({
   selector: 'app-document-receiving',
@@ -82,6 +83,12 @@ export class DocumentReceivingComponent implements OnInit {
         });
         break;
       case 'viewInfo':
+        this.dialog.open(RegistrantFormComponent, {
+          data: { header: `View Information`, obj: event.obj.sender },
+          disableClose: true,
+          width: 'auto',
+          height: 'auto',
+        });
         break;
       default:
     }

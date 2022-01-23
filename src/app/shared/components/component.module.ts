@@ -18,6 +18,7 @@ import { ViewDocumentComponent } from './view-document/view-document.component';
 import { ImageFormComponent } from './image-form/image-form.component';
 import { ViewAttachmentsComponent } from './view-attachments/view-attachments.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+
 @NgModule({
   declarations: [
     LoadingComponent,
