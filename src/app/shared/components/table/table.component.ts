@@ -36,7 +36,7 @@ export class TableComponent implements OnInit {
   @Input() loading = false;
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   displayedColumns: Array<string> = [];
-  keyword: any;
+  keyword: string = '';
   curPageIndex: number = 1;
   constructor(public util: UtilService, private _bs: MatBottomSheet) {}
   ngAfterViewInit() {
