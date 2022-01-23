@@ -9,6 +9,9 @@
   (pagesLoaded)="onFileLoad()"
   [zoom]="'auto'"
 ></ngx-extended-pdf-viewer>
+<ng-container *ngIf="data.isImg"
+  ><img style="height: 100%; width: 100%" [src]="data.link"
+/></ng-container>
 
 <mat-dialog-actions *ngIf="data.downloadButton">
   <button mat-button color="primary" (click)="downloadFile()">

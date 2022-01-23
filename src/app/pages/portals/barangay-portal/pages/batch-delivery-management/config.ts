@@ -7,12 +7,13 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     selected: true,
     isCheckbox: true,
     bottomSheet: [
-      { label: 'View Document/s', action: 'viewDoc' },
+      { label: 'View Document/s', action: 'viewDoc', icon: 'description' },
       {
         label: 'View Personal Information/Proof of Identity',
         action: 'viewInfo',
+        icon: 'assignment_ind',
       },
-      { label: 'View Video Of Signing', action: 'viewVid' },
+      { label: 'View Video Of Signing', action: 'viewVid', icon: 'duo' },
     ],
     populate: [
       {
@@ -68,7 +69,13 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     label: 'Enroute',
     selected: false,
     isCheckbox: false,
-    bottomSheet: [{ label: 'View Transaction/s', action: 'viewTransac' }],
+    bottomSheet: [
+      {
+        label: 'View Transaction/s',
+        action: 'viewTransac',
+        icon: 'description',
+      },
+    ],
     populate: [
       {
         field: '_batchedBy',
@@ -106,7 +113,11 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
 ];
 
 export const BATCH_DELIVERY_BOTTOMSHEET: BottomSheetItem[] = [
-  { label: 'View Document/s', action: 'viewDoc' },
-  { label: 'View Personal Information/Proof of Identity', action: 'viewInfo' },
-  { label: 'View Video Of Signing', action: 'viewVid' },
+  { label: 'View Document/s', action: 'viewDoc', icon: 'description' },
+  {
+    label: 'View Personal Information/Proof of Identity',
+    action: 'viewInfo',
+    icon: 'assignment_ind',
+  },
+  { label: 'View Video Of Signing', action: 'viewVid', icon: 'duo' },
 ];

@@ -4,8 +4,9 @@ import { ApiService } from './../../../../../service/api/api.service';
 import { FILT_BTN_CONFIG, BATCH_DELIVERY_BOTTOMSHEET } from './config';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ViewDocumentComponent } from 'src/app/shared/dialogs/view-document/view-document.component';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ViewDocumentComponent } from 'src/app/shared/components/view-document/view-document.component';
+import { RegistrantFormComponent } from 'src/app/shared/components/registrant-form/registrant-form.component';
 
 @Component({
   selector: 'app-batch-delivery-management',
@@ -29,6 +30,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
         select: 'firstName,lastName',
       },
     ],
+    bottomSheet: this.bsConfig,
   };
   routeLength = 3;
   dataSource = [];
@@ -134,6 +136,12 @@ export class BatchDeliveryManagementComponent implements OnInit {
         });
         break;
       case 'viewInfo':
+        this.dialog.open(RegistrantFormComponent, {
+          data: { header: `View Information`, obj: event.obj.sender },
+          disableClose: true,
+          width: 'auto',
+          height: 'auto',
+        });
         break;
       case 'viewTransac':
         this.onViewTransac(event.obj);

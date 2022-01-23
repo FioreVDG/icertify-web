@@ -3,8 +3,9 @@ import { QueryParams } from './../../../../../../models/queryparams.interface';
 import { ApiService } from './../../../../../../service/api/api.service';
 import { Component, OnInit } from '@angular/core';
 import { BATCH_DELIVERY_BOTTOMSHEET, TRANSAC_TABLE_COLUMN } from './config';
-import { ViewDocumentComponent } from 'src/app/shared/dialogs/view-document/view-document.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ViewDocumentComponent } from 'src/app/shared/components/view-document/view-document.component';
+import { RegistrantFormComponent } from 'src/app/shared/components/registrant-form/registrant-form.component';
 
 @Component({
   selector: 'app-batch-folder',
@@ -65,6 +66,12 @@ export class BatchFolderComponent implements OnInit {
         });
         break;
       case 'viewInfo':
+        this.dialog.open(RegistrantFormComponent, {
+          data: { header: `View Information`, obj: event.obj.sender },
+          disableClose: true,
+          width: 'auto',
+          height: 'auto',
+        });
         break;
       default:
     }
