@@ -59,7 +59,7 @@ export const NOTARY_DOC_RECEIVING_FILT_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     isCheckbox: false,
     populate: [
       {
-        field: '_batchedBy',
+        field: '_receivedBy',
         select: 'firstName,lastName,middleName',
       },
     ],

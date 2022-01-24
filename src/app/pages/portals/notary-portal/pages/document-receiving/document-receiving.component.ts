@@ -5,10 +5,12 @@ import { forkJoin } from 'rxjs';
 import { QueryParams } from 'src/app/models/queryparams.interface';
 import { TableOutput } from 'src/app/models/tableemit.interface';
 import { ApiService } from 'src/app/service/api/api.service';
+import { AuthService } from 'src/app/service/auth/auth.service';
 import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
 import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
 import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
 import { NOTARY_DOC_RECEIVING_FILT_CONFIG } from './config';
+import { ViewTransactionComponent } from './view-transaction/view-transaction.component';
 
 @Component({
   selector: 'app-document-receiving',
@@ -38,16 +40,22 @@ export class DocumentReceivingComponent implements OnInit {
   dataSource = [];
   dataLength: number = 0;
   bsConfig: any;
+  me: any;
 
   constructor(
     private api: ApiService,
     private dialog: MatDialog,
     private router: Router,
+    private auth: AuthService,
     private route: ActivatedRoute,
     private dbx: DropboxService
   ) {}
 
   ngOnInit(): void {
+    this.auth.me().subscribe((res: any) => {
+      this.me = res.env.user;
+      console.log(this.me);
+    });
     this.fetchData(this.page);
   }
 
@@ -62,12 +70,19 @@ export class DocumentReceivingComponent implements OnInit {
       populates: event.populate ? event.populate : [],
     };
 
-    if (event.label === 'Received')
+    if (event.label === 'Received') {
       query.find.push({
         field: 'folderStatus',
         operator: '=',
         value: event.label,
       });
+    } else {
+      query.find.push({
+        field: 'folderStatus',
+        operator: '[ne]=',
+        value: 'Received',
+      });
+    }
     this.api.transaction.getAllFolder(query).subscribe((res: any) => {
       this.loading = false;
       console.log(res);
@@ -94,6 +109,11 @@ export class DocumentReceivingComponent implements OnInit {
 
   onRowClick(event: any) {
     console.log(event);
+    this.dialog.open(ViewTransactionComponent, {
+      data: event,
+      height: 'auto',
+      width: '70%',
+    });
   }
 
   onRouteActivate() {
@@ -123,7 +143,10 @@ export class DocumentReceivingComponent implements OnInit {
       .subscribe((res: any) => {
         if (res) {
           let apiQueries = ids.map((id: any) => {
-            return this.api.folder.update({ folderStatus: 'Received' }, id._id);
+            return this.api.folder.update(
+              { folderStatus: 'Received', _receivedBy: this.me._id },
+              id
+            );
           });
 
           forkJoin(apiQueries).subscribe((res: any) => {

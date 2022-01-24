@@ -20,6 +20,7 @@
         <ng-container *ngFor="let item of files; let i = index">
           <div class="col-6">
             <h4><b>Name: </b>{{ item.name }}</h4>
+            <p><b>Status: </b>{{ item.data.documentStatus }}</p>
             <p><b>Type: </b>{{ item.data.documentType }}</p>
             <p><b>Reference Code: </b>{{ item.data.refCode }}</p>
 
