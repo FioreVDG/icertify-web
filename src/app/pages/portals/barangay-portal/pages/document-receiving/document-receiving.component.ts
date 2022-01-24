@@ -78,37 +78,50 @@ export class DocumentReceivingComponent implements OnInit {
     console.log(event);
     switch (event.action) {
       case 'viewDoc':
-        this.dialog.open(ViewDocumentComponent, {
-          data: event.obj,
-          disableClose: true,
-          width: 'auto',
-          height: 'auto',
-        });
+        this.viewAttachments(event.obj._documents);
         break;
       case 'viewInfo':
-        this.dialog.open(RegistrantFormComponent, {
-          data: { header: `View Information`, obj: event.obj.sender },
-          disableClose: true,
-          width: 'auto',
-          height: 'auto',
-        });
+        event.obj.sender;
+        this.viewPersonalInfo(event.obj.sender);
         break;
       case 'viewVid':
-        this.dbx.getTempLink(event.obj.videoOfSignature.path_display).subscribe(
-          (res: any) => {
-            this.dialog.open(ViewVideoComponent, {
-              width: '50%',
-              disableClose: true,
-              data: { video: res.result.link, header: 'Video of Signing' },
-            });
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-
+        this.viewVideoOfSigning(event.obj.videoOfSignature.path_display);
         break;
       default:
     }
+  }
+
+  viewVideoOfSigning(path_display: string) {
+    this.dbx.getTempLink(path_display).subscribe(
+      (res: any) => {
+        this.dialog.open(ViewVideoComponent, {
+          width: '50%',
+          disableClose: true,
+          data: { video: res.result.link, header: 'Video of Signing' },
+        });
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+
+  viewPersonalInfo(obj: any) {
+    this.dialog.open(RegistrantFormComponent, {
+      data: { header: `View Information`, obj },
+      disableClose: true,
+      width: 'auto',
+      height: 'auto',
+    });
+  }
+
+  viewAttachments(docs: any) {
+    console.log(docs);
+    // this.dialog.open(ViewDocumentComponent, {
+    //   data: event.obj,
+    //   disableClose: true,
+    //   width: 'auto',
+    //   height: 'auto',
+    // });
   }
 }
