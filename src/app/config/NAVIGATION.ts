@@ -6,6 +6,12 @@ export const NOTARY_NAVS: NavNode[] = [
     route: 'notary-dashboard',
     hasAccess: false,
   },
+  {
+    label: 'Document Receiving',
+    icon: 'assignment_returned',
+    route: 'document-receiving',
+    hasAccess: false,
+  },
 ];
 
 export const BARANGAY_NAVS: NavNode[] = [
