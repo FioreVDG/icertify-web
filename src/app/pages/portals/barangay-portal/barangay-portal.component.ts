@@ -92,28 +92,29 @@ export class BarangayPortalComponent implements OnInit {
   }
 
   changeRoute(nav: any) {
-    this.navigationLoading = true;
     if (this.router.url.split('/').pop() == nav.route) {
       setTimeout(() => {
         this.navigationLoading = false;
       }, 1000);
-    }
+    } else {
+      this.navigationLoading = true;
 
-    const routeEvent = this.router.events.subscribe(
-      (event: NavigationEvent) => {
-        if (event instanceof NavigationStart) {
-          this.navigationLoading = true;
-        } else if (event instanceof NavigationEnd) {
-          routeEvent.unsubscribe();
-          setTimeout(() => {
-            this.navigationLoading = false;
-          }, 1000);
+      const routeEvent = this.router.events.subscribe(
+        (event: NavigationEvent) => {
+          if (event instanceof NavigationStart) {
+            this.navigationLoading = true;
+          } else if (event instanceof NavigationEnd) {
+            routeEvent.unsubscribe();
+            setTimeout(() => {
+              this.navigationLoading = false;
+            }, 1000);
+          }
         }
-      }
-    );
+      );
 
-    this.changeLabel.emit(nav);
-    this.routeLabel = nav.label;
+      this.changeLabel.emit(nav);
+      this.routeLabel = nav.label;
+    }
   }
 
   menuClick(event: any) {

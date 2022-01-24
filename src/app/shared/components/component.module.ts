@@ -19,6 +19,8 @@ import { ImageFormComponent } from './image-form/image-form.component';
 import { ViewAttachmentsComponent } from './view-attachments/view-attachments.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { ViewVideoComponent } from './view-video/view-video.component';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,9 @@ import { ViewVideoComponent } from './view-video/view-video.component';
     MaterialModule,
     CommonModule,
     AvatarModule,
+    NgxDocViewerModule,
     NgxExtendedPdfViewerModule,
+    NgxSkeletonLoaderModule,
     ReactiveFormsModule,
     FormsModule,
     NgxFileDropModule,

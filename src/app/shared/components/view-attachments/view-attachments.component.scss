@@ -1,5 +1,20 @@
 .close-btn {
-  margin-right: -14px !important;
-  margin-top: -27px !important;
+  margin-top: -65px !important;
   float: right;
+}
+.img-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 20rem;
+  padding: 0.7rem;
+  border: 2px solid #acacac;
+  border-radius: 0.25rem;
+  transition: 0.1s ease-in;
+  position: relative;
+  img {
+    max-width: 100%;
+    max-height: 100%;
+  }
 }

@@ -49,6 +49,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
     this.fetchData(this.page);
   }
   fetchData(event: any) {
+    this.loading = true;
     console.log(event);
 
     let qry = {
@@ -66,6 +67,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
     } else api = this.api.transaction.getAll(qry);
 
     api.subscribe((res: any) => {
+      this.loading = false;
       console.log(res);
       this.dataSource =
         res.env && res.env.transactions ? res.env.transactions : res.folders;
