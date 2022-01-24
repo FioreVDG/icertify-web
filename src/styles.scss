@@ -22,6 +22,17 @@ h5 {
   font-family: "Poppins", sans-serif !important;
 }
 
+table {
+  width: 100%;
+  * {
+    font-size: 12px !important;
+  }
+
+  thead {
+    // background-color: #f9f9f9 !important;
+  }
+}
+
 .centered {
   position: absolute;
   top: 50%;
@@ -130,7 +141,7 @@ h5 {
   padding-bottom: 0.5rem;
 }
 .bdrop {
-  background-color: #c4c4c4ee;
+  background-color: #484848a1;
   backdrop-filter: blur(0.5px);
 }
 .dialog-transparent {

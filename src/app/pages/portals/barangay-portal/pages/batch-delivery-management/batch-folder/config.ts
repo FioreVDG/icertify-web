@@ -38,9 +38,9 @@ export const TRANSAC_TABLE_COLUMN: Array<Column> = [
   {
     title: 'Date and Time Received',
     breakpoint: 'sm',
-    path: 'dtr',
+    path: 'updatedAt',
 
-    type: 'text',
+    type: 'date',
     selected: true,
   },
   {

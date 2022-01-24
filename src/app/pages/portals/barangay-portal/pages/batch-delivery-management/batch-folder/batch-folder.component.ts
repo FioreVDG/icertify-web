@@ -1,3 +1,4 @@
+import { DropboxService } from './../../../../../../service/dropbox/dropbox.service';
 import { ActivatedRoute } from '@angular/router';
 import { QueryParams } from './../../../../../../models/queryparams.interface';
 import { ApiService } from './../../../../../../service/api/api.service';
@@ -6,6 +7,7 @@ import { BATCH_DELIVERY_BOTTOMSHEET, TRANSAC_TABLE_COLUMN } from './config';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewDocumentComponent } from 'src/app/shared/components/view-document/view-document.component';
 import { RegistrantFormComponent } from 'src/app/shared/components/registrant-form/registrant-form.component';
+import { ViewVideoComponent } from 'src/app/shared/components/view-video/view-video.component';
 
 @Component({
   selector: 'app-batch-folder',
@@ -26,7 +28,8 @@ export class BatchFolderComponent implements OnInit {
   constructor(
     private api: ApiService,
     private route: ActivatedRoute,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private dbx: DropboxService
   ) {
     this.folderId = this.route.snapshot.paramMap.get('id');
   }
@@ -72,6 +75,21 @@ export class BatchFolderComponent implements OnInit {
           width: 'auto',
           height: 'auto',
         });
+        break;
+      case 'viewVid':
+        this.dbx.getTempLink(event.obj.videoOfSignature.path_display).subscribe(
+          (res: any) => {
+            this.dialog.open(ViewVideoComponent, {
+              width: '50%',
+              disableClose: true,
+              data: { video: res.result.link, header: 'Video of Signing' },
+            });
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+
         break;
       default:
     }

@@ -114,6 +114,7 @@ export class AddTransactionComponent implements OnInit {
               documentType: res.result.document_type,
               sender: this.data,
               documentName: res.result.name,
+              fileExtension: res.result.name.split('.')[1],
               dropbox: res.result,
               documentTypeSpecific: this.others,
               link: await this.getTempLink(res.result.path_display),
@@ -157,8 +158,10 @@ export class AddTransactionComponent implements OnInit {
       .afterClosed()
       .subscribe(async (res: any) => {
         console.log(res);
-        this.video = await this.getTempLink(res.result.path_display);
-        this.videoOfSignature = res.result;
+        if (res) {
+          this.video = await this.getTempLink(res.result.path_display);
+          this.videoOfSignature = res.result;
+        }
       });
   }
 

@@ -1,3 +1,4 @@
+import { DropboxService } from './../../../../../service/dropbox/dropbox.service';
 import { ActionResultComponent } from './../../../../../shared/dialogs/action-result/action-result.component';
 import { AreYouSureComponent } from './../../../../../shared/dialogs/are-you-sure/are-you-sure.component';
 import { ApiService } from './../../../../../service/api/api.service';
@@ -7,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ViewDocumentComponent } from 'src/app/shared/components/view-document/view-document.component';
 import { RegistrantFormComponent } from 'src/app/shared/components/registrant-form/registrant-form.component';
+import { ViewVideoComponent } from 'src/app/shared/components/view-video/view-video.component';
 
 @Component({
   selector: 'app-batch-delivery-management',
@@ -39,13 +41,15 @@ export class BatchDeliveryManagementComponent implements OnInit {
     private api: ApiService,
     private dialog: MatDialog,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dbx: DropboxService
   ) {}
 
   ngOnInit(): void {
     this.fetchData(this.page);
   }
   fetchData(event: any) {
+    this.loading = true;
     console.log(event);
 
     let qry = {
@@ -63,6 +67,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
     } else api = this.api.transaction.getAll(qry);
 
     api.subscribe((res: any) => {
+      this.loading = false;
       console.log(res);
       this.dataSource =
         res.env && res.env.transactions ? res.env.transactions : res.folders;
@@ -145,6 +150,21 @@ export class BatchDeliveryManagementComponent implements OnInit {
         break;
       case 'viewTransac':
         this.onViewTransac(event.obj);
+        break;
+      case 'viewVid':
+        this.dbx.getTempLink(event.obj.videoOfSignature.path_display).subscribe(
+          (res: any) => {
+            this.dialog.open(ViewVideoComponent, {
+              width: '50%',
+              disableClose: true,
+              data: { video: res.result.link, header: 'Video of Signing' },
+            });
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+
         break;
       default:
     }
