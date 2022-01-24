@@ -19,9 +19,9 @@
       <div class="grid">
         <ng-container *ngFor="let item of files; let i = index">
           <div class="col-6">
-            <h4>{{ item.name }}</h4>
-            <p>{{ item.data.documentType }}</p>
-            <p>{{ item.data.refCode }}</p>
+            <h4><b>Name: </b>{{ item.name }}</h4>
+            <p><b>Type: </b>{{ item.data.documentType }}</p>
+            <p><b>Reference Code: </b>{{ item.data.refCode }}</p>
 
             <div class="img-container">
               <mat-spinner

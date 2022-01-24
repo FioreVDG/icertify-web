@@ -68,7 +68,11 @@ export class LoginComponent implements OnInit {
           } else {
             this.dialog
               .open(ActionResultComponent, {
-                data: { msg: 'Unauthorized / Login Failed', success: false },
+                data: {
+                  msg: 'Unauthorized / Login Failed',
+                  success: false,
+                  button: 'Got it!',
+                },
               })
               .afterClosed()
               .subscribe((res: any) => {
