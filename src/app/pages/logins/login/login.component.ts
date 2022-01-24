@@ -65,6 +65,9 @@ export class LoginComponent implements OnInit {
           if (res && res.env.user.type === 'Barangay') {
             this.router.navigate(['/barangay-portal/barangay-dashboard']);
             this.isLoggedIn = true;
+          } else if (res && res.env.user.type === 'Notary') {
+            this.router.navigate(['/notary-portal/notary-dashboard']);
+            this.isLoggedIn = true;
           } else {
             this.dialog
               .open(ActionResultComponent, {
