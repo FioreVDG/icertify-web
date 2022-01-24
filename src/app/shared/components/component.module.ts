@@ -20,6 +20,7 @@ import { ViewAttachmentsComponent } from './view-attachments/view-attachments.co
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { ViewVideoComponent } from './view-video/view-video.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
     MaterialModule,
     CommonModule,
     AvatarModule,
+    NgxDocViewerModule,
     NgxExtendedPdfViewerModule,
     NgxSkeletonLoaderModule,
     ReactiveFormsModule,
