@@ -1,1 +1,24 @@
-<p>document-receiving works!</p>
+<router-outlet (activate)="onRouteActivate()"></router-outlet>
+<ng-container *ngIf="routeLength < 4">
+  <button
+    mat-raised-button
+    *ngIf="selected.length && currTable !== 'Received'"
+    style="position: relative; top: 9rem; left: 85%"
+    (click)="onMark()"
+  >
+    Mark as Received
+  </button>
+
+  <app-table
+    [filterButtonConfig]="filtBtnConfig"
+    [loading]="loading"
+    (onUpdateTableEmit)="tableUpdateEmit($event)"
+    (onRowClick)="onRowClick($event)"
+    [dataSource]="dataSource"
+    [dataLength]="dataLength"
+    [pagination]="page"
+    [checkBox]="isCheckbox"
+    [bottomSheet]="bsConfig"
+    (onCheckBoxSelect)="onCheckBoxSelect($event)"
+  ></app-table
+></ng-container>

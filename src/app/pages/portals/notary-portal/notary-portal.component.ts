@@ -11,6 +11,7 @@ import { NOTARY_NAVS } from 'src/app/config/NAVIGATION';
 import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
+import { NOTARY_MENU, NOTARY_MENU_COLORS } from 'src/app/config/USER_MENU';
 
 @Component({
   selector: 'app-notary-portal',
@@ -28,6 +29,10 @@ export class NotaryPortalComponent implements OnInit {
   navigationLoading: boolean = false;
   routeLabel: string = '';
   page: any;
+
+  //For Menu
+  notaryMenu = NOTARY_MENU;
+  menuColors = NOTARY_MENU_COLORS;
 
   constructor(
     public router: Router,
@@ -110,6 +115,19 @@ export class NotaryPortalComponent implements OnInit {
     }
   }
 
+  menuClick(event: any) {
+    switch (event) {
+      case 'logout':
+        this.onLogout();
+        break;
+      case 'change-password':
+        this.changePassword();
+        break;
+      default:
+    }
+  }
+
+  changePassword() {}
   onLogout() {
     this.dialog
       .open(AreYouSureComponent, {

@@ -67,7 +67,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
       api = this.api.transaction.getAllFolder(qry);
     } else {
       qry.populates.push({ field: '_documents' });
-      api = this.api.transaction.getAll(qry);
+      api = this.api.transaction.getAllForBatching(qry);
     }
 
     api.subscribe((res: any) => {
