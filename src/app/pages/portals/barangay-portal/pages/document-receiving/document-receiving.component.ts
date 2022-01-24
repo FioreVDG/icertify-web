@@ -12,6 +12,8 @@ import { ViewDocumentComponent } from 'src/app/shared/components/view-document/v
 import { RegistrantFormComponent } from 'src/app/shared/components/registrant-form/registrant-form.component';
 import { ViewVideoComponent } from 'src/app/shared/components/view-video/view-video.component';
 import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
+import { forkJoin } from 'rxjs';
+import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachments/view-attachments.component';
 
 @Component({
   selector: 'app-document-receiving',
@@ -53,6 +55,9 @@ export class DocumentReceivingComponent implements OnInit {
         {
           field: '_createdBy',
         },
+        {
+          field: '_documents',
+        },
       ],
     };
     if (event.filter) query.filter = event.filter;
@@ -75,7 +80,7 @@ export class DocumentReceivingComponent implements OnInit {
     );
   }
   onRowClick(event: any) {
-    console.log(event);
+    // console.log(event);
     switch (event.action) {
       case 'viewDoc':
         this.viewAttachments(event.obj._documents);
@@ -115,13 +120,14 @@ export class DocumentReceivingComponent implements OnInit {
     });
   }
 
-  viewAttachments(docs: any) {
+  viewAttachments(docs: Array<any>) {
     console.log(docs);
-    // this.dialog.open(ViewDocumentComponent, {
-    //   data: event.obj,
-    //   disableClose: true,
-    //   width: 'auto',
-    //   height: 'auto',
-    // });
+    this.dialog.open(ViewAttachmentsComponent, {
+      data: {
+        documents: docs,
+      },
+      height: 'auto',
+      width: '70%',
+    });
   }
 }
