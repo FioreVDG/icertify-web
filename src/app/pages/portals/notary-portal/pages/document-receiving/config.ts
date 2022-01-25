@@ -1,5 +1,6 @@
 import { BottomSheetItem } from 'src/app/models/bottomsheet.interface';
 import { FILTER_BUTTON_COLUMN } from 'src/app/models/filter-button-conf.interface';
+import { Find } from 'src/app/models/queryparams.interface';
 
 export const NOTARY_DOC_RECEIVING_FILT_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
   {
@@ -102,5 +103,31 @@ export const NOTARY_DOC_RECEIVING_FILT_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
     ],
+  },
+];
+
+export const FOR_RECEIVING_FIND: Find[] = [
+  {
+    field: 'folderStatus',
+    operator: '[nin]=',
+    value: 'Done,Incomplete',
+  },
+  {
+    field: 'location',
+    operator: '=',
+    value: 'Road',
+  },
+];
+
+export const RECEIVED_FIND: Find[] = [
+  {
+    field: 'folderStatus',
+    operator: '[nin]=',
+    value: 'Done,Incomplete',
+  },
+  {
+    field: 'location',
+    operator: '=',
+    value: 'Notary',
   },
 ];

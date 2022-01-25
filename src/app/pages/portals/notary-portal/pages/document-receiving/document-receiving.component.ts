@@ -9,7 +9,11 @@ import { AuthService } from 'src/app/service/auth/auth.service';
 import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
 import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
 import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
-import { NOTARY_DOC_RECEIVING_FILT_CONFIG } from './config';
+import {
+  FOR_RECEIVING_FIND,
+  NOTARY_DOC_RECEIVING_FILT_CONFIG,
+  RECEIVED_FIND,
+} from './config';
 import { ViewTransactionComponent } from './view-transaction/view-transaction.component';
 
 @Component({
@@ -71,24 +75,9 @@ export class DocumentReceivingComponent implements OnInit {
     };
 
     if (event.label === 'Received') {
-      query.find.push({
-        field: 'folderStatus',
-        operator: '=',
-        value: event.label,
-      });
+      query.find = RECEIVED_FIND;
     } else {
-      query.find.push(
-        {
-          field: 'folderStatus',
-          operator: '[ne]=',
-          value: 'Received',
-        },
-        {
-          field: 'location',
-          operator: '=',
-          value: 'Road',
-        }
-      );
+      query.find = FOR_RECEIVING_FIND;
     }
     this.api.transaction.getAllFolder(query).subscribe((res: any) => {
       this.loading = false;
@@ -152,7 +141,6 @@ export class DocumentReceivingComponent implements OnInit {
           let apiQueries = ids.map((id: any) => {
             return this.api.folder.update(
               {
-                folderStatus: 'Received',
                 _receivedBy: this.me._id,
                 location: 'Notary',
               },
