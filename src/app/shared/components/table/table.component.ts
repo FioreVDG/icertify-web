@@ -26,6 +26,7 @@ export class TableComponent implements OnInit {
   @Input() dataLength: number = 0;
   @Input() columns!: Array<Column>;
   @Input() bottomSheet: any;
+  @Input() checkBoxDisableField!: any;
   @Input() pagination: any;
   @Output() onRowClick: any = new EventEmitter<any>();
   @Input() filterButtonConfig: any = [];
@@ -43,6 +44,7 @@ export class TableComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
   }
   ngOnInit(): void {
+    console.log(this.checkBoxDisableField);
     console.log(this.checkBox);
     this.duplicateColumns = JSON.parse(
       JSON.stringify(this.columns ? this.columns : this.defaultColumn())
@@ -196,5 +198,20 @@ export class TableComponent implements OnInit {
 
     this.checkedRows.select(...this.dataSource);
     this.onCheckBoxSelect.emit(this.checkedRows.selected);
+  }
+
+  getTextColor(col: Column, value: string) {
+    let column: any = col;
+    for (let color of column.textColor) {
+      if (color.value === value) return color.color;
+    }
+  }
+
+  checkBoxDisable(col: Column, value: string) {
+    let column: any = col;
+    for (let valueToDisable of column.CheckboxDisabler) {
+      if (valueToDisable === value) return true;
+    }
+    return false;
   }
 }

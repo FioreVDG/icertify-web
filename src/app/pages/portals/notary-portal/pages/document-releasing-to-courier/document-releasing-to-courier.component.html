@@ -10,6 +10,7 @@
   </button>
 
   <app-table
+    [checkBoxDisableField]="checkBoxDisableField"
     [filterButtonConfig]="filtBtnConfig"
     [loading]="loading"
     (onUpdateTableEmit)="tableUpdateEmit($event)"

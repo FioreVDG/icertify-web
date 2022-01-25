@@ -25,7 +25,7 @@ import {
 export class DocumentReleasingToCourierComponent implements OnInit {
   filtBtnConfig = NOTARY_DOC_RELEASING_TO_COURIER_CONFIG;
   isCheckbox: boolean = true;
-  checkBoxDisableField = 'Status';
+  checkBoxDisableField = { column: 'folderStatus', value: 'Incomplete' };
   selected = [];
   currTable: any;
   currPopulate: any;

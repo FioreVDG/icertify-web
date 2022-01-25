@@ -56,6 +56,10 @@
             <span>
               <mat-checkbox
                 [checked]="checkedRows.isSelected(row)"
+                [disabled]="
+                  row[checkBoxDisableField.column] ===
+                  checkBoxDisableField.value
+                "
                 (click)="$event.stopPropagation()"
                 (change)="$event ? onCheckBoxChange(row) : null"
               >
@@ -70,7 +74,22 @@
               {{ col.title }}
             </th>
             <td mat-cell *matCellDef="let element" (click)="rowClick(element)">
-              <span *ngIf="col.type !== 'special' && col.type !== 'date'"
+              <span
+                *ngIf="
+                  col.type !== 'special' &&
+                  col.type !== 'date' &&
+                  !col.textColor
+                "
+                >{{ col.path === "mobileNumber" ? "(+63)" : ""
+                }}{{ util.deepFind(element, col.path) }}</span
+              >
+              <span
+                *ngIf="
+                  col.type !== 'special' && col.type !== 'date' && col.textColor
+                "
+                [ngStyle]="{
+                  color: getTextColor(col, util.deepFind(element, col.path))
+                }"
                 >{{ col.path === "mobileNumber" ? "(+63)" : ""
                 }}{{ util.deepFind(element, col.path) }}</span
               >

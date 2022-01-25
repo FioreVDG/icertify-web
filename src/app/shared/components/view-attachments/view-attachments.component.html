@@ -1,4 +1,4 @@
-<h3 mat-dialog-title>View Attachments</h3>
+<h3 mat-dialog-title>{{ data.refCode ? data.refCode : "View Attachments" }}</h3>
 <mat-icon mat-dialog-close class="close-btn" color="warn">close</mat-icon>
 <!-- // ADD IMAGE VIEWRR -->
 <div mat-dialog-content *ngIf="!loading">
