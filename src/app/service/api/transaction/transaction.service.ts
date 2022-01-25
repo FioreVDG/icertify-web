@@ -23,6 +23,9 @@ export class TransactionService {
   delete(id: String) {
     return this.http.start('delete', `/transactions/${id}`);
   }
+  getAllForBatching(query: QueryParams) {
+    return this.http.start('get', '/transactions/for-batching', {}, query);
+  }
   getAllBatchTransaction(query: QueryParams) {
     return this.http.start('get', `/transactions/batch`, {}, query);
   }

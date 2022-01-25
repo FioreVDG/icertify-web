@@ -19,6 +19,13 @@ const routes: Routes = [
             (m) => m.DashboardModule
           ),
       },
+      {
+        path: 'document-receiving',
+        loadChildren: () =>
+          import('./pages/document-receiving/document-receiving.module').then(
+            (m) => m.DocumentReceivingModule
+          ),
+      },
     ],
   },
 ];

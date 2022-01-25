@@ -21,6 +21,7 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { ViewVideoComponent } from './view-video/view-video.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { RtVideoComponent } from './rt-video/rt-video.component';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { RtVideoComponent } from './rt-video/rt-video.component';
     MaterialModule,
     CommonModule,
     AvatarModule,
+    NgxDocViewerModule,
     NgxExtendedPdfViewerModule,
     NgxSkeletonLoaderModule,
     ReactiveFormsModule,

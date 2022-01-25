@@ -4,7 +4,6 @@ import {
   MatDialogRef,
   MatDialog,
 } from '@angular/material/dialog';
-import { Dropbox } from 'dropbox';
 import { Column } from 'src/app/models/column.interface';
 import { QueryParams } from 'src/app/models/queryparams.interface';
 import { TableOutput } from 'src/app/models/tableemit.interface';
