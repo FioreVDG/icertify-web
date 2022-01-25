@@ -91,11 +91,6 @@
           mat-row
           *matRowDef="let row; columns: displayedColumns; let i = index"
         ></tr>
-        <tr class="mat-row" *ngIf="dataSource.length">
-          <td class="mat-cell" style="text-align: center" colspan="9999">
-            No Records Found
-          </td>
-        </tr>
       </table>
       <mat-paginator
         style="border-top: 1px solid #26184aac"
@@ -108,7 +103,9 @@
         (page)="onClickPagination($event)"
       >
       </mat-paginator>
-
+      <div *ngIf="!dataSource?.length && !loading" align="center">
+        <p>No Records Found</p>
+      </div>
       <div *ngIf="loading" class="loading mt-4">
         <ngx-skeleton-loader
           count="5"

@@ -56,7 +56,11 @@
     <router-outlet></router-outlet>
   </div>
   <div style="overflow-x: hidden; overflow-y: hidden">
-    <app-loading *ngIf="loading && !loggingOut"></app-loading>
+    <app-loading
+      *ngIf="navigationLoading && !loggingOut"
+      [label]="'Navigating to'"
+      [route]="routeLabel"
+    ></app-loading>
   </div>
 </mat-sidenav-container>
-<app-loading *ngIf="loggingOut"></app-loading>
+<app-loading *ngIf="loggingOut" [label]="'Logging out'"></app-loading>

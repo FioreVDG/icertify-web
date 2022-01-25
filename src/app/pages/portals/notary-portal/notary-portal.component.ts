@@ -18,7 +18,7 @@ import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you
   styleUrls: ['./notary-portal.component.scss'],
 })
 export class NotaryPortalComponent implements OnInit {
-  isExpanded: boolean = true;
+  isExpanded: boolean = false;
   notaryNav = NOTARY_NAVS;
   me!: User;
   navigation: any;
@@ -85,7 +85,6 @@ export class NotaryPortalComponent implements OnInit {
   }
 
   changeRoute(nav: any) {
-    this.navigationLoading = true;
     if (this.router.url.split('/').pop() == nav.route) {
       setTimeout(() => {
         this.navigationLoading = false;

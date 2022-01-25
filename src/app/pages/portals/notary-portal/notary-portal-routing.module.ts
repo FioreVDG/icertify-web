@@ -26,6 +26,13 @@ const routes: Routes = [
             (m) => m.DocumentReceivingModule
           ),
       },
+      {
+        path: 'video-conference',
+        loadChildren: () =>
+          import('./pages/video-conferencing/video-conferencing.module').then(
+            (m) => m.VideoConferencingModule
+          ),
+      },
     ],
   },
 ];
