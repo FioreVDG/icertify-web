@@ -12,6 +12,7 @@ import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you
 import { ViewTransactionComponent } from '../document-receiving/view-transaction/view-transaction.component';
 import {
   DELIVERED_FIND,
+  DOC_RELEASING_DISABLE_CHECKBOX,
   ENROUTE_FIND,
   FOR_PICKUP_FIND,
   NOTARY_DOC_RELEASING_TO_COURIER_CONFIG,
@@ -25,7 +26,7 @@ import {
 export class DocumentReleasingToCourierComponent implements OnInit {
   filtBtnConfig = NOTARY_DOC_RELEASING_TO_COURIER_CONFIG;
   isCheckbox: boolean = true;
-  checkBoxDisableField = { column: 'folderStatus', value: 'Incomplete' };
+  checkBoxDisableField = DOC_RELEASING_DISABLE_CHECKBOX;
   selected = [];
   currTable: any;
   currPopulate: any;

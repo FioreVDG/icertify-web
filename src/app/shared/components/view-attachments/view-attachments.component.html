@@ -20,7 +20,25 @@
         <ng-container *ngFor="let item of files; let i = index">
           <div class="col-6">
             <h4><b>Name: </b>{{ item.name }}</h4>
-            <p><b>Status: </b>{{ item.data.documentStatus }}</p>
+            <p *ngIf="item.data.documentStatus">
+              <b>Status: </b
+              ><span
+                [ngStyle]="{
+                  color:
+                    item.data.documentStatus === 'Pending for Notary'
+                      ? '#F4D03F'
+                      : '#27AE60'
+                }"
+                >{{ item.data.documentStatus }}
+              </span>
+              <span *ngIf="item.data.documentStatus !== 'Pending for Notary'"
+                ><button mat-icon-button>
+                  <mat-icon matTooltip="View Screenshots"
+                    >photo_camera</mat-icon
+                  >
+                </button>
+              </span>
+            </p>
             <p><b>Type: </b>{{ item.data.documentType }}</p>
             <p><b>Reference Code: </b>{{ item.data.refCode }}</p>
 

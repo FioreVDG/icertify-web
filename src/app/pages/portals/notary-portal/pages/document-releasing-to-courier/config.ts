@@ -34,7 +34,7 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
           title: 'Notary',
           breakpoint: 'sm',
           path: '_receivedBy',
-          paths: ['_receivedBy.lastName,_receivedBy.firstName'],
+          paths: ['_receivedBy.lastName', '_receivedBy.firstName'],
           type: 'special',
           selected: true,
         },
@@ -104,7 +104,7 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
           title: 'Notary',
           breakpoint: 'sm',
           path: '_receivedBy',
-          paths: ['_receivedBy.lastName,_receivedBy.firstName'],
+          paths: ['_receivedBy.lastName', '_receivedBy.firstName'],
           type: 'special',
           selected: true,
         },
@@ -112,7 +112,7 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
           title: 'Marked as Enroute by',
           breakpoint: 'sm',
           path: '_enrouteBy',
-          paths: ['_enrouteBy.lastName,_enrouteBy.firstName'],
+          paths: ['_enrouteBy.lastName', '_enrouteBy.firstName'],
           type: 'special',
           selected: true,
         },
@@ -165,7 +165,7 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
           title: 'Notary',
           breakpoint: 'sm',
           path: '_receivedBy',
-          paths: ['_receivedBy.lastName,_receivedBy.firstName'],
+          paths: ['_receivedBy.lastName', '_receivedBy.firstName'],
           type: 'special',
           selected: true,
         },
@@ -173,7 +173,10 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
           title: 'Received By',
           breakpoint: 'sm',
           path: '_enrouteBy',
-          paths: ['_receivedByBarangay.lastName,_receivedByBarangay.firstName'],
+          paths: [
+            '_receivedByBarangay.lastName',
+            '_receivedByBarangay.firstName',
+          ],
           type: 'special',
           selected: true,
         },
@@ -194,6 +197,11 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
       ],
     },
   ];
+
+export const DOC_RELEASING_DISABLE_CHECKBOX = {
+  column: 'folderStatus',
+  value: 'Incomplete',
+};
 
 export const FOR_PICKUP_FIND: Find[] = [
   {
