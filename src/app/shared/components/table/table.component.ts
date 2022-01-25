@@ -184,6 +184,7 @@ export class TableComponent implements OnInit {
     this.onUpdateTableEmit.emit(this.pagination);
   }
   onCheckBoxChange(row: any) {
+    console.log(row);
     this.checkedRows.toggle(row);
     this.onCheckBoxSelect.emit(this.checkedRows.selected);
   }

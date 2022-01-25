@@ -27,6 +27,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'video-conference',
+        loadChildren: () =>
+          import('./pages/video-conferencing/video-conferencing.module').then(
+            (m) => m.VideoConferencingModule
+          ),
+      },
+      {
         path: 'document-releasing-to-courier',
         loadChildren: () =>
           import(

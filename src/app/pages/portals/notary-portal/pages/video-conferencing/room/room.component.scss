@@ -1,0 +1,69 @@
+@import "../../../../../../../assets/styles/variables.scss";
+
+.flex-stretch {
+  flex: 1 0 auto;
+}
+.header-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.5rem;
+  .name-container {
+    display: flex;
+    padding-right: 1.5rem;
+    mat-icon {
+      font-size: 50px;
+    }
+  }
+  .info {
+    display: block;
+    h4,
+    p {
+      margin: 0;
+      text-align: right;
+    }
+  }
+}
+
+.main-content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 86vh;
+  .left {
+    width: 75%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .vid-wrapper {
+      height: 30rem;
+      width: 65%;
+      background: #565656;
+    }
+  }
+  .right {
+    width: 20%;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    .btn-join {
+      background-color: $primary;
+      color: #fff;
+      cursor: pointer;
+      outline: none;
+      border: none;
+      display: block;
+      border-radius: 25px;
+      width: 55%;
+      padding: 1rem 2rem;
+      font-size: 16px;
+    }
+    h3 {
+      //   text-align: center;
+    }
+  }
+}
+
+mat-sidenav-container {
+  height: 100%;
+}

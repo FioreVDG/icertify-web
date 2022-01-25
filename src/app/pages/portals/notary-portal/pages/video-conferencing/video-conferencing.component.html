@@ -1,0 +1,34 @@
+<button
+  mat-stroked-button
+  color="primary"
+  *ngIf="countSelected > 0 && currentTable === 'For Scheduling'"
+  style="position: absolute; z-index: 99"
+  (click)="onSetSchedule()"
+>
+  Set Schedule
+</button>
+<button
+  mat-stroked-button
+  color="primary"
+  *ngIf="currentTable !== 'For Scheduling'"
+  style="position: absolute; z-index: 99"
+  (click)="onCreateMeeting()"
+>
+  Click here to start meeting
+</button>
+<app-table
+  style="position: relative"
+  [filterButtonConfig]="filterBtnConfig"
+  [loading]="loading"
+  [dataSource]="dataSource"
+  [checkBox]="isCheckbox"
+  (onUpdateTableEmit)="tableUpdateEmit($event)"
+  [pagination]="page"
+  (onRowClick)="onRowClick($event)"
+  [dataLength]="dataLength"
+  (onCheckBoxSelect)="onCheckBoxSelect($event)"
+></app-table>
+<small *ngIf="countSelected > 0 && currentTable === 'For Scheduling'">
+  <b>{{ countSelected }}</b> {{ countSelected > 1 ? "batches" : "batch" }} has
+  been selected
+</small>

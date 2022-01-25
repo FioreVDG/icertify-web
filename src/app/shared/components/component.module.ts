@@ -22,6 +22,7 @@ import { ViewVideoComponent } from './view-video/view-video.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { RtVideoComponent } from './rt-video/rt-video.component';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
+import { ConferenceRoomComponent } from './conference-room/conference-room.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
     AutoCompleteComponent,
     ViewAttachmentsComponent,
     ViewVideoComponent,
+    ConferenceRoomComponent,
     RtVideoComponent,
   ],
   imports: [
