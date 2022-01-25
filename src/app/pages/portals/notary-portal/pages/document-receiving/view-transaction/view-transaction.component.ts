@@ -82,7 +82,7 @@ export class ViewTransactionComponent implements OnInit {
     console.log(event);
     switch (event.action) {
       case 'viewDoc':
-        this.viewAttachments(event.obj._documents);
+        this.viewAttachments(event.obj._documents, event.obj.refCode);
         break;
       case 'viewInfo':
         event.obj.sender;
@@ -119,11 +119,12 @@ export class ViewTransactionComponent implements OnInit {
     });
   }
 
-  viewAttachments(docs: Array<any>) {
+  viewAttachments(docs: Array<any>, refCode: string) {
     console.log(docs);
     this.dialog.open(ViewAttachmentsComponent, {
       data: {
         documents: docs,
+        refCode: refCode,
       },
       height: 'auto',
       width: '70%',
