@@ -20,6 +20,7 @@ import { ViewAttachmentsComponent } from './view-attachments/view-attachments.co
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { ViewVideoComponent } from './view-video/view-video.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { RtVideoComponent } from './rt-video/rt-video.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
     AutoCompleteComponent,
     ViewAttachmentsComponent,
     ViewVideoComponent,
+    RtVideoComponent,
   ],
   imports: [
     MaterialModule,
@@ -58,6 +60,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
     OtpComponent,
     BottomSheetComponent,
     AutoCompleteComponent,
+    RtVideoComponent,
   ],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
