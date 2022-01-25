@@ -190,14 +190,16 @@ export class TableComponent implements OnInit {
   }
 
   checkAll() {
-    if (this.checkedRows.selected.length === this.dataSource.length) {
-      this.onCheckBoxSelect.emit([]);
-      this.checkedRows.clear();
-      return;
-    }
+    if (!this.checkBoxDisableField) {
+      if (this.checkedRows.selected.length === this.dataSource.length) {
+        this.onCheckBoxSelect.emit([]);
+        this.checkedRows.clear();
+        return;
+      }
 
-    this.checkedRows.select(...this.dataSource);
-    this.onCheckBoxSelect.emit(this.checkedRows.selected);
+      this.checkedRows.select(...this.dataSource);
+      this.onCheckBoxSelect.emit(this.checkedRows.selected);
+    }
   }
 
   getTextColor(col: Column, value: string) {
