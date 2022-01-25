@@ -44,7 +44,6 @@ export class TableComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
   }
   ngOnInit(): void {
-    console.log(this.checkBoxDisableField);
     console.log(this.checkBox);
     this.duplicateColumns = JSON.parse(
       JSON.stringify(this.columns ? this.columns : this.defaultColumn())
@@ -199,6 +198,29 @@ export class TableComponent implements OnInit {
 
       this.checkedRows.select(...this.dataSource);
       this.onCheckBoxSelect.emit(this.checkedRows.selected);
+    } else {
+      const numSelected = this.checkedRows.selected.length;
+      const numSelectedMinusDisabled = this.dataSource.filter((row: any) => {
+        return (
+          row[this.checkBoxDisableField.column] !==
+          this.checkBoxDisableField.value
+        );
+      }).length;
+
+      if (numSelected === numSelectedMinusDisabled) {
+        this.onCheckBoxSelect.emit([]);
+        this.checkedRows.clear();
+        return;
+      } else {
+        this.dataSource.forEach((row: any) => {
+          if (
+            row[this.checkBoxDisableField.column] !==
+            this.checkBoxDisableField.value
+          )
+            this.checkedRows.select(row);
+        });
+        this.onCheckBoxSelect.emit(this.checkedRows.selected);
+      }
     }
   }
 
