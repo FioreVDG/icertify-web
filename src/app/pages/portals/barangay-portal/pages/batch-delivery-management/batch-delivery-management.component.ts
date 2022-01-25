@@ -9,6 +9,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ViewDocumentComponent } from 'src/app/shared/components/view-document/view-document.component';
 import { RegistrantFormComponent } from 'src/app/shared/components/registrant-form/registrant-form.component';
 import { ViewVideoComponent } from 'src/app/shared/components/view-video/view-video.component';
+import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachments/view-attachments.component';
 
 @Component({
   selector: 'app-batch-delivery-management',
@@ -57,14 +58,17 @@ export class BatchDeliveryManagementComponent implements OnInit {
       page: event.pageIndex || 1,
       limit: (event.pageSize || 10) + '',
       filter: event.filter,
-      populates: event.populate,
+      populates: event.populate ? event.populate : [],
     };
 
     console.log(qry);
     let api: any;
     if (event && event.label === 'Enroute') {
       api = this.api.transaction.getAllFolder(qry);
-    } else api = this.api.transaction.getAll(qry);
+    } else {
+      qry.populates.push({ field: '_documents' });
+      api = this.api.transaction.getAllForBatching(qry);
+    }
 
     api.subscribe((res: any) => {
       this.loading = false;
@@ -133,10 +137,10 @@ export class BatchDeliveryManagementComponent implements OnInit {
     console.log(event);
     switch (event.action) {
       case 'viewDoc':
-        this.dialog.open(ViewDocumentComponent, {
-          data: event.obj,
+        this.dialog.open(ViewAttachmentsComponent, {
+          data: { documents: event.obj._documents },
           disableClose: true,
-          width: 'auto',
+          width: '70%',
           height: 'auto',
         });
         break;

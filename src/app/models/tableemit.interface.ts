@@ -1,7 +1,8 @@
+import { BottomSheetItem } from './bottomsheet.interface';
 import { Find, Populate } from './queryparams.interface';
 
 export interface TableOutput {
-  populate?: Populate;
+  populate?: Array<Populate>;
   pageSize: number;
   length?: number;
   pageIndex: number;
@@ -16,4 +17,7 @@ export interface TableOutput {
     fields: Array<string>;
   };
   type?: String;
+  label?: string;
+  isCheckbox?: boolean;
+  bottomSheet?: Array<BottomSheetItem>;
 }

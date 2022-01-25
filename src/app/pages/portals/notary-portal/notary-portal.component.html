@@ -45,6 +45,14 @@
       >chevron_right</mat-icon
     >
     <div class="flex-stretch"></div>
+    <app-profile-menu
+      class="avatar"
+      *ngIf="me"
+      [me]="me"
+      [avatarColors]="menuColors"
+      [menuItems]="notaryMenu"
+      (onMenuClick)="menuClick($event)"
+    ></app-profile-menu>
   </mat-toolbar>
   <mat-toolbar style="height: 3rem; border-bottom: 3px solid #26184ab8">
     <small style="font-size: 13px; letter-spacing: 0.1rem">{{

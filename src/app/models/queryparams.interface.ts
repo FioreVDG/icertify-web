@@ -1,7 +1,7 @@
 export interface Find {
   field: string;
   operator: string;
-  value: string | number | boolean | Date | null;
+  value: string | number | boolean | Date | null | undefined;
 }
 
 export interface Populate {
@@ -19,7 +19,7 @@ export interface QueryParams {
   fields?: string;
   page?: number;
   find: Array<Find>;
-  populates?: Array<Populate>;
+  populates?: Array<Populate> | undefined;
   filter?: {
     value: string | boolean | number;
     fields: Array<string>;

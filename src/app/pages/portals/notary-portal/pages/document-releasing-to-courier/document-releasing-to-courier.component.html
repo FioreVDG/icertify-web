@@ -6,10 +6,11 @@
     style="position: relative; top: 9rem; left: 85%"
     (click)="onMark()"
   >
-    Mark as Received
+    Mark as Enroute
   </button>
 
   <app-table
+    [checkBoxDisableField]="checkBoxDisableField"
     [filterButtonConfig]="filtBtnConfig"
     [loading]="loading"
     (onUpdateTableEmit)="tableUpdateEmit($event)"

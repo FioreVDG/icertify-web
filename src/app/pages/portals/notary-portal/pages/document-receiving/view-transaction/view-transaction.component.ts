@@ -1,41 +1,40 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { BottomSheetItem } from 'src/app/models/bottomsheet.interface';
+import { Component, Inject, OnInit } from '@angular/core';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialog,
+} from '@angular/material/dialog';
 import { Column } from 'src/app/models/column.interface';
 import { QueryParams } from 'src/app/models/queryparams.interface';
 import { TableOutput } from 'src/app/models/tableemit.interface';
 import { ApiService } from 'src/app/service/api/api.service';
-import { UtilService } from 'src/app/service/util/util.service';
-import { AutoCompleteComponent } from 'src/app/shared/components/auto-complete/auto-complete.component';
-import { DOCUMENT_RECEIVING_TABLE, DOC_RECEIVING_BOTTOMSHEET } from './config';
-import { ViewDocumentComponent } from 'src/app/shared/components/view-document/view-document.component';
-import { RegistrantFormComponent } from 'src/app/shared/components/registrant-form/registrant-form.component';
-import { ViewVideoComponent } from 'src/app/shared/components/view-video/view-video.component';
 import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
-import { forkJoin } from 'rxjs';
+import { RegistrantFormComponent } from 'src/app/shared/components/registrant-form/registrant-form.component';
 import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachments/view-attachments.component';
+import { ViewVideoComponent } from 'src/app/shared/components/view-video/view-video.component';
+import { VIEW_TRANSACTION_BOTTOMSHEET, VIEW_TRANSACTION_TABLE } from './config';
 
 @Component({
-  selector: 'app-document-receiving',
-  templateUrl: './document-receiving.component.html',
-  styleUrls: ['./document-receiving.component.scss'],
+  selector: 'app-view-transaction',
+  templateUrl: './view-transaction.component.html',
+  styleUrls: ['./view-transaction.component.scss'],
 })
-export class DocumentReceivingComponent implements OnInit {
+export class ViewTransactionComponent implements OnInit {
   dataSource: Array<any> = [];
-  columns: Column[] = DOCUMENT_RECEIVING_TABLE;
-  bottomSheet: BottomSheetItem[] = DOC_RECEIVING_BOTTOMSHEET;
+  columns: Column[] = VIEW_TRANSACTION_TABLE;
+  bottomSheet = VIEW_TRANSACTION_BOTTOMSHEET;
   dataLength: number = 0;
   page: any = {
     pageSize: 10,
     pageIndex: 1,
   };
   loading: boolean = false;
-
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<ViewTransactionComponent>,
     private api: ApiService,
-    private dialog: MatDialog,
-    private util: UtilService,
-    private dbx: DropboxService
+    private dbx: DropboxService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -47,18 +46,18 @@ export class DocumentReceivingComponent implements OnInit {
     this.loading = true;
     this.page.pageIndex = event.pageIndex;
     this.page.pageSize = event.pageSize;
+
     let query: QueryParams = {
-      find: [],
-      page: event.pageIndex,
-      limit: event.pageSize + '',
-      populates: [
+      find: [
         {
-          field: '_createdBy',
-        },
-        {
-          field: '_documents',
+          field: '_folderId',
+          operator: '=',
+          value: this.data._id,
         },
       ],
+      page: event.pageIndex,
+      limit: event.pageSize + '',
+      populates: [{ field: '_folderId' }, { field: '_documents' }],
     };
     if (event.filter) query.filter = event.filter;
     if (event.sort) {
@@ -68,7 +67,6 @@ export class DocumentReceivingComponent implements OnInit {
 
     this.api.transaction.getAll(query).subscribe(
       (res: any) => {
-        console.log(res);
         this.dataSource = res.env.transactions;
         this.dataLength = res.total;
         this.loading = false;
@@ -79,11 +77,12 @@ export class DocumentReceivingComponent implements OnInit {
       }
     );
   }
+
   onRowClick(event: any) {
-    // console.log(event);
+    console.log(event);
     switch (event.action) {
       case 'viewDoc':
-        this.viewAttachments(event.obj._documents);
+        this.viewAttachments(event.obj._documents, event.obj.refCode);
         break;
       case 'viewInfo':
         event.obj.sender;
@@ -120,11 +119,12 @@ export class DocumentReceivingComponent implements OnInit {
     });
   }
 
-  viewAttachments(docs: Array<any>) {
+  viewAttachments(docs: Array<any>, refCode: string) {
     console.log(docs);
     this.dialog.open(ViewAttachmentsComponent, {
       data: {
         documents: docs,
+        refCode: refCode,
       },
       height: 'auto',
       width: '70%',

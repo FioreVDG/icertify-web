@@ -11,8 +11,12 @@ export interface Column {
   alternativePath?: string;
   textColor?: Array<Color>;
   isCheckbox?: boolean;
+  disableCheckbox?: Array<CheckboxDisabler>;
 }
 
+interface CheckboxDisabler {
+  value: string;
+}
 interface Color {
   value: string;
   color: string;

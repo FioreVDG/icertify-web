@@ -1,4 +1,4 @@
-<h3 mat-dialog-title>View Attachments</h3>
+<h3 mat-dialog-title>{{ data.refCode ? data.refCode : "View Attachments" }}</h3>
 <mat-icon mat-dialog-close class="close-btn" color="warn">close</mat-icon>
 <!-- // ADD IMAGE VIEWRR -->
 <div mat-dialog-content *ngIf="!loading">
@@ -19,9 +19,10 @@
       <div class="grid">
         <ng-container *ngFor="let item of files; let i = index">
           <div class="col-6">
-            <h4>{{ item.name }}</h4>
-            <p>{{ item.data.documentType }}</p>
-            <p>{{ item.data.refCode }}</p>
+            <h4><b>Name: </b>{{ item.name }}</h4>
+            <p><b>Status: </b>{{ item.data.documentStatus }}</p>
+            <p><b>Type: </b>{{ item.data.documentType }}</p>
+            <p><b>Reference Code: </b>{{ item.data.refCode }}</p>
 
             <div class="img-container">
               <mat-spinner

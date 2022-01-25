@@ -33,6 +33,13 @@ const routes: Routes = [
             (m) => m.VideoConferencingModule
           ),
       },
+      {
+        path: 'document-releasing-to-courier',
+        loadChildren: () =>
+          import(
+            './pages/document-releasing-to-courier/document-releasing-to-courier.module'
+          ).then((m) => m.DocumentReleasingToCourierModule),
+      },
     ],
   },
 ];

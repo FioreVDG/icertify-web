@@ -25,6 +25,6 @@
   </div>
 </div>
 <!-- MEETING -->
-<div class="grid" *ngIf="joinRoom">
-  <div class="col-12"></div>
-</div>
+<mat-sidenav-container *ngIf="joinRoom">
+  <mat-sidenav #sidenav mode="side" opened opened="true"></mat-sidenav>
+</mat-sidenav-container>

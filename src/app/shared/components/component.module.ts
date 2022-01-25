@@ -20,6 +20,7 @@ import { ViewAttachmentsComponent } from './view-attachments/view-attachments.co
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { ViewVideoComponent } from './view-video/view-video.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { RtVideoComponent } from './rt-video/rt-video.component';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { ConferenceRoomComponent } from './conference-room/conference-room.component';
 
@@ -39,6 +40,7 @@ import { ConferenceRoomComponent } from './conference-room/conference-room.compo
     ViewAttachmentsComponent,
     ViewVideoComponent,
     ConferenceRoomComponent,
+    RtVideoComponent,
   ],
   imports: [
     MaterialModule,
@@ -62,6 +64,7 @@ import { ConferenceRoomComponent } from './conference-room/conference-room.compo
     OtpComponent,
     BottomSheetComponent,
     AutoCompleteComponent,
+    RtVideoComponent,
   ],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

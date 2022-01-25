@@ -9,17 +9,23 @@ import { AuthService } from 'src/app/service/auth/auth.service';
 import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
 import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
 import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
-import { NOTARY_DOC_RECEIVING_FILT_CONFIG } from './config';
-import { ViewTransactionComponent } from './view-transaction/view-transaction.component';
+import { ViewTransactionComponent } from '../document-receiving/view-transaction/view-transaction.component';
+import {
+  DELIVERED_FIND,
+  ENROUTE_FIND,
+  FOR_PICKUP_FIND,
+  NOTARY_DOC_RELEASING_TO_COURIER_CONFIG,
+} from './config';
 
 @Component({
-  selector: 'app-document-receiving',
-  templateUrl: './document-receiving.component.html',
-  styleUrls: ['./document-receiving.component.scss'],
+  selector: 'app-document-releasing-to-courier',
+  templateUrl: './document-releasing-to-courier.component.html',
+  styleUrls: ['./document-releasing-to-courier.component.scss'],
 })
-export class DocumentReceivingComponent implements OnInit {
-  filtBtnConfig = NOTARY_DOC_RECEIVING_FILT_CONFIG;
+export class DocumentReleasingToCourierComponent implements OnInit {
+  filtBtnConfig = NOTARY_DOC_RELEASING_TO_COURIER_CONFIG;
   isCheckbox: boolean = true;
+  checkBoxDisableField = { column: 'folderStatus', value: 'Incomplete' };
   selected = [];
   currTable: any;
   currPopulate: any;
@@ -29,12 +35,16 @@ export class DocumentReceivingComponent implements OnInit {
     pageIndex: 1,
     populate: [
       {
-        field: '_batchedBy',
+        field: '_enrouteBy',
       },
       {
         field: '_receivedBy',
       },
+      {
+        field: '_receivedByBarangay',
+      },
     ],
+    label: 'For Pickup',
   };
   routeLength = 3;
   dataSource = [];
@@ -56,6 +66,7 @@ export class DocumentReceivingComponent implements OnInit {
       this.me = res.env.user;
       console.log(this.me);
     });
+
     this.fetchData(this.page);
   }
 
@@ -70,32 +81,26 @@ export class DocumentReceivingComponent implements OnInit {
       populates: event.populate ? event.populate : [],
     };
 
-    if (event.label === 'Received') {
-      query.find.push({
-        field: 'folderStatus',
-        operator: '=',
-        value: event.label,
-      });
-    } else {
-      query.find.push(
-        {
-          field: 'folderStatus',
-          operator: '[ne]=',
-          value: 'Received',
-        },
-        {
-          field: 'location',
-          operator: '=',
-          value: 'Road',
-        }
-      );
+    if (event.label === 'For Pickup') {
+      query.find = FOR_PICKUP_FIND;
+    } else if (event.label === 'Enroute') {
+      query.find = ENROUTE_FIND;
+    } else if (event.label === 'Delivered') {
+      query.find = DELIVERED_FIND;
     }
-    this.api.transaction.getAllFolder(query).subscribe((res: any) => {
-      this.loading = false;
-      console.log(res);
-      this.dataSource = res.folders;
-      this.dataLength = res.count;
-    });
+
+    this.api.transaction.getAllFolder(query).subscribe(
+      (res: any) => {
+        this.loading = false;
+        console.log(res);
+        this.dataSource = res.folders;
+        this.dataLength = res.count;
+      },
+      (error) => {
+        console.log(error);
+        this.loading = false;
+      }
+    );
     this.currTable = event.label;
     this.page.populate = event.populate ? event.populate : [];
 
@@ -152,9 +157,8 @@ export class DocumentReceivingComponent implements OnInit {
           let apiQueries = ids.map((id: any) => {
             return this.api.folder.update(
               {
-                folderStatus: 'Received',
-                _receivedBy: this.me._id,
-                location: 'Notary',
+                _enrouteBy: this.me._id,
+                location: 'Road',
               },
               id
             );
@@ -166,7 +170,7 @@ export class DocumentReceivingComponent implements OnInit {
               .open(ActionResultComponent, {
                 data: {
                   success: true,
-                  msg: `Batch/es successfully marked as received!`,
+                  msg: `Batch/es successfully enrouted.`,
                   button: 'Okay',
                 },
               })
