@@ -32,14 +32,19 @@
                 >{{ item.data.documentStatus }}
               </span>
               <span *ngIf="item.data.documentStatus !== 'Pending for Notary'"
-                ><button mat-icon-button>
+                ><button mat-icon-button (click)="viewScreenshot(item.data)">
                   <mat-icon matTooltip="View Screenshots"
                     >photo_camera</mat-icon
                   >
                 </button>
               </span>
             </p>
-            <p><b>Type: </b>{{ item.data.documentType }}</p>
+            <p *ngIf="item.data.documentType">
+              <b>Type: </b>{{ item.data.documentType }}
+              <span *ngIf="item.data.documentTypeSpecific"
+                >({{ item.data.documentTypeSpecific }})</span
+              >
+            </p>
             <p><b>Reference Code: </b>{{ item.data.refCode }}</p>
 
             <div class="img-container">
