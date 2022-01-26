@@ -32,7 +32,9 @@ export class ViewAttachmentsComponent implements OnInit {
   fileLoaded(index: number) {
     this.files[index].loaded = true;
   }
-
+  viewScreenshot(item: any) {
+    console.log(item);
+  }
   fetchAttachments(doc: any, index: number) {
     this.loading = true;
 
