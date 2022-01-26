@@ -1,0 +1,35 @@
+@import "../../../assets/styles/variables.scss";
+
+.main-content {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .text-404 {
+    position: relative;
+    font-size: 200px;
+    font-weight: bolder;
+    color: #c1c1c1;
+  }
+  .wrsorry {
+    position: absolute;
+    color: #4e2ea1;
+  }
+  .btn {
+    position: absolute;
+    bottom: 30%;
+    button {
+      width: auto;
+      border-radius: 20px;
+      border: 1px solid #4e2ea1;
+      color: #4e2ea1;
+    }
+    button:hover {
+      width: auto;
+      border-radius: 20px;
+      border: 1px solid #4e2ea1;
+      color: #ffff;
+      background-color: #4e2ea1;
+    }
+  }
+}
