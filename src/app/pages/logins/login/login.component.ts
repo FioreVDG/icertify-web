@@ -51,6 +51,7 @@ export class LoginComponent implements OnInit {
             })
             .afterClosed()
             .subscribe((res: any) => {
+              this.isLoggingIn = false;
               this.isLoggedIn = false;
               this.credential.reset();
             });
