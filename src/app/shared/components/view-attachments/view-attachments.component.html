@@ -41,16 +41,14 @@
           </p>
           <p>Type: {{ item.data.documentType }}</p>
           <p>Reference Code: {{ item.data.refCode }}</p>
-          <div class="grid">
-            <p
-              class="col-12"
-              *ngIf="
-                item.data.documentStatus !== 'Pending for Notary' &&
-                item.screenshot.length > 0
-              "
-            >
-              Screenshots
-            </p>
+          <div
+            class="grid"
+            *ngIf="
+              item.data.documentStatus !== 'Pending for Notary' &&
+              item.screenshot.length > 0
+            "
+          >
+            <p class="col-12">Screenshots</p>
 
             <div
               (click)="openNewWindow(s.link)"
@@ -69,6 +67,7 @@
             *ngIf="!item.loaded"
             style="position: absolute"
           ></mat-spinner>
+          <p>Uploaded Document</p>
           <img
             *ngIf="item.isImage"
             [src]="item.link"
