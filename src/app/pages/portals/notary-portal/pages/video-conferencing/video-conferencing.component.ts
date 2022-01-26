@@ -45,11 +45,11 @@ export class VideoConferencingComponent implements OnInit {
     console.log(event);
     let query = {
       find: [
-        // {
-        //   field: 'folderStatus',
-        //   operator: '=',
-        //   value: event.label,
-        // },
+        {
+          field: 'folderStatus',
+          operator: '=',
+          value: event.label,
+        },
       ],
       page: event.pageIndex || 1,
       limit: (event.pageSize || 10) + '',

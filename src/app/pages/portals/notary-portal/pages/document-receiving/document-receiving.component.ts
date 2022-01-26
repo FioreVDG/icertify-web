@@ -1,3 +1,4 @@
+import { UtilService } from './../../../../../service/util/util.service';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -52,7 +53,8 @@ export class DocumentReceivingComponent implements OnInit {
     private router: Router,
     private auth: AuthService,
     private route: ActivatedRoute,
-    private dbx: DropboxService
+    private dbx: DropboxService,
+    private util: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -133,22 +135,26 @@ export class DocumentReceivingComponent implements OnInit {
       .open(AreYouSureComponent, {
         data: {
           msg: 'Mark as received batch/es?',
+          isOthers: true,
         },
       })
       .afterClosed()
       .subscribe((res: any) => {
+        const loader = this.util.startLoading('Saving...');
         if (res) {
           let apiQueries = ids.map((id: any) => {
             return this.api.folder.update(
               {
                 _receivedBy: this.me._id,
                 location: 'Notary',
+                folderStatus: 'For Scheduling',
               },
               id
             );
           });
 
           forkJoin(apiQueries).subscribe((res: any) => {
+            this.util.stopLoading(loader);
             console.log(res);
             this.dialog
               .open(ActionResultComponent, {

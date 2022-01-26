@@ -13,10 +13,20 @@
     </div>
     <div class="main-content">
       <div class="left">
-        <div class="vid-wrapper"></div>
+        <div *ngIf="locked" class="vid-wrapper"></div>
+        <webcam
+          class="cam"
+          [width]="850"
+          [height]="850"
+          [allowCameraSwitch]="false"
+          (initError)="handleInitError($event)"
+          *ngIf="!locked"
+        ></webcam>
       </div>
       <div class="right">
-        <button (click)="joinMeeting()" class="btn-join">JOIN NOW</button>
+        <button mat-flat-button (click)="joinMeeting()" class="btn-join">
+          JOIN NOW
+        </button>
       </div>
     </div>
     <button mat-dialog-close mat-button color="primary">
@@ -25,6 +35,11 @@
   </div>
 </div>
 <!-- MEETING -->
-<mat-sidenav-container *ngIf="joinRoom">
-  <mat-sidenav #sidenav mode="side" opened opened="true"></mat-sidenav>
+<mat-sidenav-container *ngIf="joinRoom" autosize>
+  <mat-sidenav #sidenav mode="side" opened="true">
+    <p>Transaction Reference Code</p>
+  </mat-sidenav>
+  <div class="grid main-container">
+    <div class="col-12"></div>
+  </div>
 </mat-sidenav-container>
