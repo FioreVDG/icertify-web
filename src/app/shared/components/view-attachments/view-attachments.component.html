@@ -45,7 +45,7 @@
             <p
               class="col-12"
               *ngIf="
-                item.data.documentStatus === 'Pending for Notary' &&
+                item.data.documentStatus !== 'Pending for Notary' &&
                 item.screenshot.length > 0
               "
             >
