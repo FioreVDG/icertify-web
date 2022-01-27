@@ -1,3 +1,4 @@
+import { AgoraService } from './agora/agora.service';
 import { NotarialService } from './notarial/notarial.service';
 import { Inject, Injectable } from '@angular/core';
 import { URL } from 'src/app/config/url';
@@ -21,6 +22,7 @@ export class ApiService {
     public document: DocumentService,
     public folder: FolderService,
     public transaction: TransactionService,
-    public role: RoleService
+    public role: RoleService,
+    public agora: AgoraService
   ) {}
 }
