@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/service/auth/auth.service';
+import { UtilService } from 'src/app/service/util/util.service';
 import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
 
 @Component({
@@ -16,7 +17,7 @@ export class LoginComponent implements OnInit {
   isLoggingIn: boolean = false;
   isLoggedIn: boolean = false;
   credential = this.fb.group({
-    email: new FormControl('', [Validators.required /* Validators.email*/]),
+    info: new FormControl('', [Validators.required /* Validators.email*/]),
     password: new FormControl('', [Validators.required]),
   });
   constructor(
@@ -24,6 +25,7 @@ export class LoginComponent implements OnInit {
     private sb: MatSnackBar,
     private router: Router,
     private dialog: MatDialog,
+    private util: UtilService,
     private auth: AuthService
   ) {}
 
@@ -63,18 +65,26 @@ export class LoginComponent implements OnInit {
   formFieldErrMessage(fcName: string) {
     let formControl = this.credential.controls[fcName];
     if (formControl.hasError('required')) return 'You must enter a value';
-    if (formControl.hasError('email')) return 'Invalid email';
+    if (formControl.hasError('info')) return 'Invalid email/mobile number';
 
     return '';
   }
 
   login() {
-    const body = {
-      email: this.credential.value.email,
+    let type = '';
+    let body: any = {
       password: this.credential.value.password,
     };
+    if (this.util.isEmail(this.credential.value.info)) {
+      type = 'barangay';
+      body.email = this.credential.value.info;
+    } else {
+      type = 'consumer';
+      body.mobileNumber = this.credential.value.info;
+    }
+
     this.isLoggingIn = true;
-    this.auth.login(body, 'barangay').subscribe(
+    this.auth.login(body, type).subscribe(
       (res: any) => {
         console.log(res);
         this.isLoggingIn = false;
