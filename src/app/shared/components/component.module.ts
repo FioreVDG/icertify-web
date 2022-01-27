@@ -22,6 +22,8 @@ import { ViewVideoComponent } from './view-video/view-video.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { RtVideoComponent } from './rt-video/rt-video.component';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
+import { StoreModule } from '@ngrx/store';
+import { userReducer } from 'src/app/store/user/user.reducer';
 import { ConferenceRoomComponent } from './conference-room/conference-room.component';
 
 @NgModule({
@@ -52,6 +54,7 @@ import { ConferenceRoomComponent } from './conference-room/conference-room.compo
     ReactiveFormsModule,
     FormsModule,
     NgxFileDropModule,
+    StoreModule.forFeature('user', userReducer),
   ],
   exports: [
     LoadingComponent,

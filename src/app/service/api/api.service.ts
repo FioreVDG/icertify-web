@@ -1,3 +1,4 @@
+import { AgoraService } from './agora/agora.service';
 import { NotarialService } from './notarial/notarial.service';
 import { Inject, Injectable } from '@angular/core';
 import { URL } from 'src/app/config/url';
@@ -9,7 +10,6 @@ import { FolderService } from './folder/folder.service';
 import { TransactionService } from './transaction/transaction.service';
 import { RoleService } from './role/role.service';
 import { ConferenceService } from './conference/conference.service';
-import { AgoraService } from './agora/agora.service';
 
 @Injectable({
   providedIn: 'root',

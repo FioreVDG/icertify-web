@@ -1,3 +1,4 @@
 <div id="agora_local" class="local"></div>
-
-<div *ngFor="let callId of remoteCalls" [id]="callId" class="remote"></div>
+<ng-container *ngFor="let call of remoteCalls">
+  <div [id]="call.id" class="remote"></div>
+</ng-container>

@@ -1,3 +1,4 @@
+import { ApiService } from './../../../service/api/api.service';
 import { Component, OnInit } from '@angular/core';
 import {
   AgoraClient,
@@ -6,6 +7,9 @@ import {
   Stream,
   StreamEvent,
 } from 'ngx-agora';
+import { Store } from '@ngrx/store';
+import { User } from 'src/app/models/user.interface';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-rt-video',
@@ -15,38 +19,80 @@ import {
 export class RtVideoComponent implements OnInit {
   title = 'agorawrtc-demo';
   localCallId = 'agora_local';
-  remoteCalls: string[] = [];
+  remoteCalls: Array<any> = [];
 
   private client!: AgoraClient;
   private localStream!: Stream;
-  private uid: number;
-  constructor(private ngxAgoraService: NgxAgoraService) {
-    this.uid = Math.floor(Math.random() * 100);
-  }
+  private token = '';
+  public me: any;
+  private uid = '';
+  public channelName = '123123123';
+
+  snack: any;
+
+  constructor(
+    private ngxAgoraService: NgxAgoraService,
+    private api: ApiService,
+    private store: Store<{ user: User }>,
+    private snackbar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
-    this.client = this.ngxAgoraService.createClient({
-      mode: 'rtc',
-      codec: 'h264',
-    });
-    this.assignClientHandlers();
-
-    this.localStream = this.ngxAgoraService.createStream({
-      streamID: this.uid,
-      audio: true,
-      video: true,
-      screen: false,
-    });
-    this.assignLocalStreamHandlers();
-    // Join and publish methods added in this step
-    this.initLocalStream(() =>
-      this.join(
-        (uid) => this.publish(),
-        (error) => console.error(error)
-      )
-    );
+    this.startConference();
+    setTimeout(() => {
+      console.log(this.remoteCalls);
+    }, 10000);
   }
 
+  startConference() {
+    window.addEventListener('beforeunload', (e: any) => {
+      var confirmationMessage = 'o/';
+      (e || window.event).returnValue = confirmationMessage;
+      this.leave();
+      return confirmationMessage;
+    });
+    this.snack = this.snackbar.open('Entering Room...', undefined);
+    this.api.agora.getToken(this.channelName).subscribe((res: any) => {
+      console.log(
+        '][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]',
+        res
+      );
+      if (res) this.token = res.env.token;
+      this.store.select('user').subscribe((res: User) => {
+        this.me = res;
+        this.uid = res._id;
+        console.log(
+          '][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]',
+          this.me
+        );
+        this.client = this.ngxAgoraService.createClient({
+          mode: 'rtc',
+          codec: 'h264',
+        });
+        this.assignClientHandlers();
+
+        this.localStream = this.ngxAgoraService.createStream({
+          streamID: this.uid,
+          audio: true,
+          video: true,
+          screen: false,
+        });
+        this.assignLocalStreamHandlers();
+        // Join and publish methods added in this step
+        this.initLocalStream(() =>
+          this.join(
+            (uid) => {
+              this.publish();
+              this.snack.dismiss();
+            },
+            (error) => {
+              console.error(error);
+            }
+          )
+        );
+      });
+    });
+  }
   private assignClientHandlers(): void {
     this.client.on(ClientEvent.LocalStreamPublished, (evt) => {
       console.log('Publish local stream successfully');
@@ -65,6 +111,9 @@ export class RtVideoComponent implements OnInit {
     });
 
     this.client.on(ClientEvent.RemoteStreamAdded, (evt) => {
+      console.log(
+        '[][][][][][][][][][][][][][][][][][][][][][][][][][] Remote Stream added'
+      );
       const stream = evt.stream as Stream;
       this.client.subscribe(stream, { audio: true, video: true }, (err) => {
         console.log('Subscribe stream failed', err);
@@ -72,15 +121,24 @@ export class RtVideoComponent implements OnInit {
     });
 
     this.client.on(ClientEvent.RemoteStreamSubscribed, (evt) => {
+      console.log(
+        '[][][][][][][][][][][][][][][][][][][][][][][][][][] Remote Stream Subscribed'
+      );
       const stream = evt.stream as Stream;
       const id = this.getRemoteId(stream);
       if (!this.remoteCalls.length) {
-        this.remoteCalls.push(id);
+        this.remoteCalls.push({
+          id: id,
+          hasAudio: true,
+        });
         setTimeout(() => stream.play(id), 1000);
       }
     });
 
     this.client.on(ClientEvent.RemoteStreamRemoved, (evt) => {
+      console.log(
+        '[][][][][][][][][][][][][][][][][][][][][][][][][][] Remote Stream Removed'
+      );
       const stream = evt.stream as Stream;
       if (stream) {
         stream.stop();
@@ -90,11 +148,14 @@ export class RtVideoComponent implements OnInit {
     });
 
     this.client.on(ClientEvent.PeerLeave, (evt) => {
+      console.log(
+        '[][][][][][][][][][][][][][][][][][][][][][][][][][] PEEER LEAVE'
+      );
       const stream = evt.stream as Stream;
       if (stream) {
         stream.stop();
         this.remoteCalls = this.remoteCalls.filter(
-          (call) => call !== `${this.getRemoteId(stream)}`
+          (call) => call.id !== `${this.getRemoteId(stream)}`
         );
         console.log(`${evt.uid} left from this channel`);
       }
@@ -125,7 +186,14 @@ export class RtVideoComponent implements OnInit {
           onSuccess();
         }
       },
-      (err) => console.error('getUserMedia failed', err)
+      (err) => {
+        console.error('getUserMedia failed', err);
+        this.snack.dismiss();
+        this.snackbar.open(
+          'Unable to Join. There is error with your video/audio',
+          'OK'
+        );
+      }
     );
   }
 
@@ -133,7 +201,13 @@ export class RtVideoComponent implements OnInit {
     onSuccess?: (uid: number | string) => void,
     onFailure?: (error: Error) => void
   ): void {
-    this.client.join(null, 'foo-bar', this.uid, onSuccess, onFailure);
+    this.client.join(
+      this.token,
+      this.channelName,
+      this.uid,
+      onSuccess,
+      onFailure
+    );
   }
 
   /**
@@ -142,6 +216,19 @@ export class RtVideoComponent implements OnInit {
   publish(): void {
     this.client.publish(this.localStream, (err) =>
       console.log('Publish local stream error: ' + err)
+    );
+  }
+
+  leave() {
+    this.localStream.stop();
+    this.localStream.close();
+    this.client.leave(
+      () => {
+        console.log('Leavel channel successfully');
+      },
+      (err) => {
+        console.log('Leave channel failed');
+      }
     );
   }
 }
