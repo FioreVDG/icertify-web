@@ -35,6 +35,13 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'user-portal',
+    loadChildren: () =>
+      import('./pages/portals/user-portal/user-portal.module').then(
+        (m) => m.UserPortalModule
+      ),
+  },
+  {
     path: 'superadmin-portal',
     loadChildren: () =>
       import('./pages/portals/superadmin-portal/superadmin-portal.module').then(

@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   isLoggingIn: boolean = false;
   isLoggedIn: boolean = false;
   credential = this.fb.group({
-    email: new FormControl('', [Validators.required, Validators.email]),
+    email: new FormControl('', [Validators.required /* Validators.email*/]),
     password: new FormControl('', [Validators.required]),
   });
   constructor(
@@ -69,56 +69,62 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
+    const body = {
+      email: this.credential.value.email,
+      password: this.credential.value.password,
+    };
     this.isLoggingIn = true;
-    this.auth
-      .login(this.credential.value.email, this.credential.value.password)
-      .subscribe(
-        (res: any) => {
-          console.log(res);
-          this.isLoggingIn = false;
+    this.auth.login(body, 'barangay').subscribe(
+      (res: any) => {
+        console.log(res);
+        this.isLoggingIn = false;
 
-          localStorage.setItem('SESSION_CSURF_TOKEN', res.csrf_token);
-          localStorage.setItem('SESSION_AUTH', res.token);
+        localStorage.setItem('SESSION_CSURF_TOKEN', res.csrf_token);
+        localStorage.setItem('SESSION_AUTH', res.token);
 
-          if (res && res.env.user.type === 'Barangay') {
-            this.router.navigate(['/barangay-portal/barangay-dashboard']);
-            this.isLoggedIn = true;
-          } else if (res && res.env.user.type === 'Notary') {
-            this.router.navigate(['/notary-portal/notary-dashboard']);
-            this.isLoggedIn = true;
-          } else {
-            this.dialog
-              .open(ActionResultComponent, {
-                data: {
-                  msg: 'Unauthorized / Login Failed',
-                  success: false,
-                  button: 'Got it!',
-                },
-              })
-              .afterClosed()
-              .subscribe((res: any) => {
-                this.isLoggedIn = false;
-                this.credential.reset();
-              });
-          }
-        },
-        (err) => {
-          console.log(err);
-          this.isLoggedIn = false;
-          this.isLoggingIn = false;
+        if (res && res.env.user.type === 'Barangay') {
+          this.router.navigate(['/barangay-portal/barangay-dashboard']);
+          this.isLoggedIn = true;
+        } else if (res && res.env.user.type === 'Notary') {
+          this.router.navigate(['/notary-portal/notary-dashboard']);
+          this.isLoggedIn = true;
+        } else if (res && res.env.user.type === 'Consumer') {
+          this.router.navigate(['/user-portal/']);
+          this.isLoggedIn = true;
+        } else {
           this.dialog
             .open(ActionResultComponent, {
               data: {
-                msg: `${err.error.message} / Login Failed`,
+                msg: 'Unauthorized / Login Failed',
                 success: false,
                 button: 'Got it!',
               },
             })
             .afterClosed()
             .subscribe((res: any) => {
+              this.isLoggedIn = false;
+              this.isLoggingIn = false;
               this.credential.reset();
             });
         }
-      );
+      },
+      (err) => {
+        console.log(err);
+        this.isLoggedIn = false;
+        this.isLoggingIn = false;
+        this.dialog
+          .open(ActionResultComponent, {
+            data: {
+              msg: `${err.error.message} / Login Failed`,
+              success: false,
+              button: 'Got it!',
+            },
+          })
+          .afterClosed()
+          .subscribe((res: any) => {
+            this.credential.reset();
+          });
+      }
+    );
   }
 }
