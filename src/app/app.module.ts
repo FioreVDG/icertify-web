@@ -8,19 +8,21 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 import { AgoraConfig, NgxAgoraModule } from 'ngx-agora';
+import { NotfoundComponent } from './pages/notfound/notfound.component';
 
 const agoraConfig: AgoraConfig = {
   AppID: '4b117526903f4bc4a60134e23047a1a8',
 };
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, NotfoundComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
     MaterialModule,
+
     StoreModule.forRoot({}),
     NgxAgoraModule.forRoot(agoraConfig),
   ],

@@ -30,7 +30,6 @@ export class BatchDeliveryManagementComponent implements OnInit {
     populate: [
       {
         field: '_createdBy',
-        select: 'firstName,lastName',
       },
     ],
     bottomSheet: this.bsConfig,
