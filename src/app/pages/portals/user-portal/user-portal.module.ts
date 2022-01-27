@@ -1,3 +1,4 @@
+import { DialogsModule } from './../../../shared/dialogs/dialogs.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -13,6 +14,7 @@ import { MaterialModule } from 'src/app/shared/material/material.module';
     ComponentModule,
     UserPortalRoutingModule,
     MaterialModule,
+    DialogsModule,
   ],
 })
 export class UserPortalModule {}
