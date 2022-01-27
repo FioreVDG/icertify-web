@@ -63,6 +63,7 @@ import { ConferenceRoomComponent } from './conference-room/conference-room.compo
     RegistrantFormComponent,
     OtpComponent,
     BottomSheetComponent,
+    ConferenceRoomComponent,
     AutoCompleteComponent,
     RtVideoComponent,
   ],

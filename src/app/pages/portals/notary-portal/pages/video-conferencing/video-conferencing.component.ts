@@ -27,6 +27,10 @@ export class VideoConferencingComponent implements OnInit {
         field: '_receivedBy',
         select: 'firstName,lastName',
       },
+      {
+        field: '_transactions',
+        select: '-__v',
+      },
     ],
   };
   countSelected: any;
@@ -98,6 +102,9 @@ export class VideoConferencingComponent implements OnInit {
       .afterClosed()
       .subscribe((res: any) => {
         console.log(res);
+        if (res) {
+          this.fetchData(this.page);
+        }
       });
   }
   onCreateMeeting() {

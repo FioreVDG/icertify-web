@@ -1,5 +1,7 @@
-import { QueryParams } from './../../../../../../models/queryparams.interface';
+import { UtilService } from './../../../../../../service/util/util.service';
+import { ActionResultComponent } from './../../../../../../shared/dialogs/action-result/action-result.component';
 import { FolderService } from './../../../../../../service/api/folder/folder.service';
+import { ConferenceService } from './../../../../../../service/api/conference/conference.service';
 import { AreYouSureComponent } from './../../../../../../shared/dialogs/are-you-sure/are-you-sure.component';
 import {
   MatDialog,
@@ -19,7 +21,8 @@ export class SetScheduleComponent implements OnInit {
     public dialogRef: MatDialogRef<SetScheduleComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialog: MatDialog,
-    private folder: FolderService
+    private conference: ConferenceService,
+    private util: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -39,16 +42,47 @@ export class SetScheduleComponent implements OnInit {
       .afterClosed()
       .subscribe((res: any) => {
         console.log(res);
+        this.createSchedule();
       });
   }
 
-  updateSchedule() {
-    this.data.conferenceSchedule = new Date(this.schedule);
-    this.folder.update(this.data, this.data._id).subscribe(
+  createSchedule() {
+    let toSaveData: any = {};
+    let idsTemp: any = [];
+    this.data.forEach((el: any) => {
+      console.log(el);
+      idsTemp.push(el._id);
+    });
+    toSaveData.schedule = new Date(this.schedule);
+    toSaveData._folderIds = idsTemp;
+    console.log(toSaveData);
+    const loader = this.util.startLoading('Saving schedule');
+    this.conference.create(toSaveData).subscribe(
       (res: any) => {
         console.log(res);
+        this.util.stopLoading(loader);
+        if (res) {
+          this.dialog.open(ActionResultComponent, {
+            data: {
+              msg: 'Selected Batches has been successfully scheduled!',
+              button: 'Okay',
+              success: true,
+            },
+          });
+          this.dialogRef.close();
+        }
       },
-      (err) => {}
+      (err) => {
+        console.log(err);
+        this.util.stopLoading(loader);
+        this.dialog.open(ActionResultComponent, {
+          data: {
+            msg: err.error.message || 'Server Error, Please try again',
+            button: 'Okay',
+            success: false,
+          },
+        });
+      }
     );
   }
 }
