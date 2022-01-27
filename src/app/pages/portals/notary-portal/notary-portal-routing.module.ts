@@ -26,6 +26,20 @@ const routes: Routes = [
             (m) => m.DocumentReceivingModule
           ),
       },
+      {
+        path: 'video-conference',
+        loadChildren: () =>
+          import('./pages/video-conferencing/video-conferencing.module').then(
+            (m) => m.VideoConferencingModule
+          ),
+      },
+      {
+        path: 'document-releasing-to-courier',
+        loadChildren: () =>
+          import(
+            './pages/document-releasing-to-courier/document-releasing-to-courier.module'
+          ).then((m) => m.DocumentReleasingToCourierModule),
+      },
     ],
   },
 ];

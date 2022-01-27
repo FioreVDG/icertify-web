@@ -15,11 +15,11 @@
       <h2>Login your account</h2>
       <form [formGroup]="credential" style="width: 100%">
         <mat-form-field class="full-width" appearance="fill">
-          <mat-label>Email</mat-label>
-          <input type="text" matInput formControlName="email" />
+          <mat-label>Email/Mobile Number</mat-label>
+          <input type="text" matInput formControlName="info" />
           <mat-icon color="primary" matSuffix>mail</mat-icon>
-          <mat-error *ngIf="credential.controls.email.invalid">{{
-            formFieldErrMessage("email")
+          <mat-error *ngIf="credential.controls.info.invalid">{{
+            formFieldErrMessage("info")
           }}</mat-error>
         </mat-form-field>
         <mat-form-field class="full-width" appearance="fill">

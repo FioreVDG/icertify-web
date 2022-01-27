@@ -26,6 +26,7 @@ export class TableComponent implements OnInit {
   @Input() dataLength: number = 0;
   @Input() columns!: Array<Column>;
   @Input() bottomSheet: any;
+  @Input() checkBoxDisableField!: any;
   @Input() pagination: any;
   @Output() onRowClick: any = new EventEmitter<any>();
   @Input() filterButtonConfig: any = [];
@@ -183,18 +184,59 @@ export class TableComponent implements OnInit {
     this.onUpdateTableEmit.emit(this.pagination);
   }
   onCheckBoxChange(row: any) {
+    console.log(row);
     this.checkedRows.toggle(row);
     this.onCheckBoxSelect.emit(this.checkedRows.selected);
   }
 
   checkAll() {
-    if (this.checkedRows.selected.length === this.dataSource.length) {
-      this.onCheckBoxSelect.emit([]);
-      this.checkedRows.clear();
-      return;
-    }
+    if (!this.checkBoxDisableField) {
+      if (this.checkedRows.selected.length === this.dataSource.length) {
+        this.onCheckBoxSelect.emit([]);
+        this.checkedRows.clear();
+        return;
+      }
 
-    this.checkedRows.select(...this.dataSource);
-    this.onCheckBoxSelect.emit(this.checkedRows.selected);
+      this.checkedRows.select(...this.dataSource);
+      this.onCheckBoxSelect.emit(this.checkedRows.selected);
+    } else {
+      const numSelected = this.checkedRows.selected.length;
+      const numSelectedMinusDisabled = this.dataSource.filter((row: any) => {
+        return (
+          row[this.checkBoxDisableField.column] !==
+          this.checkBoxDisableField.value
+        );
+      }).length;
+
+      if (numSelected === numSelectedMinusDisabled) {
+        this.onCheckBoxSelect.emit([]);
+        this.checkedRows.clear();
+        return;
+      } else {
+        this.dataSource.forEach((row: any) => {
+          if (
+            row[this.checkBoxDisableField.column] !==
+            this.checkBoxDisableField.value
+          )
+            this.checkedRows.select(row);
+        });
+        this.onCheckBoxSelect.emit(this.checkedRows.selected);
+      }
+    }
+  }
+
+  getTextColor(col: Column, value: string) {
+    let column: any = col;
+    for (let color of column.textColor) {
+      if (color.value === value) return color.color;
+    }
+  }
+
+  checkBoxDisable(col: Column, value: string) {
+    let column: any = col;
+    for (let valueToDisable of column.CheckboxDisabler) {
+      if (valueToDisable === value) return true;
+    }
+    return false;
   }
 }

@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpService } from '../../http/http.service';
+import { QueryParams } from 'src/app/models/queryparams.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -7,7 +8,7 @@ import { HttpService } from '../../http/http.service';
 export class AgoraService {
   constructor(@Inject(HttpService) private http: HttpService) {}
 
-  getVideoConferenceToken(chName: string) {
-    return this.http.start('get', `/agora/token/${chName}`);
+  getToken(channelName: String) {
+    return this.http.start('get', `/agora/token/${channelName}`);
   }
 }

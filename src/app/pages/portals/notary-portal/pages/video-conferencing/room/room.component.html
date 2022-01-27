@@ -1,0 +1,30 @@
+<div class="grid" style="overflow: hidden" *ngIf="!joinRoom">
+  <div class="col-12">
+    <div class="grid pt-3 pr-3">
+      <div class="col-12 header-wrapper">
+        <div class="name-container">
+          <div class="info">
+            <h4>Enteng Kabisote</h4>
+            <p>ryzzamaeChacha@gmail.com</p>
+          </div>
+          <mat-icon color="primary">account_circle</mat-icon>
+        </div>
+      </div>
+    </div>
+    <div class="main-content">
+      <div class="left">
+        <div class="vid-wrapper"></div>
+      </div>
+      <div class="right">
+        <button (click)="joinMeeting()" class="btn-join">JOIN NOW</button>
+      </div>
+    </div>
+    <button mat-dialog-close mat-button color="primary">
+      <mat-icon>arrow_back</mat-icon>&nbsp;Back
+    </button>
+  </div>
+</div>
+<!-- MEETING -->
+<mat-sidenav-container *ngIf="joinRoom">
+  <mat-sidenav #sidenav mode="side" opened opened="true"></mat-sidenav>
+</mat-sidenav-container>

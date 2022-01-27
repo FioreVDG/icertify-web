@@ -32,7 +32,9 @@ export class ViewAttachmentsComponent implements OnInit {
   fileLoaded(index: number) {
     this.files[index].loaded = true;
   }
-
+  viewScreenshot(item: any) {
+    console.log(item);
+  }
   fetchAttachments(doc: any, index: number) {
     this.loading = true;
 
@@ -41,13 +43,24 @@ export class ViewAttachmentsComponent implements OnInit {
         let fileType = res.result.metadata.name.split('.');
         let fileName = fileType.slice(0, -1).join(' ');
         fileType = fileType[fileType.length - 1].toLowerCase();
-
+        let screenshot: any = [];
+        if (doc[index].screenShots.length) {
+          doc[index].screenShots.forEach((s: any, index: any) => {
+            this.dbx.getTempLink(s.path_display).subscribe((res: any) => {
+              screenshot.push({
+                link: res.result.link,
+                name: `screenshot` + index + 1,
+              });
+            });
+          });
+        }
         this.files.push({
           data: doc[index],
           name: fileName,
           link: res.result.link,
           isImage: fileType === 'pdf' ? false : true,
           loaded: false,
+          screenshot,
         });
 
         if (this.data.documents.length - 1 === index) {
@@ -62,5 +75,12 @@ export class ViewAttachmentsComponent implements OnInit {
         console.log(error);
       }
     );
+  }
+  openNewWindow(link: string) {
+    let url = link;
+    let img = '<img style="height:100vh;width:100vw" src="' + url + '">';
+    let popup = window.open();
+    popup?.document.write(img);
+    // popup?.print();
   }
 }

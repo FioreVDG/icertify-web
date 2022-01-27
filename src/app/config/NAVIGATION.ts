@@ -12,6 +12,18 @@ export const NOTARY_NAVS: NavNode[] = [
     route: 'document-receiving',
     hasAccess: false,
   },
+  {
+    label: 'Video Conferencing',
+    icon: 'videocam',
+    route: 'video-conference',
+    hasAccess: false,
+  },
+  {
+    label: 'Document Releasing to Courier',
+    icon: 'delivery_dining',
+    route: 'document-releasing-to-courier',
+    hasAccess: false,
+  },
 ];
 
 export const BARANGAY_NAVS: NavNode[] = [

@@ -1,4 +1,4 @@
-<h3 mat-dialog-title>View Attachments</h3>
+<h3 mat-dialog-title>{{ data.refCode ? data.refCode : "View Attachments" }}</h3>
 <mat-icon mat-dialog-close class="close-btn" color="warn">close</mat-icon>
 <!-- // ADD IMAGE VIEWRR -->
 <div mat-dialog-content *ngIf="!loading">
@@ -16,35 +16,72 @@
   </div> -->
   <div class="grid">
     <div class="col-12">
-      <div class="grid">
-        <ng-container *ngFor="let item of files; let i = index">
-          <div class="col-6">
-            <h4><b>Name: </b>{{ item.name }}</h4>
-            <p><b>Status: </b>{{ item.data.documentStatus }}</p>
-            <p><b>Type: </b>{{ item.data.documentType }}</p>
-            <p><b>Reference Code: </b>{{ item.data.refCode }}</p>
+      <div
+        class="grid"
+        style="
+          border-bottom: 2px solid #c5c5c5;
+          margin-bottom: 1rem;
+          padding: 1rem 0;
+        "
+        *ngFor="let item of files; let i = index"
+      >
+        <div class="col-6">
+          <p>Name: {{ item.name }}</p>
+          <p *ngIf="item.data.documentStatus">
+            Status:
+            <span
+              [ngStyle]="{
+                color:
+                  item.data.documentStatus === 'Pending for Notary'
+                    ? '#F4D03F'
+                    : '#27AE60'
+              }"
+              >{{ item.data.documentStatus }}
+            </span>
+          </p>
+          <p>Type: {{ item.data.documentType }}</p>
+          <p>Reference Code: {{ item.data.refCode }}</p>
+          <div
+            class="grid"
+            *ngIf="
+              item.data.documentStatus === 'Notarized' &&
+              item.screenshot.length > 0
+            "
+          >
+            <p class="col-12">Screenshots</p>
 
-            <div class="img-container">
-              <mat-spinner
-                *ngIf="!item.loaded"
-                style="position: absolute"
-              ></mat-spinner>
-              <img
-                *ngIf="item.isImage"
-                [src]="item.link"
-                alt=""
-                (load)="fileLoaded(i)"
-              />
-              <ngx-doc-viewer
-                *ngIf="!item.isImage"
-                style="min-width: 100%; min-height: 100%"
-                [url]="item.link"
-                viewer="google"
-                (loaded)="fileLoaded(i)"
-              ></ngx-doc-viewer>
+            <div
+              (click)="openNewWindow(s.link)"
+              class="col-3 pic"
+              *ngFor="let s of item.screenshot; let i = index"
+            >
+              <img [src]="s.link" />
+              <span class="imgtext">
+                <p>View Screenshot</p>
+              </span>
             </div>
           </div>
-        </ng-container>
+        </div>
+        <div class="col-6 img-container">
+          <mat-spinner
+            *ngIf="!item.loaded"
+            style="position: absolute"
+          ></mat-spinner>
+          <p>Uploaded Document</p>
+          <img
+            *ngIf="item.isImage"
+            [src]="item.link"
+            alt=""
+            (load)="fileLoaded(i)"
+          />
+          <ngx-doc-viewer
+            *ngIf="!item.isImage"
+            style="min-width: 100%; min-height: 100%"
+            [url]="item.link"
+            viewer="google"
+            (loaded)="fileLoaded(i)"
+          ></ngx-doc-viewer>
+        </div>
       </div>
     </div>
   </div>

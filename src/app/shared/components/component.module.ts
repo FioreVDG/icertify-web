@@ -24,6 +24,7 @@ import { RtVideoComponent } from './rt-video/rt-video.component';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { StoreModule } from '@ngrx/store';
 import { userReducer } from 'src/app/store/user/user.reducer';
+import { ConferenceRoomComponent } from './conference-room/conference-room.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { userReducer } from 'src/app/store/user/user.reducer';
     AutoCompleteComponent,
     ViewAttachmentsComponent,
     ViewVideoComponent,
+    ConferenceRoomComponent,
     RtVideoComponent,
   ],
   imports: [
