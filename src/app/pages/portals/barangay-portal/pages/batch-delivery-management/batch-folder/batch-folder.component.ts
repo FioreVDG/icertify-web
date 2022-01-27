@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ViewDocumentComponent } from 'src/app/shared/components/view-document/view-document.component';
 import { RegistrantFormComponent } from 'src/app/shared/components/registrant-form/registrant-form.component';
 import { ViewVideoComponent } from 'src/app/shared/components/view-video/view-video.component';
+import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachments/view-attachments.component';
 
 @Component({
   selector: 'app-batch-folder',
@@ -46,8 +47,8 @@ export class BatchFolderComponent implements OnInit {
       populates: [
         {
           field: '_createdBy',
-          select: 'firstName,lastName',
         },
+        { field: '_documents' },
       ],
     };
 
@@ -61,10 +62,10 @@ export class BatchFolderComponent implements OnInit {
     // console.log(event);
     switch (event.action) {
       case 'viewDoc':
-        this.dialog.open(ViewDocumentComponent, {
-          data: event.obj,
+        this.dialog.open(ViewAttachmentsComponent, {
+          data: { documents: event.obj._documents },
           disableClose: true,
-          width: 'auto',
+          width: '70%',
           height: 'auto',
         });
         break;
