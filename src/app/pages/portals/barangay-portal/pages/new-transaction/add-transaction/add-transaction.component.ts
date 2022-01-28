@@ -193,6 +193,7 @@ export class AddTransactionComponent implements OnInit {
   saveTransaction() {
     let toSaveData: any = {};
     toSaveData.sender = this.data;
+    toSaveData.sender._senderId = this.data._id;
     toSaveData.videoOfSignature = this.videoOfSignature;
     toSaveData.documents = this.docsArray;
     toSaveData._brgyId = this.brgyId._id;
