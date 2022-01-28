@@ -19,4 +19,23 @@
     (onMenuClick)="menuClick($event)"
   ></app-profile-menu>
 </mat-toolbar>
-<app-rt-video></app-rt-video>
+<app-loading *ngIf="loading" label="loading"></app-loading>
+<section *ngIf="!loading">
+  <div class="grid" *ngIf="!canJoin">
+    <div
+      class="col-12 flex align-items-center justify-content-center flex-column"
+    >
+      <p>
+        {{
+          disabled
+            ? "You dont have a schedule today"
+            : "Click the button to Join meeting"
+        }}
+      </p>
+      <button mat-flat-button color="primary" [disabled]="disabled">
+        Join Meeting
+      </button>
+    </div>
+  </div>
+  <app-rt-video *ngIf="canJoin"></app-rt-video>
+</section>
