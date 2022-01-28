@@ -6,6 +6,7 @@ export interface User {
   middleName: string;
   mobileNumber: string;
   _roleId?: ROLE;
+  email?: string;
 }
 export enum USER_REDUCER_ACTIONS {
   SetUser = 'SET_USER',

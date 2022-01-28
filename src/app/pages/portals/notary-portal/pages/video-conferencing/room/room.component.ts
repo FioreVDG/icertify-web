@@ -8,6 +8,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
 import { WebcamInitError } from 'ngx-webcam';
 import { Socket } from 'ngx-socket-io';
+import { Store } from '@ngrx/store';
+import { User } from 'src/app/models/user.interface';
 
 @Component({
   selector: 'app-room',
@@ -26,6 +28,7 @@ export class RoomComponent implements OnInit {
   uid: string = '';
 
   token: string = '';
+  me!: User;
 
   constructor(
     public dialogRef: MatDialogRef<RoomComponent>,
@@ -35,12 +38,16 @@ export class RoomComponent implements OnInit {
     private conference: ConferenceService,
     private agora: AgoraService,
     private auth: AuthService,
-    private socket: Socket
+    private socket: Socket,
+    private store: Store<{ user: User }>
   ) {}
 
   ngOnInit(): void {
     console.log(this.data);
     this.getExpectedParticipants();
+    this.store.select('user').subscribe((res: any) => {
+      this.me = res;
+    });
   }
 
   getExpectedParticipants() {

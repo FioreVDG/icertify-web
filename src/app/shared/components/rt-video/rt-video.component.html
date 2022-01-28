@@ -22,17 +22,25 @@
     <div class="grid">
       <div class="col-4"></div>
       <div class="col-4 btn-center">
-        <button mat-fab (click)="toggleAudio()">
+        <button
+          mat-fab
+          (click)="toggleAudio()"
+          [class]="!localAudio ? 'btn-red' : 'btn-local'"
+        >
           <mat-icon class="{{ !localAudio ? 'white' : '' }}">{{
             localAudio ? "mic" : "mic_off"
           }}</mat-icon>
         </button>
-        <button mat-fab (click)="toggleVideo()">
+        <button
+          mat-fab
+          (click)="toggleVideo()"
+          [class]="!localVideo ? 'btn-local' : 'btn-success'"
+        >
           <mat-icon class="{{ !localVideo ? 'white' : '' }}">{{
             localVideo ? "videocam" : "videocam_off"
           }}</mat-icon>
         </button>
-        <button mat-fab>
+        <button mat-fab class="btn-local">
           <mat-icon>more_vert</mat-icon>
         </button>
       </div>
