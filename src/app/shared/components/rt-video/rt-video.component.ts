@@ -39,7 +39,7 @@ export class RtVideoComponent implements OnInit {
 
   ngOnInit(): void {
     this.startConference();
-    setTimeout(() => {
+    setInterval(() => {
       console.log(this.remoteCalls);
     }, 10000);
   }
@@ -131,7 +131,7 @@ export class RtVideoComponent implements OnInit {
         this.remoteCalls.push({
           id: id,
           hasAudio: true,
-          details: this.me,
+          // details: this.me,
         });
         setTimeout(() => stream.play(id), 1000);
       }
