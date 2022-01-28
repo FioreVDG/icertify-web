@@ -27,6 +27,8 @@ export class RtVideoComponent implements OnInit {
   public me: any;
   private uid = '';
   public channelName = '123123123';
+  public localAudio = true;
+  public localVideo = true;
 
   snack: any;
 
@@ -74,8 +76,8 @@ export class RtVideoComponent implements OnInit {
 
         this.localStream = this.ngxAgoraService.createStream({
           streamID: this.uid,
-          audio: true,
-          video: true,
+          audio: this.localAudio,
+          video: this.localVideo,
           screen: false,
         });
         this.assignLocalStreamHandlers();
@@ -131,7 +133,8 @@ export class RtVideoComponent implements OnInit {
         this.remoteCalls.push({
           id: id,
           hasAudio: true,
-          // details: this.me,
+          hasVideo: true,
+          details: this.me,
         });
         setTimeout(() => stream.play(id), 1000);
       }
@@ -162,6 +165,39 @@ export class RtVideoComponent implements OnInit {
         console.log(`${evt.uid} left from this channel`);
       }
     });
+
+    //for remote Audio
+    this.client.on(ClientEvent.RemoteAudioMuted, (evt) => {
+      const stream = evt.stream as Stream;
+      console.log(stream.getAudioTrack());
+      this.remoteCalls.find((o: any) => {
+        o.id == this.getRemoteId(stream);
+      }).hasAudio = false;
+    });
+
+    this.client.on(ClientEvent.RemoteAudioUnmuted, (evt) => {
+      const stream = evt.stream as Stream;
+      this.remoteCalls.find((o: any) => {
+        o.id == this.getRemoteId(stream);
+      }).hasAudio = true;
+    });
+    //end (for remote Audio)
+
+    //for remote Video
+    this.client.on(ClientEvent.RemoveVideoMuted, (evt) => {
+      const stream = evt.stream as Stream;
+      console.log(stream.getAudioTrack());
+      this.remoteCalls.find((o: any) => {
+        o.id == this.getRemoteId(stream);
+      }).hasVideo = false;
+    });
+    this.client.on(ClientEvent.RemoteVideoUnmuted, (evt) => {
+      const stream = evt.stream as Stream;
+      this.remoteCalls.find((o: any) => {
+        o.id == this.getRemoteId(stream);
+      }).hasVideo = true;
+    });
+    //end (for remote Video)
   }
 
   private getRemoteId(stream: Stream): string {
@@ -232,5 +268,24 @@ export class RtVideoComponent implements OnInit {
         console.log('Leave channel failed');
       }
     );
+  }
+
+  toggleAudio() {
+    if (this.localAudio) {
+      this.localStream.muteAudio();
+    } else {
+      this.localStream.unmuteAudio();
+    }
+    this.localAudio = !this.localAudio;
+    console.log(this.localAudio);
+  }
+  toggleVideo() {
+    if (this.localVideo) {
+      this.localStream.muteVideo();
+    } else {
+      this.localStream.unmuteVideo();
+    }
+    this.localVideo = !this.localVideo;
+    console.log(this.localVideo);
   }
 }
