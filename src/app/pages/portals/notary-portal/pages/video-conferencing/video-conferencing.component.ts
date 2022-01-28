@@ -70,6 +70,7 @@ export class VideoConferencingComponent implements OnInit {
   }
 
   tableUpdateEmit(event: any) {
+    this.selected = [];
     console.log(event);
     event.label = event.label || this.currentTable;
     this.fetchData(event);
