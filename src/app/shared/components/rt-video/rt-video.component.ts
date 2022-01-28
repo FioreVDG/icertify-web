@@ -174,14 +174,14 @@ export class RtVideoComponent implements OnInit {
 
     //for remote Audio
     this.client.on(ClientEvent.RemoteAudioMuted, (evt) => {
-      console.log('AUDIO MUTED', evt);
+      // console.log('AUDIO MUTED', evt);
       this.remoteCalls.find(
         (o: any) => o.id == `agora_remote-${evt.uid}`
       ).hasAudio = false;
     });
 
     this.client.on(ClientEvent.RemoteAudioUnmuted, (evt) => {
-      console.log('AUDIO UNMUTED', evt);
+      // console.log('AUDIO UNMUTED', evt);
       this.remoteCalls.find(
         (o: any) => o.id == `agora_remote-${evt.uid}`
       ).hasAudio = true;

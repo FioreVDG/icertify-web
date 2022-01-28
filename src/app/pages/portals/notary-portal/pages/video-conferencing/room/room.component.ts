@@ -88,6 +88,6 @@ export class RoomComponent implements OnInit {
   }
 
   emitJoinRoomSocket(data: any) {
-    this.socket.emit('createMeeting', { data });
+    this.socket.emit('createMeeting', data);
   }
 }
