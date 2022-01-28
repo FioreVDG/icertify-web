@@ -61,6 +61,7 @@ export class RtVideoComponent implements OnInit {
       this.store.select('user').subscribe((res: User) => {
         this.me = res;
         this.uid = res._id;
+
         console.log(
           '][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]',
           this.me
@@ -130,6 +131,7 @@ export class RtVideoComponent implements OnInit {
         this.remoteCalls.push({
           id: id,
           hasAudio: true,
+          details: this.me,
         });
         setTimeout(() => stream.play(id), 1000);
       }
