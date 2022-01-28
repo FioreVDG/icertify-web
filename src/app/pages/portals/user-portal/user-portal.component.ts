@@ -1,3 +1,5 @@
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Socket } from 'ngx-socket-io';
 import { AuthService } from './../../../service/auth/auth.service';
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { User } from 'src/app/models/user.interface';
@@ -31,18 +33,27 @@ export class UserPortalComponent implements OnInit {
     public router: Router,
     public auth: AuthService,
     private dialog: MatDialog,
-    private store: Store<{ user: User }>
+    private store: Store<{ user: User }>,
+    private socket: Socket,
+    private sb: MatSnackBar
   ) {}
 
   ngOnInit(): void {
+    console.log('USER PORTAL');
     this.getMe();
+    this.socket.fromEvent('createdMeeting').subscribe((msg) => {
+      this.sb.open(
+        `Atty. Joined the meeting for your Transaction, meeting code :${msg}`
+      );
+      console.log(msg);
+    });
   }
 
   getMe() {
     this.loading = true;
     this.auth.me().subscribe(
       (res: any) => {
-        console.log(res);
+        // console.log(res);
         this.me = res.env.user;
         this.store.dispatch(setUser({ user: res.env.user }));
         localStorage.setItem('USER_INFORMATION', JSON.stringify(this.me));
@@ -59,7 +70,7 @@ export class UserPortalComponent implements OnInit {
     let csurf_token = localStorage.getItem('SESSION_CSURF_TOKEN');
     let session_token = localStorage.getItem('SESSION_AUTH');
 
-    console.log(csurf_token, session_token);
+    // console.log(csurf_token, session_token);
 
     if (csurf_token == null || session_token == null) {
       this.loading = true;

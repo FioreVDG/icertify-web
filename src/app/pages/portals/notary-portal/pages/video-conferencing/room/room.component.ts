@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
 import { WebcamInitError } from 'ngx-webcam';
+import { Socket } from 'ngx-socket-io';
 
 @Component({
   selector: 'app-room',
@@ -33,7 +34,8 @@ export class RoomComponent implements OnInit {
     public util: UtilService,
     private conference: ConferenceService,
     private agora: AgoraService,
-    private auth: AuthService
+    private auth: AuthService,
+    private socket: Socket
   ) {}
 
   ngOnInit(): void {
@@ -47,6 +49,7 @@ export class RoomComponent implements OnInit {
     };
     this.conference.getScheduled(query).subscribe((res: any) => {
       console.log(res);
+      this.data = res.env.schedules;
     });
   }
 
@@ -66,6 +69,7 @@ export class RoomComponent implements OnInit {
       (res: any) => {
         console.log(res);
         this.token = res.token;
+        this.emitJoinRoomSocket(this.data);
         if (res) {
           this.auth.me().subscribe((res: any) => {
             this.uid = res.env.user._id;
@@ -81,5 +85,9 @@ export class RoomComponent implements OnInit {
         this.util.stopLoading(loader);
       }
     );
+  }
+
+  emitJoinRoomSocket(data: any) {
+    this.socket.emit('createMeeting', { data });
   }
 }
