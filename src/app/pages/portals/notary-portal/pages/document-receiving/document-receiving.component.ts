@@ -148,6 +148,7 @@ export class DocumentReceivingComponent implements OnInit {
                 _receivedBy: this.me._id,
                 location: 'Notary',
                 folderStatus: 'For Scheduling',
+                dateDropToNotary: new Date(),
               },
               id
             );

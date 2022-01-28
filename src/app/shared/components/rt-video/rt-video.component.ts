@@ -115,7 +115,8 @@ export class RtVideoComponent implements OnInit {
 
     this.client.on(ClientEvent.RemoteStreamAdded, (evt) => {
       console.log(
-        '[][][][][][][][][][][][][][][][][][][][][][][][][][] Remote Stream added'
+        '[][][][][][][][][][][][][][][][][][][][][][][][][][] Remote Stream added',
+        evt
       );
       const stream = evt.stream as Stream;
       this.client.subscribe(stream, { audio: true, video: true }, (err) => {
@@ -125,7 +126,8 @@ export class RtVideoComponent implements OnInit {
 
     this.client.on(ClientEvent.RemoteStreamSubscribed, (evt) => {
       console.log(
-        '[][][][][][][][][][][][][][][][][][][][][][][][][][] Remote Stream Subscribed'
+        '[][][][][][][][][][][][][][][][][][][][][][][][][][] Remote Stream Subscribed',
+        evt
       );
       const stream = evt.stream as Stream;
       const id = this.getRemoteId(stream);
@@ -168,36 +170,39 @@ export class RtVideoComponent implements OnInit {
 
     //for remote Audio
     this.client.on(ClientEvent.RemoteAudioMuted, (evt) => {
-      const stream = evt.stream as Stream;
-      console.log(stream.getAudioTrack());
-      this.remoteCalls.find((o: any) => {
-        o.id == this.getRemoteId(stream);
-      }).hasAudio = false;
+      console.log('AUDIO MUTED', evt);
+      this.remoteCalls.find(
+        (o: any) => o.id == `agora_remote-${evt.uid}`
+      ).hasAudio = false;
     });
 
     this.client.on(ClientEvent.RemoteAudioUnmuted, (evt) => {
-      const stream = evt.stream as Stream;
-      this.remoteCalls.find((o: any) => {
-        o.id == this.getRemoteId(stream);
-      }).hasAudio = true;
+      console.log('AUDIO UNMUTED', evt);
+      this.remoteCalls.find(
+        (o: any) => o.id == `agora_remote-${evt.uid}`
+      ).hasAudio = true;
     });
     //end (for remote Audio)
 
     //for remote Video
     this.client.on(ClientEvent.RemoveVideoMuted, (evt) => {
-      const stream = evt.stream as Stream;
-      console.log(stream.getAudioTrack());
-      this.remoteCalls.find((o: any) => {
-        o.id == this.getRemoteId(stream);
-      }).hasVideo = false;
+      console.log('VIDEO MUTED', evt);
+      this.remoteCalls.find(
+        (o: any) => o.id == `agora_remote-${evt.uid}`
+      ).hasVideo = false;
     });
     this.client.on(ClientEvent.RemoteVideoUnmuted, (evt) => {
-      const stream = evt.stream as Stream;
-      this.remoteCalls.find((o: any) => {
-        o.id == this.getRemoteId(stream);
-      }).hasVideo = true;
+      console.log('VIDEO UNMUTED', evt);
+      this.remoteCalls.find(
+        (o: any) => o.id == `agora_remote-${evt.uid}`
+      ).hasVideo = true;
     });
     //end (for remote Video)
+
+    //tests
+    this.client.on(ClientEvent.VolumeIndicator, (evt) => {
+      console.log('TESTESTESTESTESTESTES[][][][][][][][][][][][][][]', evt);
+    });
   }
 
   private getRemoteId(stream: Stream): string {
