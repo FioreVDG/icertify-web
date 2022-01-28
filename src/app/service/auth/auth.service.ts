@@ -37,10 +37,10 @@ export class AuthService {
     );
   }
 
-  login(email: string, password: string) {
+  login(body: object, type: string) {
     return this.http.post(
-      this.url + '/auth/login',
-      { email, password },
+      this.url + `/auth/login/${type}`,
+      body,
       this.getHeaders()
     );
   }

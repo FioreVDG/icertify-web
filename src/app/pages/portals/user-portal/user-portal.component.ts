@@ -1,39 +1,30 @@
 import { AuthService } from './../../../service/auth/auth.service';
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { User } from 'src/app/models/user.interface';
-import {
-  NavigationEnd,
-  NavigationStart,
-  Router,
-  Event as NavigationEvent,
-} from '@angular/router';
+
 import { NOTARY_NAVS } from 'src/app/config/NAVIGATION';
 import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
 import { NOTARY_MENU, NOTARY_MENU_COLORS } from 'src/app/config/USER_MENU';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { setUser } from 'src/app/store/user/user.action';
 
 @Component({
-  selector: 'app-notary-portal',
-  templateUrl: './notary-portal.component.html',
-  styleUrls: ['./notary-portal.component.scss'],
+  selector: 'app-user-portal',
+  templateUrl: './user-portal.component.html',
+  styleUrls: ['./user-portal.component.scss'],
 })
-export class NotaryPortalComponent implements OnInit {
-  isExpanded: boolean = false;
-  notaryNav = NOTARY_NAVS;
+export class UserPortalComponent implements OnInit {
   me!: User;
-  navigation: any;
   loading: boolean = false;
   loggingOut: boolean = false;
-  changeLabel = new EventEmitter<boolean>();
   navigationLoading: boolean = false;
   routeLabel: string = '';
   page: any;
 
-  //For Menu
-  notaryMenu = NOTARY_MENU;
+  userMenu = NOTARY_MENU;
   menuColors = NOTARY_MENU_COLORS;
 
   constructor(
@@ -45,15 +36,6 @@ export class NotaryPortalComponent implements OnInit {
 
   ngOnInit(): void {
     this.getMe();
-    const currRoute = this.router.url.split('/').pop();
-    console.log(currRoute);
-    let temp: Array<String> = [];
-    this.notaryNav.forEach((i: any) => {
-      temp.push(i);
-    });
-
-    this.page = this.notaryNav.find((o: any) => o.route === currRoute);
-    if (this.page) this.routeLabel = this.page.label;
   }
 
   getMe() {
@@ -63,7 +45,7 @@ export class NotaryPortalComponent implements OnInit {
         console.log(res);
         this.me = res.env.user;
         this.store.dispatch(setUser({ user: res.env.user }));
-        localStorage.setItem('BARANGAY_INFORMATION', JSON.stringify(this.me));
+        localStorage.setItem('USER_INFORMATION', JSON.stringify(this.me));
         this.loading = false;
       },
       (err) => {
@@ -90,31 +72,6 @@ export class NotaryPortalComponent implements OnInit {
         .subscribe((res: any) => {
           this.router.navigate(['/login']);
         });
-    }
-  }
-
-  changeRoute(nav: any) {
-    if (this.router.url.split('/').pop() == nav.route) {
-      setTimeout(() => {
-        this.navigationLoading = false;
-      }, 1000);
-    } else {
-      this.navigationLoading = true;
-      const routeEvent = this.router.events.subscribe(
-        (event: NavigationEvent) => {
-          if (event instanceof NavigationStart) {
-            this.navigationLoading = true;
-          } else if (event instanceof NavigationEnd) {
-            routeEvent.unsubscribe();
-            setTimeout(() => {
-              this.navigationLoading = false;
-            }, 1000);
-          }
-        }
-      );
-
-      this.changeLabel.emit(nav);
-      this.routeLabel = nav.label;
     }
   }
 

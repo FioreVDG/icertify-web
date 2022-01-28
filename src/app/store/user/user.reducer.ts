@@ -3,6 +3,7 @@ import { User } from 'src/app/models/user.interface';
 import { resetUser, setUser } from './user.action';
 
 const userInitialState: User = {
+  _id: '',
   firstName: '',
   lastName: '',
   middleName: '',

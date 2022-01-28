@@ -17,6 +17,9 @@ export class ConferenceService {
   get(query: QueryParams, id: String) {
     return this.http.start('get', `/conferences/${id}`, {}, query);
   }
+  getScheduled(query: QueryParams) {
+    return this.http.start('get', `/conferences/schedules`, {}, query);
+  }
   update(body: Object, id: String) {
     return this.http.start('put', `/conferences/${id}`, body);
   }

@@ -132,7 +132,9 @@ export class RegistrantFormComponent implements OnInit {
     delete this.toAddData.address2;
     this.toAddData.address = this.addressTemp;
     this.toAddData.images = this.imgObj;
-    this.toAddData.birthDate = new Date(this.toAddData.birthDate);
+    this.toAddData.birthDate = new Date(
+      this.toAddData.birthDate
+    ).toLocaleDateString();
     this.toAddData.mobileNumber = this.data.mobileNumber;
     console.log(this.toAddData);
 
