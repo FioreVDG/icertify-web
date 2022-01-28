@@ -197,6 +197,7 @@ export class AddTransactionComponent implements OnInit {
     toSaveData.videoOfSignature = this.videoOfSignature;
     toSaveData.documents = this.docsArray;
     toSaveData._brgyId = this.brgyId._id;
+    toSaveData._senderId = this.data._id;
 
     console.log(toSaveData);
     const loader = this.util.startLoading();

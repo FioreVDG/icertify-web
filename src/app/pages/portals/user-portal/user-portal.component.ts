@@ -8,6 +8,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
 import { NOTARY_MENU, NOTARY_MENU_COLORS } from 'src/app/config/USER_MENU';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { setUser } from 'src/app/store/user/user.action';
 
 @Component({
   selector: 'app-user-portal',
@@ -28,7 +30,8 @@ export class UserPortalComponent implements OnInit {
   constructor(
     public router: Router,
     public auth: AuthService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private store: Store<{ user: User }>
   ) {}
 
   ngOnInit(): void {
@@ -41,6 +44,7 @@ export class UserPortalComponent implements OnInit {
       (res: any) => {
         console.log(res);
         this.me = res.env.user;
+        this.store.dispatch(setUser({ user: res.env.user }));
         localStorage.setItem('USER_INFORMATION', JSON.stringify(this.me));
         this.loading = false;
       },
