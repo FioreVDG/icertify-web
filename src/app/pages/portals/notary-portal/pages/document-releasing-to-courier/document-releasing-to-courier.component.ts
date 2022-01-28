@@ -160,6 +160,7 @@ export class DocumentReleasingToCourierComponent implements OnInit {
               {
                 _enrouteBy: this.me._id,
                 location: 'Road',
+                datePickedFromNotary: new Date(),
               },
               id
             );

@@ -27,7 +27,9 @@ export class RtVideoComponent implements OnInit {
   private token = '';
   public me: any;
   private uid = '';
-  public channelName = '321321312';
+  public channelName = '321321321';
+  public localAudio = true;
+  public localVideo = true;
 
   snack: any;
 
@@ -76,8 +78,8 @@ export class RtVideoComponent implements OnInit {
 
         this.localStream = this.ngxAgoraService.createStream({
           streamID: this.uid,
-          audio: true,
-          video: true,
+          audio: this.localAudio,
+          video: this.localVideo,
           screen: false,
         });
         this.assignLocalStreamHandlers();
@@ -137,6 +139,7 @@ export class RtVideoComponent implements OnInit {
         this.remoteCalls.push({
           id: id,
           hasAudio: true,
+          hasVideo: true,
           details: this.me,
         });
         setTimeout(() => stream.play(id), 1000);
@@ -167,6 +170,42 @@ export class RtVideoComponent implements OnInit {
         );
         // console.log(`${evt.uid} left from this channel`);
       }
+    });
+
+    //for remote Audio
+    this.client.on(ClientEvent.RemoteAudioMuted, (evt) => {
+      console.log('AUDIO MUTED', evt);
+      this.remoteCalls.find(
+        (o: any) => o.id == `agora_remote-${evt.uid}`
+      ).hasAudio = false;
+    });
+
+    this.client.on(ClientEvent.RemoteAudioUnmuted, (evt) => {
+      console.log('AUDIO UNMUTED', evt);
+      this.remoteCalls.find(
+        (o: any) => o.id == `agora_remote-${evt.uid}`
+      ).hasAudio = true;
+    });
+    //end (for remote Audio)
+
+    //for remote Video
+    this.client.on(ClientEvent.RemoveVideoMuted, (evt) => {
+      console.log('VIDEO MUTED', evt);
+      this.remoteCalls.find(
+        (o: any) => o.id == `agora_remote-${evt.uid}`
+      ).hasVideo = false;
+    });
+    this.client.on(ClientEvent.RemoteVideoUnmuted, (evt) => {
+      console.log('VIDEO UNMUTED', evt);
+      this.remoteCalls.find(
+        (o: any) => o.id == `agora_remote-${evt.uid}`
+      ).hasVideo = true;
+    });
+    //end (for remote Video)
+
+    //tests
+    this.client.on(ClientEvent.VolumeIndicator, (evt) => {
+      console.log('TESTESTESTESTESTESTES[][][][][][][][][][][][][][]', evt);
     });
   }
 
@@ -238,5 +277,24 @@ export class RtVideoComponent implements OnInit {
         console.log('Leave channel failed');
       }
     );
+  }
+
+  toggleAudio() {
+    if (this.localAudio) {
+      this.localStream.muteAudio();
+    } else {
+      this.localStream.unmuteAudio();
+    }
+    this.localAudio = !this.localAudio;
+    console.log(this.localAudio);
+  }
+  toggleVideo() {
+    if (this.localVideo) {
+      this.localStream.muteVideo();
+    } else {
+      this.localStream.unmuteVideo();
+    }
+    this.localVideo = !this.localVideo;
+    console.log(this.localVideo);
   }
 }
