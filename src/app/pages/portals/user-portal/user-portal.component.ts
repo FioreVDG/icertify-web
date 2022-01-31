@@ -59,10 +59,7 @@ export class UserPortalComponent implements OnInit {
             let transaction: Array<any> = [];
 
             res.env.schedules.forEach((el: any) => {
-              console.log(el);
               el._folderIds.forEach((f: any) => {
-                console.log(f);
-                // transaction.push(f._transactions.sender);
                 f._transactions.forEach((o: any) => {
                   transaction.push(o.sender);
                 });

@@ -47,6 +47,13 @@ const routes: Routes = [
             './pages/batch-delivery-management/batch-delivery-management.module'
           ).then((m) => m.BatchDeliveryManagementModule),
       },
+      {
+        path: 'video-conference',
+        loadChildren: () =>
+          import(
+            './pages/barangay-video-conferencing/barangay-video-conferencing.module'
+          ).then((m) => m.BarangayVideoConferencingModule),
+      },
     ],
   },
 ];

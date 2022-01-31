@@ -57,6 +57,12 @@ export const BARANGAY_NAVS: NavNode[] = [
     route: 'batch-delivery-management',
     hasAccess: false,
   },
+  {
+    label: 'Video Conferencing',
+    icon: 'videocam',
+    route: 'video-conference',
+    hasAccess: false,
+  },
 ];
 
 export const SUPERADMIN_NAVS: NavNode[] = [

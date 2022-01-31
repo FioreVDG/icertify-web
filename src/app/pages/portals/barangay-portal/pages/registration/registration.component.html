@@ -3,8 +3,8 @@
   <div class="pt-6"></div>
   <img src="../../../../assets/images/smartphone.svg" alt="" />
   <p>
-    Enter <b>Mobile Number</b> to verify and to proceed. Check the
-    <b>OTP</b> that was sent to your mobile number.
+    Enter <b>Mobile Number</b> to verify and to proceed. An <b>OTP</b> will be
+    sent to this mobile nubmer.
   </p>
 
   <mat-form-field appearance="standard"
@@ -28,6 +28,6 @@
     color="primary"
     [disabled]="verifying"
   >
-    {{ verifying ? "Verifying..." : "Verify" }}
+    {{ verifying ? "Sending..." : "send OTP" }}
   </button>
 </div>
