@@ -32,7 +32,12 @@
               : "Click the button to Join meeting"
           }}
         </p>
-        <button mat-flat-button color="primary" [disabled]="disabled">
+        <button
+          mat-flat-button
+          color="primary"
+          (click)="canJoin = !canJoin"
+          [disabled]="disabled"
+        >
           Join Meeting
         </button>
       </div>

@@ -1,3 +1,5 @@
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Socket } from 'ngx-socket-io';
 import { ConferenceService } from './../../../service/api/conference/conference.service';
 import { AuthService } from './../../../service/auth/auth.service';
 import { Component, EventEmitter, OnInit } from '@angular/core';
@@ -36,11 +38,20 @@ export class UserPortalComponent implements OnInit {
     public auth: AuthService,
     private dialog: MatDialog,
     private store: Store<{ user: User }>,
+    private socket: Socket,
+    private sb: MatSnackBar,
     private conference: ConferenceService
   ) {}
 
   ngOnInit(): void {
+    console.log('USER PORTAL');
     this.getMe();
+    this.socket.fromEvent('createdMeeting').subscribe((msg) => {
+      this.sb.open(
+        `Atty. Joined the meeting for your Transaction, meeting code :${msg}`
+      );
+      console.log(msg);
+    });
   }
 
   getMe() {
@@ -56,22 +67,18 @@ export class UserPortalComponent implements OnInit {
           this.conference.getScheduled({ find: [] }).subscribe((res: any) => {
             console.log(res);
             this.loading = false;
-            let transaction: Array<any> = [];
+            let existing: Array<any> = [];
 
             res.env.schedules.forEach((el: any) => {
               el._folderIds.forEach((f: any) => {
                 f._transactions.forEach((o: any) => {
-                  transaction.push(o.sender);
+                  console.log(o);
+                  if (o.sender._senderId === this.me._id) existing.push(o);
                 });
               });
             });
-            console.log(transaction);
-
-            let isExisting: any = transaction.find(
-              (o: any) => o._senderId === this.me._id
-            );
-            console.log(isExisting);
-            if (isExisting) this.disabled = false;
+            if (existing.length > 0) this.disabled = false;
+            console.log(existing);
           });
         }
       },
@@ -86,7 +93,7 @@ export class UserPortalComponent implements OnInit {
     let csurf_token = localStorage.getItem('SESSION_CSURF_TOKEN');
     let session_token = localStorage.getItem('SESSION_AUTH');
 
-    console.log(csurf_token, session_token);
+    // console.log(csurf_token, session_token);
 
     if (csurf_token == null || session_token == null) {
       this.loading = true;

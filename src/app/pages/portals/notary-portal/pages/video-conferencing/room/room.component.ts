@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
 import { WebcamInitError } from 'ngx-webcam';
+import { Socket } from 'ngx-socket-io';
 import { Store } from '@ngrx/store';
 import { User } from 'src/app/models/user.interface';
 
@@ -37,11 +38,13 @@ export class RoomComponent implements OnInit {
     private conference: ConferenceService,
     private agora: AgoraService,
     private auth: AuthService,
+    private socket: Socket,
     private store: Store<{ user: User }>
   ) {}
 
   ngOnInit(): void {
     console.log(this.data);
+    this.socketEventHandler();
     this.getExpectedParticipants();
     this.store.select('user').subscribe((res: any) => {
       this.me = res;
@@ -54,6 +57,7 @@ export class RoomComponent implements OnInit {
     };
     this.conference.getScheduled(query).subscribe((res: any) => {
       console.log(res);
+      this.data = res.env.schedules;
     });
   }
 
@@ -73,6 +77,7 @@ export class RoomComponent implements OnInit {
       (res: any) => {
         console.log(res);
         this.token = res.token;
+        this.emitJoinRoomSocket(this.data);
         if (res) {
           this.auth.me().subscribe((res: any) => {
             this.uid = res.env.user._id;
@@ -88,5 +93,14 @@ export class RoomComponent implements OnInit {
         this.util.stopLoading(loader);
       }
     );
+  }
+
+  emitJoinRoomSocket(data: any) {
+    this.socket.emit('createMeeting', { sched: data, id: this.me._id });
+  }
+  socketEventHandler() {
+    this.socket.fromEvent('createdMeeting').subscribe((res: any) => {
+      console.log(res);
+    });
   }
 }
