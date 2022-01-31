@@ -7,6 +7,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
 import { WebcamInitError } from 'ngx-webcam';
+import { Store } from '@ngrx/store';
+import { User } from 'src/app/models/user.interface';
 
 @Component({
   selector: 'app-room',
@@ -25,6 +27,7 @@ export class RoomComponent implements OnInit {
   uid: string = '';
 
   token: string = '';
+  me!: User;
 
   constructor(
     public dialogRef: MatDialogRef<RoomComponent>,
@@ -33,12 +36,16 @@ export class RoomComponent implements OnInit {
     public util: UtilService,
     private conference: ConferenceService,
     private agora: AgoraService,
-    private auth: AuthService
+    private auth: AuthService,
+    private store: Store<{ user: User }>
   ) {}
 
   ngOnInit(): void {
     console.log(this.data);
     this.getExpectedParticipants();
+    this.store.select('user').subscribe((res: any) => {
+      this.me = res;
+    });
   }
 
   getExpectedParticipants() {

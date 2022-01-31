@@ -1,3 +1,4 @@
+import { ConferenceService } from './../../../service/api/conference/conference.service';
 import { AuthService } from './../../../service/auth/auth.service';
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { User } from 'src/app/models/user.interface';
@@ -27,11 +28,15 @@ export class UserPortalComponent implements OnInit {
   userMenu = NOTARY_MENU;
   menuColors = NOTARY_MENU_COLORS;
 
+  canJoin: boolean = false;
+  disabled: boolean = true;
+
   constructor(
     public router: Router,
     public auth: AuthService,
     private dialog: MatDialog,
-    private store: Store<{ user: User }>
+    private store: Store<{ user: User }>,
+    private conference: ConferenceService
   ) {}
 
   ngOnInit(): void {
@@ -43,10 +48,35 @@ export class UserPortalComponent implements OnInit {
     this.auth.me().subscribe(
       (res: any) => {
         console.log(res);
-        this.me = res.env.user;
-        this.store.dispatch(setUser({ user: res.env.user }));
-        localStorage.setItem('USER_INFORMATION', JSON.stringify(this.me));
-        this.loading = false;
+        if (res) {
+          this.me = res.env.user;
+          this.store.dispatch(setUser({ user: res.env.user }));
+          localStorage.setItem('USER_INFORMATION', JSON.stringify(this.me));
+
+          this.conference.getScheduled({ find: [] }).subscribe((res: any) => {
+            console.log(res);
+            this.loading = false;
+            let transaction: Array<any> = [];
+
+            res.env.schedules.forEach((el: any) => {
+              console.log(el);
+              el._folderIds.forEach((f: any) => {
+                console.log(f);
+                // transaction.push(f._transactions.sender);
+                f._transactions.forEach((o: any) => {
+                  transaction.push(o.sender);
+                });
+              });
+            });
+            console.log(transaction);
+
+            let isExisting: any = transaction.find(
+              (o: any) => o._senderId === this.me._id
+            );
+            console.log(isExisting);
+            if (isExisting) this.disabled = false;
+          });
+        }
       },
       (err) => {
         console.log(err);

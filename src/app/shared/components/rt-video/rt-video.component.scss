@@ -73,7 +73,7 @@ mat-toolbar {
   justify-content: center;
   button {
     margin: 0rem 0.6rem;
-    background: #2e3235;
+    // background: #2e3235;
   }
 }
 
@@ -90,4 +90,14 @@ mat-toolbar {
 .time {
   color: #fff;
   text-align: center;
+}
+.btn-red {
+  background-color: $warn;
+}
+.btn-success {
+  background-color: $primary;
+}
+.btn-local {
+  // margin: 0rem 0.6rem;
+  background: #2e3235;
 }
