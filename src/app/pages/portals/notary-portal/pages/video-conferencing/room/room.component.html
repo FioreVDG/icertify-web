@@ -24,8 +24,15 @@
         ></webcam>
       </div>
       <div class="right">
-        <button mat-flat-button (click)="joinMeeting()" class="btn-join">
+        <!-- <button mat-flat-button (click)="joinMeeting()" class="btn-join">
           JOIN NOW
+        </button> -->
+        <button
+          mat-stroked-button
+          *ngFor="let schedule of data"
+          (click)="joinMeeting(schedule)"
+        >
+          {{ schedule.schedule | date: "medium" }}
         </button>
       </div>
     </div>
@@ -37,11 +44,89 @@
 <!-- MEETING -->
 <mat-sidenav-container *ngIf="joinRoom" autosize>
   <mat-sidenav #sidenav mode="side" opened="true">
-    <p>Transaction Reference Code</p>
+    <small>
+      CID: <kbd>{{ currentSchedule._id }}</kbd>
+    </small>
+    <p>
+      QUEUE NO. {{ currentTransactionIndex + 1 }} of
+      {{ transactions.length }}
+    </p>
+    <p>Transac Ref Code</p>
+    <h3>{{ currentTransaction.refCode }}</h3>
+
+    <h3>Document Ref Code</h3>
+    <ng-container
+      *ngFor="let doc of currentTransaction._documents; let i = index"
+    >
+      <p (click)="selectDocumentToView(doc)">{{ doc.refCode }}</p>
+    </ng-container>
+    <mat-divider></mat-divider>
+    <h3>Proof of Identity</h3>
+    <ng-container *ngFor="let image of _images">
+      <h3>{{ image.label }}</h3>
+      <img [src]="image.url" alt=""
+    /></ng-container>
+
+    <h3>Personal Information</h3>
+    <ng-container *ngFor="let item of userInfo">
+      <p *ngIf="item.type !== 'date'">
+        <span>{{ item.label }}</span
+        >{{ util.deepFind(currentTransaction.sender, item.path) }}
+      </p>
+      <p *ngIf="item.type === 'date'">
+        <span>{{ item.label }}</span
+        >{{ util.deepFind(currentTransaction.sender, item.path) | date }}
+      </p>
+    </ng-container>
+    <h3>Video of Signing</h3>
+    <video
+      *ngIf="currentTransaction.vidURL !== undefined"
+      style="max-width: 95%; min-height: 20rem"
+      controls
+    >
+      <source [src]="currentTransaction.vidURL" type="video/mp4" />
+    </video>
   </mat-sidenav>
+
   <div class="grid main-container">
+    <mat-toolbar style="color: '#FFF'">
+      <p style="text-align: center" *ngIf="currentDocument">
+        This is for Document with reference code:
+        <b>{{ currentDocument.refCode }}</b>
+      </p>
+      <div class="flex-stretch"></div>
+      <button
+        mat-icon-button
+        (click)="prevTransaction()"
+        *ngIf="currentTransactionIndex > 0"
+      >
+        <mat-icon>arrow_backward_ios</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        (click)="nextTransaction()"
+        *ngIf="currentTransactionIndex + 1 < transactions.length"
+      >
+        <mat-icon>arrow_forward_ios</mat-icon>
+      </button>
+    </mat-toolbar>
     <div class="col-12">
-      <app-rt-video></app-rt-video>
+      <app-rt-video [channelName]="currentSchedule._id"></app-rt-video>
+      <div class="grid mt-3">
+        <div class="col-12 opt-btn">
+          <button mat-raised-button color="primary" (click)="takeScreenshot()">
+            <mat-icon>photo_camera</mat-icon>&nbsp;Screenshot and Mark as
+            Notarized
+          </button>
+          <button mat-raised-button color="warn">Mark as unnotarized</button>
+        </div>
+      </div>
     </div>
   </div>
+
+  <!-- <ngx-capture
+    style="position: absolute; z-index: 0"
+    [target]="screen"
+    (resultImage)="saveImage($event)"
+  ></ngx-capture> -->
 </mat-sidenav-container>

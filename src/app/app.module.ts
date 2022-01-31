@@ -9,7 +9,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 import { AgoraConfig, NgxAgoraModule } from 'ngx-agora';
 import { NotfoundComponent } from './pages/notfound/notfound.component';
-
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+const config: SocketIoConfig = {
+  url: 'http://localhost:3000/', // socket server url;
+  options: {},
+};
 const agoraConfig: AgoraConfig = {
   AppID: '4b117526903f4bc4a60134e23047a1a8',
 };
@@ -22,6 +26,7 @@ const agoraConfig: AgoraConfig = {
     BrowserAnimationsModule,
     HttpClientModule,
     MaterialModule,
+    SocketIoModule.forRoot(config),
 
     StoreModule.forRoot({}),
     NgxAgoraModule.forRoot(agoraConfig),

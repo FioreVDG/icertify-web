@@ -1,0 +1,9 @@
+<app-table
+  style="position: relative"
+  [filterButtonConfig]="filterBtnConfig"
+  [loading]="loading"
+  [dataSource]="dataSource"
+  [dataLength]="dataLength"
+  [pagination]="page"
+  (onUpdateTableEmit)="tableUpdateEmit($event)"
+></app-table>

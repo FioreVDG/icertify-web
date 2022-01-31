@@ -2,9 +2,7 @@ import { QueryParams } from './../../../../../models/queryparams.interface';
 import { RegistrantFormComponent } from './../../../../../shared/components/registrant-form/registrant-form.component';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { OtpService } from 'src/app/service/api/otp/otp.service';
 import { UserService } from 'src/app/service/api/user/user.service';
-import { AuthService } from 'src/app/service/auth/auth.service';
 import { UtilService } from 'src/app/service/util/util.service';
 import { OtpComponent } from 'src/app/shared/components/otp/otp.component';
 import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
@@ -19,8 +17,6 @@ export class RegistrationComponent implements OnInit {
   verifying: boolean = false;
   constructor(
     private util: UtilService,
-    private auth: AuthService,
-    private otp: OtpService,
     private user: UserService,
     private dialog: MatDialog
   ) {}
@@ -42,16 +38,14 @@ export class RegistrationComponent implements OnInit {
   }
 
   send() {
-    console.log(this.mobileNumber);
+    const loader = this.util.startLoading('Sending please wait');
     this.verifying = true;
-    let query: QueryParams = {
-      find: [],
-    };
     this.user.checkExistingMobileNumber(this.mobileNumber).subscribe(
       (res: any) => {
         console.log(res);
         this.verifying = false;
         if (res) {
+          this.util.stopLoading(loader);
           this.dialog
             .open(OtpComponent, {
               data: { mobileNumber: this.mobileNumber },
@@ -95,6 +89,7 @@ export class RegistrationComponent implements OnInit {
       },
       (err) => {
         console.log(err);
+        this.util.stopLoading(loader);
         this.dialog.open(ActionResultComponent, {
           data: { msg: err.error.message, success: false, button: 'Okay' },
         });

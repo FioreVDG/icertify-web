@@ -1,3 +1,4 @@
+import { UtilService } from './../../../service/util/util.service';
 import { ActionResultComponent } from './../../dialogs/action-result/action-result.component';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -57,7 +58,8 @@ export class OtpComponent implements OnInit {
     public dialogRef: MatDialogRef<OtpComponent>,
     private otpService: OtpService,
     private sb: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private util: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -87,7 +89,7 @@ export class OtpComponent implements OnInit {
     });
 
     console.log(this.otp);
-
+    const loader = this.util.startLoading('Verifying Please wait');
     this.otpService
       .registerCheckOTP({
         mobileNumber: '+63' + this.data.mobileNumber,
@@ -97,12 +99,14 @@ export class OtpComponent implements OnInit {
         (res) => {
           console.log(res);
           if (!this.data.from_fp) localStorage.removeItem('OTP_TOKEN');
+          this.util.stopLoading(loader);
           this.verifying = false;
           this.dialogRef.close(true);
         },
         (err) => {
           this.verifying = false;
           console.log(err);
+          this.util.stopLoading(loader);
           this.dialog.open(ActionResultComponent, {
             data: {
               success: false,
