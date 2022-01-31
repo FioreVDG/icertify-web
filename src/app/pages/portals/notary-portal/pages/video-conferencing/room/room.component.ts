@@ -44,6 +44,7 @@ export class RoomComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.data);
+    this.socketEventHandler();
     this.getExpectedParticipants();
     this.store.select('user').subscribe((res: any) => {
       this.me = res;
@@ -95,6 +96,11 @@ export class RoomComponent implements OnInit {
   }
 
   emitJoinRoomSocket(data: any) {
-    this.socket.emit('createMeeting', data);
+    this.socket.emit('createMeeting', { sched: data, id: this.me._id });
+  }
+  socketEventHandler() {
+    this.socket.fromEvent('createdMeeting').subscribe((res: any) => {
+      console.log(res);
+    });
   }
 }

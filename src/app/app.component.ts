@@ -11,6 +11,5 @@ export class AppComponent {
   constructor(private socket: Socket) {}
   ngOnInit() {
     this.socket.connect();
-    this.socket.emit('trial', { msg: 'Hello from Client' });
   }
 }

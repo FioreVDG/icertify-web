@@ -67,7 +67,7 @@ export class UserPortalComponent implements OnInit {
           this.conference.getScheduled({ find: [] }).subscribe((res: any) => {
             console.log(res);
             this.loading = false;
-            let transaction: Array<any> = [];
+            let existing: Array<any> = [];
 
             res.env.schedules.forEach((el: any) => {
               console.log(el);
@@ -75,17 +75,13 @@ export class UserPortalComponent implements OnInit {
                 console.log(f);
                 // transaction.push(f._transactions.sender);
                 f._transactions.forEach((o: any) => {
-                  transaction.push(o.sender);
+                  console.log(o);
+                  if (o.sender._senderId === this.me._id) existing.push(o);
                 });
               });
             });
-            console.log(transaction);
-
-            let isExisting: any = transaction.find(
-              (o: any) => o._senderId === this.me._id
-            );
-            console.log(isExisting);
-            if (isExisting) this.disabled = false;
+            if (existing.length > 0) this.disabled = false;
+            console.log(existing);
           });
         }
       },
