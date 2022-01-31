@@ -1,6 +1,6 @@
 import { Socket } from 'ngx-socket-io';
 import { ApiService } from './../../../service/api/api.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   AgoraClient,
   ClientEvent,
@@ -21,13 +21,14 @@ export class RtVideoComponent implements OnInit {
   title = 'agorawrtc-demo';
   localCallId = 'agora_local';
   remoteCalls: Array<any> = [];
+  @Input() channelName: any;
 
   private client!: AgoraClient;
   private localStream!: Stream;
   private token = '';
   public me: any;
   private uid = '';
-  public channelName = '321321321';
+  // public channelName = '321321321';
   public localAudio = true;
   public localVideo = true;
 

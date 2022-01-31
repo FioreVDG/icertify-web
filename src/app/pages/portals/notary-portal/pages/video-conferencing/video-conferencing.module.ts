@@ -10,6 +10,7 @@ import { VideoConferencingComponent } from './video-conferencing.component';
 import { SetScheduleComponent } from './set-schedule/set-schedule.component';
 import { RoomComponent } from './room/room.component';
 import { WebcamModule } from 'ngx-webcam';
+import { NgxCaptureModule } from 'ngx-capture';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { WebcamModule } from 'ngx-webcam';
     FormsModule,
     ReactiveFormsModule,
     WebcamModule,
+    NgxCaptureModule,
   ],
 })
 export class VideoConferencingModule {}

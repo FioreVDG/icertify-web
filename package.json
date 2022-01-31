@@ -33,6 +33,7 @@
     "lodash": "^4.17.21",
     "ngx-agora": "^2.0.1",
     "ngx-avatar": "^4.1.0",
+    "ngx-capture": "^0.12.1",
     "ngx-doc-viewer": "^2.1.2",
     "ngx-extended-pdf-viewer": "^10.0.0-alpha.3",
     "ngx-file-drop": "^13.0.0",
