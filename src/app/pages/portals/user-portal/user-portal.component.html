@@ -1,22 +1,31 @@
 <!-- <mat-toolbar>
  
 </mat-toolbar> -->
+<section style="overflow-x: hidden">
+  <div class="grid">
+    <div class="col-12">
+      <mat-toolbar style="border-bottom: 0.5px #8f8f8f3f solid">
+        <img
+          src="../../../assets/images/iCertify-logo.png"
+          class="img"
+          alt=""
+        />
+        <div class="logo-text">
+          <!-- <h3>iCertify, Inc.</h3>
+      <p>NOTARY</p> -->
+        </div>
 
-<mat-toolbar style="border-bottom: 0.5px #8f8f8f3f solid">
-  <img src="../../../assets/images/iCertify-logo.png" class="img" alt="" />
-  <div class="logo-text">
-    <!-- <h3>iCertify, Inc.</h3>
-    <p>NOTARY</p> -->
+        <div class="flex-stretch"></div>
+        <app-profile-menu
+          class="avatar"
+          *ngIf="me"
+          [me]="me"
+          [avatarColors]="menuColors"
+          [menuItems]="userMenu"
+          (onMenuClick)="menuClick($event)"
+        ></app-profile-menu>
+      </mat-toolbar>
+      <app-rt-video></app-rt-video>
+    </div>
   </div>
-
-  <div class="flex-stretch"></div>
-  <app-profile-menu
-    class="avatar"
-    *ngIf="me"
-    [me]="me"
-    [avatarColors]="menuColors"
-    [menuItems]="userMenu"
-    (onMenuClick)="menuClick($event)"
-  ></app-profile-menu>
-</mat-toolbar>
-<app-rt-video></app-rt-video>
+</section>
