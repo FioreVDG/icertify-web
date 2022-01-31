@@ -1,0 +1,53 @@
+<div mat-dialog-title>
+  <h3>dashdjkasljhdklas</h3>
+  <mat-icon mat-dialog-close class="close-btn" color="warn">close</mat-icon>
+</div>
+
+<div class="grid" style="overflow: hidden" *ngIf="!joinRoom">
+  <div class="col-12">
+    <div class="grid pt-3 pr-3">
+      <div class="col-12 header-wrapper">
+        <div class="name-container">
+          <div class="info">
+            <!-- <h4>{{ me.firstName }} {{ me.lastName }}</h4>
+              <p>{{ me.email }}</p> -->
+          </div>
+          <mat-icon color="primary">account_circle</mat-icon>
+        </div>
+      </div>
+    </div>
+    <div class="main-content">
+      <div class="left">
+        <div *ngIf="locked" class="vid-wrapper"></div>
+        <webcam
+          class="cam"
+          [width]="850"
+          [height]="850"
+          [allowCameraSwitch]="false"
+          (initError)="handleInitError($event)"
+          *ngIf="!locked"
+        ></webcam>
+      </div>
+      <div class="right">
+        <!-- <button mat-flat-button (click)="joinMeeting()" class="btn-join">
+            JOIN NOW
+          </button> -->
+        <button
+          mat-stroked-button
+          *ngFor="let schedule of data"
+          (click)="joinMeeting(schedule)"
+        >
+          {{ schedule.schedule | date: "medium" }}
+        </button>
+      </div>
+    </div>
+    <button mat-dialog-close mat-button color="primary">
+      <mat-icon>arrow_back</mat-icon>&nbsp;Back
+    </button>
+  </div>
+</div>
+<div *ngIf="joinRoom" class="grid main-container">
+  <div class="col-12">
+    <app-rt-video></app-rt-video>
+  </div>
+</div>

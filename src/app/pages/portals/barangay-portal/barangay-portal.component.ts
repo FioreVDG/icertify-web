@@ -15,6 +15,9 @@ import { BARANGAY_NAVS } from 'src/app/config/NAVIGATION';
 import { AuthService } from 'src/app/service/auth/auth.service';
 import { UtilService } from 'src/app/service/util/util.service';
 import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
+import { Store } from '@ngrx/store';
+import { User } from 'src/app/models/user.interface';
+import { setUser } from 'src/app/store/user/user.action';
 
 @Component({
   selector: 'app-barangay-portal',
@@ -40,7 +43,8 @@ export class BarangayPortalComponent implements OnInit {
     public router: Router,
     private dialog: MatDialog,
     private util: UtilService,
-    private auth: AuthService
+    private auth: AuthService,
+    private store: Store<{ user: User }>
   ) {}
 
   ngOnInit(): void {
@@ -61,6 +65,7 @@ export class BarangayPortalComponent implements OnInit {
       (res: any) => {
         console.log(res);
         this.me = res.env.user;
+        this.store.dispatch(setUser({ user: res.env.user }));
         localStorage.setItem('BARANGAY_INFORMATION', JSON.stringify(this.me));
         this.loading = false;
       },

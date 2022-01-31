@@ -6,6 +6,8 @@ import { CommonModule } from '@angular/common';
 
 import { BarangayPortalRoutingModule } from './barangay-portal-routing.module';
 import { BarangayPortalComponent } from './barangay-portal.component';
+import { StoreModule } from '@ngrx/store';
+import { userReducer } from 'src/app/store/user/user.reducer';
 
 @NgModule({
   declarations: [BarangayPortalComponent],
@@ -15,6 +17,7 @@ import { BarangayPortalComponent } from './barangay-portal.component';
     MaterialModule,
     ComponentModule,
     DialogsModule,
+    StoreModule.forFeature('user', userReducer),
   ],
 })
 export class BarangayPortalModule {}
