@@ -17,6 +17,11 @@ import { User } from 'src/app/models/user.interface';
   styleUrls: ['./room.component.scss'],
 })
 export class RoomComponent implements OnInit {
+  // TODO: Create Interface for Schedule
+  // TODO: Create Interface for Folder(Batch)
+  // TODO: Create Interface for Transactions
+  // TODO: Create Interface for Document
+
   joinRoom: boolean = false;
   locked: boolean = false;
 
@@ -29,6 +34,10 @@ export class RoomComponent implements OnInit {
 
   token: string = '';
   me!: User;
+  currentSchedule: any;
+  currentTransactionIndex = -1;
+  transactions: any = [];
+  currentTransaction: any;
 
   constructor(
     public dialogRef: MatDialogRef<RoomComponent>,
@@ -58,6 +67,15 @@ export class RoomComponent implements OnInit {
     this.conference.getScheduled(query).subscribe((res: any) => {
       console.log(res);
       this.data = res.env.schedules;
+      this.data.forEach((schedule: any) => {
+        let documentCtr = 0;
+        schedule._folderIds.forEach((folder: any) => {
+          folder._transactions.forEach((transaction: any) => {
+            documentCtr += transaction._documents.length;
+          });
+        });
+        schedule['no_of_documents'] = documentCtr;
+      });
     });
   }
 
@@ -71,22 +89,25 @@ export class RoomComponent implements OnInit {
     }
   }
 
-  joinMeeting() {
+  joinMeeting(schedule: any) {
+    console.log(schedule);
+    this.currentSchedule = schedule;
+    this.transactions = [];
+    this.currentSchedule._folderIds.forEach((folder: any) => {
+      folder._transactions.forEach((transaction: any) => {
+        this.transactions.push(transaction);
+      });
+    });
     const loader = this.util.startLoading('Joining please wait...');
-    this.agora.getToken(this.id).subscribe(
+    this.agora.getToken(schedule._id).subscribe(
       (res: any) => {
         console.log(res);
         this.token = res.token;
         this.emitJoinRoomSocket(this.data);
-        if (res) {
-          this.auth.me().subscribe((res: any) => {
-            this.uid = res.env.user._id;
-            this.util.stopLoading(loader);
-            // this.startConference();
-            console.log(this.uid);
-            this.joinRoom = true;
-          });
-        }
+        this.nextTransaction();
+        this.joinRoom = true;
+        this.util.stopLoading(loader);
+        console.log(this.transactions);
       },
       (err) => {
         console.log(err);
@@ -102,5 +123,11 @@ export class RoomComponent implements OnInit {
     this.socket.fromEvent('createdMeeting').subscribe((res: any) => {
       console.log(res);
     });
+  }
+
+  nextTransaction() {
+    this.currentTransactionIndex++;
+    this.currentTransaction = this.transactions[this.currentTransactionIndex];
+    console.log(this.currentTransaction);
   }
 }
