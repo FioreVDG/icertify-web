@@ -17,6 +17,7 @@ import {
   FOR_PICKUP_FIND,
   NOTARY_DOC_RELEASING_TO_COURIER_CONFIG,
 } from './config';
+import { MarkAsEnrouteComponent } from './mark-as-enroute/mark-as-enroute.component';
 
 @Component({
   selector: 'app-document-releasing-to-courier',
@@ -36,13 +37,7 @@ export class DocumentReleasingToCourierComponent implements OnInit {
     pageIndex: 1,
     populate: [
       {
-        field: '_enrouteBy',
-      },
-      {
         field: '_receivedBy',
-      },
-      {
-        field: '_receivedByBarangay',
       },
     ],
     label: 'For Pickup',
@@ -144,45 +139,59 @@ export class DocumentReleasingToCourierComponent implements OnInit {
   onMark() {
     let ids: any = [];
     this.selected.forEach((id: any) => {
-      ids.push(id._id);
+      ids.push(id);
     });
+
     this.dialog
-      .open(AreYouSureComponent, {
-        data: {
-          msg: 'Mark as received batch/es?',
-        },
+      .open(MarkAsEnrouteComponent, {
+        data: { selected: ids, me: this.me },
+        height: 'auto',
+        width: '60%',
       })
       .afterClosed()
-      .subscribe((res: any) => {
-        if (res) {
-          let apiQueries = ids.map((id: any) => {
-            return this.api.folder.update(
-              {
-                _enrouteBy: this.me._id,
-                location: 'Road',
-                datePickedFromNotary: new Date(),
-              },
-              id
-            );
-          });
-
-          forkJoin(apiQueries).subscribe((res: any) => {
-            console.log(res);
-            this.dialog
-              .open(ActionResultComponent, {
-                data: {
-                  success: true,
-                  msg: `Batch/es successfully enrouted.`,
-                  button: 'Okay',
-                },
-              })
-              .afterClosed()
-              .subscribe((res: any) => {
-                this.fetchData(this.page);
-                this.selected = [];
-              });
-          });
-        }
+      .subscribe((res) => {
+        if (res) this.fetchData(this.page);
       });
+
+    ///////////////////////
+    ///////////////////////
+    // this.dialog
+    //   .open(AreYouSureComponent, {
+    //     data: {
+    //       msg: 'Mark as received batch/es?',
+    //     },
+    //   })
+    //   .afterClosed()
+    //   .subscribe((res: any) => {
+    //     if (res) {
+    //       let apiQueries = ids.map((id: any) => {
+    //         return this.api.folder.update(
+    //           {
+    //             _enrouteBy: this.me._id,
+    //             location: 'Road',
+    //             datePickedFromNotary: new Date(),
+    //           },
+    //           id
+    //         );
+    //       });
+
+    //       forkJoin(apiQueries).subscribe((res: any) => {
+    //         console.log(res);
+    //         this.dialog
+    //           .open(ActionResultComponent, {
+    //             data: {
+    //               success: true,
+    //               msg: `Batch/es successfully enrouted.`,
+    //               button: 'Okay',
+    //             },
+    //           })
+    //           .afterClosed()
+    //           .subscribe((res: any) => {
+    //             this.fetchData(this.page);
+    //             this.selected = [];
+    //           });
+    //       });
+    //     }
+    //   });
   }
 }

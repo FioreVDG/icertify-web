@@ -34,6 +34,7 @@
         <ng-container matColumnDef="select" *ngIf="checkBox">
           <th mat-header-cell class="pr-2" *matHeaderCellDef>
             <mat-checkbox
+              *ngIf="uniqueCheckbox === false"
               [indeterminate]="
                 checkedRows.hasValue() &&
                 dataSource.length !== checkedRows.selected.length
@@ -63,7 +64,7 @@
                     : false
                 "
                 (click)="$event.stopPropagation()"
-                (change)="$event ? onCheckBoxChange(row) : null"
+                (change)="$event ? onCheckBoxClick(row) : null"
               >
               </mat-checkbox>
             </span>

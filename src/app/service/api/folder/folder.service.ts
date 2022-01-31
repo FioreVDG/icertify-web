@@ -19,6 +19,9 @@ export class FolderService {
   update(body: Object, id: String) {
     return this.http.start('put', `/folders/${id}`, body);
   }
+  enroute(body: Object, id: String) {
+    return this.http.start('put', `/folders/enroute/${id}`, body);
+  }
   delete(id: String) {
     return this.http.start('delete', `/folders/${id}`);
   }
