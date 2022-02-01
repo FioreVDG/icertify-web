@@ -1,3 +1,4 @@
+import { MarkAsNotarizedComponent } from './mark-as-notarized/mark-as-notarized.component';
 import { USER_INFO } from './config';
 import { DropboxService } from './../../../../../../service/dropbox/dropbox.service';
 import { AuthService } from './../../../../../../service/auth/auth.service';
@@ -6,14 +7,19 @@ import { Populate } from 'src/app/models/queryparams.interface';
 import { ConferenceService } from './../../../../../../service/api/conference/conference.service';
 import { UtilService } from 'src/app/service/util/util.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { WebcamInitError } from 'ngx-webcam';
 import { Socket } from 'ngx-socket-io';
 import { Store } from '@ngrx/store';
 import { User } from 'src/app/models/user.interface';
 import { NgxCaptureService } from 'ngx-capture';
-import { tap } from 'rxjs/operators';
+// import * as htmlToImage from 'html-to-image';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-room',
@@ -21,7 +27,8 @@ import { tap } from 'rxjs/operators';
   styleUrls: ['./room.component.scss'],
 })
 export class RoomComponent implements OnInit {
-  @ViewChild('screen', { static: true }) screen: any;
+  @ViewChild('screen', { static: false }) screen: any;
+  screenshot: any;
   // TODO: Create Interface for Schedule
   // TODO: Create Interface for Folder(Batch)
   // TODO: Create Interface for Transactions
@@ -70,7 +77,8 @@ export class RoomComponent implements OnInit {
     private dbx: DropboxService,
     private socket: Socket,
     private store: Store<{ user: User }>,
-    private captureService: NgxCaptureService
+    private captureService: NgxCaptureService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -160,9 +168,8 @@ export class RoomComponent implements OnInit {
 
   async initiateTransaction() {
     this.currentTransaction = this.transactions[this.currentTransactionIndex];
-    console.log(this.currentTransaction);
+    this.selectDocumentToView(this.currentTransaction._documents[0]);
     this._images.forEach(async (image: any) => {
-      console.log(this.currentTransaction.sender[image.fcname]);
       if (
         this.currentTransaction.sender.images &&
         this.currentTransaction.sender.images[image.fcname]
@@ -178,8 +185,7 @@ export class RoomComponent implements OnInit {
       );
     else delete this.currentTransaction.vidURL;
 
-    this.selectDocumentToView(this.currentTransaction._documents[0]);
-
+    console.log('CHECK THIS', this._images);
     console.log(this.currentTransaction);
   }
 
@@ -187,24 +193,54 @@ export class RoomComponent implements OnInit {
     console.log(event);
     this.currentDocument = event;
   }
+
   takeScreenshot() {
-    this.captureService
-      .getImage(this.screen.nativeElement, true)
-      .pipe(
-        tap((img) => {
-          console.log(img);
-        })
-      )
-      .subscribe();
+    html2canvas(document.getElementById('screen') || document.body).then(
+      (canvas) => {
+        // Convert the canvas to blob
+        this.screenshot = canvas.toDataURL('image/png');
+        this.openNotarizeDialog();
+      }
+    );
+
+    // htmlToImage
+    //   .toPng(node)
+    //   .then((dataUrl) => {
+    //     var img = new Image();
+    //     img.src = dataUrl;
+    //     console.log(img.src);
+    //     this.screenshot = img.src;
+    //     this.openNotarizeDialog();
+    //   })
+    //   .catch(function (error) {
+    //     console.error('oops, something went wrong!', error);
+    //   });
+
+    // this.captureService
+    //   .getImage(this.screen.nativeElement, true)
+    //   .pipe(
+    //     tap((img) => {
+    //       console.log(img);
+    //       this.screenshot = img;
+    //       this.openNotarizeDialog();
+    //     })
+    //   )
+    //   .subscribe();
+  }
+
+  openNotarizeDialog() {
+    this.dialog.open(MarkAsNotarizedComponent, {
+      data: { document: this.currentDocument, screenshot: this.screenshot },
+    });
   }
 
   async getTempLink(data: any) {
     console.log(data);
     const response = await this.dbx.getTempLink(data).toPromise();
     console.log(response);
-    return response.result.l;
+    return response.result.link;
   }
-  saveImage(img: string) {
-    console.log(img);
-  }
+  // saveImage(img: string) {
+  //   console.log(img);
+  // }
 }

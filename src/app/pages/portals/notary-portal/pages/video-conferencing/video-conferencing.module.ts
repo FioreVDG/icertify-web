@@ -11,12 +11,14 @@ import { SetScheduleComponent } from './set-schedule/set-schedule.component';
 import { RoomComponent } from './room/room.component';
 import { WebcamModule } from 'ngx-webcam';
 import { NgxCaptureModule } from 'ngx-capture';
+import { MarkAsNotarizedComponent } from './room/mark-as-notarized/mark-as-notarized.component';
 
 @NgModule({
   declarations: [
     VideoConferencingComponent,
     SetScheduleComponent,
     RoomComponent,
+    MarkAsNotarizedComponent,
   ],
   imports: [
     CommonModule,
