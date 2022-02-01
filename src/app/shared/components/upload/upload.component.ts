@@ -92,6 +92,7 @@ export class UploadComponent implements OnInit {
     let mobilenum: any = this.data.mobileNumber ? this.data.mobileNumber : '';
     let filename: any = this.data.name ? this.data.name : fileNameArray[0];
     console.log(fileNameArray);
+    console.log(filename);
     this.dbx
       .uploadFile(
         '/' + 'ICertify' + '/' + path + mobilenum + '/',

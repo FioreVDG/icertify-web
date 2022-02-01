@@ -1,9 +1,7 @@
 import { MarkAsNotarizedComponent } from './mark-as-notarized/mark-as-notarized.component';
 import { USER_INFO } from './config';
 import { DropboxService } from './../../../../../../service/dropbox/dropbox.service';
-import { AuthService } from './../../../../../../service/auth/auth.service';
 import { AgoraService } from './../../../../../../service/api/agora/agora.service';
-import { Populate } from 'src/app/models/queryparams.interface';
 import { ConferenceService } from './../../../../../../service/api/conference/conference.service';
 import { UtilService } from 'src/app/service/util/util.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -77,7 +75,6 @@ export class RoomComponent implements OnInit {
     private dbx: DropboxService,
     private socket: Socket,
     private store: Store<{ user: User }>,
-    private captureService: NgxCaptureService,
     private dialog: MatDialog
   ) {}
 
@@ -199,38 +196,20 @@ export class RoomComponent implements OnInit {
       (canvas) => {
         // Convert the canvas to blob
         this.screenshot = canvas.toDataURL('image/png');
-        this.openNotarizeDialog();
+        this.openNotarizeDialog('Notarized');
       }
     );
-
-    // htmlToImage
-    //   .toPng(node)
-    //   .then((dataUrl) => {
-    //     var img = new Image();
-    //     img.src = dataUrl;
-    //     console.log(img.src);
-    //     this.screenshot = img.src;
-    //     this.openNotarizeDialog();
-    //   })
-    //   .catch(function (error) {
-    //     console.error('oops, something went wrong!', error);
-    //   });
-
-    // this.captureService
-    //   .getImage(this.screen.nativeElement, true)
-    //   .pipe(
-    //     tap((img) => {
-    //       console.log(img);
-    //       this.screenshot = img;
-    //       this.openNotarizeDialog();
-    //     })
-    //   )
-    //   .subscribe();
   }
 
-  openNotarizeDialog() {
+  openNotarizeDialog(type: string) {
     this.dialog.open(MarkAsNotarizedComponent, {
-      data: { document: this.currentDocument, screenshot: this.screenshot },
+      data: {
+        document: this.currentDocument,
+        screenshot: this.screenshot,
+        transaction: this.currentTransaction,
+        type: type,
+      },
+      minWidth: '45vw',
     });
   }
 
@@ -240,7 +219,4 @@ export class RoomComponent implements OnInit {
     console.log(response);
     return response.result.link;
   }
-  // saveImage(img: string) {
-  //   console.log(img);
-  // }
 }

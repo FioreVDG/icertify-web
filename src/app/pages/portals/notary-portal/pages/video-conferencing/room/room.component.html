@@ -42,7 +42,7 @@
   </div>
 </div>
 <!-- MEETING -->
-<div id="screen" #screen>
+<div>
   <mat-sidenav-container *ngIf="joinRoom" autosize>
     <mat-sidenav #sidenav mode="side" opened="true">
       <small>
@@ -89,7 +89,12 @@
       </video>
     </mat-sidenav>
 
-    <div class="grid main-container">
+    <div
+      style="background: #1f2326"
+      class="grid main-container"
+      id="screen"
+      #screen
+    >
       <mat-toolbar style="color: '#FFF'">
         <p style="text-align: center" *ngIf="currentDocument">
           This is for Document with reference code:
@@ -123,7 +128,13 @@
               <mat-icon>photo_camera</mat-icon>&nbsp;Screenshot and Mark as
               Notarized
             </button>
-            <button mat-raised-button color="warn">Mark as unnotarized</button>
+            <button
+              mat-raised-button
+              color="warn"
+              (click)="openNotarizeDialog('Unnotarized')"
+            >
+              Mark as unnotarized
+            </button>
           </div>
         </div>
       </div>
