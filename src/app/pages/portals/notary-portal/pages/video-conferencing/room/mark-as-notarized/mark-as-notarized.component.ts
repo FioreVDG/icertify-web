@@ -40,7 +40,7 @@ export class MarkAsNotarizedComponent implements OnInit {
     console.log(this.data);
   }
 
-  markAsNotarized(event: any) {
+  markDocument(event: any) {
     console.log(event);
     let msg: string =
       this.data.type === 'Notarized'
