@@ -55,7 +55,7 @@ export const NOTARY_DOC_RECEIVING_FILT_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     ],
   },
   {
-    label: 'Received',
+    label: 'Received By',
     selected: false,
     isCheckbox: false,
     populate: [

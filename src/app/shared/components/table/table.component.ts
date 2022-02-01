@@ -32,6 +32,7 @@ export class TableComponent implements OnInit {
   @Input() filterButtonConfig: any = [];
   duplicateColumns!: Array<Column>;
   @Output() onUpdateTableEmit: any = new EventEmitter<any>();
+  @Input() uniqueCheckbox: any = false;
 
   @Output() onCheckBoxSelect = new EventEmitter<any>();
   @Input() loading = false;
@@ -49,6 +50,20 @@ export class TableComponent implements OnInit {
       JSON.stringify(this.columns ? this.columns : this.defaultColumn())
     );
     this.updateBreakpoint();
+
+    if (this.filterButtonConfig) {
+      this.filterButtonConfig.forEach((i: any, index: any) => {
+        if (index === 0) {
+          this.checkBox = i.isCheckbox;
+          this.duplicateColumns = i.column;
+          i.selected = true;
+          this.onUpdateTableEmit.emit(i);
+        } else {
+          i.selected = false;
+        }
+      });
+      console.log(this.filterButtonConfig);
+    }
   }
   updateBreakpoint() {
     this.displayedColumns = [];
@@ -187,6 +202,22 @@ export class TableComponent implements OnInit {
     console.log(row);
     this.checkedRows.toggle(row);
     this.onCheckBoxSelect.emit(this.checkedRows.selected);
+  }
+  onCheckBoxChangeUnique(row: any) {
+    if (!this.checkedRows.selected.includes(row)) {
+      this.checkedRows.clear();
+    }
+    this.checkedRows.toggle(row);
+
+    this.onCheckBoxSelect.emit(this.checkedRows.selected);
+  }
+
+  onCheckBoxClick(row: any) {
+    if (this.uniqueCheckbox) {
+      this.onCheckBoxChangeUnique(row);
+    } else {
+      this.onCheckBoxChange(row);
+    }
   }
 
   checkAll() {

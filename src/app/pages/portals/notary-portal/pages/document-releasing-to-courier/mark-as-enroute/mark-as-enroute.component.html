@@ -1,0 +1,24 @@
+<div mat-dialog-title><h3>Review Enrouting Details</h3></div>
+<mat-icon (click)="close()" class="close-btn" color="warn">close</mat-icon>
+
+<div mat-dialog-conent>
+  <app-form
+    #enrouteDetails
+    [formfields]="markAsEnrouteFormFields"
+    (formInitiated)="formInitialized()"
+    (formListener)="formListener($event)"
+    [obj]="obj"
+  >
+  </app-form>
+</div>
+
+<div mat-dialog-actions align="center">
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="!enrouteDetails.form.valid || saving"
+    (click)="submit()"
+  >
+    Enroute
+  </button>
+</div>
