@@ -41,7 +41,6 @@ export class RoomComponent implements OnInit {
   };
   id: string = '5f927f9772c9250004a83372';
   uid: string = '';
-
   token: string = '';
   me!: User;
   currentSchedule: any;
@@ -63,7 +62,6 @@ export class RoomComponent implements OnInit {
     },
   ];
   userInfo = USER_INFO;
-
   currentDocument: any;
   constructor(
     public dialogRef: MatDialogRef<RoomComponent>,
