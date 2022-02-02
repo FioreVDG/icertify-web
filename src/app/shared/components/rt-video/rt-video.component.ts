@@ -33,14 +33,18 @@ export class RtVideoComponent implements OnInit {
   public localVideo = true;
 
   snack: any;
-
+  timeStamp: Date = new Date();
   constructor(
     private ngxAgoraService: NgxAgoraService,
     private api: ApiService,
     private store: Store<{ user: User }>,
     private snackbar: MatSnackBar,
     private socket: Socket
-  ) {}
+  ) {
+    setInterval(() => {
+      this.timeStamp = new Date();
+    }, 1);
+  }
 
   ngOnInit(): void {
     this.startConference();
