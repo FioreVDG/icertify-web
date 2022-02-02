@@ -23,4 +23,10 @@ export class DocumentService {
   delete(id: String) {
     return this.http.start('delete', `/documents/${id}`);
   }
+  notarize(id: String) {
+    return this.http.start('put', `/documents/notarize/${id}`);
+  }
+  unnotarize(id: String) {
+    return this.http.start('put', `/documents/unnotarize/${id}`);
+  }
 }
