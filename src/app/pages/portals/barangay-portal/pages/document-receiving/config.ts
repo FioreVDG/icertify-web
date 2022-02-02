@@ -38,6 +38,7 @@ export const DOCUMENT_RECEIVING_TABLE: Column[] = [
     path: 'documentCount',
     type: 'text', // make count type
     selected: true,
+    isVirtual: true,
   },
   {
     title: 'Status',
@@ -45,6 +46,16 @@ export const DOCUMENT_RECEIVING_TABLE: Column[] = [
     path: 'transactionStatus',
     type: 'text',
     selected: true,
+    textColor: [
+      {
+        value: 'Done',
+        color: '#83b9a1' || 'green',
+      },
+      {
+        value: 'Pending',
+        color: '#F4D03F' || 'yellow',
+      },
+    ],
   },
 ];
 

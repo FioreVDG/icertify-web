@@ -4,6 +4,7 @@
     mat-raised-button
     *ngIf="selected.length && currTable !== 'Received'"
     style="position: relative; top: 9rem; left: 85%"
+    class="mark-btn"
     (click)="onMark()"
   >
     Mark as Enroute
@@ -21,5 +22,6 @@
     [checkBox]="isCheckbox"
     [bottomSheet]="bsConfig"
     (onCheckBoxSelect)="onCheckBoxSelect($event)"
+    [uniqueCheckbox]="true"
   ></app-table
 ></ng-container>

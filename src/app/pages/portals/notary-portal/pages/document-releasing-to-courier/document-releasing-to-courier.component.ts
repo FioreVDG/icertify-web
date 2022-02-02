@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/service/auth/auth.service';
 import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
 import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
 import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
+import { VIEW_TRANSACTION_TABLE_DOC_RELEASING } from '../document-receiving/view-transaction/config';
 import { ViewTransactionComponent } from '../document-receiving/view-transaction/view-transaction.component';
 import {
   DELIVERED_FIND,
@@ -17,6 +18,7 @@ import {
   FOR_PICKUP_FIND,
   NOTARY_DOC_RELEASING_TO_COURIER_CONFIG,
 } from './config';
+import { MarkAsEnrouteComponent } from './mark-as-enroute/mark-as-enroute.component';
 
 @Component({
   selector: 'app-document-releasing-to-courier',
@@ -36,13 +38,7 @@ export class DocumentReleasingToCourierComponent implements OnInit {
     pageIndex: 1,
     populate: [
       {
-        field: '_enrouteBy',
-      },
-      {
         field: '_receivedBy',
-      },
-      {
-        field: '_receivedByBarangay',
       },
     ],
     label: 'For Pickup',
@@ -76,18 +72,24 @@ export class DocumentReleasingToCourierComponent implements OnInit {
     console.log(event);
 
     let query: QueryParams = {
-      find: [],
+      find: event.find ? event.find : [],
       page: event.pageIndex || 1,
       limit: (event.pageSize || 10) + '',
       populates: event.populate ? event.populate : [],
     };
 
+    if (event.filter) query.filter = event.filter;
+    if (event.sort) {
+      query.sort =
+        (event.sort.direction === 'asc' ? '' : '-') + event.sort.active;
+    }
+
     if (event.label === 'For Pickup') {
-      query.find = FOR_PICKUP_FIND;
+      query.find = query.find.concat(FOR_PICKUP_FIND);
     } else if (event.label === 'Enroute') {
-      query.find = ENROUTE_FIND;
+      query.find = query.find.concat(ENROUTE_FIND);
     } else if (event.label === 'Delivered') {
-      query.find = DELIVERED_FIND;
+      query.find = query.find.concat(DELIVERED_FIND);
     }
 
     this.api.transaction.getAllFolder(query).subscribe(
@@ -123,7 +125,7 @@ export class DocumentReleasingToCourierComponent implements OnInit {
   onRowClick(event: any) {
     console.log(event);
     this.dialog.open(ViewTransactionComponent, {
-      data: event,
+      data: { event, column: VIEW_TRANSACTION_TABLE_DOC_RELEASING },
       height: 'auto',
       width: '70%',
     });
@@ -144,45 +146,59 @@ export class DocumentReleasingToCourierComponent implements OnInit {
   onMark() {
     let ids: any = [];
     this.selected.forEach((id: any) => {
-      ids.push(id._id);
+      ids.push(id);
     });
+
     this.dialog
-      .open(AreYouSureComponent, {
-        data: {
-          msg: 'Mark as received batch/es?',
-        },
+      .open(MarkAsEnrouteComponent, {
+        data: { selected: ids, me: this.me },
+        height: 'auto',
+        width: '60%',
       })
       .afterClosed()
-      .subscribe((res: any) => {
-        if (res) {
-          let apiQueries = ids.map((id: any) => {
-            return this.api.folder.update(
-              {
-                _enrouteBy: this.me._id,
-                location: 'Road',
-                datePickedFromNotary: new Date(),
-              },
-              id
-            );
-          });
-
-          forkJoin(apiQueries).subscribe((res: any) => {
-            console.log(res);
-            this.dialog
-              .open(ActionResultComponent, {
-                data: {
-                  success: true,
-                  msg: `Batch/es successfully enrouted.`,
-                  button: 'Okay',
-                },
-              })
-              .afterClosed()
-              .subscribe((res: any) => {
-                this.fetchData(this.page);
-                this.selected = [];
-              });
-          });
-        }
+      .subscribe((res) => {
+        if (res) this.fetchData(this.page);
       });
+
+    ///////////////////////
+    ///////////////////////
+    // this.dialog
+    //   .open(AreYouSureComponent, {
+    //     data: {
+    //       msg: 'Mark as received batch/es?',
+    //     },
+    //   })
+    //   .afterClosed()
+    //   .subscribe((res: any) => {
+    //     if (res) {
+    //       let apiQueries = ids.map((id: any) => {
+    //         return this.api.folder.update(
+    //           {
+    //             _enrouteBy: this.me._id,
+    //             location: 'Road',
+    //             datePickedFromNotary: new Date(),
+    //           },
+    //           id
+    //         );
+    //       });
+
+    //       forkJoin(apiQueries).subscribe((res: any) => {
+    //         console.log(res);
+    //         this.dialog
+    //           .open(ActionResultComponent, {
+    //             data: {
+    //               success: true,
+    //               msg: `Batch/es successfully enrouted.`,
+    //               button: 'Okay',
+    //             },
+    //           })
+    //           .afterClosed()
+    //           .subscribe((res: any) => {
+    //             this.fetchData(this.page);
+    //             this.selected = [];
+    //           });
+    //       });
+    //     }
+    //   });
   }
 }

@@ -16,6 +16,7 @@ import {
   RECEIVED_FIND,
 } from './config';
 import { ViewTransactionComponent } from './view-transaction/view-transaction.component';
+import { VIEW_TRANSACTION_TABLE } from './view-transaction/config';
 
 @Component({
   selector: 'app-document-receiving',
@@ -70,17 +71,23 @@ export class DocumentReceivingComponent implements OnInit {
     console.log(event);
 
     let query: QueryParams = {
-      find: [],
+      find: event.find ? event.find : [],
       page: event.pageIndex || 1,
       limit: (event.pageSize || 10) + '',
       populates: event.populate ? event.populate : [],
     };
 
     if (event.label === 'Received') {
-      query.find = RECEIVED_FIND;
+      query.find = query.find.concat(RECEIVED_FIND);
     } else {
-      query.find = FOR_RECEIVING_FIND;
+      query.find = query.find.concat(FOR_RECEIVING_FIND);
     }
+    if (event.filter) query.filter = event.filter;
+    if (event.sort) {
+      query.sort =
+        (event.sort.direction === 'asc' ? '' : '-') + event.sort.active;
+    }
+
     this.api.transaction.getAllFolder(query).subscribe((res: any) => {
       this.loading = false;
       console.log(res);
@@ -108,7 +115,7 @@ export class DocumentReceivingComponent implements OnInit {
   onRowClick(event: any) {
     console.log(event);
     this.dialog.open(ViewTransactionComponent, {
-      data: event,
+      data: { event, column: VIEW_TRANSACTION_TABLE },
       height: 'auto',
       width: '70%',
     });

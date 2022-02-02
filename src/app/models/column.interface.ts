@@ -2,6 +2,7 @@ export interface Column {
   title: string;
   breakpoint: Breakpoint;
   path: string;
+  isVirtual?: Boolean; // ADD THIS TO VIRTUALS set false
   subpath?: any;
   paths?: Array<string>;
   type: ColumnType;

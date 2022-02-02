@@ -5,9 +5,10 @@ import { DocumentReleasingToCourierRoutingModule } from './document-releasing-to
 import { DocumentReleasingToCourierComponent } from './document-releasing-to-courier.component';
 import { ComponentModule } from 'src/app/shared/components/component.module';
 import { MaterialModule } from 'src/app/shared/material/material.module';
+import { MarkAsEnrouteComponent } from './mark-as-enroute/mark-as-enroute.component';
 
 @NgModule({
-  declarations: [DocumentReleasingToCourierComponent],
+  declarations: [DocumentReleasingToCourierComponent, MarkAsEnrouteComponent],
   imports: [
     CommonModule,
     DocumentReleasingToCourierRoutingModule,

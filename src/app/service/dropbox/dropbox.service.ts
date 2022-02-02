@@ -58,8 +58,8 @@ export class DropboxService {
           observer.complete();
         })
         .catch((error: any) => {
-          //console.log(error);
-          observer.error(error);
+          console.log(error);
+          console.log(observer.error(error));
         });
     });
   }

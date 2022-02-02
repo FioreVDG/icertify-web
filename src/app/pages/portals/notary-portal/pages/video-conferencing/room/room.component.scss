@@ -3,7 +3,7 @@
 .flex-stretch {
   flex: 1 0 auto;
 }
-.header-wrapper {
+.header-wrap {
   display: flex;
   justify-content: flex-end;
   padding: 0.5rem;
@@ -63,7 +63,6 @@
     }
   }
 }
-
 mat-sidenav-container {
   height: 100%;
   overflow-x: hidden;
@@ -74,9 +73,60 @@ mat-sidenav-container {
     border: 1px #565656 solid;
     box-shadow: none;
     padding: 0.5rem;
-    width: 20vw;
+    padding-right: 0;
+    width: 22vw;
     color: #fff;
     background: #2e3235;
+  }
+
+  .img-txt {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .clickable {
+    cursor: pointer;
+    margin: 0;
+  }
+  .selected {
+    cursor: pointer;
+    font-weight: bold;
+    margin: 0;
+  }
+  .separator {
+    margin-top: 0.5rem;
+    width: 100%;
+    background-color: #79797975;
+    height: 2px;
+  }
+  .img-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 16rem;
+    padding: 0.3rem;
+    padding-bottom: 0rem;
+    margin-bottom: 0.4rem;
+    border: 2px solid #79797975;
+    border-radius: 0.25rem;
+    position: relative;
+    margin-right: 0.3rem;
+    img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+    .img-label {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      text-align: center;
+      color: #fff;
+      width: 100%;
+      padding: 0.5rem;
+      background-color: #26184a8b;
+      margin: 0;
+    }
   }
 
   .main-container {
