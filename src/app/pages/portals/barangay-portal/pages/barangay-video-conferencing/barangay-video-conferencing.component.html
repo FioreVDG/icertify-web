@@ -1,7 +1,8 @@
 <app-table
   style="position: relative"
-  [filterButtonConfig]="filterBtnConfig"
+  [columns]="columns"
   [loading]="loading"
+  (onRowClick)="onRowClick($event)"
   [dataSource]="dataSource"
   [dataLength]="dataLength"
   [pagination]="page"

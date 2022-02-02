@@ -1,5 +1,10 @@
+import { ApiService } from 'src/app/service/api/api.service';
 import { Component, OnInit } from '@angular/core';
-import { FILT_BTN } from './config';
+import { CONFERENCE_TABLE } from './config';
+import { Store } from '@ngrx/store';
+import { User } from 'src/app/models/user.interface';
+import { MatDialog } from '@angular/material/dialog';
+import { ViewBatchTransactionsComponent } from './view-batch-transactions/view-batch-transactions.component';
 
 @Component({
   selector: 'app-barangay-video-conferencing',
@@ -7,24 +12,65 @@ import { FILT_BTN } from './config';
   styleUrls: ['./barangay-video-conferencing.component.scss'],
 })
 export class BarangayVideoConferencingComponent implements OnInit {
-  filterBtnConfig = FILT_BTN;
+  columns = CONFERENCE_TABLE;
   loading: boolean = true;
   dataSource = [];
   dataLength: number = 0;
   page = {
     pageSize: 10,
     pageIndex: 1,
-    populate: [],
+    populate: [
+      {
+        field: '_notaryId',
+      },
+    ],
   };
   currentTable: any;
-  constructor() {}
+  me: any;
+  constructor(
+    private api: ApiService,
+    private store: Store<{ user: User }>,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
-    this.fetchData(this.page);
+    this.store.select('user').subscribe((res: User) => {
+      this.me = res;
+      console.log(res);
+      this.fetchData(this.page);
+    });
   }
 
   fetchData(event: any) {
     console.log(event);
+    this.loading = true;
+
+    // event.label = event.label === undefined ? 'For Scheduling' : event.label;
+
+    console.log(event);
+    let query = {
+      find: [
+        {
+          field: '_brgyId',
+          operator: '=',
+          value: this.me._brgyId,
+        },
+      ],
+      page: event.pageIndex || 1,
+      limit: (event.pageSize || 10) + '',
+      filter: event.filter,
+      populates: event.populate,
+    };
+
+    console.log(query);
+    this.api.conference.getAll(query).subscribe((res: any) => {
+      this.loading = false;
+      console.log(res);
+      this.dataSource = res.env.conferences;
+      this.dataLength = res.total;
+    });
+
+    this.currentTable = event.label;
   }
 
   tableUpdateEmit(event: any) {
@@ -34,5 +80,14 @@ export class BarangayVideoConferencingComponent implements OnInit {
     setTimeout(() => {
       this.loading = false;
     }, 1000);
+  }
+
+  onRowClick(event: any) {
+    console.log(event);
+    this.dialog.open(ViewBatchTransactionsComponent, {
+      data: event,
+      height: 'auto',
+      width: '70%',
+    });
   }
 }
