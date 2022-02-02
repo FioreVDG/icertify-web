@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/service/auth/auth.service';
 import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
 import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
 import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
+import { VIEW_TRANSACTION_TABLE_DOC_RELEASING } from '../document-receiving/view-transaction/config';
 import { ViewTransactionComponent } from '../document-receiving/view-transaction/view-transaction.component';
 import {
   DELIVERED_FIND,
@@ -71,18 +72,24 @@ export class DocumentReleasingToCourierComponent implements OnInit {
     console.log(event);
 
     let query: QueryParams = {
-      find: [],
+      find: event.find ? event.find : [],
       page: event.pageIndex || 1,
       limit: (event.pageSize || 10) + '',
       populates: event.populate ? event.populate : [],
     };
 
+    if (event.filter) query.filter = event.filter;
+    if (event.sort) {
+      query.sort =
+        (event.sort.direction === 'asc' ? '' : '-') + event.sort.active;
+    }
+
     if (event.label === 'For Pickup') {
-      query.find = FOR_PICKUP_FIND;
+      query.find = query.find.concat(FOR_PICKUP_FIND);
     } else if (event.label === 'Enroute') {
-      query.find = ENROUTE_FIND;
+      query.find = query.find.concat(ENROUTE_FIND);
     } else if (event.label === 'Delivered') {
-      query.find = DELIVERED_FIND;
+      query.find = query.find.concat(DELIVERED_FIND);
     }
 
     this.api.transaction.getAllFolder(query).subscribe(
@@ -118,7 +125,7 @@ export class DocumentReleasingToCourierComponent implements OnInit {
   onRowClick(event: any) {
     console.log(event);
     this.dialog.open(ViewTransactionComponent, {
-      data: event,
+      data: { event, column: VIEW_TRANSACTION_TABLE_DOC_RELEASING },
       height: 'auto',
       width: '70%',
     });

@@ -1,11 +1,11 @@
 import { Column } from 'src/app/models/column.interface';
 import { BottomSheetItem } from 'src/app/models/bottomsheet.interface';
 
-export const DOCUMENT_RECEIVING_TABLE: Column[] = [
+export const BATCH_TRANSACTION_TABLE: Column[] = [
   {
-    title: 'Transaction Reference Code',
+    title: 'Batch Reference Code',
     breakpoint: 'sm',
-    path: 'refCode',
+    path: '_folderId.folderName',
     type: 'text',
     selected: true,
   },
@@ -18,17 +18,16 @@ export const DOCUMENT_RECEIVING_TABLE: Column[] = [
     selected: true,
   },
   {
-    title: 'Uploaded By',
+    title: 'Transaction Reference Code',
     breakpoint: 'sm',
-    path: '_createdBy',
-    paths: ['_createdBy.firstName', '_createdBy.lastName'],
-    type: 'special',
+    path: 'refCode',
+    type: 'text',
     selected: true,
   },
   {
-    title: 'Date and Time Received',
+    title: 'Date and Time Picked up',
     breakpoint: 'sm',
-    path: 'createdAt',
+    path: '_folderId.datePickedFromBarangay',
     type: 'date',
     selected: true,
   },
@@ -38,28 +37,15 @@ export const DOCUMENT_RECEIVING_TABLE: Column[] = [
     path: 'documentCount',
     type: 'text', // make count type
     selected: true,
-    isVirtual: true,
-  },
-  {
-    title: 'Status',
-    breakpoint: 'sm',
-    path: 'transactionStatus',
-    type: 'text',
-    selected: true,
-    textColor: [
-      {
-        value: 'Done',
-        color: '#83b9a1' || 'green',
-      },
-      {
-        value: 'Pending',
-        color: '#F4D03F' || 'yellow',
-      },
-    ],
   },
 ];
 
-export const DOC_RECEIVING_BOTTOMSHEET: BottomSheetItem[] = [
+export const BATCH_TRANSACTION_BOTTOMSHEET: BottomSheetItem[] = [
+  {
+    label: 'Start Video Conference',
+    action: 'startConference',
+    icon: 'videocam',
+  },
   { label: 'View Document/s', action: 'viewDoc', icon: 'description' },
   {
     label: 'View Personal Information/Proof of Identity',

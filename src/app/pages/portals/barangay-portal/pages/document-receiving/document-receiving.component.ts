@@ -48,7 +48,7 @@ export class DocumentReceivingComponent implements OnInit {
     this.page.pageIndex = event.pageIndex;
     this.page.pageSize = event.pageSize;
     let query: QueryParams = {
-      find: [],
+      find: event.find ? event.find : [],
       page: event.pageIndex,
       limit: event.pageSize + '',
       populates: [

@@ -1,10 +1,10 @@
 <div mat-dialog-title>
-  <h3>{{ data.event.folderName ? data.event.folderName : "Batch Code" }}</h3>
+  <h3>{{ data._id ? data._id : "Schedule" }}</h3>
   <mat-icon mat-dialog-close class="close-btn" color="warn">close</mat-icon>
 </div>
 
 <app-table
-  [columns]="data.column"
+  [columns]="columns"
   [dataSource]="dataSource"
   [dataLength]="dataLength"
   [pagination]="page"
