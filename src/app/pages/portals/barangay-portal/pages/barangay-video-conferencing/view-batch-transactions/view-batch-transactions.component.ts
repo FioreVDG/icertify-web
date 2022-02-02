@@ -13,6 +13,7 @@ import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
 import { RegistrantFormComponent } from 'src/app/shared/components/registrant-form/registrant-form.component';
 import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachments/view-attachments.component';
 import { ViewVideoComponent } from 'src/app/shared/components/view-video/view-video.component';
+import { BrgyRoomComponent } from '../brgy-room/brgy-room.component';
 import {
   BATCH_TRANSACTION_BOTTOMSHEET,
   BATCH_TRANSACTION_TABLE,
@@ -106,7 +107,7 @@ export class ViewBatchTransactionsComponent implements OnInit {
   }
 
   startConference(selected: any) {
-    this.dialog.open(RoomComponent, {
+    this.dialog.open(BrgyRoomComponent, {
       data: selected,
       minHeight: '100vh',
       minWidth: '100vw',
