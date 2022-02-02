@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>Create SLA</h1>
+<div mat-dialog-content>
+  <app-form
+    #sla
+    [formfields]="slaFormFields"
+    (formInitiated)="formInitialized($event)"
+    (formListener)="formListener($event)"
+    [obj]="obj"
+    *ngIf="!loading"
+  >
+  </app-form>
+</div>
+<div mat-dialog-actions align="end" *ngIf="isFormInitiated">
+  <button mat-button color="warn" mat-dialog-close>Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="addToSLA()"
+    [disabled]="!sla || !sla.form.valid"
+  >
+    Create
+  </button>
+</div>

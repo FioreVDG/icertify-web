@@ -49,7 +49,7 @@ export class UtilService {
   }
   deepFind(obj: any, path: string | Array<string | number>): any {
     // console.log(path);
-    if (!obj) return '';
+    if (!obj && obj != 0) return '';
     if (obj && !path) return '';
 
     if (typeof path == 'string') return this.deepFind(obj, path.split('.'));

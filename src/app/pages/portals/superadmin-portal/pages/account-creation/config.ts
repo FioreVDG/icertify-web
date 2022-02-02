@@ -17,6 +17,6 @@ export const MENU = [
   {
     title: 'QC LEGAL DEPARTMENT',
     action: 'qclegal',
-    logo: 'location_city',
+    logo: '../../../../../../assets/images/quezoncity logo.png',
   },
 ];
