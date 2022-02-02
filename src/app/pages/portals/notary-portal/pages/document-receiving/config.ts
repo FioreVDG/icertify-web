@@ -50,12 +50,13 @@ export const NOTARY_DOC_RECEIVING_FILT_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         breakpoint: 'sm',
         path: 'transactionCount',
         type: 'text',
+        isVirtual: true,
         selected: true,
       },
     ],
   },
   {
-    label: 'Received By',
+    label: 'Received',
     selected: false,
     isCheckbox: false,
     populate: [
@@ -99,6 +100,7 @@ export const NOTARY_DOC_RECEIVING_FILT_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         title: 'No. of Transaction',
         breakpoint: 'sm',
         path: 'transactionCount',
+        isVirtual: true,
         type: 'text',
         selected: true,
       },

@@ -1,5 +1,6 @@
 import { BottomSheetItem } from 'src/app/models/bottomsheet.interface';
 import { FILTER_BUTTON_COLUMN } from 'src/app/models/filter-button-conf.interface';
+import { Find } from 'src/app/models/queryparams.interface';
 
 export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
   {
@@ -59,7 +60,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         title: 'No. of Documents',
         breakpoint: 'sm',
         path: 'documentCount',
-
+        isVirtual: true,
         type: 'text',
         selected: true,
       },
@@ -109,6 +110,18 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
     ],
+  },
+];
+export const ENROUTE_FIND_BATCH: Find[] = [
+  {
+    field: 'folderStatus',
+    operator: '[nin]=',
+    value: 'Done,Incomplete',
+  },
+  {
+    field: 'location',
+    operator: '=',
+    value: 'Road',
   },
 ];
 

@@ -39,9 +39,9 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
           selected: true,
         },
         {
-          title: 'Date and Time Assessed',
+          title: 'Date and Time Completed',
           breakpoint: 'sm',
-          path: 'dateAssessed',
+          path: 'dateCompleted',
           type: 'date',
           selected: true,
         },
@@ -51,6 +51,7 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
           path: 'transactionCount',
           type: 'text',
           selected: true,
+          isVirtual: true,
         },
         {
           title: 'Status',
@@ -127,6 +128,7 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
           title: 'Transaction Count',
           breakpoint: 'sm',
           path: 'transactionCount',
+          isVirtual: true,
           type: 'text',
           selected: true,
         },
@@ -190,6 +192,7 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
         {
           title: 'Transaction Count',
           breakpoint: 'sm',
+          isVirtual: true,
           path: 'transactionCount',
           type: 'text',
           selected: true,

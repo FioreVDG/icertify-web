@@ -2,7 +2,11 @@ import { DropboxService } from './../../../../../service/dropbox/dropbox.service
 import { ActionResultComponent } from './../../../../../shared/dialogs/action-result/action-result.component';
 import { AreYouSureComponent } from './../../../../../shared/dialogs/are-you-sure/are-you-sure.component';
 import { ApiService } from './../../../../../service/api/api.service';
-import { FILT_BTN_CONFIG, BATCH_DELIVERY_BOTTOMSHEET } from './config';
+import {
+  FILT_BTN_CONFIG,
+  BATCH_DELIVERY_BOTTOMSHEET,
+  ENROUTE_FIND_BATCH,
+} from './config';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -10,6 +14,9 @@ import { ViewDocumentComponent } from 'src/app/shared/components/view-document/v
 import { RegistrantFormComponent } from 'src/app/shared/components/registrant-form/registrant-form.component';
 import { ViewVideoComponent } from 'src/app/shared/components/view-video/view-video.component';
 import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachments/view-attachments.component';
+import { ViewTransactionComponent } from '../../../notary-portal/pages/document-receiving/view-transaction/view-transaction.component';
+import { TRANSAC_TABLE_COLUMN } from './batch-folder/config';
+import { Find } from 'src/app/models/queryparams.interface';
 
 @Component({
   selector: 'app-batch-delivery-management',
@@ -53,22 +60,24 @@ export class BatchDeliveryManagementComponent implements OnInit {
     console.log(event);
 
     let qry = {
-      find: [],
+      find: event.find ? event.find : [],
       page: event.pageIndex || 1,
       limit: (event.pageSize || 10) + '',
       filter: event.filter,
       populates: event.populate ? event.populate : [],
     };
+    if (event.filter) qry.filter = event.filter;
 
-    console.log(qry);
     let api: any;
     if (event && event.label === 'Enroute') {
+      qry.find = qry.find.concat(ENROUTE_FIND_BATCH);
       api = this.api.transaction.getAllFolder(qry);
     } else {
-      qry.populates.push({ field: '_documents' });
+      qry.populates.push({ field: '_documents', select: '-__v' });
       api = this.api.transaction.getAllForBatching(qry);
     }
 
+    console.log(qry);
     api.subscribe((res: any) => {
       this.loading = false;
       console.log(res);
@@ -174,10 +183,15 @@ export class BatchDeliveryManagementComponent implements OnInit {
   }
 
   onViewTransac(obj: any) {
-    this.router.navigate([
-      `/barangay-portal/batch-delivery-management/batch-folder`,
-      obj._id,
-    ]);
+    this.dialog.open(ViewTransactionComponent, {
+      data: { event: obj, column: TRANSAC_TABLE_COLUMN },
+      height: 'auto',
+      width: '70%',
+    });
+    // this.router.navigate([
+    //   `/barangay-portal/batch-delivery-management/batch-folder`,
+    //   obj._id,
+    // ]);
   }
 
   onRouteActivate() {

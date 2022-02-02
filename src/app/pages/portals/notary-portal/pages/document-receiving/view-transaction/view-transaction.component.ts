@@ -21,7 +21,6 @@ import { VIEW_TRANSACTION_BOTTOMSHEET, VIEW_TRANSACTION_TABLE } from './config';
 })
 export class ViewTransactionComponent implements OnInit {
   dataSource: Array<any> = [];
-  columns: Column[] = VIEW_TRANSACTION_TABLE;
   bottomSheet = VIEW_TRANSACTION_BOTTOMSHEET;
   dataLength: number = 0;
   page: any = {
@@ -52,12 +51,16 @@ export class ViewTransactionComponent implements OnInit {
         {
           field: '_folderId',
           operator: '=',
-          value: this.data._id,
+          value: this.data.event._id,
         },
       ],
       page: event.pageIndex,
       limit: event.pageSize + '',
-      populates: [{ field: '_folderId' }, { field: '_documents' }],
+      populates: [
+        { field: '_folderId' },
+        { field: '_documents' },
+        { field: '_createdBy' },
+      ],
     };
     if (event.filter) query.filter = event.filter;
     if (event.sort) {
