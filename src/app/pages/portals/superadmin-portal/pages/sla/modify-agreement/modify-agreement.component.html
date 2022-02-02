@@ -1,0 +1,60 @@
+<h1 mat-dialog-title>Modify Agreement</h1>
+<div mat-dialog-content>
+  <small>{{ data.type }}</small>
+  <h3 style="margin-top: 0">
+    {{
+      data.type === "Barangay"
+        ? data._userId.address.barangay.brgyDesc
+        : data._userId.firstName + " " + data._userId.lastName
+    }}
+  </h3>
+
+  <div class="mat-elevation-z1 section">
+    <form [formGroup]="agreementForm" class="grid">
+      <mat-form-field class="col-12">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="label" />
+      </mat-form-field>
+      <mat-form-field class="col-12">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" rows="5"></textarea>
+      </mat-form-field>
+      <ng-container formGroupName="time">
+        <mat-form-field class="col-6">
+          <mat-label>Time Start</mat-label>
+          <input matInput type="time" formControlName="start" />
+          <!-- <mat-select formControlName="start">
+            <mat-option *ngFor="let time of times" [value]="time + ' AM'">
+              {{ time }} AM
+            </mat-option>
+            <mat-option *ngFor="let time of times" [value]="time + ' PM'">
+              {{ time }} PM
+            </mat-option>
+          </mat-select> -->
+        </mat-form-field>
+
+        <mat-form-field class="col-6">
+          <mat-label>Time End</mat-label>
+          <input matInput type="time" formControlName="end" />
+        </mat-form-field>
+
+        <!-- <mat-form-field class="col-6">
+          <mat-label>Time Start</mat-label>
+          <mat-select formControlName="end">
+            <mat-option *ngFor="let time of times" [value]="time + ' AM'">
+              {{ time }} AM
+            </mat-option>
+            <mat-option *ngFor="let time of times" [value]="time + ' PM'">
+              {{ time }} PM
+            </mat-option>
+          </mat-select>
+        </mat-form-field> -->
+      </ng-container>
+    </form>
+  </div>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button color="warn" mat-dialog-close>Cancel</button>
+  <button mat-flat-button color="primary" (click)="onSubmit()">Create</button>
+</div>

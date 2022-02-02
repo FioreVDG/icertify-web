@@ -37,6 +37,7 @@
 
 <app-table
   [dataSource]="dataSource"
+  (onRowClick)="onRowClick($event)"
   [dataLength]="dataLength"
   [pagination]="page"
   [loading]="loading"

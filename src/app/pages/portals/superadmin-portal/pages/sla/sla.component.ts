@@ -7,6 +7,7 @@ import {
   SLA_COLUMNS,
   SLA_COLUMNS_CONFIG,
 } from './config';
+import { ModifyAgreementComponent } from './modify-agreement/modify-agreement.component';
 import { UpsertSlaComponent } from './upsert-sla/upsert-sla.component';
 
 @Component({
@@ -97,5 +98,13 @@ export class SlaComponent implements OnInit {
       .subscribe((res) => {
         if (res) this.fetchData(this.page);
       });
+  }
+
+  onRowClick(event: any) {
+    this.dialog.open(ModifyAgreementComponent, {
+      width: '100%',
+      disableClose: true,
+      data: event,
+    });
   }
 }
