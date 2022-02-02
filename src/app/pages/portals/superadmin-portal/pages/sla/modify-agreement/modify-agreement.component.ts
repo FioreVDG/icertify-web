@@ -1,6 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ApiService } from 'src/app/service/api/api.service';
+import { UtilService } from 'src/app/service/util/util.service';
+import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
+import { COLLECTIONS, MOCK } from './config';
 
 @Component({
   selector: 'app-modify-agreement',
@@ -20,25 +24,75 @@ export class ModifyAgreementComponent implements OnInit {
     path: new FormControl('', [Validators.required]),
   });
 
+  displayTypes = ['Tabular', 'Pie Chart', 'Line Graph', 'Bar Graph'];
+  collections = COLLECTIONS;
+  properties: Array<{ label: string; path: string }> = [];
+  agreementIndex = -1;
+
   // TODO: Create interface of agreement
   agreements: Array<any> = [];
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private api: ApiService,
+    private util: UtilService,
+    private dialog: MatDialog
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.data);
+    this.agreements = this.data.agreements;
+    this.agreementForm.get('collectionName')?.valueChanges.subscribe((res) => {
+      this.properties =
+        this.collections.find((o) => o.name === res)?.paths || [];
+    });
+  }
+
+  editAgreement(i: number) {
+    this.agreementIndex = i;
+    this.agreementForm.setValue(this.agreements[i]);
+    console.log(this.agreementIndex);
+  }
 
   pushToAgreements() {
-    this.agreements.push(this.agreementForm.getRawValue());
+    if (this.agreementIndex < 0)
+      this.agreements.push(this.agreementForm.getRawValue());
+    else
+      this.agreements.splice(
+        this.agreementIndex,
+        1,
+        this.agreementForm.getRawValue()
+      );
+
+    this.data.agreements = this.agreements;
+    let loader = this.util.startLoading('Syncing Changes...');
+    this.api.sla.update(this.data, this.data._id).subscribe(
+      (res) => {
+        this.agreementForm.reset();
+        console.log(this.agreements);
+        this.agreementIndex = -1;
+        this.util.stopLoading(loader);
+      },
+      (err) => {
+        this.dialog.open(ActionResultComponent, {
+          data: {
+            msg: 'Error: ' + err.error.message,
+            success: false,
+            button: 'Okay',
+          },
+        });
+      }
+    );
   }
 
   removeFromAgreements(i: number) {
     this.agreements.splice(i, 1);
   }
 
-  onSubmit() {
-    console.log(this.timeToString(this.agreementForm.getRawValue().time.start));
-    console.log(this.timeToString(this.agreementForm.getRawValue().time.end));
-  }
+  // onSubmit() {
+  //   console.log(this.timeToString(this.agreementForm.getRawValue().time.start));
+  //   console.log(this.timeToString(this.agreementForm.getRawValue().time.end));
+  // }
 
   timeToString(time: any) {
     // 12 hours format
