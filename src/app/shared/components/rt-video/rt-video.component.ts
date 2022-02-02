@@ -59,12 +59,12 @@ export class RtVideoComponent implements OnInit {
   }
 
   startConference() {
-    window.addEventListener('beforeunload', (e: any) => {
-      var confirmationMessage = 'o/';
-      (e || window.event).returnValue = confirmationMessage;
-      this.leave();
-      return confirmationMessage;
-    });
+    // window.addEventListener('beforeunload', (e: any) => {
+    //   var confirmationMessage = 'o/';
+    //   (e || window.event).returnValue = confirmationMessage;
+    //   this.leave();
+    //   return confirmationMessage;
+    // });
     this.snack = this.snackbar.open('Entering Room...', undefined);
     this.api.agora.getToken(this.channelName).subscribe((res: any) => {
       // console.log(

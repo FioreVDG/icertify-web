@@ -33,6 +33,21 @@ export class VideoConferencingComponent implements OnInit {
       },
     ],
   };
+  pageLeave = {
+    pageSize: 10,
+    pageIndex: 1,
+    label: 'Scheduled',
+    populate: [
+      {
+        field: '_receivedBy',
+        select: 'firstName,lastName',
+      },
+      {
+        field: '_transactions',
+        select: '-__v',
+      },
+    ],
+  };
   countSelected: any;
   constructor(private api: ApiService, private dialog: MatDialog) {}
 
@@ -109,11 +124,18 @@ export class VideoConferencingComponent implements OnInit {
       });
   }
   onCreateMeeting() {
-    this.dialog.open(RoomComponent, {
-      data: this.selected,
-      minHeight: '100vh',
-      minWidth: '100vw',
-      panelClass: 'dialog-no-padding',
-    });
+    this.dialog
+      .open(RoomComponent, {
+        data: this.selected,
+        minHeight: '100vh',
+        minWidth: '100vw',
+        panelClass: 'dialog-no-padding',
+      })
+      .afterClosed()
+      .subscribe((res: any) => {
+        if (res) {
+          this.fetchData(this.pageLeave);
+        }
+      });
   }
 }
