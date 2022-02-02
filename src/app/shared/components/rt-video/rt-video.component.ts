@@ -1,6 +1,7 @@
+import { MatDialog } from '@angular/material/dialog';
 import { Socket } from 'ngx-socket-io';
 import { ApiService } from './../../../service/api/api.service';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   AgoraClient,
   ClientEvent,
@@ -11,6 +12,7 @@ import {
 import { Store } from '@ngrx/store';
 import { User } from 'src/app/models/user.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AreYouSureComponent } from '../../dialogs/are-you-sure/are-you-sure.component';
 
 @Component({
   selector: 'app-rt-video',
@@ -32,6 +34,8 @@ export class RtVideoComponent implements OnInit {
   public localAudio = true;
   public localVideo = true;
 
+  @Output() onLeaveMeeting: any = new EventEmitter<any>();
+
   snack: any;
   timeStamp: Date = new Date();
   constructor(
@@ -39,7 +43,8 @@ export class RtVideoComponent implements OnInit {
     private api: ApiService,
     private store: Store<{ user: User }>,
     private snackbar: MatSnackBar,
-    private socket: Socket
+    private socket: Socket,
+    private dialog: MatDialog
   ) {
     setInterval(() => {
       this.timeStamp = new Date();
@@ -272,11 +277,21 @@ export class RtVideoComponent implements OnInit {
   }
 
   leave() {
-    this.localStream.stop();
-    this.localStream.close();
     this.client.leave(
       () => {
-        console.log('Leave channel successfully');
+        this.dialog
+          .open(AreYouSureComponent, {
+            data: { msg: 'you want to leave', isOthers: true },
+          })
+          .afterClosed()
+          .subscribe((res: any) => {
+            if (res) {
+              this.onLeaveMeeting.emit();
+              this.localStream.stop();
+              this.localStream.close();
+              console.log('Leave channel successfully');
+            }
+          });
       },
       (err) => {
         console.log('Leave channel failed');

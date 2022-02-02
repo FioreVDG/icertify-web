@@ -1,3 +1,4 @@
+import { AreYouSureComponent } from './../../../../../../shared/dialogs/are-you-sure/are-you-sure.component';
 import { MarkAsNotarizedComponent } from './mark-as-notarized/mark-as-notarized.component';
 import { USER_INFO } from './config';
 import { DropboxService } from './../../../../../../service/dropbox/dropbox.service';
@@ -15,7 +16,6 @@ import { WebcamInitError } from 'ngx-webcam';
 import { Socket } from 'ngx-socket-io';
 import { Store } from '@ngrx/store';
 import { User } from 'src/app/models/user.interface';
-import { NgxCaptureService } from 'ngx-capture';
 // import * as htmlToImage from 'html-to-image';
 import html2canvas from 'html2canvas';
 
@@ -184,6 +184,10 @@ export class RoomComponent implements OnInit {
     console.log(this.currentTransaction);
   }
 
+  imageLoaded(index: number) {
+    this._images[index].loaded = true;
+  }
+
   selectDocumentToView(event: any) {
     console.log(event);
     this.currentDocument = event;
@@ -213,8 +217,18 @@ export class RoomComponent implements OnInit {
 
   async getTempLink(data: any) {
     console.log(data);
-    const response = await this.dbx.getTempLink(data).toPromise();
+    const response = await this.dbx
+      .getTempLink(data)
+      .toPromise()
+      .catch((err: any) => {
+        console.log(err);
+      });
     console.log(response);
     return response.result.link;
+  }
+
+  leaveMeeting(event: any) {
+    console.log(event);
+    this.dialogRef.close();
   }
 }

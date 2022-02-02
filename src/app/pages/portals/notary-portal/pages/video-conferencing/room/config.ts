@@ -24,4 +24,16 @@ export const USER_INFO = [
     label: 'Sex',
     path: 'gender',
   },
+  {
+    label: 'Address',
+    path: 'address',
+    type: 'special',
+    paths: [
+      'address.address1',
+      'address.address2',
+      'address.barangay.brgyDesc',
+      'address.cityMun.citymunDesc',
+      'address.province.provDesc',
+    ],
+  },
 ];
