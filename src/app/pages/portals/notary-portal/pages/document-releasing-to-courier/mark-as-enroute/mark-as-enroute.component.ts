@@ -45,8 +45,6 @@ export class MarkAsEnrouteComponent implements OnInit {
   submit() {
     let toAdd = {
       riderNotaryToBarangay: { ...this.toAddData },
-      _enrouteBy: this.data.me._id,
-      location: 'Road',
       datePickedFromNotary: new Date(),
     };
     console.log(toAdd);
