@@ -11,6 +11,7 @@ import { TransactionService } from './transaction/transaction.service';
 import { RoleService } from './role/role.service';
 import { ConferenceService } from './conference/conference.service';
 import { SlaService } from './sla/sla.service';
+import { RoomService } from './room/room.service';
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +28,7 @@ export class ApiService {
     public role: RoleService,
     public conference: ConferenceService,
     public agora: AgoraService,
-    public sla: SlaService
+    public sla: SlaService,
+    public room: RoomService
   ) {}
 }

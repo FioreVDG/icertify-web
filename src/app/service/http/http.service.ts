@@ -62,7 +62,7 @@ export class HttpService {
     // console.log(option);
     endpoint = URL + endpoint;
     var queryStr = queryArray.join('&') ? '?' + queryArray.join('&') : '';
-    console.log(endpoint + queryStr);
+    // console.log(endpoint + queryStr);
     switch (method) {
       case 'get': // get
         return this.http.get(endpoint + queryStr, option);

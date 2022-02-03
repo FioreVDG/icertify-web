@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { User } from 'src/app/models/user.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewBatchTransactionsComponent } from './view-batch-transactions/view-batch-transactions.component';
+import { QueryParams } from 'src/app/models/queryparams.interface';
 
 @Component({
   selector: 'app-barangay-video-conferencing',
@@ -39,6 +40,8 @@ export class BarangayVideoConferencingComponent implements OnInit {
       console.log(res);
       this.fetchData(this.page);
     });
+
+    this.getActiveConference();
   }
 
   fetchData(event: any) {
@@ -89,5 +92,25 @@ export class BarangayVideoConferencingComponent implements OnInit {
       height: 'auto',
       width: '70%',
     });
+  }
+
+  getActiveConference() {
+    console.log('check here');
+    let query: QueryParams = {
+      find: [],
+    };
+    this.api.room.get(query).subscribe(
+      (res: any) => {
+        console.log(res.env.room);
+        setTimeout(() => {
+          this.getActiveConference();
+        }, 5000);
+      },
+      (err) => {
+        setTimeout(() => {
+          this.getActiveConference();
+        }, 5000);
+      }
+    );
   }
 }
