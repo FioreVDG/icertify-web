@@ -209,7 +209,7 @@ export class RoomComponent implements OnInit {
               const loader2 = this.util.startLoading(
                 'Checking room details...'
               );
-              this.room.delete(res.env.room[0]._id).subscribe(
+              this.room.delete(this.currentRoom).subscribe(
                 (res: any) => {
                   console.log(res);
                   if (res) this.util.stopLoading(loader2);
@@ -231,6 +231,7 @@ export class RoomComponent implements OnInit {
   }
 
   async initiateTransaction() {
+    const loader = this.util.startLoading('Initiating room details...');
     this.currentTransaction = this.transactions[this.currentTransactionIndex];
 
     this.selectDocumentToView(this.currentTransaction._documents[0]);
@@ -253,7 +254,6 @@ export class RoomComponent implements OnInit {
     // FOR ROOM HERE
     // FOR ROOM HERE
     let query: QueryParams = { find: [] };
-    const loader = this.util.startLoading('Initiating room details...');
     this.room.get(query).subscribe((res: any) => {
       console.log(res);
       console.log('ITO YUNG EXISTING ROOM', res.env.room);
@@ -269,9 +269,10 @@ export class RoomComponent implements OnInit {
           const loader2 = this.util.startLoading('Fiinalizing room details...');
           this.room.create(roomToAdd).subscribe(
             (res: any) => {
+              console.log(res);
               if (res) {
-                this.currentRoom = res.env.room[0]._id;
                 this.util.stopLoading(loader2);
+                this.currentRoom = res.env.room[0]._id;
                 console.log(res);
                 console.log('ITO YUNG EXISTING ROOM', res.env.room);
               }

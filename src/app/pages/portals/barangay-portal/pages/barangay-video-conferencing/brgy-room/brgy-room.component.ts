@@ -125,6 +125,7 @@ export class BrgyRoomComponent implements OnInit {
   }
 
   getExpectedParticipants() {
+    let filtMySched: any;
     let query = {
       find: [],
       populates: [{ field: '_notaryId' }],
@@ -138,6 +139,14 @@ export class BrgyRoomComponent implements OnInit {
           console.log(folder);
         });
       });
+      filtMySched = this.schedules.filter(
+        (o: any) => o._id === this.data.obj._folderId._conferenceId
+      );
+      if (filtMySched.length) {
+        this.currentScheduleId = filtMySched[0]._id;
+        this.notaryDetails = filtMySched._notaryId;
+        console.log(filtMySched);
+      }
     });
   }
 
