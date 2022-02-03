@@ -209,7 +209,7 @@ export class RoomComponent implements OnInit {
               const loader2 = this.util.startLoading(
                 'Checking room details...'
               );
-              this.room.delete(res.env.room[0]._id).subscribe(
+              this.room.delete(this.currentRoom).subscribe(
                 (res: any) => {
                   console.log(res);
                   if (res) this.util.stopLoading(loader2);
