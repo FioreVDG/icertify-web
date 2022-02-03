@@ -153,6 +153,7 @@ export class DocumentReceivingComponent implements OnInit {
             return this.api.folder.update(
               {
                 _receivedBy: this.me._id,
+                _notaryId: this.me._notaryId,
                 location: 'Notary',
                 locationStatus: 'Received by Notary',
                 folderStatus: 'For Scheduling',

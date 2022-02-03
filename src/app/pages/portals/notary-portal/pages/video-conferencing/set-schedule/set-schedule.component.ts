@@ -72,7 +72,7 @@ export class SetScheduleComponent implements OnInit {
             })
             .afterClosed()
             .subscribe((res: any) => {
-              if (res) this.dialogRef.close();
+              if (res) this.dialogRef.close(res);
             });
         }
       },

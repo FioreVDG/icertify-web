@@ -1,0 +1,20 @@
+.vc-card {
+  padding: 16px;
+  background-color: #26184a;
+  color: white;
+  h1,
+  p {
+    margin: 0;
+  }
+  small span {
+    color: #6b55a1;
+  }
+  .queue {
+    font-size: 4rem;
+  }
+
+  .queue-card {
+    background-color: white;
+    color: #26184a;
+  }
+}

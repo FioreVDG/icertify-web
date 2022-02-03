@@ -1,3 +1,4 @@
+import { BrgyRoomComponent } from './brgy-room/brgy-room.component';
 import { ApiService } from 'src/app/service/api/api.service';
 import { Component, OnInit } from '@angular/core';
 import { CONFERENCE_TABLE } from './config';
@@ -5,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { User } from 'src/app/models/user.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewBatchTransactionsComponent } from './view-batch-transactions/view-batch-transactions.component';
+import { QueryParams } from 'src/app/models/queryparams.interface';
 
 @Component({
   selector: 'app-barangay-video-conferencing',
@@ -27,6 +29,8 @@ export class BarangayVideoConferencingComponent implements OnInit {
   };
   currentTable: any;
   me: any;
+  // TODO: room interface
+  activeRooms: Array<any> = [];
   constructor(
     private api: ApiService,
     private store: Store<{ user: User }>,
@@ -39,6 +43,8 @@ export class BarangayVideoConferencingComponent implements OnInit {
       console.log(res);
       this.fetchData(this.page);
     });
+    this.getActive = true;
+    this.getActiveConference();
   }
 
   fetchData(event: any) {
@@ -89,5 +95,63 @@ export class BarangayVideoConferencingComponent implements OnInit {
       height: 'auto',
       width: '70%',
     });
+  }
+
+  getActive = false;
+  getActiveConference() {
+    console.log('check here');
+    let query: QueryParams = {
+      find: [],
+    };
+    this.api.room.get(query).subscribe(
+      (res: any) => {
+        console.log(res.env.room);
+        this.activeRooms = res.env.room || [];
+        if (this.getActive)
+          setTimeout(() => {
+            this.getActiveConference();
+          }, 5000);
+      },
+      (err) => {
+        if (this.getActive)
+          setTimeout(() => {
+            this.getActiveConference();
+          }, 5000);
+      }
+    );
+  }
+
+  enterNow(room: any) {
+    this.getActive = false;
+    this.api.transaction
+      .get(
+        {
+          find: [],
+          populates: [{ field: '_folderId' }, { field: '_documents' }],
+        },
+        room.currentTransaction._id
+      )
+      .subscribe(
+        (res: any) => {
+          console.log('YEY');
+          console.log(res);
+          res.env.transaction.que = room.que;
+          this.dialog
+            .open(BrgyRoomComponent, {
+              data: { obj: res.env.transaction },
+              minHeight: '100vh',
+              minWidth: '100vw',
+              panelClass: 'dialog-no-padding',
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.getActive = true;
+              this.getActiveConference();
+            });
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
   }
 }
