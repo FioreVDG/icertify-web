@@ -32,6 +32,10 @@ export class ViewBatchTransactionsComponent implements OnInit {
   page: any = {
     pageSize: 10,
     pageIndex: 1,
+    sort: {
+      active: 'createdAt',
+      direction: 'desc',
+    },
   };
   loading: boolean = false;
 
@@ -73,7 +77,7 @@ export class ViewBatchTransactionsComponent implements OnInit {
     if (event.filter) query.filter = event.filter;
     if (event.sort) {
       query.sort =
-        (event.sort.direction === 'asc' ? '' : '-') + event.sort.active;
+        (event.sort.direction === 'desc' ? '' : '-') + event.sort.active;
     }
 
     this.api.transaction.getAll(query).subscribe(
