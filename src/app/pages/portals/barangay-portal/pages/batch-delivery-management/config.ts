@@ -33,7 +33,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
       {
-        title: 'Owner',
+        title: 'QC Indigent',
         breakpoint: 'sm',
         path: 'sender',
         paths: ['sender.firstName', 'sender.lastName'],
@@ -41,7 +41,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
       {
-        title: 'Uploaded by',
+        title: 'Received By',
         breakpoint: 'sm',
         path: '_createdBy',
         paths: ['_createdBy.firstName', '_createdBy.lastName'],

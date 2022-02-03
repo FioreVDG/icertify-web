@@ -154,7 +154,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
         break;
       case 'viewInfo':
         this.dialog.open(RegistrantFormComponent, {
-          data: { header: `View Information`, obj: event.obj.sender },
+          data: { header: `Registrant Information`, obj: event.obj.sender },
           disableClose: true,
           width: 'auto',
           height: 'auto',

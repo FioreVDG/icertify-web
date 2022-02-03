@@ -46,11 +46,22 @@ export class RegistrantFormComponent implements OnInit {
     this.findDefaultValue('region');
 
     this.registrantFromFields.forEach((el: any) => {
+      const disabledItemHeaders = ['Review Details', 'Registrant Information'];
       el.items.forEach((item: any) => {
-        if (this.data.header === 'Review Details') item.disabled = true;
+        if (disabledItemHeaders.includes(this.data.header))
+          item.disabled = true;
+        // if (this.data.header === 'Review Details') item.disabled = true;
+        // if (this.data.header === 'Registrant Information') item.disabled = true;
         else item.disabled = false;
       });
     });
+  }
+
+  checkHeaderDisabler() {
+    const disabledItemHeaders = ['Review Details', 'Registrant Information'];
+
+    if (disabledItemHeaders.includes(this.data.header)) return true;
+    else return false;
   }
 
   findDefaultValue(fcname: any) {

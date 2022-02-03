@@ -17,7 +17,7 @@ export class UsersComponent implements OnInit {
   bsConfig = USER_BOTTOMSHEET;
   _brgyId: any;
   userType: any;
-  _notarialId: any;
+  _notaryId: any;
   dataSource = [];
   page = {
     pageSize: 10,
@@ -33,7 +33,7 @@ export class UsersComponent implements OnInit {
 
   ngOnInit(): void {
     this._brgyId = this.route.snapshot.paramMap.get('brgyId');
-    this._notarialId = this.route.snapshot.paramMap.get('notarialId');
+    this._notaryId = this.route.snapshot.paramMap.get('_notaryId');
     this.userType = this.route.snapshot.paramMap.get('userType');
     this.fetchUser(this.page);
   }
@@ -43,7 +43,7 @@ export class UsersComponent implements OnInit {
         panelClass: 'custom-dialog-container',
         data: {
           _brgyId: this._brgyId,
-          _notarialId: this._notarialId,
+          _notaryId: this._notaryId,
           type: this.userType,
         },
       })
@@ -74,11 +74,11 @@ export class UsersComponent implements OnInit {
     }
     if (this._brgyId && this._brgyId !== 'undefined')
       qry.find.push({ field: '_brgyId', operator: '=', value: this._brgyId });
-    if (this._notarialId && this._notarialId !== 'undefined')
+    if (this._notaryId && this._notaryId !== 'undefined')
       qry.find.push({
-        field: '_notarialId',
+        field: '_notaryId',
         operator: '=',
-        value: this._notarialId,
+        value: this._notaryId,
       });
     if (event && event.filter) {
       qry['filter'] = event.filter;

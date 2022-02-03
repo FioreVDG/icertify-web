@@ -100,7 +100,7 @@ export class NotarialComponent implements OnInit {
       case 'users':
         this.route.navigate([
           'superadmin-portal/account-creation/users',
-          { notarialId: event.obj._id, userType: 'Notary' },
+          { _notaryId: event.obj._id, userType: 'Notary' },
         ]);
         break;
 

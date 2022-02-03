@@ -26,7 +26,7 @@
         *ngFor="let item of files; let i = index"
       >
         <div class="col-6">
-          <p>Name: {{ item.name }}</p>
+          <p>Document Title: {{ item.name }}</p>
           <p *ngIf="item.data.documentStatus">
             Status:
             <span
@@ -39,7 +39,10 @@
               >{{ item.data.documentStatus }}
             </span>
           </p>
-          <p>Type: {{ item.data.documentType }}</p>
+          <p>Document Type: {{ item.data.documentType }}</p>
+          <p *ngIf="item.data.documentType === 'Others'">
+            Document Type Specific: {{ item.data.documentTypeSpecific }}
+          </p>
           <p>Reference Code: {{ item.data.refCode }}</p>
           <div
             class="grid"

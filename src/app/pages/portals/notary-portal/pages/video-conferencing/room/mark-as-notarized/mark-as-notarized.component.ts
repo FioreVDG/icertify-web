@@ -59,10 +59,13 @@ export class MarkAsNotarizedComponent implements OnInit {
 
   changeDocumentStatus(event: any) {
     if (this.data.type === 'Notarized') {
-      const loader = this.util.startLoading('Confirming... Please wait');
-      let tempFile: any = this.data.screenshot.split(',')[1];
+      const loader = this.util.startLoading('Confirming Please wait...');
+      //UPLOADING TO DBX
+      console.log(this.data.screenshot);
+      let imgBlob = this.dataURItoBlob(this.data.screenshot.split(',')[1]);
+      console.log(imgBlob);
       let fileName: any = event.refCode + '-' + event._id;
-      this.dbx.uploadFile(this.path, fileName + '.png', tempFile).subscribe(
+      this.dbx.uploadFile(this.path, fileName + '.png', imgBlob).subscribe(
         (res: any) => {
           console.log(res);
           if (res) {
@@ -70,40 +73,41 @@ export class MarkAsNotarizedComponent implements OnInit {
               panelClass: ['success'],
               duration: 1000,
             });
-            event.documentStatus = 'Notarized';
             event.screenShots = [res.result];
             console.log(event);
-            this.document.update(event, event._id).subscribe(
-              (res: any) => {
-                console.log(res);
-                if (res) {
-                  this.util.stopLoading(loader);
-                  this.dialog
-                    .open(ActionResultComponent, {
-                      data: {
-                        msg: `${event.refCode} successfully marked as notarized!`,
-                        success: true,
-                        button: 'Okay',
-                      },
-                    })
-                    .afterClosed()
-                    .subscribe((res: any) => {
-                      if (res) this.dialogRef.close();
-                    });
-                }
-              },
-              (err) => {
-                console.log(res);
+            this.document.notarize(event, event._id).subscribe((res: any) => {
+              console.log(res);
+              if (res) {
                 this.util.stopLoading(loader);
-                this.dialog.open(ActionResultComponent, {
-                  data: {
-                    msg: err.error.message || 'Server error, Please try again!',
-                    success: false,
-                    button: 'Okay',
-                  },
-                });
+                this.dialog
+                  .open(ActionResultComponent, {
+                    data: {
+                      msg: `${event.refCode} successfully marked as notarized!`,
+                      success: true,
+                      button: 'Okay',
+                    },
+                  })
+                  .afterClosed()
+                  .subscribe(
+                    (res: any) => {
+                      if (res) this.dialogRef.close({ data: 'Notarized' });
+                    },
+                    (err) => {
+                      console.log(err);
+                      this.util.stopLoading(loader);
+                      this.dialog.open(ActionResultComponent, {
+                        data: {
+                          msg:
+                            err.error.message ||
+                            'Server error, Please try again!',
+                          success: false,
+                          button: 'Okay',
+                        },
+                      });
+                    }
+                  );
               }
-            );
+            });
           }
         },
         (err) => {
@@ -116,10 +120,9 @@ export class MarkAsNotarizedComponent implements OnInit {
         }
       );
     } else {
-      const loader = this.util.startLoading('Confirming... Please wait');
-      event.documentStatus = 'Unnotarized';
+      const loader = this.util.startLoading('Confirming Please wait...');
       event.remark = this.others ? this.others : this.remark;
-      this.document.update(event, event._id).subscribe(
+      this.document.unnotarize(event, event._id).subscribe(
         (res: any) => {
           console.log(res);
           if (res) {
@@ -134,7 +137,7 @@ export class MarkAsNotarizedComponent implements OnInit {
               })
               .afterClosed()
               .subscribe((res: any) => {
-                if (res) this.dialogRef.close();
+                if (res) this.dialogRef.close({ data: 'Unnotarized' });
               });
           }
         },
@@ -151,5 +154,16 @@ export class MarkAsNotarizedComponent implements OnInit {
         }
       );
     }
+  }
+  //CONVERT BASE 64 to blob
+  dataURItoBlob(dataURI: string) {
+    const byteString = window.atob(dataURI);
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const int8Array = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < byteString.length; i++) {
+      int8Array[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([int8Array], { type: 'image/png' });
+    return blob;
   }
 }

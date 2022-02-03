@@ -55,6 +55,18 @@
           "
         >
           <i
+            >BID: <kbd>{{ currentTransaction._folderId }}</kbd></i
+          >
+        </p>
+        <p
+          style="
+            text-align: center;
+            color: #fff;
+            font-size: 12px;
+            margin: 0rem 0rem;
+          "
+        >
+          <i
             >CID: <kbd>{{ currentSchedule._id }}</kbd></i
           >
         </p>
@@ -73,9 +85,20 @@
         *ngFor="let doc of currentTransaction._documents; let i = index"
       >
         <p
-          [class]="doc.isSelected ? 'selected' : 'clickable'"
+          class="clickable"
+          [ngClass]="{
+            success: doc.documentStatus === 'Notarized',
+            warn: doc.documentStatus === 'Pending for Notary',
+            danger: doc.documentStatus === 'Unnotarized'
+          }"
           (click)="selectDocumentToView(doc)"
         >
+          <mat-icon *ngIf="doc.documentStatus === 'Pending for Notary'"
+            >mode_standby</mat-icon
+          ><mat-icon *ngIf="doc.documentStatus === 'Notarized'">done</mat-icon
+          ><mat-icon *ngIf="doc.documentStatus === 'Unnotarized'"
+            >close</mat-icon
+          >
           {{ doc.refCode }}
         </p>
       </ng-container>
@@ -153,7 +176,8 @@
         </button>
         <button
           mat-icon-button
-          (click)="nextTransaction()"
+          (click)="openUserDetails()"
+          [disabled]="checkDocumentStatus()"
           *ngIf="currentTransactionIndex + 1 < transactions.length"
         >
           <mat-icon>arrow_forward_ios</mat-icon>
@@ -165,7 +189,7 @@
           (onLeaveMeeting)="leaveMeeting($event)"
         ></app-rt-video>
         <div class="grid mt-3">
-          <div class="col-12 opt-btn">
+          <div class="col-12 opt-btn" *ngIf="checkDocumentStatus()">
             <button
               mat-raised-button
               color="primary"
