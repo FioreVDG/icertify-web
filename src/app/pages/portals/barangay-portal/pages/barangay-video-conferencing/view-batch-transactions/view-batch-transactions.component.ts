@@ -32,6 +32,10 @@ export class ViewBatchTransactionsComponent implements OnInit {
   page: any = {
     pageSize: 10,
     pageIndex: 1,
+    sort: {
+      active: 'createdAt',
+      direction: 'desc',
+    },
   };
   loading: boolean = false;
 
@@ -64,17 +68,24 @@ export class ViewBatchTransactionsComponent implements OnInit {
       ],
       page: event.pageIndex,
       limit: event.pageSize + '',
-      populates: [{ field: '_folderId' }, { field: '_documents' }],
+      populates: [
+        { field: '_folderId' },
+        { field: '_documents' },
+        // { field: '_notaryId' },
+      ],
     };
     if (event.filter) query.filter = event.filter;
     if (event.sort) {
       query.sort =
-        (event.sort.direction === 'asc' ? '' : '-') + event.sort.active;
+        (event.sort.direction === 'desc' ? '' : '-') + event.sort.active;
     }
 
     this.api.transaction.getAll(query).subscribe(
       (res: any) => {
         console.log(res);
+        res.env.transactions.forEach((transaction: any, index: any) => {
+          transaction.que = index + 1;
+        });
         this.dataSource = res.env.transactions;
         this.dataLength = res.total;
         this.loading = false;
@@ -107,7 +118,7 @@ export class ViewBatchTransactionsComponent implements OnInit {
   }
 
   startConference(selected: any) {
-    this.dialog.open(BrgyRoomComponent, {
+    selected.que = this.dialog.open(BrgyRoomComponent, {
       data: selected,
       minHeight: '100vh',
       minWidth: '100vw',

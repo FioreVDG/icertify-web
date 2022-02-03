@@ -25,6 +25,7 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { StoreModule } from '@ngrx/store';
 import { userReducer } from 'src/app/store/user/user.reducer';
 import { ConferenceRoomComponent } from './conference-room/conference-room.component';
+import { RoomComponent } from './room/room.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { ConferenceRoomComponent } from './conference-room/conference-room.compo
     ViewVideoComponent,
     ConferenceRoomComponent,
     RtVideoComponent,
+    RoomComponent,
   ],
   imports: [
     MaterialModule,

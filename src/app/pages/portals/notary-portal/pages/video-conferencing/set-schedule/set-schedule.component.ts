@@ -62,14 +62,18 @@ export class SetScheduleComponent implements OnInit {
         console.log(res);
         this.util.stopLoading(loader);
         if (res) {
-          this.dialog.open(ActionResultComponent, {
-            data: {
-              msg: 'Selected Batches has been successfully scheduled!',
-              button: 'Okay',
-              success: true,
-            },
-          });
-          this.dialogRef.close();
+          this.dialog
+            .open(ActionResultComponent, {
+              data: {
+                msg: 'Selected Batches has been successfully scheduled!',
+                button: 'Okay',
+                success: true,
+              },
+            })
+            .afterClosed()
+            .subscribe((res: any) => {
+              if (res) this.dialogRef.close();
+            });
         }
       },
       (err) => {

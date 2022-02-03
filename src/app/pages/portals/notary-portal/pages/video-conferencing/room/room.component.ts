@@ -1,3 +1,6 @@
+import { QueryParams } from './../../../../../../models/queryparams.interface';
+import { RoomService } from './../../../../../../service/api/room/room.service';
+import { RegistrantFormComponent } from './../../../../../../shared/components/registrant-form/registrant-form.component';
 import { AreYouSureComponent } from './../../../../../../shared/dialogs/are-you-sure/are-you-sure.component';
 import { MarkAsNotarizedComponent } from './mark-as-notarized/mark-as-notarized.component';
 import { USER_INFO } from './config';
@@ -63,6 +66,8 @@ export class RoomComponent implements OnInit {
   ];
   userInfo = USER_INFO;
   currentDocument: any;
+  currentBatch: any;
+  currentRoom: any;
   constructor(
     public dialogRef: MatDialogRef<RoomComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -73,7 +78,8 @@ export class RoomComponent implements OnInit {
     private dbx: DropboxService,
     private socket: Socket,
     private store: Store<{ user: User }>,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private room: RoomService
   ) {}
 
   ngOnInit(): void {
@@ -83,6 +89,7 @@ export class RoomComponent implements OnInit {
     this.store.select('user').subscribe((res: any) => {
       this.me = res;
     });
+    this.checkDocument();
   }
 
   getExpectedParticipants() {
@@ -95,12 +102,17 @@ export class RoomComponent implements OnInit {
       this.data.forEach((schedule: any) => {
         let documentCtr = 0;
         schedule._folderIds.forEach((folder: any) => {
-          folder._transactions.forEach((transaction: any) => {
+          folder._transactions.forEach((transaction: any, index: any) => {
+            transaction.que = index + 1;
             documentCtr += transaction._documents.length;
+            transaction._documents.forEach((document: any, index: any) => {
+              document.que = index + 1;
+            });
           });
         });
         schedule['no_of_documents'] = documentCtr;
       });
+      console.log(this.data);
     });
   }
 
@@ -114,26 +126,38 @@ export class RoomComponent implements OnInit {
     }
   }
 
+  checkDocument() {
+    console.log(this.currentDocument);
+  }
+
   joinMeeting(schedule: any) {
     console.log(schedule);
     this.currentSchedule = schedule;
     console.log(this.currentSchedule._id);
     this.transactions = [];
     this.currentSchedule._folderIds.forEach((folder: any) => {
-      folder._transactions.forEach((transaction: any) => {
+      folder._transactions.forEach((transaction: any, index: any) => {
+        transaction.que = index + 1;
         this.transactions.push(transaction);
+        console.log(this.transactions);
+        transaction._documents.forEach((document: any, index: any) => {
+          document.que = index + 1;
+        });
       });
     });
     const loader = this.util.startLoading('Joining please wait...');
     this.agora.getToken(schedule._id).subscribe(
       (res: any) => {
-        console.log(res);
-        this.token = res.token;
-        this.emitJoinRoomSocket(this.data);
-        this.nextTransaction();
-        this.joinRoom = true;
-        this.util.stopLoading(loader);
-        console.log(this.transactions);
+        if (res) {
+          console.log(res);
+          this.token = res.token;
+          this.emitJoinRoomSocket(this.data);
+          this.nextTransaction();
+          this.joinRoom = true;
+          this.util.stopLoading(loader);
+
+          console.log(this.transactions);
+        }
       },
       (err) => {
         console.log(err);
@@ -156,6 +180,51 @@ export class RoomComponent implements OnInit {
     this.initiateTransaction();
   }
 
+  openUserDetails() {
+    this.dialog
+      .open(RegistrantFormComponent, {
+        data: {
+          header: 'Review Details',
+          obj: this.transactions[this.currentTransactionIndex + 1].sender,
+        },
+      })
+      .afterClosed()
+      .subscribe((res: any) => {
+        if (res) {
+          const loader = this.util.startLoading('Loading details...');
+
+          setTimeout(() => {
+            this.util.stopLoading(loader);
+          }, 1000);
+          this.currentTransactionIndex++;
+          this.currentTransaction =
+            this.transactions[this.currentTransactionIndex];
+          this.initiateTransaction();
+
+          //DELETE CURRENT ROOM beofre proceeding to the NEXT TRANSACTION
+          let query: QueryParams = { find: [] };
+          this.room.get(query).subscribe((res: any) => {
+            console.log(res);
+            if (res && res.env.room.length) {
+              const loader2 = this.util.startLoading(
+                'Checking room details...'
+              );
+              this.room.delete(res.env.room[0]._id).subscribe(
+                (res: any) => {
+                  console.log(res);
+                  if (res) this.util.stopLoading(loader2);
+                },
+                (err) => {
+                  console.log(err);
+                  this.util.stopLoading(loader2);
+                }
+              );
+            }
+          });
+        }
+      });
+  }
+
   prevTransaction() {
     this.currentTransactionIndex--;
     this.initiateTransaction();
@@ -163,6 +232,7 @@ export class RoomComponent implements OnInit {
 
   async initiateTransaction() {
     this.currentTransaction = this.transactions[this.currentTransactionIndex];
+
     this.selectDocumentToView(this.currentTransaction._documents[0]);
     this._images.forEach(async (image: any) => {
       if (
@@ -179,6 +249,41 @@ export class RoomComponent implements OnInit {
         this.currentTransaction.videoOfSignature.path_display
       );
     else delete this.currentTransaction.vidURL;
+
+    // FOR ROOM HERE
+    // FOR ROOM HERE
+    let query: QueryParams = { find: [] };
+    const loader = this.util.startLoading('Initiating room details...');
+    this.room.get(query).subscribe((res: any) => {
+      console.log(res);
+      console.log('ITO YUNG EXISTING ROOM', res.env.room);
+      if (res) {
+        this.util.stopLoading(loader);
+        if (res.env && !res.env.room.length) {
+          console.log('WALA PANG EXISTING ROOM');
+          let roomToAdd: any = {};
+          roomToAdd.que = this.currentTransaction.que;
+          roomToAdd.currentTransaction = this.currentTransaction;
+          roomToAdd.currentSchedId = this.currentSchedule._id;
+
+          const loader2 = this.util.startLoading('Fiinalizing room details...');
+          this.room.create(roomToAdd).subscribe(
+            (res: any) => {
+              if (res) {
+                this.util.stopLoading(loader2);
+                console.log(res);
+                console.log('ITO YUNG EXISTING ROOM', res.env.room);
+              }
+            },
+            (err) => {
+              console.log(err);
+
+              this.util.stopLoading(loader2);
+            }
+          );
+        }
+      }
+    });
 
     console.log('CHECK THIS', this._images);
     console.log(this.currentTransaction);
@@ -204,15 +309,32 @@ export class RoomComponent implements OnInit {
   }
 
   openNotarizeDialog(type: string) {
-    this.dialog.open(MarkAsNotarizedComponent, {
-      data: {
-        document: this.currentDocument,
-        screenshot: this.screenshot,
-        transaction: this.currentTransaction,
-        type: type,
-      },
-      minWidth: '45vw',
-    });
+    this.dialog
+      .open(MarkAsNotarizedComponent, {
+        data: {
+          document: this.currentDocument,
+          screenshot: this.screenshot,
+          transaction: this.currentTransaction,
+          type: type,
+        },
+        minWidth: '45vw',
+      })
+      .afterClosed()
+      .subscribe((res: any) => {
+        if (res) {
+          console.log(res);
+          console.log(this.currentDocument);
+          this.currentDocument.documentStatus = res.data;
+        }
+      });
+  }
+
+  checkDocumentStatus() {
+    let filtPending: any = this.currentTransaction._documents.filter(
+      (o: any) => o.documentStatus === 'Pending for Notary'
+    );
+    if (filtPending.length) return true;
+    else return false;
   }
 
   async getTempLink(data: any) {
@@ -229,6 +351,6 @@ export class RoomComponent implements OnInit {
 
   leaveMeeting(event: any) {
     console.log(event);
-    this.dialogRef.close();
+    this.dialogRef.close(true);
   }
 }
