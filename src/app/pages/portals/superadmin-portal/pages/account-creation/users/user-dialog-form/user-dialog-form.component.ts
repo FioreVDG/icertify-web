@@ -43,6 +43,7 @@ export class UserDialogFormComponent implements OnInit {
   ngOnInit(): void {
     this.getRegions();
     this.initializeBrgyForm();
+    console.log(this.data);
   }
 
   getRegions() {
@@ -155,10 +156,8 @@ export class UserDialogFormComponent implements OnInit {
 
       _brgyId:
         this.data._brgyId !== 'undefined' ? this.data._brgyId : undefined,
-      _notarialId:
-        this.data._notarialId !== 'undefined'
-          ? this.data._notarialId
-          : undefined,
+      _notaryId:
+        this.data._notaryId !== 'undefined' ? this.data._notaryId : undefined,
       type: this.data.type,
     };
     toSaveData['address'] = {
