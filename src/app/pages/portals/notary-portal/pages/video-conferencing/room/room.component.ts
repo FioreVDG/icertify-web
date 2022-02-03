@@ -269,9 +269,10 @@ export class RoomComponent implements OnInit {
           const loader2 = this.util.startLoading('Fiinalizing room details...');
           this.room.create(roomToAdd).subscribe(
             (res: any) => {
+              console.log(res);
               if (res) {
-                this.currentRoom = res.env.room[0]._id;
                 this.util.stopLoading(loader2);
+                this.currentRoom = res.env.room[0]._id;
                 console.log(res);
                 console.log('ITO YUNG EXISTING ROOM', res.env.room);
               }
