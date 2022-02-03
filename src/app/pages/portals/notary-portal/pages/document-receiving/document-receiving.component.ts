@@ -154,6 +154,7 @@ export class DocumentReceivingComponent implements OnInit {
               {
                 _receivedBy: this.me._id,
                 location: 'Notary',
+                locationStatus: 'Received by Notary',
                 folderStatus: 'For Scheduling',
                 dateDropToNotary: new Date(),
               },
@@ -161,23 +162,28 @@ export class DocumentReceivingComponent implements OnInit {
             );
           });
 
-          forkJoin(apiQueries).subscribe((res: any) => {
-            this.util.stopLoading(loader);
-            console.log(res);
-            this.dialog
-              .open(ActionResultComponent, {
-                data: {
-                  success: true,
-                  msg: `Batch/es successfully marked as received!`,
-                  button: 'Okay',
-                },
-              })
-              .afterClosed()
-              .subscribe((res: any) => {
-                this.fetchData(this.page);
-                this.selected = [];
-              });
-          });
+          forkJoin(apiQueries).subscribe(
+            (res: any) => {
+              this.util.stopLoading(loader);
+              console.log(res);
+              this.dialog
+                .open(ActionResultComponent, {
+                  data: {
+                    success: true,
+                    msg: `Batch/es successfully marked as received!`,
+                    button: 'Okay',
+                  },
+                })
+                .afterClosed()
+                .subscribe((res: any) => {
+                  this.fetchData(this.page);
+                  this.selected = [];
+                });
+            },
+            (err: any) => {
+              console.log(err.error);
+            }
+          );
         }
       });
   }

@@ -113,7 +113,7 @@ export class DocumentReceivingComponent implements OnInit {
 
   viewPersonalInfo(obj: any) {
     this.dialog.open(RegistrantFormComponent, {
-      data: { header: `View Information`, obj },
+      data: { header: `Review Details`, obj },
       disableClose: true,
       width: 'auto',
       height: 'auto',

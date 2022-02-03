@@ -46,6 +46,7 @@ export class MarkAsEnrouteComponent implements OnInit {
     let toAdd = {
       riderNotaryToBarangay: { ...this.toAddData },
       datePickedFromNotary: new Date(),
+      locationStatus: 'Enroute to Barangay',
     };
     console.log(toAdd);
 
