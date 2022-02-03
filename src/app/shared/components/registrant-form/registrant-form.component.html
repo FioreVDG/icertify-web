@@ -1,6 +1,6 @@
 <h3 mat-dialog-title>{{ data.header }}</h3>
 <mat-icon
-  *ngIf="data.header === 'Review Details'"
+  *ngIf="checkHeaderDisabler()"
   (click)="close()"
   class="close-btn"
   color="warn"
@@ -15,11 +15,7 @@
     [obj]="this.data.obj"
   ></app-form>
   <app-image-form
-    [disable]="
-      data.header === 'Review Details' || data.header === 'View Information'
-        ? true
-        : false
-    "
+    [disable]="checkHeaderDisabler()"
     [mobileNumber]="this.data.mobileNumber"
     [obj]="this.data.obj?.images ? this.data.obj.images : {}"
     (imageEmitter)="imageEmitter($event)"
@@ -37,13 +33,11 @@
     <mat-icon>save_as</mat-icon>&nbsp;Save
   </button>
   <button
-    *ngIf="
-      data.header === 'Review Details' || data.header === 'View Information'
-    "
+    *ngIf="this.data.header === 'Review Details'"
     mat-flat-button
     color="primary"
     (click)="dialogRef.close(true)"
   >
-    {{ data.header === "Review Details" ? "Next" : "Close" }}
+    Next
   </button>
 </div>
