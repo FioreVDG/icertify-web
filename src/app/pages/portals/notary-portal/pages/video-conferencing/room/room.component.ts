@@ -193,9 +193,6 @@ export class RoomComponent implements OnInit {
         if (res) {
           const loader = this.util.startLoading('Loading details...');
 
-          setTimeout(() => {
-            this.util.stopLoading(loader);
-          }, 1000);
           this.currentTransactionIndex++;
           this.currentTransaction =
             this.transactions[this.currentTransactionIndex];
@@ -205,7 +202,10 @@ export class RoomComponent implements OnInit {
           let query: QueryParams = { find: [] };
           this.room.get(query).subscribe((res: any) => {
             console.log(res);
+
+            this.util.stopLoading(loader);
             if (res && res.env.room.length) {
+              this.currentRoom = res.env.room[0]._id;
               const loader2 = this.util.startLoading(
                 'Checking room details...'
               );
@@ -270,6 +270,7 @@ export class RoomComponent implements OnInit {
           this.room.create(roomToAdd).subscribe(
             (res: any) => {
               if (res) {
+                this.currentRoom = res.env.room[0]._id;
                 this.util.stopLoading(loader2);
                 console.log(res);
                 console.log('ITO YUNG EXISTING ROOM', res.env.room);
@@ -351,6 +352,14 @@ export class RoomComponent implements OnInit {
 
   leaveMeeting(event: any) {
     console.log(event);
+    this.room.delete(this.currentRoom).subscribe(
+      (res: any) => {
+        console.log(res);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
     this.dialogRef.close(true);
   }
 }

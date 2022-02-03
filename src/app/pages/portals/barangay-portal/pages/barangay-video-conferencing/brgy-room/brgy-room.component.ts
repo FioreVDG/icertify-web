@@ -89,6 +89,7 @@ export class BrgyRoomComponent implements OnInit {
 
           this.checkAvailability(this.currentRoomDetails, this.currDetails);
         } else {
+          this.util.stopLoading(loader);
           console.log('No active meeting');
           this.msg = 'Conference is empty';
           this.btnDisabled = true;
