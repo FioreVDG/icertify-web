@@ -10,6 +10,7 @@ import { FolderService } from './folder/folder.service';
 import { TransactionService } from './transaction/transaction.service';
 import { RoleService } from './role/role.service';
 import { ConferenceService } from './conference/conference.service';
+import { SlaService } from './sla/sla.service';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +26,7 @@ export class ApiService {
     public transaction: TransactionService,
     public role: RoleService,
     public conference: ConferenceService,
-    public agora: AgoraService
+    public agora: AgoraService,
+    public sla: SlaService
   ) {}
 }

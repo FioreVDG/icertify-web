@@ -1,0 +1,55 @@
+<!-- <mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title> Barangay </mat-panel-title>
+      <mat-panel-description>
+        This is a summary of the content
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <app-table
+      [columns]="columns"
+      [dataSource]="dataSource"
+      [dataLength]="dataLength"
+      [pagination]="page"
+      [loading]="loading"
+      (onUpdateTableEmit)="fetchData($event)"
+    ></app-table>
+  </mat-expansion-panel>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title> Notary</mat-panel-title>
+      <mat-panel-description>
+        This is a summary of the content
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <app-table
+      [columns]="columns"
+      [dataSource]="dataSource"
+      [dataLength]="dataLength"
+      [pagination]="page"
+      [loading]="loading"
+      (onUpdateTableEmit)="fetchData($event)"
+    ></app-table>
+  </mat-expansion-panel>
+</mat-accordion> -->
+
+<app-table
+  [dataSource]="dataSource"
+  (onRowClick)="onRowClick($event)"
+  [dataLength]="dataLength"
+  [pagination]="page"
+  [loading]="loading"
+  [filterButtonConfig]="filtBtnConfig"
+  (onUpdateTableEmit)="fetchData($event)"
+></app-table>
+
+<button
+  mat-fab
+  color="primary"
+  class="bottom-right-button"
+  (click)="createSLA()"
+>
+  <mat-icon>add</mat-icon>
+</button>

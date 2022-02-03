@@ -78,10 +78,10 @@ export class VideoConferencingComponent implements OnInit {
 
     console.log(query);
     this.api.transaction.getAllFolder(query).subscribe((res: any) => {
-      this.loading = false;
       console.log(res);
       this.dataSource = res.folders;
       this.dataLength = res.count;
+      this.loading = false;
     });
 
     this.currentTable = event.label;

@@ -94,10 +94,10 @@ export class DocumentReleasingToCourierComponent implements OnInit {
 
     this.api.transaction.getAllFolder(query).subscribe(
       (res: any) => {
-        this.loading = false;
         console.log(res);
         this.dataSource = res.folders;
         this.dataLength = res.count;
+        this.loading = false;
       },
       (error) => {
         console.log(error);

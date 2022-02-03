@@ -1,0 +1,114 @@
+<div mat-dialog-title>
+  <small>{{ data.type }}</small>
+  <h3 style="margin-top: 0; margin-bottom: 0">
+    <b style="color: rgb(63, 63, 63)">
+      {{
+        data.type === "Barangay"
+          ? data._userId.address.barangay.brgyDesc
+          : data._userId.firstName + " " + data._userId.lastName
+      }}
+    </b>
+  </h3>
+</div>
+<div mat-dialog-content>
+  <div class="grid">
+    <div class="col-6">
+      <div class="mat-elevation-z1 section sticky">
+        <form [formGroup]="agreementForm" class="grid">
+          <mat-form-field class="col-12">
+            <mat-label>Title</mat-label>
+            <input matInput formControlName="label" />
+          </mat-form-field>
+          <mat-form-field class="col-12">
+            <mat-label>Description</mat-label>
+            <textarea
+              matInput
+              formControlName="description"
+              rows="5"
+            ></textarea>
+          </mat-form-field>
+          <ng-container formGroupName="time">
+            <mat-form-field class="col-6">
+              <mat-label>Time Start</mat-label>
+              <input matInput type="time" formControlName="start" />
+            </mat-form-field>
+
+            <mat-form-field class="col-6">
+              <mat-label>Time End</mat-label>
+              <input matInput type="time" formControlName="end" />
+            </mat-form-field>
+          </ng-container>
+          <mat-form-field class="col-12">
+            <mat-label>Display Type</mat-label>
+            <mat-select formControlName="displayType">
+              <mat-option
+                *ngFor="let displayType of displayTypes"
+                [value]="displayType"
+              >
+                {{ displayType }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col-6">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="collectionName">
+              <mat-option
+                *ngFor="let collection of collections"
+                [value]="collection.name"
+              >
+                {{ collection.label }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col-6">
+            <mat-label>Specify Column</mat-label>
+            <mat-select formControlName="path">
+              <mat-option *ngFor="let prop of properties" [value]="prop.path">
+                {{ prop.label }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </form>
+        <button
+          mat-flat-button
+          color="accent"
+          (click)="pushToAgreements()"
+          [disabled]="!agreementForm.valid"
+        >
+          {{ agreementIndex > -1 ? "Save Changes" : "Add to Agreement" }}
+        </button>
+      </div>
+    </div>
+
+    <div class="col-6">
+      <h1 style="color: grey; margin-top: 0">Service Level Agreement</h1>
+      <section *ngIf="!agreements || !agreements.length">
+        <p style="color:rgb(163, 163, 163)">No Content Yet. Fill up the form to add agreement.</p>
+      </section>
+      <section *ngFor="let agreement of agreements; let i = index">
+        <h3 class="section-header">
+          {{ i + 1 }}.&nbsp;{{ agreement.label }}
+          <mat-icon class="section-header-icons" (click)="editAgreement(i)">
+            edit
+          </mat-icon>
+          <mat-icon
+            class="section-header-icons"
+            (click)="removeFromAgreements(i)"
+          >
+            delete
+          </mat-icon>
+        </h3>
+        <small style="color: rgb(163, 163, 163); margin-bottom: 16px">
+          Time Range: <b>{{ agreement.time.start }}</b> to
+          <b>{{ agreement.time.end }}</b>
+        </small>
+        <p [innerHTML]="agreement.description"></p>
+      </section>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-flat-button mat-dialog-close>
+    <mat-icon>arrow_back_ios</mat-icon>Back
+  </button>
+</div>

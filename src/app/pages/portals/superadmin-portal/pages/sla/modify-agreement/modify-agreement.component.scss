@@ -1,0 +1,28 @@
+.section {
+  padding: 16px;
+  margin-bottom: 8px;
+  background-color: rgb(251, 251, 251);
+}
+
+.section-header {
+  color: rgb(63, 63, 63);
+  margin-bottom: 0;
+  .section-header-icons {
+    float: right;
+    opacity: 0;
+  }
+}
+
+.section-header:hover {
+  color: rgb(63, 63, 63);
+  .section-header-icons {
+    float: right;
+    opacity: 0.5;
+    transition: 50ms;
+    cursor: pointer;
+  }
+
+  .section-header-icons:hover {
+    opacity: 1;
+  }
+}

@@ -72,4 +72,10 @@ export const SUPERADMIN_NAVS: NavNode[] = [
     route: 'account-creation',
     hasAccess: false,
   },
+  {
+    label: 'SLA',
+    icon: 'description',
+    route: 'sla',
+    hasAccess: false,
+  },
 ];

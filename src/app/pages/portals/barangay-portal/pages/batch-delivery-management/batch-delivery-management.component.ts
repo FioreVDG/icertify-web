@@ -79,11 +79,11 @@ export class BatchDeliveryManagementComponent implements OnInit {
 
     console.log(qry);
     api.subscribe((res: any) => {
-      this.loading = false;
       console.log(res);
       this.dataSource =
         res.env && res.env.transactions ? res.env.transactions : res.folders;
       this.dataLength = res.count;
+      this.loading = false;
     });
     this.currTable = event.label;
     this.page.populate = event.populate;

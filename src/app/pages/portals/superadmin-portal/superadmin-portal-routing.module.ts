@@ -20,6 +20,11 @@ const routes: Routes = [
             (m) => m.AccountCreationModule
           ),
       },
+      {
+        path: 'sla',
+        loadChildren: () =>
+          import('./pages/sla/sla.module').then((m) => m.SlaModule),
+      },
     ],
   },
 ];
