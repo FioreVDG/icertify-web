@@ -231,6 +231,7 @@ export class RoomComponent implements OnInit {
   }
 
   async initiateTransaction() {
+    const loader = this.util.startLoading('Initiating room details...');
     this.currentTransaction = this.transactions[this.currentTransactionIndex];
 
     this.selectDocumentToView(this.currentTransaction._documents[0]);
@@ -253,7 +254,6 @@ export class RoomComponent implements OnInit {
     // FOR ROOM HERE
     // FOR ROOM HERE
     let query: QueryParams = { find: [] };
-    const loader = this.util.startLoading('Initiating room details...');
     this.room.get(query).subscribe((res: any) => {
       console.log(res);
       console.log('ITO YUNG EXISTING ROOM', res.env.room);
