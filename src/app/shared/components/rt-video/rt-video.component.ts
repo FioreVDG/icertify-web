@@ -24,6 +24,7 @@ export class RtVideoComponent implements OnInit {
   localCallId = 'agora_local';
   remoteCalls: Array<any> = [];
   @Input() channelName: any;
+  @Input() details: any;
 
   private client!: AgoraClient;
   private localStream!: Stream;
@@ -52,19 +53,14 @@ export class RtVideoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.channelName);
     this.startConference();
     setTimeout(() => {
-      // console.log(this.remoteCalls);
-    }, 10000);
+      console.log(this.remoteCalls);
+    }, 5000);
   }
 
   startConference() {
-    // window.addEventListener('beforeunload', (e: any) => {
-    //   var confirmationMessage = 'o/';
-    //   (e || window.event).returnValue = confirmationMessage;
-    //   this.leave();
-    //   return confirmationMessage;
-    // });
     this.snack = this.snackbar.open('Entering Room...', undefined);
     this.api.agora.getToken(this.channelName).subscribe((res: any) => {
       // console.log(
@@ -74,6 +70,7 @@ export class RtVideoComponent implements OnInit {
       if (res) this.token = res.env.token;
       this.store.select('user').subscribe((res: User) => {
         this.me = res;
+        console.log(this.me);
         this.uid = res._id;
 
         // console.log(
@@ -150,7 +147,7 @@ export class RtVideoComponent implements OnInit {
           id: id,
           hasAudio: true,
           hasVideo: true,
-          details: this.me,
+          // details: this.details,
         });
         setTimeout(() => stream.play(id), 1000);
       }

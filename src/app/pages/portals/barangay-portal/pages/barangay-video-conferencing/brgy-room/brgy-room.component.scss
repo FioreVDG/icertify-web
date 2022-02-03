@@ -15,11 +15,15 @@
     }
   }
   .info {
-    display: block;
+    // display: block;
     h4,
     p {
       margin: 0;
       text-align: right;
+    }
+    h3 {
+      margin-top: 0.6rem;
+      margin-right: 0.2rem;
     }
   }
 }
@@ -31,10 +35,11 @@
   justify-content: center;
   height: 86vh;
   .left {
-    width: 75%;
+    width: 70%;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     .vid-wrapper {
       height: 30rem;
       width: 65%;
@@ -42,21 +47,23 @@
     }
   }
   .right {
-    width: 20%;
+    width: 25%;
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
     .btn-join {
-      background-color: $primary;
-      color: #fff;
       cursor: pointer;
       outline: none;
       border: none;
       display: block;
       border-radius: 25px;
       width: 60%;
-      padding: 1rem 2rem;
+      padding: 0.8rem 1.5rem;
       font-size: 16px;
+      margin: auto;
+    }
+    .text-center {
+      text-align: center;
     }
   }
 }
