@@ -1,7 +1,14 @@
 import { MatDialog } from '@angular/material/dialog';
 import { Socket } from 'ngx-socket-io';
 import { ApiService } from './../../../service/api/api.service';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  SimpleChange,
+} from '@angular/core';
 import {
   AgoraClient,
   ClientEvent,
@@ -25,6 +32,8 @@ export class RtVideoComponent implements OnInit {
   remoteCalls: Array<any> = [];
   @Input() channelName: any;
   @Input() details: any;
+  @Input() remoteDetails: any;
+  @Input() removeArr: Array<any> = [];
 
   private client!: AgoraClient;
   private localStream!: Stream;
@@ -36,6 +45,7 @@ export class RtVideoComponent implements OnInit {
   public localVideo = true;
 
   @Output() onLeaveMeeting: any = new EventEmitter<any>();
+  @Output() removeParticipant: any = new EventEmitter<any>();
 
   snack: any;
   timeStamp: Date = new Date();
@@ -57,7 +67,18 @@ export class RtVideoComponent implements OnInit {
     this.startConference();
     setTimeout(() => {
       console.log(this.remoteCalls);
-    }, 5000);
+      console.log(this.remoteDetails);
+    }, 3000);
+  }
+
+  ngOnChanges(changes: SimpleChange) {
+    console.log(changes);
+    this.removeOnRemote();
+  }
+
+  removeOnRemote() {
+    this.remoteCalls = [];
+    console.log(this.remoteCalls);
   }
 
   startConference() {
@@ -147,7 +168,7 @@ export class RtVideoComponent implements OnInit {
           id: id,
           hasAudio: true,
           hasVideo: true,
-          // details: this.details,
+          details: this.remoteDetails,
         });
         setTimeout(() => stream.play(id), 1000);
       }

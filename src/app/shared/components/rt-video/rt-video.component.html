@@ -2,7 +2,10 @@
   <div class="col-6">
     <div id="agora_local" class="local">
       <p *ngIf="me">
-        (ME) {{ me.firstName }} {{ me.middleName }} {{ me.lastName }}
+        <b
+          >(ME) {{ me.firstName }} {{ me.middleName }} {{ me.lastName }}
+          {{ me.suffix }}</b
+        >
       </p>
     </div>
   </div>
@@ -10,6 +13,10 @@
     <div class="remote">
       <ng-container *ngFor="let call of remoteCalls">
         <div class="remote" [id]="call.id"></div>
+        <p *ngIf="call.details">
+          (INDIGENT) {{ call.details.firstName }} {{ call.details.middleName }}
+          {{ call.details.lastName }} {{ call.details.suffix }}
+        </p>
       </ng-container>
     </div>
   </div>

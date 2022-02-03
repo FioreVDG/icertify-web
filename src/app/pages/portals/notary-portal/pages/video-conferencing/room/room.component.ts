@@ -68,6 +68,10 @@ export class RoomComponent implements OnInit {
   currentDocument: any;
   currentBatch: any;
   currentRoom: any;
+
+  remoteCallDetails: any = {};
+  leaveArr: any = [];
+
   constructor(
     public dialogRef: MatDialogRef<RoomComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -196,7 +200,6 @@ export class RoomComponent implements OnInit {
           this.currentTransactionIndex++;
           this.currentTransaction =
             this.transactions[this.currentTransactionIndex];
-          this.initiateTransaction();
 
           //DELETE CURRENT ROOM beofre proceeding to the NEXT TRANSACTION
           let query: QueryParams = { find: [] };
@@ -212,7 +215,9 @@ export class RoomComponent implements OnInit {
               this.room.delete(this.currentRoom).subscribe(
                 (res: any) => {
                   console.log(res);
-                  if (res) this.util.stopLoading(loader2);
+                  delete this.remoteCallDetails;
+                  this.initiateTransaction();
+                  this.util.stopLoading(loader2);
                 },
                 (err) => {
                   console.log(err);
@@ -231,7 +236,6 @@ export class RoomComponent implements OnInit {
   }
 
   async initiateTransaction() {
-    const loader = this.util.startLoading('Initiating room details...');
     this.currentTransaction = this.transactions[this.currentTransactionIndex];
 
     this.selectDocumentToView(this.currentTransaction._documents[0]);
@@ -253,39 +257,57 @@ export class RoomComponent implements OnInit {
 
     // FOR ROOM HERE
     // FOR ROOM HERE
+    const loader = this.util.startLoading('Initiating room details...');
     let query: QueryParams = { find: [] };
-    this.room.get(query).subscribe((res: any) => {
-      console.log(res);
-      console.log('ITO YUNG EXISTING ROOM', res.env.room);
-      if (res) {
-        this.util.stopLoading(loader);
-        if (res.env && !res.env.room.length) {
-          console.log('WALA PANG EXISTING ROOM');
-          let roomToAdd: any = {};
-          roomToAdd.que = this.currentTransaction.que;
-          roomToAdd.currentTransaction = this.currentTransaction;
-          roomToAdd.currentSchedId = this.currentSchedule._id;
+    this.room.get(query).subscribe(
+      (res: any) => {
+        console.log(res);
+        if (res) {
+          this.remoteCallDetails = res.env.room[0]?.currentTransaction.sender;
 
-          const loader2 = this.util.startLoading('Fiinalizing room details...');
-          this.room.create(roomToAdd).subscribe(
-            (res: any) => {
-              console.log(res);
-              if (res) {
-                this.util.stopLoading(loader2);
-                this.currentRoom = res.env.room[0]._id;
+          this.currentRoom = res.env.room[0]?._id;
+          console.log('ITO YUNG EXISTING ROOM', res.env.room);
+
+          this.util.stopLoading(loader);
+          if (!res.env.room.length) {
+            console.log('WALA PANG EXISTING ROOM');
+
+            console.log(this.remoteCallDetails);
+            let roomToAdd: any = {};
+            roomToAdd.que = this.currentTransaction.que;
+            roomToAdd.currentTransaction = this.currentTransaction;
+            roomToAdd.currentSchedId = this.currentSchedule._id;
+
+            const loader2 = this.util.startLoading(
+              'Fiinalizing room details...'
+            );
+            this.room.create(roomToAdd).subscribe(
+              (res: any) => {
                 console.log(res);
-                console.log('ITO YUNG EXISTING ROOM', res.env.room);
-              }
-            },
-            (err) => {
-              console.log(err);
+                if (res) {
+                  this.util.stopLoading(loader2);
+                  this.currentRoom = res.env.room[0]?._id;
+                  this.remoteCallDetails =
+                    res.env.room[0]?.currentTransaction.sender;
+                  console.log(this.remoteCallDetails);
 
-              this.util.stopLoading(loader2);
-            }
-          );
+                  console.log(res);
+                  console.log('ITO YUNG EXISTING ROOM', res.env.room);
+                }
+              },
+              (err) => {
+                console.log(err);
+
+                this.util.stopLoading(loader2);
+              }
+            );
+          }
         }
+      },
+      (err) => {
+        console.log(err);
       }
-    });
+    );
 
     console.log('CHECK THIS', this._images);
     console.log(this.currentTransaction);
@@ -362,5 +384,9 @@ export class RoomComponent implements OnInit {
       }
     );
     this.dialogRef.close(true);
+  }
+
+  removeOnMeeting() {
+    delete this.remoteCallDetails;
   }
 }
