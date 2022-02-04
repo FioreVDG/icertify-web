@@ -413,7 +413,7 @@ export class RoomComponent implements OnInit {
       (res: any) => {
         console.log(res);
         this.util.stopLoading(loader);
-        this.dialogRef.close(true);
+        this.joinRoom = false;
       },
       (err) => {
         console.log(err);

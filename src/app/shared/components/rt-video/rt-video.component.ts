@@ -31,7 +31,6 @@ export class RtVideoComponent implements OnInit {
   localCallId = 'agora_local';
   remoteCalls: Array<any> = [];
   @Input() channelName: any;
-  @Input() details: any;
   @Input() remoteDetails: any;
   @Input() removeArr: Array<any> = [];
 
