@@ -1,5 +1,5 @@
 import { UtilService } from './../../../../../service/util/util.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
@@ -17,6 +17,7 @@ import {
 } from './config';
 import { ViewTransactionComponent } from './view-transaction/view-transaction.component';
 import { VIEW_TRANSACTION_TABLE } from './view-transaction/config';
+import { TableComponent } from 'src/app/shared/components/table/table.component';
 
 @Component({
   selector: 'app-document-receiving',
@@ -24,6 +25,8 @@ import { VIEW_TRANSACTION_TABLE } from './view-transaction/config';
   styleUrls: ['./document-receiving.component.scss'],
 })
 export class DocumentReceivingComponent implements OnInit {
+  @ViewChild('table') appTable: TableComponent | undefined;
+
   filtBtnConfig = NOTARY_DOC_RECEIVING_FILT_CONFIG;
   isCheckbox: boolean = true;
   selected = [];
@@ -177,6 +180,7 @@ export class DocumentReceivingComponent implements OnInit {
                 })
                 .afterClosed()
                 .subscribe((res: any) => {
+                  this.appTable?.checkedRows.clear();
                   this.fetchData(this.page);
                   this.selected = [];
                 });

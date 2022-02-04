@@ -12,6 +12,7 @@ import { RoleService } from './role/role.service';
 import { ConferenceService } from './conference/conference.service';
 import { SlaService } from './sla/sla.service';
 import { RoomService } from './room/room.service';
+import { SmsService } from './sms/sms.service';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +30,7 @@ export class ApiService {
     public conference: ConferenceService,
     public agora: AgoraService,
     public sla: SlaService,
-    public room: RoomService
+    public room: RoomService,
+    public sms: SmsService
   ) {}
 }

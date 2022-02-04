@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
@@ -7,6 +7,7 @@ import { TableOutput } from 'src/app/models/tableemit.interface';
 import { ApiService } from 'src/app/service/api/api.service';
 import { AuthService } from 'src/app/service/auth/auth.service';
 import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
+import { TableComponent } from 'src/app/shared/components/table/table.component';
 import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
 import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
 import { VIEW_TRANSACTION_TABLE_DOC_RELEASING } from '../document-receiving/view-transaction/config';
@@ -26,6 +27,7 @@ import { MarkAsEnrouteComponent } from './mark-as-enroute/mark-as-enroute.compon
   styleUrls: ['./document-releasing-to-courier.component.scss'],
 })
 export class DocumentReleasingToCourierComponent implements OnInit {
+  @ViewChild('table') appTable: TableComponent | undefined;
   filtBtnConfig = NOTARY_DOC_RELEASING_TO_COURIER_CONFIG;
   isCheckbox: boolean = true;
   checkBoxDisableField = DOC_RELEASING_DISABLE_CHECKBOX;
@@ -158,6 +160,8 @@ export class DocumentReleasingToCourierComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res) this.fetchData(this.page);
+        this.selected = [];
+        this.appTable?.checkedRows.clear();
       });
 
     ///////////////////////
