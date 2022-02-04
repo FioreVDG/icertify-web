@@ -1,3 +1,4 @@
+import { ActionResultComponent } from './../../../../../../shared/dialogs/action-result/action-result.component';
 import { QueryParams } from './../../../../../../models/queryparams.interface';
 import { RoomService } from './../../../../../../service/api/room/room.service';
 import { RegistrantFormComponent } from './../../../../../../shared/components/registrant-form/registrant-form.component';
@@ -72,6 +73,8 @@ export class RoomComponent implements OnInit {
   remoteCallDetails: any = {};
   leaveArr: any = [];
 
+  query: QueryParams = { find: [] };
+
   constructor(
     public dialogRef: MatDialogRef<RoomComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -88,11 +91,11 @@ export class RoomComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.data);
-    this.socketEventHandler();
-    this.getExpectedParticipants();
     this.store.select('user').subscribe((res: any) => {
       this.me = res;
     });
+    this.socketEventHandler();
+    this.getExpectedParticipants();
     this.checkDocument();
   }
 
@@ -150,16 +153,17 @@ export class RoomComponent implements OnInit {
       });
     });
     const loader = this.util.startLoading('Joining please wait...');
+
     this.agora.getToken(schedule._id).subscribe(
+      //need na alisin itong agora token
       (res: any) => {
         if (res) {
           console.log(res);
           this.token = res.token;
-          this.emitJoinRoomSocket(this.data);
-          this.nextTransaction();
+          // this.emitJoinRoomSocket(this.data);
+          this.getCurrentTransactionQueue(this.transactions);
           this.joinRoom = true;
           this.util.stopLoading(loader);
-
           console.log(this.transactions);
         }
       },
@@ -168,6 +172,28 @@ export class RoomComponent implements OnInit {
         this.util.stopLoading(loader);
       }
     );
+  }
+
+  //Automatically proceed to current queue transaction
+  getCurrentTransactionQueue(transactions: Array<any> = []) {
+    console.log(transactions);
+    let tempRoom: any;
+    this.room.get(this.query).subscribe(async (res: any) => {
+      console.log(res);
+      if (res.env.room.length) {
+        tempRoom = res.env.room[0];
+        this.currentRoom = res.env.room[0]._id;
+        let currentExistingTransaction: any = transactions.find(
+          (transaction: any) => transaction.que === tempRoom.que
+        );
+        if (currentExistingTransaction) {
+          this.currentTransaction = currentExistingTransaction;
+          this.currentTransactionIndex = currentExistingTransaction.que - 1;
+          this.getImages();
+        }
+      } else this.nextTransaction();
+    });
+    console.log(this.currentTransaction);
   }
 
   emitJoinRoomSocket(data: any) {
@@ -202,8 +228,7 @@ export class RoomComponent implements OnInit {
             this.transactions[this.currentTransactionIndex];
 
           //DELETE CURRENT ROOM beofre proceeding to the NEXT TRANSACTION
-          let query: QueryParams = { find: [] };
-          this.room.get(query).subscribe((res: any) => {
+          this.room.get(this.query).subscribe((res: any) => {
             console.log(res);
 
             this.util.stopLoading(loader);
@@ -236,36 +261,23 @@ export class RoomComponent implements OnInit {
   }
 
   async initiateTransaction() {
+    const loader = this.util.startLoading('Initiating room details...');
     this.currentTransaction = this.transactions[this.currentTransactionIndex];
 
     this.selectDocumentToView(this.currentTransaction._documents[0]);
-    this._images.forEach(async (image: any) => {
-      if (
-        this.currentTransaction.sender.images &&
-        this.currentTransaction.sender.images[image.fcname]
-      )
-        image.url = await this.getTempLink(
-          this.currentTransaction.sender.images[image.fcname].path_display
-        );
-      else delete image.url;
-    });
-    if (this.currentTransaction.videoOfSignature.path_display)
-      this.currentTransaction.vidURL = await this.getTempLink(
-        this.currentTransaction.videoOfSignature.path_display
-      );
-    else delete this.currentTransaction.vidURL;
+    this.getImages();
 
     // FOR ROOM HERE
     // FOR ROOM HERE
-    const loader = this.util.startLoading('Initiating room details...');
-    let query: QueryParams = { find: [] };
-    this.room.get(query).subscribe(
+    this.room.get(this.query).subscribe(
       (res: any) => {
         console.log(res);
         if (res) {
-          this.remoteCallDetails = res.env.room[0]?.currentTransaction.sender;
+          if (res.env.room.length) {
+            this.remoteCallDetails = res.env.room[0].currentTransaction.sender;
 
-          this.currentRoom = res.env.room[0]?._id;
+            this.currentRoom = res.env.room[0]._id;
+          }
           console.log('ITO YUNG EXISTING ROOM', res.env.room);
 
           this.util.stopLoading(loader);
@@ -286,9 +298,9 @@ export class RoomComponent implements OnInit {
                 console.log(res);
                 if (res) {
                   this.util.stopLoading(loader2);
-                  this.currentRoom = res.env.room[0]?._id;
+                  this.currentRoom = res.env.room._id;
                   this.remoteCallDetails =
-                    res.env.room[0]?.currentTransaction.sender;
+                    res.env.room.currentTransaction.sender;
                   console.log(this.remoteCallDetails);
 
                   console.log(res);
@@ -320,6 +332,24 @@ export class RoomComponent implements OnInit {
   selectDocumentToView(event: any) {
     console.log(event);
     this.currentDocument = event;
+  }
+
+  async getImages() {
+    this._images.forEach(async (image: any) => {
+      if (
+        this.currentTransaction.sender.images &&
+        this.currentTransaction.sender.images[image.fcname]
+      )
+        image.url = await this.getTempLink(
+          this.currentTransaction.sender.images[image.fcname].path_display
+        );
+      else delete image.url;
+    });
+    if (this.currentTransaction.videoOfSignature.path_display)
+      this.currentTransaction.vidURL = await this.getTempLink(
+        this.currentTransaction.videoOfSignature.path_display
+      );
+    else delete this.currentTransaction.vidURL;
   }
 
   takeScreenshot() {
@@ -375,15 +405,25 @@ export class RoomComponent implements OnInit {
 
   leaveMeeting(event: any) {
     console.log(event);
+    const loader = this.util.startLoading('Leaving...');
     this.room.delete(this.currentRoom).subscribe(
       (res: any) => {
         console.log(res);
+        this.util.stopLoading(loader);
+        this.dialogRef.close(true);
       },
       (err) => {
         console.log(err);
+        this.util.stopLoading(loader);
+        this.dialog.open(ActionResultComponent, {
+          data: {
+            msg: err.error.message || 'Server Error, Please try again!',
+            success: false,
+            button: 'Okay',
+          },
+        });
       }
     );
-    this.dialogRef.close(true);
   }
 
   removeOnMeeting() {
