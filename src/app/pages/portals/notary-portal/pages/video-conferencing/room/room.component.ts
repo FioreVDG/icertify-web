@@ -408,28 +408,25 @@ export class RoomComponent implements OnInit {
     console.log(event);
     console.log(this.me.type);
     const loader = this.util.startLoading('Leaving...');
-    if (this.me.type !== 'NOTARY') {
-      this.dialogRef.close(true);
-    } else {
-      this.room.delete(this.currentRoom).subscribe(
-        (res: any) => {
-          console.log(res);
-          this.util.stopLoading(loader);
-          this.dialogRef.close(true);
-        },
-        (err) => {
-          console.log(err);
-          this.util.stopLoading(loader);
-          this.dialog.open(ActionResultComponent, {
-            data: {
-              msg: err.error.message || 'Server Error, Please try again!',
-              success: false,
-              button: 'Okay',
-            },
-          });
-        }
-      );
-    }
+
+    this.room.delete(this.currentRoom).subscribe(
+      (res: any) => {
+        console.log(res);
+        this.util.stopLoading(loader);
+        this.dialogRef.close(true);
+      },
+      (err) => {
+        console.log(err);
+        this.util.stopLoading(loader);
+        this.dialog.open(ActionResultComponent, {
+          data: {
+            msg: err.error.message || 'Server Error, Please try again!',
+            success: false,
+            button: 'Okay',
+          },
+        });
+      }
+    );
   }
 
   removeOnMeeting() {
