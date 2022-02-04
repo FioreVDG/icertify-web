@@ -191,6 +191,7 @@ export class RoomComponent implements OnInit {
         if (currentExistingTransaction) {
           this.currentTransaction = currentExistingTransaction;
           this.currentTransactionIndex = currentExistingTransaction.que - 1;
+          this.selectDocumentToView(this.currentTransaction._documents[0]);
           this.getImages();
         }
       } else this.nextTransaction();
@@ -414,7 +415,7 @@ export class RoomComponent implements OnInit {
       (res: any) => {
         console.log(res);
         this.util.stopLoading(loader);
-        this.joinRoom = false;
+        this.dialogRef.close(true);
       },
       (err) => {
         console.log(err);
