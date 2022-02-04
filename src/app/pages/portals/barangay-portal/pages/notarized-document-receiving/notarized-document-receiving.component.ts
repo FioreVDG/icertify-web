@@ -150,13 +150,14 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
           });
 
           let smsQueries = ids.map((id: any) => {
-            this.api.sms.sendReleasingNotif({}, id);
+            return this.api.sms.sendReleasingNotif({}, id);
           });
 
           forkJoin(apiQueries).subscribe(
             (res: any) => {
               forkJoin(smsQueries).subscribe(
                 (res) => {
+                  console.log(res);
                   this.util.stopLoading(loader);
                   this.dialog
                     .open(ActionResultComponent, {
@@ -174,7 +175,7 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
                     });
                 },
                 (err) => {
-                  console.log(err.error);
+                  console.log(err);
                 }
               );
               console.log(res);
