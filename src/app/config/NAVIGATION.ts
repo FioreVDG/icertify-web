@@ -63,6 +63,18 @@ export const BARANGAY_NAVS: NavNode[] = [
     route: 'video-conference',
     hasAccess: false,
   },
+  {
+    label: 'Notarized Document Receiving',
+    icon: 'fact_check',
+    route: 'notarized-document-receiving',
+    hasAccess: false,
+  },
+  {
+    label: 'Notarized Document Releasing',
+    icon: 'verified',
+    route: 'notarized-document-releasing',
+    hasAccess: false,
+  },
 ];
 
 export const SUPERADMIN_NAVS: NavNode[] = [

@@ -54,6 +54,20 @@ const routes: Routes = [
             './pages/barangay-video-conferencing/barangay-video-conferencing.module'
           ).then((m) => m.BarangayVideoConferencingModule),
       },
+      {
+        path: 'notarized-document-receiving',
+        loadChildren: () =>
+          import(
+            './pages/notarized-document-receiving/notarized-document-receiving.module'
+          ).then((m) => m.NotarizedDocumentReceivingModule),
+      },
+      {
+        path: 'notarized-document-releasing',
+        loadChildren: () =>
+          import(
+            './pages/notarized-document-releasing/notarized-document-releasing.module'
+          ).then((m) => m.NotarizedDocumentReleasingModule),
+      },
     ],
   },
 ];
