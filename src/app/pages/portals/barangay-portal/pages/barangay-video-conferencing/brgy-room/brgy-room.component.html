@@ -69,11 +69,13 @@
     </div>
   </div>
 </div>
-<div *ngIf="joinRoom" class="grid main-container">
+
+<div *ngIf="joinRoom" style="margin: 0" class="grid main-container">
   <div class="col-12">
     <app-rt-video
       [channelName]="currentScheduleId"
-      [details]="details"
+      [remoteDetails]="remoteCallDetails"
+      (onLeaveMeeting)="leaveMeeting($event)"
     ></app-rt-video>
   </div>
 </div>

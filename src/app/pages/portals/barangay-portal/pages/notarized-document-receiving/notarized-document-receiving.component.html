@@ -9,6 +9,7 @@
 </button>
 
 <app-table
+  #table
   [filterButtonConfig]="filtBtnConfig"
   [loading]="loading"
   (onUpdateTableEmit)="tableUpdateEmit($event)"

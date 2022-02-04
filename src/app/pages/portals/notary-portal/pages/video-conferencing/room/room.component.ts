@@ -22,6 +22,7 @@ import { Store } from '@ngrx/store';
 import { User } from 'src/app/models/user.interface';
 // import * as htmlToImage from 'html-to-image';
 import html2canvas from 'html2canvas';
+import { DocumentImageViewerComponent } from 'src/app/shared/dialogs/document-image-viewer/document-image-viewer.component';
 
 @Component({
   selector: 'app-room',
@@ -182,6 +183,7 @@ export class RoomComponent implements OnInit {
       console.log(res);
       if (res.env.room.length) {
         tempRoom = res.env.room[0];
+        this.remoteCallDetails = res.env.room[0].currentTransaction.sender;
         this.currentRoom = res.env.room[0]._id;
         let currentExistingTransaction: any = transactions.find(
           (transaction: any) => transaction.que === tempRoom.que
@@ -189,6 +191,7 @@ export class RoomComponent implements OnInit {
         if (currentExistingTransaction) {
           this.currentTransaction = currentExistingTransaction;
           this.currentTransactionIndex = currentExistingTransaction.que - 1;
+          this.selectDocumentToView(this.currentTransaction._documents[0]);
           this.getImages();
         }
       } else this.nextTransaction();
@@ -320,8 +323,6 @@ export class RoomComponent implements OnInit {
         console.log(err);
       }
     );
-
-    console.log('CHECK THIS', this._images);
     console.log(this.currentTransaction);
   }
 
@@ -350,6 +351,8 @@ export class RoomComponent implements OnInit {
         this.currentTransaction.videoOfSignature.path_display
       );
     else delete this.currentTransaction.vidURL;
+
+    console.log('CHECK THIS', this._images);
   }
 
   takeScreenshot() {
@@ -405,7 +408,9 @@ export class RoomComponent implements OnInit {
 
   leaveMeeting(event: any) {
     console.log(event);
+    console.log(this.me.type);
     const loader = this.util.startLoading('Leaving...');
+
     this.room.delete(this.currentRoom).subscribe(
       (res: any) => {
         console.log(res);
@@ -424,6 +429,14 @@ export class RoomComponent implements OnInit {
         });
       }
     );
+  }
+
+  expandImg(event: string) {
+    console.log(event);
+    this.dialog.open(DocumentImageViewerComponent, {
+      data: event,
+      panelClass: 'dialog-transparent',
+    });
   }
 
   removeOnMeeting() {

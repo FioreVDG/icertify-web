@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { forkJoin } from 'rxjs';
 import { User } from 'src/app/models/user.interface';
 import { ApiService } from 'src/app/service/api/api.service';
 import { UtilService } from 'src/app/service/util/util.service';
+import { TableComponent } from 'src/app/shared/components/table/table.component';
 import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
 import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
 import {
@@ -21,6 +22,7 @@ import { ViewFolderTransactionsComponent } from './view-folder-transactions/view
   styleUrls: ['./notarized-document-receiving.component.scss'],
 })
 export class NotarizedDocumentReceivingComponent implements OnInit {
+  @ViewChild('table') appTable: TableComponent | undefined;
   filtBtnConfig = FILT_BTN_CONFIG;
   isCheckbox: boolean = true;
   selected = [];
@@ -138,31 +140,45 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
           let apiQueries = ids.map((id: any) => {
             return this.api.folder.update(
               {
-                _receivedBy: this.me._id,
+                _brgyReceivedBy: this.me._id,
                 location: 'Barangay',
                 locationStatus: 'Received by Barangay',
+                dateDropToBarangay: new Date(),
               },
               id
             );
           });
 
+          let smsQueries = ids.map((id: any) => {
+            return this.api.sms.sendReleasingNotif({}, id);
+          });
+
           forkJoin(apiQueries).subscribe(
             (res: any) => {
-              this.util.stopLoading(loader);
+              forkJoin(smsQueries).subscribe(
+                (res) => {
+                  console.log(res);
+                  this.util.stopLoading(loader);
+                  this.dialog
+                    .open(ActionResultComponent, {
+                      data: {
+                        success: true,
+                        msg: `Batch/es successfully marked as received!`,
+                        button: 'Okay',
+                      },
+                    })
+                    .afterClosed()
+                    .subscribe((res: any) => {
+                      this.appTable?.checkedRows.clear();
+                      this.selected = [];
+                      this.fetchData(this.page);
+                    });
+                },
+                (err) => {
+                  console.log(err);
+                }
+              );
               console.log(res);
-              this.dialog
-                .open(ActionResultComponent, {
-                  data: {
-                    success: true,
-                    msg: `Batch/es successfully marked as received!`,
-                    button: 'Okay',
-                  },
-                })
-                .afterClosed()
-                .subscribe((res: any) => {
-                  this.selected = [];
-                  this.fetchData(this.page);
-                });
             },
             (err: any) => {
               console.log(err.error);

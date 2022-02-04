@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { forkJoin } from 'rxjs';
@@ -7,6 +7,7 @@ import { ApiService } from 'src/app/service/api/api.service';
 import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
 import { UtilService } from 'src/app/service/util/util.service';
 import { RegistrantFormComponent } from 'src/app/shared/components/registrant-form/registrant-form.component';
+import { TableComponent } from 'src/app/shared/components/table/table.component';
 import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachments/view-attachments.component';
 import { ViewVideoComponent } from 'src/app/shared/components/view-video/view-video.component';
 import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
@@ -24,6 +25,8 @@ import {
   styleUrls: ['./notarized-document-releasing.component.scss'],
 })
 export class NotarizedDocumentReleasingComponent implements OnInit {
+  @ViewChild('table') appTable: TableComponent | undefined;
+
   filtBtnConfig = FILT_BTN_CONFIG;
   isCheckbox: boolean = true;
   selected = [];
@@ -163,6 +166,8 @@ export class NotarizedDocumentReleasingComponent implements OnInit {
                 })
                 .afterClosed()
                 .subscribe((res: any) => {
+                  this.appTable?.checkedRows.clear();
+
                   this.selected = [];
                   this.fetchData(this.page);
                 });

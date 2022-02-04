@@ -2,8 +2,9 @@ import { RoomComponent } from './room/room.component';
 import { SetScheduleComponent } from './set-schedule/set-schedule.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ApiService } from './../../../../../service/api/api.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FILT_BTN } from './config';
+import { TableComponent } from 'src/app/shared/components/table/table.component';
 
 @Component({
   selector: 'app-video-conferencing',
@@ -11,6 +12,7 @@ import { FILT_BTN } from './config';
   styleUrls: ['./video-conferencing.component.scss'],
 })
 export class VideoConferencingComponent implements OnInit {
+  @ViewChild('table') appTable: TableComponent | undefined;
   filterBtnConfig = FILT_BTN;
   isCheckbox: boolean = true;
   selected = [];
@@ -119,6 +121,8 @@ export class VideoConferencingComponent implements OnInit {
       .subscribe((res: any) => {
         console.log(res);
         if (res) {
+          this.appTable?.checkedRows.clear();
+
           this.fetchData(this.page);
         }
       });
