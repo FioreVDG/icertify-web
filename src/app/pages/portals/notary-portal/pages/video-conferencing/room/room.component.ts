@@ -22,6 +22,7 @@ import { Store } from '@ngrx/store';
 import { User } from 'src/app/models/user.interface';
 // import * as htmlToImage from 'html-to-image';
 import html2canvas from 'html2canvas';
+import { DocumentImageViewerComponent } from 'src/app/shared/dialogs/document-image-viewer/document-image-viewer.component';
 
 @Component({
   selector: 'app-room',
@@ -427,6 +428,14 @@ export class RoomComponent implements OnInit {
         });
       }
     );
+  }
+
+  expandImg(event: string) {
+    console.log(event);
+    this.dialog.open(DocumentImageViewerComponent, {
+      data: event,
+      panelClass: 'dialog-transparent',
+    });
   }
 
   removeOnMeeting() {

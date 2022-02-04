@@ -106,7 +106,7 @@ mat-sidenav-container {
     flex-direction: column;
     height: 16rem;
     padding: 0.3rem;
-    padding-bottom: 0rem;
+    // padding-bottom: 0rem;
     margin-bottom: 0.4rem;
     border: 2px solid #79797975;
     border-radius: 0.25rem;
@@ -126,6 +126,16 @@ mat-sidenav-container {
       padding: 0.5rem;
       background-color: #26184a8b;
       margin: 0;
+    }
+    .maximize {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: #fefefeb3;
+      border-radius: 5px;
+    }
+    .maximize:hover {
+      color: #fff;
     }
   }
 

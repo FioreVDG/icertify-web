@@ -92,6 +92,15 @@
       <p><b>Proof of Identity</b></p>
       <ng-container *ngFor="let image of _images; let i = index">
         <div class="img-wrap">
+          <button
+            (click)="expandImg(image.url)"
+            class="maximize"
+            [disabled]="!image.loaded"
+            mat-icon-button
+            color="primary"
+          >
+            <mat-icon>open_in_full</mat-icon>
+          </button>
           <mat-spinner
             *ngIf="!image.loaded"
             [diameter]="35"

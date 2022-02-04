@@ -27,7 +27,6 @@ import { AreYouSureComponent } from '../../dialogs/are-you-sure/are-you-sure.com
   styleUrls: ['./rt-video.component.scss'],
 })
 export class RtVideoComponent implements OnInit {
-  title = 'agorawrtc-demo';
   localCallId = 'agora_local';
   remoteCalls: Array<any> = [];
   @Input() channelName: any;
@@ -39,12 +38,10 @@ export class RtVideoComponent implements OnInit {
   private token = '';
   public me: any;
   private uid = '';
-  // public channelName = '321321321';
   public localAudio = true;
   public localVideo = true;
 
   @Output() onLeaveMeeting: any = new EventEmitter<any>();
-  @Output() removeParticipant: any = new EventEmitter<any>();
 
   snack: any;
   timeStamp: Date = new Date();
