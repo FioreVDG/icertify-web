@@ -7,7 +7,7 @@ import {
   BATCH_DELIVERY_BOTTOMSHEET,
   ENROUTE_FIND_BATCH,
 } from './config';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ViewDocumentComponent } from 'src/app/shared/components/view-document/view-document.component';
@@ -17,6 +17,7 @@ import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachm
 import { ViewTransactionComponent } from '../../../notary-portal/pages/document-receiving/view-transaction/view-transaction.component';
 import { TRANSAC_TABLE_COLUMN } from './batch-folder/config';
 import { Find } from 'src/app/models/queryparams.interface';
+import { TableComponent } from 'src/app/shared/components/table/table.component';
 
 @Component({
   selector: 'app-batch-delivery-management',
@@ -24,6 +25,7 @@ import { Find } from 'src/app/models/queryparams.interface';
   styleUrls: ['./batch-delivery-management.component.scss'],
 })
 export class BatchDeliveryManagementComponent implements OnInit {
+  @ViewChild('table') appTable: TableComponent | undefined;
   filtBtnConfig = FILT_BTN_CONFIG;
   isCheckbox: boolean = true;
   selected = [];
@@ -134,6 +136,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
                 })
                 .afterClosed()
                 .subscribe((res: any) => {
+                  this.appTable?.checkedRows.clear();
                   this.fetchData(this.page);
                   this.selected = [];
                 });
