@@ -115,6 +115,11 @@ export const FIND_UPLOADED: Find[] = [
     operator: '=',
     value: 'Active',
   },
+  {
+    field: 'notarizedDocument',
+    operator: '[nin]=',
+    value: 'null',
+  },
 ];
 
 export const UPLOADING_NOTARIZED_DOCUMENT_BOTTOMSHEET: BottomSheetItem[] = [];
