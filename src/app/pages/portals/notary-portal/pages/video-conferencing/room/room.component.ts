@@ -1,3 +1,4 @@
+import { ActionResultComponent } from './../../../../../../shared/dialogs/action-result/action-result.component';
 import { QueryParams } from './../../../../../../models/queryparams.interface';
 import { RoomService } from './../../../../../../service/api/room/room.service';
 import { RegistrantFormComponent } from './../../../../../../shared/components/registrant-form/registrant-form.component';
@@ -68,6 +69,12 @@ export class RoomComponent implements OnInit {
   currentDocument: any;
   currentBatch: any;
   currentRoom: any;
+
+  remoteCallDetails: any = {};
+  leaveArr: any = [];
+
+  query: QueryParams = { find: [] };
+
   constructor(
     public dialogRef: MatDialogRef<RoomComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -84,11 +91,11 @@ export class RoomComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.data);
-    this.socketEventHandler();
-    this.getExpectedParticipants();
     this.store.select('user').subscribe((res: any) => {
       this.me = res;
     });
+    this.socketEventHandler();
+    this.getExpectedParticipants();
     this.checkDocument();
   }
 
@@ -146,16 +153,17 @@ export class RoomComponent implements OnInit {
       });
     });
     const loader = this.util.startLoading('Joining please wait...');
+
     this.agora.getToken(schedule._id).subscribe(
+      //need na alisin itong agora token
       (res: any) => {
         if (res) {
           console.log(res);
           this.token = res.token;
-          this.emitJoinRoomSocket(this.data);
-          this.nextTransaction();
+          // this.emitJoinRoomSocket(this.data);
+          this.getCurrentTransactionQueue(this.transactions);
           this.joinRoom = true;
           this.util.stopLoading(loader);
-
           console.log(this.transactions);
         }
       },
@@ -164,6 +172,28 @@ export class RoomComponent implements OnInit {
         this.util.stopLoading(loader);
       }
     );
+  }
+
+  //Automatically proceed to current queue transaction
+  getCurrentTransactionQueue(transactions: Array<any> = []) {
+    console.log(transactions);
+    let tempRoom: any;
+    this.room.get(this.query).subscribe(async (res: any) => {
+      console.log(res);
+      if (res.env.room.length) {
+        tempRoom = res.env.room[0];
+        this.currentRoom = res.env.room[0]._id;
+        let currentExistingTransaction: any = transactions.find(
+          (transaction: any) => transaction.que === tempRoom.que
+        );
+        if (currentExistingTransaction) {
+          this.currentTransaction = currentExistingTransaction;
+          this.currentTransactionIndex = currentExistingTransaction.que - 1;
+          this.getImages();
+        }
+      } else this.nextTransaction();
+    });
+    console.log(this.currentTransaction);
   }
 
   emitJoinRoomSocket(data: any) {
@@ -196,11 +226,9 @@ export class RoomComponent implements OnInit {
           this.currentTransactionIndex++;
           this.currentTransaction =
             this.transactions[this.currentTransactionIndex];
-          this.initiateTransaction();
 
           //DELETE CURRENT ROOM beofre proceeding to the NEXT TRANSACTION
-          let query: QueryParams = { find: [] };
-          this.room.get(query).subscribe((res: any) => {
+          this.room.get(this.query).subscribe((res: any) => {
             console.log(res);
 
             this.util.stopLoading(loader);
@@ -212,7 +240,9 @@ export class RoomComponent implements OnInit {
               this.room.delete(this.currentRoom).subscribe(
                 (res: any) => {
                   console.log(res);
-                  if (res) this.util.stopLoading(loader2);
+                  delete this.remoteCallDetails;
+                  this.initiateTransaction();
+                  this.util.stopLoading(loader2);
                 },
                 (err) => {
                   console.log(err);
@@ -235,6 +265,76 @@ export class RoomComponent implements OnInit {
     this.currentTransaction = this.transactions[this.currentTransactionIndex];
 
     this.selectDocumentToView(this.currentTransaction._documents[0]);
+    this.getImages();
+
+    // FOR ROOM HERE
+    // FOR ROOM HERE
+    this.room.get(this.query).subscribe(
+      (res: any) => {
+        console.log(res);
+        if (res) {
+          if (res.env.room.length) {
+            this.remoteCallDetails = res.env.room[0].currentTransaction.sender;
+
+            this.currentRoom = res.env.room[0]._id;
+          }
+          console.log('ITO YUNG EXISTING ROOM', res.env.room);
+
+          this.util.stopLoading(loader);
+          if (!res.env.room.length) {
+            console.log('WALA PANG EXISTING ROOM');
+
+            console.log(this.remoteCallDetails);
+            let roomToAdd: any = {};
+            roomToAdd.que = this.currentTransaction.que;
+            roomToAdd.currentTransaction = this.currentTransaction;
+            roomToAdd.currentSchedId = this.currentSchedule._id;
+
+            const loader2 = this.util.startLoading(
+              'Fiinalizing room details...'
+            );
+            this.room.create(roomToAdd).subscribe(
+              (res: any) => {
+                console.log(res);
+                if (res) {
+                  this.util.stopLoading(loader2);
+                  this.currentRoom = res.env.room._id;
+                  this.remoteCallDetails =
+                    res.env.room.currentTransaction.sender;
+                  console.log(this.remoteCallDetails);
+
+                  console.log(res);
+                  console.log('ITO YUNG EXISTING ROOM', res.env.room);
+                }
+              },
+              (err) => {
+                console.log(err);
+
+                this.util.stopLoading(loader2);
+              }
+            );
+          }
+        }
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
+    console.log('CHECK THIS', this._images);
+    console.log(this.currentTransaction);
+  }
+
+  imageLoaded(index: number) {
+    this._images[index].loaded = true;
+  }
+
+  selectDocumentToView(event: any) {
+    console.log(event);
+    this.currentDocument = event;
+  }
+
+  async getImages() {
     this._images.forEach(async (image: any) => {
       if (
         this.currentTransaction.sender.images &&
@@ -250,54 +350,6 @@ export class RoomComponent implements OnInit {
         this.currentTransaction.videoOfSignature.path_display
       );
     else delete this.currentTransaction.vidURL;
-
-    // FOR ROOM HERE
-    // FOR ROOM HERE
-    let query: QueryParams = { find: [] };
-    this.room.get(query).subscribe((res: any) => {
-      console.log(res);
-      console.log('ITO YUNG EXISTING ROOM', res.env.room);
-      if (res) {
-        this.util.stopLoading(loader);
-        if (res.env && !res.env.room.length) {
-          console.log('WALA PANG EXISTING ROOM');
-          let roomToAdd: any = {};
-          roomToAdd.que = this.currentTransaction.que;
-          roomToAdd.currentTransaction = this.currentTransaction;
-          roomToAdd.currentSchedId = this.currentSchedule._id;
-
-          const loader2 = this.util.startLoading('Fiinalizing room details...');
-          this.room.create(roomToAdd).subscribe(
-            (res: any) => {
-              console.log(res);
-              if (res) {
-                this.util.stopLoading(loader2);
-                this.currentRoom = res.env.room[0]._id;
-                console.log(res);
-                console.log('ITO YUNG EXISTING ROOM', res.env.room);
-              }
-            },
-            (err) => {
-              console.log(err);
-
-              this.util.stopLoading(loader2);
-            }
-          );
-        }
-      }
-    });
-
-    console.log('CHECK THIS', this._images);
-    console.log(this.currentTransaction);
-  }
-
-  imageLoaded(index: number) {
-    this._images[index].loaded = true;
-  }
-
-  selectDocumentToView(event: any) {
-    console.log(event);
-    this.currentDocument = event;
   }
 
   takeScreenshot() {
@@ -353,14 +405,28 @@ export class RoomComponent implements OnInit {
 
   leaveMeeting(event: any) {
     console.log(event);
+    const loader = this.util.startLoading('Leaving...');
     this.room.delete(this.currentRoom).subscribe(
       (res: any) => {
         console.log(res);
+        this.util.stopLoading(loader);
+        this.dialogRef.close(true);
       },
       (err) => {
         console.log(err);
+        this.util.stopLoading(loader);
+        this.dialog.open(ActionResultComponent, {
+          data: {
+            msg: err.error.message || 'Server Error, Please try again!',
+            success: false,
+            button: 'Okay',
+          },
+        });
       }
     );
-    this.dialogRef.close(true);
+  }
+
+  removeOnMeeting() {
+    delete this.remoteCallDetails;
   }
 }

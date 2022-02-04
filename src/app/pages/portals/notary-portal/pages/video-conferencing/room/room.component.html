@@ -55,7 +55,7 @@
           "
         >
           <i
-            >BID: <kbd>{{ currentTransaction._folderId }}</kbd></i
+            >BID: <kbd>{{ currentTransaction?._folderId }}</kbd></i
           >
         </p>
         <p
@@ -67,7 +67,7 @@
           "
         >
           <i
-            >CID: <kbd>{{ currentSchedule._id }}</kbd></i
+            >CID: <kbd>{{ currentSchedule?._id }}</kbd></i
           >
         </p>
         <p style="text-align: center; color: #fff; margin-top: 0">
@@ -187,6 +187,7 @@
         <app-rt-video
           [channelName]="currentSchedule._id"
           (onLeaveMeeting)="leaveMeeting($event)"
+          [remoteDetails]="remoteCallDetails ? remoteCallDetails : {}"
         ></app-rt-video>
         <div class="grid mt-3">
           <div class="col-12 opt-btn" *ngIf="checkDocumentStatus()">

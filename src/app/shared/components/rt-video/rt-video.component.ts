@@ -1,7 +1,14 @@
 import { MatDialog } from '@angular/material/dialog';
 import { Socket } from 'ngx-socket-io';
 import { ApiService } from './../../../service/api/api.service';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  SimpleChange,
+} from '@angular/core';
 import {
   AgoraClient,
   ClientEvent,
@@ -25,6 +32,8 @@ export class RtVideoComponent implements OnInit {
   remoteCalls: Array<any> = [];
   @Input() channelName: any;
   @Input() details: any;
+  @Input() remoteDetails: any;
+  @Input() removeArr: Array<any> = [];
 
   private client!: AgoraClient;
   private localStream!: Stream;
@@ -36,6 +45,7 @@ export class RtVideoComponent implements OnInit {
   public localVideo = true;
 
   @Output() onLeaveMeeting: any = new EventEmitter<any>();
+  @Output() removeParticipant: any = new EventEmitter<any>();
 
   snack: any;
   timeStamp: Date = new Date();
@@ -55,28 +65,35 @@ export class RtVideoComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.channelName);
     this.startConference();
-    setTimeout(() => {
+    setInterval(() => {
       console.log(this.remoteCalls);
-    }, 5000);
+      console.log(this.remoteDetails);
+    }, 3000);
+  }
+
+  ngOnChanges(changes: SimpleChange) {
+    console.log(changes);
+    this.removeOnRemote();
+  }
+
+  removeOnRemote() {
+    this.remoteCalls = [];
+    console.log(this.remoteCalls);
   }
 
   startConference() {
     this.snack = this.snackbar.open('Entering Room...', undefined);
     this.api.agora.getToken(this.channelName).subscribe((res: any) => {
-      // console.log(
-      //   '][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]',
-      //   res
-      // );
+      console.log(
+        '][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]',
+        res
+      );
       if (res) this.token = res.env.token;
       this.store.select('user').subscribe((res: User) => {
         this.me = res;
         console.log(this.me);
         this.uid = res._id;
 
-        // console.log(
-        //   '][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]',
-        //   this.me
-        // );
         this.client = this.ngxAgoraService.createClient({
           mode: 'rtc',
           codec: 'h264',
@@ -99,7 +116,7 @@ export class RtVideoComponent implements OnInit {
               this.snack.dismiss();
             },
             (error) => {
-              // console.error(error);
+              console.error(error);
             }
           )
         );
@@ -108,74 +125,77 @@ export class RtVideoComponent implements OnInit {
   }
   private assignClientHandlers(): void {
     this.client.on(ClientEvent.LocalStreamPublished, (evt) => {
-      // console.log('Publish local stream successfully');
+      console.log('Publish local stream successfully', evt);
     });
 
     this.client.on(ClientEvent.Error, (error) => {
-      // console.log('Got error msg:', error.reason);
+      console.log('Got error msg:', error.reason);
       if (error.reason === 'DYNAMIC_KEY_TIMEOUT') {
         this.client.renewChannelKey(
           '',
           () => {
-            // console.log('Renewed the channel key successfully.')
+            console.log('Renewed the channel key successfully.');
           },
           (renewError) => {
-            // console.error('Renew channel key failed: ', renewError)
+            console.error('Renew channel key failed: ', renewError);
           }
         );
       }
     });
 
     this.client.on(ClientEvent.RemoteStreamAdded, (evt) => {
-      // console.log(
-      //   '[][][][][][][][][][][][][][][][][][][][][][][][][][] Remote Stream added'
-      // );
       const stream = evt.stream as Stream;
+      console.log(
+        '[][][][][][][][][][][][][][][][][][][][][][][][][][] Remote Stream added',
+        stream
+      );
       this.client.subscribe(stream, { audio: true, video: true }, (err) => {
-        // console.log('Subscribe stream failed', err);
+        console.log('Subscribe stream failed', err);
       });
     });
 
     this.client.on(ClientEvent.RemoteStreamSubscribed, (evt) => {
-      // console.log(
-      //   '[][][][][][][][][][][][][][][][][][][][][][][][][][] Remote Stream Subscribed'
-      // );
       const stream = evt.stream as Stream;
       const id = this.getRemoteId(stream);
+
+      console.log(
+        '[][][][][][][][][][][][][][][][][][][][][][][][][][] Remote Stream Subscribed',
+        stream
+      );
       if (!this.remoteCalls.length) {
         this.remoteCalls.push({
           id: id,
           hasAudio: true,
           hasVideo: true,
-          // details: this.details,
+          details: this.remoteDetails,
         });
         setTimeout(() => stream.play(id), 1000);
       }
     });
 
     this.client.on(ClientEvent.RemoteStreamRemoved, (evt) => {
-      // console.log(
-      //   '[][][][][][][][][][][][][][][][][][][][][][][][][][] Remote Stream Removed'
-      // );
+      console.log(
+        '[][][][][][][][][][][][][][][][][][][][][][][][][][] Remote Stream Removed'
+      );
       const stream = evt.stream as Stream;
       if (stream) {
         stream.stop();
-        this.remoteCalls = [];
-        // console.log(`Remote stream is removed ${stream.getId()}`);
+        // this.remoteCalls = [];
+        console.log(`Remote stream is removed ${stream.getId()}`);
       }
     });
 
     this.client.on(ClientEvent.PeerLeave, (evt) => {
-      // console.log(
-      //   '[][][][][][][][][][][][][][][][][][][][][][][][][][] PEEER LEAVE'
-      // );
+      console.log(
+        '[][][][][][][][][][][][][][][][][][][][][][][][][][] PEEER LEAVE'
+      );
       const stream = evt.stream as Stream;
       if (stream) {
         stream.stop();
         this.remoteCalls = this.remoteCalls.filter(
           (call) => call.id !== `${this.getRemoteId(stream)}`
         );
-        // console.log(`${evt.uid} left from this channel`);
+        console.log(`${evt.uid} left from this channel`);
       }
     });
 
@@ -238,6 +258,7 @@ export class RtVideoComponent implements OnInit {
         this.localStream.play(this.localCallId);
         if (onSuccess) {
           onSuccess();
+          console.log(this.localStream);
         }
       },
       (err) => {
@@ -262,6 +283,8 @@ export class RtVideoComponent implements OnInit {
       onSuccess,
       onFailure
     );
+    console.log(this.client);
+    console.log(this.localStream);
   }
 
   /**
@@ -269,7 +292,7 @@ export class RtVideoComponent implements OnInit {
    */
   publish(): void {
     this.client.publish(this.localStream, (err) => {
-      // console.log('Publish local stream error: ' + err);
+      console.log('Publish local stream error: ' + err);
     });
   }
 
