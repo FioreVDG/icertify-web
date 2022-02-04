@@ -182,6 +182,7 @@ export class RoomComponent implements OnInit {
       console.log(res);
       if (res.env.room.length) {
         tempRoom = res.env.room[0];
+        this.remoteCallDetails = res.env.room[0].currentTransaction.sender;
         this.currentRoom = res.env.room[0]._id;
         let currentExistingTransaction: any = transactions.find(
           (transaction: any) => transaction.que === tempRoom.que
@@ -320,8 +321,6 @@ export class RoomComponent implements OnInit {
         console.log(err);
       }
     );
-
-    console.log('CHECK THIS', this._images);
     console.log(this.currentTransaction);
   }
 
@@ -350,6 +349,8 @@ export class RoomComponent implements OnInit {
         this.currentTransaction.videoOfSignature.path_display
       );
     else delete this.currentTransaction.vidURL;
+
+    console.log('CHECK THIS', this._images);
   }
 
   takeScreenshot() {
@@ -405,25 +406,30 @@ export class RoomComponent implements OnInit {
 
   leaveMeeting(event: any) {
     console.log(event);
+    console.log(this.me.type);
     const loader = this.util.startLoading('Leaving...');
-    this.room.delete(this.currentRoom).subscribe(
-      (res: any) => {
-        console.log(res);
-        this.util.stopLoading(loader);
-        this.dialogRef.close(true);
-      },
-      (err) => {
-        console.log(err);
-        this.util.stopLoading(loader);
-        this.dialog.open(ActionResultComponent, {
-          data: {
-            msg: err.error.message || 'Server Error, Please try again!',
-            success: false,
-            button: 'Okay',
-          },
-        });
-      }
-    );
+    if (this.me.type !== 'NOTARY') {
+      this.dialogRef.close(true);
+    } else {
+      this.room.delete(this.currentRoom).subscribe(
+        (res: any) => {
+          console.log(res);
+          this.util.stopLoading(loader);
+          this.dialogRef.close(true);
+        },
+        (err) => {
+          console.log(err);
+          this.util.stopLoading(loader);
+          this.dialog.open(ActionResultComponent, {
+            data: {
+              msg: err.error.message || 'Server Error, Please try again!',
+              success: false,
+              button: 'Okay',
+            },
+          });
+        }
+      );
+    }
   }
 
   removeOnMeeting() {

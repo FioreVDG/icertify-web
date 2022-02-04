@@ -46,26 +46,12 @@
   <mat-sidenav-container *ngIf="joinRoom" autosize>
     <mat-sidenav #sidenav mode="side" opened="true" style="overflow-x: hidden"
       ><div style="position: sticky; top: 0; background: #2e3235; z-index: 99">
-        <p
-          style="
-            text-align: center;
-            color: #fff;
-            font-size: 12px;
-            margin: 0rem 0rem;
-          "
-        >
+        <p class="text-light">
           <i
             >BID: <kbd>{{ currentTransaction?._folderId }}</kbd></i
           >
         </p>
-        <p
-          style="
-            text-align: center;
-            color: #fff;
-            font-size: 12px;
-            margin: 0rem 0rem;
-          "
-        >
+        <p class="text-light">
           <i
             >CID: <kbd>{{ currentSchedule?._id }}</kbd></i
           >
@@ -187,7 +173,7 @@
         <app-rt-video
           [channelName]="currentSchedule._id"
           (onLeaveMeeting)="leaveMeeting($event)"
-          [remoteDetails]="remoteCallDetails ? remoteCallDetails : {}"
+          [remoteDetails]="remoteCallDetails"
         ></app-rt-video>
         <div class="grid mt-3">
           <div class="col-12 opt-btn" *ngIf="checkDocumentStatus()">
