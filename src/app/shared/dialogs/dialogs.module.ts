@@ -7,9 +7,10 @@ import { ActionResultComponent } from './action-result/action-result.component';
 import { ComponentModule } from '../components/component.module';
 import { SpinnerLoadingComponent } from './spinner-loading/spinner-loading.component';
 import { DocumentImageViewerComponent } from './document-image-viewer/document-image-viewer.component';
+import { CounterComponent } from './counter/counter.component';
 
 @NgModule({
-  declarations: [AreYouSureComponent, ActionResultComponent, SpinnerLoadingComponent, DocumentImageViewerComponent],
+  declarations: [AreYouSureComponent, ActionResultComponent, SpinnerLoadingComponent, DocumentImageViewerComponent, CounterComponent],
   imports: [CommonModule, MaterialModule, ComponentModule],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

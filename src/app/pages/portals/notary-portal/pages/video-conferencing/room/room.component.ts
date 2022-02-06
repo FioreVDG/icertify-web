@@ -1,3 +1,4 @@
+import { CounterComponent } from './../../../../../../shared/dialogs/counter/counter.component';
 import { ActionResultComponent } from './../../../../../../shared/dialogs/action-result/action-result.component';
 import { QueryParams } from './../../../../../../models/queryparams.interface';
 import { RoomService } from './../../../../../../service/api/room/room.service';
@@ -101,10 +102,7 @@ export class RoomComponent implements OnInit {
   }
 
   getExpectedParticipants() {
-    let query = {
-      find: [],
-    };
-    this.conference.getScheduled(query).subscribe((res: any) => {
+    this.conference.getScheduled(this.query).subscribe((res: any) => {
       console.log(res);
       this.data = res.env.schedules;
       this.data.forEach((schedule: any) => {
@@ -271,14 +269,12 @@ export class RoomComponent implements OnInit {
     this.getImages();
 
     // FOR ROOM HERE
-    // FOR ROOM HERE
     this.room.get(this.query).subscribe(
       (res: any) => {
         console.log(res);
         if (res) {
           if (res.env.room.length) {
             this.remoteCallDetails = res.env.room[0].currentTransaction.sender;
-
             this.currentRoom = res.env.room[0]._id;
           }
           console.log('ITO YUNG EXISTING ROOM', res.env.room);
@@ -286,7 +282,6 @@ export class RoomComponent implements OnInit {
           this.util.stopLoading(loader);
           if (!res.env.room.length) {
             console.log('WALA PANG EXISTING ROOM');
-
             console.log(this.remoteCallDetails);
             let roomToAdd: any = {};
             roomToAdd.que = this.currentTransaction.que;
@@ -307,12 +302,11 @@ export class RoomComponent implements OnInit {
                   console.log(this.remoteCallDetails);
 
                   console.log(res);
-                  console.log('ITO YUNG EXISTING ROOM', res.env.room);
+                  console.log('ITO YUNG BAGONG EXISTING ROOM', res.env.room);
                 }
               },
               (err) => {
                 console.log(err);
-
                 this.util.stopLoading(loader2);
               }
             );
@@ -321,6 +315,7 @@ export class RoomComponent implements OnInit {
       },
       (err) => {
         console.log(err);
+        this.util.stopLoading(loader);
       }
     );
     console.log(this.currentTransaction);
@@ -355,11 +350,28 @@ export class RoomComponent implements OnInit {
     console.log('CHECK THIS', this._images);
   }
 
+  initiateCounter() {
+    this.dialog
+      .open(CounterComponent, {
+        data: { ctr: 3 },
+        panelClass: 'dialog-transparent',
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe((res: any) => {
+        if (res) {
+          this.takeScreenshot();
+        }
+      });
+  }
+
   takeScreenshot() {
+    const loader = this.util.startLoading('Getting image ready...');
     html2canvas(document.getElementById('screen') || document.body).then(
       (canvas) => {
         // Convert the canvas to blob
         this.screenshot = canvas.toDataURL('image/png');
+        this.util.stopLoading(loader);
         this.openNotarizeDialog('Notarized');
       }
     );

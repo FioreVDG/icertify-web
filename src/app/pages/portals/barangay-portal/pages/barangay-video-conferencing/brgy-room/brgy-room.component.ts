@@ -171,6 +171,11 @@ export class BrgyRoomComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  kickMe(event: any) {
+    this.joinRoom = false;
+    this.dialogRef.close(true);
+  }
+
   leaveMeeting(event: any) {
     console.log(event);
     const loader = this.util.startLoading('Leaving...');
