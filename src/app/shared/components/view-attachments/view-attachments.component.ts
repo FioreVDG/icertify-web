@@ -22,8 +22,22 @@ export class ViewAttachmentsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.data);
-    this.fetchAttachments(this.data.documents, 0);
+    console.log(this.data.obj);
+    if (this.data.documents) this.fetchAttachments(this.data.documents, 0);
+    else {
+      this.loading = true;
+      this.files.push({
+        data: this.data.obj,
+        name: this.data.obj.documentName,
+        link: this.data.link,
+        isImage: this.data.isImg,
+        loaded: false,
+      });
+      setTimeout(() => {
+        this.loading = false;
+        this.util.stopLoading(this.loader);
+      }, 2000);
+    }
   }
 
   downloadFile() {

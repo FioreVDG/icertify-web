@@ -120,7 +120,8 @@ export class DocumentReceivingComponent implements OnInit {
     this.dialog.open(ViewTransactionComponent, {
       data: { event, column: VIEW_TRANSACTION_TABLE },
       height: 'auto',
-      width: '70%',
+      width: '85%',
+      disableClose: true,
     });
   }
 
