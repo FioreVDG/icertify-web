@@ -18,6 +18,7 @@ import { ViewTransactionComponent } from '../../../notary-portal/pages/document-
 import { TRANSAC_TABLE_COLUMN } from './batch-folder/config';
 import { Find } from 'src/app/models/queryparams.interface';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
+import { UtilService } from 'src/app/service/util/util.service';
 
 @Component({
   selector: 'app-batch-delivery-management',
@@ -51,7 +52,8 @@ export class BatchDeliveryManagementComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute,
-    private dbx: DropboxService
+    private dbx: DropboxService,
+    private util: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -167,15 +169,24 @@ export class BatchDeliveryManagementComponent implements OnInit {
         this.onViewTransac(event.obj);
         break;
       case 'viewVid':
+        const dialogLoader = this.util.startLoading('Fetching video...');
+
         this.dbx.getTempLink(event.obj.videoOfSignature.path_display).subscribe(
           (res: any) => {
-            this.dialog.open(ViewVideoComponent, {
-              width: '50%',
-              disableClose: true,
-              data: { video: res.result.link, header: 'Video of Signing' },
-            });
+            this.dialog
+              .open(ViewVideoComponent, {
+                width: '50%',
+                disableClose: true,
+                data: { video: res.result.link, header: 'Video of Signing' },
+              })
+              .afterOpened()
+              .subscribe((res) => {
+                this.util.stopLoading(dialogLoader);
+              });
           },
           (error) => {
+            this.util.stopLoading(dialogLoader);
+
             console.log(error);
           }
         );
