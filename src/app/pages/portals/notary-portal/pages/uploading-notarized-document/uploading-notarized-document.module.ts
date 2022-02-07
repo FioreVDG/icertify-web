@@ -5,9 +5,10 @@ import { UploadingNotarizedDocumentRoutingModule } from './uploading-notarized-d
 import { UploadingNotarizedDocumentComponent } from './uploading-notarized-document.component';
 import { ComponentModule } from 'src/app/shared/components/component.module';
 import { MaterialModule } from 'src/app/shared/material/material.module';
+import { UploadNotirizedDocumentComponent } from './upload-notirized-document/upload-notirized-document.component';
 
 @NgModule({
-  declarations: [UploadingNotarizedDocumentComponent],
+  declarations: [UploadingNotarizedDocumentComponent, UploadNotirizedDocumentComponent],
   imports: [
     CommonModule,
     UploadingNotarizedDocumentRoutingModule,

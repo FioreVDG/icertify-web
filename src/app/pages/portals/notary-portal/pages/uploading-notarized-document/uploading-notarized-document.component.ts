@@ -1,3 +1,4 @@
+import { UploadNotirizedDocumentComponent } from './upload-notirized-document/upload-notirized-document.component';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
@@ -99,19 +100,23 @@ export class UploadingNotarizedDocumentComponent implements OnInit {
 
   onRowClick(event: any) {
     console.log(event);
-    this.dbx.getTempLink(event.dropbox.path_display).subscribe((res: any) => {
-      console.log(res);
-      let fileType = event.dropbox.name.split('.');
-      console.log(fileType);
-      fileType = fileType[fileType.length - 1].toLowerCase();
-      this.dialog.open(ViewAttachmentsComponent, {
-        data: {
-          link: res.result.link,
-          isImg: fileType === 'pdf' ? false : true,
-        },
-        height: 'auto',
-        width: '70%',
-      });
+    this.dialog.open(UploadNotirizedDocumentComponent, {
+      height: 'auto',
+      width: '70%',
     });
+    // this.dbx.getTempLink(event.dropbox.path_display).subscribe((res: any) => {
+    //   console.log(res);
+    //   let fileType = event.dropbox.name.split('.');
+    //   console.log(fileType);
+    //   fileType = fileType[fileType.length - 1].toLowerCase();
+    //   this.dialog.open(ViewAttachmentsComponent, {
+    //     data: {
+    //       link: res.result.link,
+    //       isImg: fileType === 'pdf' ? false : true,
+    //     },
+    //     height: 'auto',
+    //     width: '70%',
+    //   });
+    // });
   }
 }
