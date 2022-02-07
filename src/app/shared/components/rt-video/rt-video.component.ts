@@ -353,13 +353,17 @@ export class RtVideoComponent implements OnInit {
     clearInterval(this.flagInterval);
     this.client.leave(() => {
       this.localStream.stop();
-      this.localStream.close();
-      this.dialog.open(ActionResultComponent, {
-        data: {
-          msg: 'Transaction Completed!',
-          success: true,
-          button: 'Okay',
-        },
+      // this.localStream.close();
+      // this.dialog.open(ActionResultComponent, {
+      //   data: {
+      //     msg: 'Transaction Completed!',
+      //     success: true,
+      //     button: 'Okay',
+      //   },
+      // });
+      this.snackbar.open('Transaction Completed!', undefined, {
+        panelClass: ['success'],
+        duration: 1500,
       });
       this.kickIndigent.emit();
     });

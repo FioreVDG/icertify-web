@@ -1,3 +1,4 @@
+import { onMainContentChange } from './../../../animations/sidebar.animation';
 import { AreYouSureComponent } from './../../../shared/dialogs/are-you-sure/are-you-sure.component';
 import {
   BARANGAY_MENU,
@@ -18,11 +19,16 @@ import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/acti
 import { Store } from '@ngrx/store';
 import { User } from 'src/app/models/user.interface';
 import { setUser } from 'src/app/store/user/user.action';
+import {
+  animateText,
+  onSideNavChange,
+} from 'src/app/animations/sidebar.animation';
 
 @Component({
   selector: 'app-barangay-portal',
   templateUrl: './barangay-portal.component.html',
   styleUrls: ['./barangay-portal.component.scss'],
+  animations: [onSideNavChange, animateText, onMainContentChange],
 })
 export class BarangayPortalComponent implements OnInit {
   isExpanded: boolean = false;
@@ -34,6 +40,10 @@ export class BarangayPortalComponent implements OnInit {
   navigationLoading: boolean = false;
   routeLabel: string = '';
   page: any;
+
+  public sideNavState: boolean = false;
+  public linkText: boolean = false;
+  public main: boolean = false;
 
   //For Menu
   barangayMenu = BARANGAY_MENU;
@@ -94,6 +104,15 @@ export class BarangayPortalComponent implements OnInit {
           this.router.navigate(['/login']);
         });
     }
+  }
+  onSinenavToggle() {
+    this.sideNavState = !this.sideNavState;
+    this.main = !this.main;
+
+    // setTimeout(() => {
+    this.linkText = this.sideNavState;
+    // }, 1000);
+    this.util.sideNavState$.next(this.sideNavState);
   }
 
   changeRoute(nav: any) {
