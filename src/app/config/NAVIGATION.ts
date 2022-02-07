@@ -24,6 +24,12 @@ export const NOTARY_NAVS: NavNode[] = [
     route: 'document-releasing-to-courier',
     hasAccess: false,
   },
+  {
+    label: 'Uploading of Notarized Document',
+    icon: 'upload_file',
+    route: 'uploading-notarized-document',
+    hasAccess: false,
+  },
 ];
 
 export const BARANGAY_NAVS: NavNode[] = [

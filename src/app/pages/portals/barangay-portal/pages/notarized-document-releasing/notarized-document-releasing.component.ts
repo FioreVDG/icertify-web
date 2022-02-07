@@ -134,7 +134,7 @@ export class NotarizedDocumentReleasingComponent implements OnInit {
     this.dialog
       .open(AreYouSureComponent, {
         data: {
-          msg: 'Mark as received batch/es?',
+          msg: 'Mark as released transaction/s?',
           isOthers: true,
         },
       })
@@ -160,7 +160,7 @@ export class NotarizedDocumentReleasingComponent implements OnInit {
                 .open(ActionResultComponent, {
                   data: {
                     success: true,
-                    msg: `Batch/es successfully marked as released!`,
+                    msg: `Transaction/s successfully marked as released!`,
                     button: 'Okay',
                   },
                 })

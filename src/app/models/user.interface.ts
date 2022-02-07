@@ -9,6 +9,7 @@ export interface User {
   email?: string;
   gender?: string;
   _brgyId?: string;
+  type?: string;
 }
 export enum USER_REDUCER_ACTIONS {
   SetUser = 'SET_USER',

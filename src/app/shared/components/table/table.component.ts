@@ -131,10 +131,12 @@ export class TableComponent implements OnInit {
       if (i.label === index) {
         this.checkBox = i.isCheckbox;
         this.duplicateColumns = i.column;
+        this.bottomSheet = i.bottomSheet;
         i.selected = true;
         this.onUpdateTableEmit.emit(i);
       } else {
         i.selected = false;
+        this.bottomSheet = null;
       }
     });
     // console.log(this.duplicateColumns);

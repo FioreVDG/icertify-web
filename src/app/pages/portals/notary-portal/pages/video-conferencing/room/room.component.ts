@@ -1,3 +1,4 @@
+import { CounterComponent } from './../../../../../../shared/dialogs/counter/counter.component';
 import { ActionResultComponent } from './../../../../../../shared/dialogs/action-result/action-result.component';
 import { QueryParams } from './../../../../../../models/queryparams.interface';
 import { RoomService } from './../../../../../../service/api/room/room.service';
@@ -22,6 +23,7 @@ import { Store } from '@ngrx/store';
 import { User } from 'src/app/models/user.interface';
 // import * as htmlToImage from 'html-to-image';
 import html2canvas from 'html2canvas';
+import { DocumentImageViewerComponent } from 'src/app/shared/dialogs/document-image-viewer/document-image-viewer.component';
 
 @Component({
   selector: 'app-room',
@@ -100,10 +102,7 @@ export class RoomComponent implements OnInit {
   }
 
   getExpectedParticipants() {
-    let query = {
-      find: [],
-    };
-    this.conference.getScheduled(query).subscribe((res: any) => {
+    this.conference.getScheduled(this.query).subscribe((res: any) => {
       console.log(res);
       this.data = res.env.schedules;
       this.data.forEach((schedule: any) => {
@@ -182,6 +181,7 @@ export class RoomComponent implements OnInit {
       console.log(res);
       if (res.env.room.length) {
         tempRoom = res.env.room[0];
+        this.remoteCallDetails = res.env.room[0].currentTransaction.sender;
         this.currentRoom = res.env.room[0]._id;
         let currentExistingTransaction: any = transactions.find(
           (transaction: any) => transaction.que === tempRoom.que
@@ -189,6 +189,7 @@ export class RoomComponent implements OnInit {
         if (currentExistingTransaction) {
           this.currentTransaction = currentExistingTransaction;
           this.currentTransactionIndex = currentExistingTransaction.que - 1;
+          this.selectDocumentToView(this.currentTransaction._documents[0]);
           this.getImages();
         }
       } else this.nextTransaction();
@@ -268,14 +269,12 @@ export class RoomComponent implements OnInit {
     this.getImages();
 
     // FOR ROOM HERE
-    // FOR ROOM HERE
     this.room.get(this.query).subscribe(
       (res: any) => {
         console.log(res);
         if (res) {
           if (res.env.room.length) {
             this.remoteCallDetails = res.env.room[0].currentTransaction.sender;
-
             this.currentRoom = res.env.room[0]._id;
           }
           console.log('ITO YUNG EXISTING ROOM', res.env.room);
@@ -283,7 +282,6 @@ export class RoomComponent implements OnInit {
           this.util.stopLoading(loader);
           if (!res.env.room.length) {
             console.log('WALA PANG EXISTING ROOM');
-
             console.log(this.remoteCallDetails);
             let roomToAdd: any = {};
             roomToAdd.que = this.currentTransaction.que;
@@ -304,12 +302,11 @@ export class RoomComponent implements OnInit {
                   console.log(this.remoteCallDetails);
 
                   console.log(res);
-                  console.log('ITO YUNG EXISTING ROOM', res.env.room);
+                  console.log('ITO YUNG BAGONG EXISTING ROOM', res.env.room);
                 }
               },
               (err) => {
                 console.log(err);
-
                 this.util.stopLoading(loader2);
               }
             );
@@ -318,10 +315,9 @@ export class RoomComponent implements OnInit {
       },
       (err) => {
         console.log(err);
+        this.util.stopLoading(loader);
       }
     );
-
-    console.log('CHECK THIS', this._images);
     console.log(this.currentTransaction);
   }
 
@@ -350,13 +346,32 @@ export class RoomComponent implements OnInit {
         this.currentTransaction.videoOfSignature.path_display
       );
     else delete this.currentTransaction.vidURL;
+
+    console.log('CHECK THIS', this._images);
+  }
+
+  initiateCounter() {
+    this.dialog
+      .open(CounterComponent, {
+        data: { ctr: 3 },
+        panelClass: 'dialog-transparent',
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe((res: any) => {
+        if (res) {
+          this.takeScreenshot();
+        }
+      });
   }
 
   takeScreenshot() {
+    const loader = this.util.startLoading('Getting image ready...');
     html2canvas(document.getElementById('screen') || document.body).then(
       (canvas) => {
         // Convert the canvas to blob
         this.screenshot = canvas.toDataURL('image/png');
+        this.util.stopLoading(loader);
         this.openNotarizeDialog('Notarized');
       }
     );
@@ -405,7 +420,9 @@ export class RoomComponent implements OnInit {
 
   leaveMeeting(event: any) {
     console.log(event);
+    console.log(this.me.type);
     const loader = this.util.startLoading('Leaving...');
+
     this.room.delete(this.currentRoom).subscribe(
       (res: any) => {
         console.log(res);
@@ -424,6 +441,14 @@ export class RoomComponent implements OnInit {
         });
       }
     );
+  }
+
+  expandImg(event: string) {
+    console.log(event);
+    this.dialog.open(DocumentImageViewerComponent, {
+      data: event,
+      panelClass: 'dialog-transparent',
+    });
   }
 
   removeOnMeeting() {

@@ -40,6 +40,13 @@ const routes: Routes = [
             './pages/document-releasing-to-courier/document-releasing-to-courier.module'
           ).then((m) => m.DocumentReleasingToCourierModule),
       },
+      {
+        path: 'uploading-notarized-document',
+        loadChildren: () =>
+          import(
+            './pages/uploading-notarized-document/uploading-notarized-document.module'
+          ).then((m) => m.UploadingNotarizedDocumentModule),
+      },
     ],
   },
 ];

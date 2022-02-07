@@ -14,8 +14,10 @@
       <ng-container *ngFor="let call of remoteCalls">
         <div class="remote" [id]="call.id"></div>
         <p *ngIf="call.details">
-          (INDIGENT) {{ call.details.firstName }} {{ call.details.middleName }}
-          {{ call.details.lastName }} {{ call.details.suffix }}
+          <b>({{ call.details.type || "INDIGENT" }})</b>
+          {{ call.details.firstName }} {{ call.details.middleName }}
+          {{ call.details.lastName }}
+          {{ call.details.suffix }}
         </p>
       </ng-container>
     </div>

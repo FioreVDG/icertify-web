@@ -38,6 +38,8 @@ export class BrgyRoomComponent implements OnInit {
   btnDisabled: boolean = true;
   details: any;
   notaryDetails: any;
+  remoteCallDetails: any = {};
+  currentRoom: any;
 
   filteredSched: any;
   currentRoomDetails: any;
@@ -86,6 +88,8 @@ export class BrgyRoomComponent implements OnInit {
           this.util.stopLoading(loader);
           res.env.room.forEach((room: any) => {
             this.currentRoomDetails = room;
+            this.remoteCallDetails = room._notaryId;
+            this.currentRoom = room._id;
           });
 
           this.checkAvailability(this.currentRoomDetails, this.currDetails);
@@ -165,5 +169,19 @@ export class BrgyRoomComponent implements OnInit {
     delete this.currentRoomDetails;
     delete this.currDetails;
     this.dialogRef.close();
+  }
+
+  kickMe(event: any) {
+    this.joinRoom = false;
+    this.dialogRef.close(true);
+  }
+
+  leaveMeeting(event: any) {
+    console.log(event);
+    const loader = this.util.startLoading('Leaving...');
+    setTimeout(() => {
+      this.util.stopLoading(loader);
+      this.dialogRef.close();
+    }, 1000);
   }
 }

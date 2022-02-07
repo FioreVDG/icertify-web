@@ -1,3 +1,6 @@
+import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
+import { ConferenceService } from './../../../service/api/conference/conference.service';
+import { RoomService } from './../../../service/api/room/room.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Socket } from 'ngx-socket-io';
 import { ApiService } from './../../../service/api/api.service';
@@ -20,6 +23,7 @@ import { Store } from '@ngrx/store';
 import { User } from 'src/app/models/user.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AreYouSureComponent } from '../../dialogs/are-you-sure/are-you-sure.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-rt-video',
@@ -27,35 +31,37 @@ import { AreYouSureComponent } from '../../dialogs/are-you-sure/are-you-sure.com
   styleUrls: ['./rt-video.component.scss'],
 })
 export class RtVideoComponent implements OnInit {
-  title = 'agorawrtc-demo';
   localCallId = 'agora_local';
   remoteCalls: Array<any> = [];
   @Input() channelName: any;
-  @Input() details: any;
   @Input() remoteDetails: any;
   @Input() removeArr: Array<any> = [];
+  @Input() showCounter: any;
 
   private client!: AgoraClient;
   private localStream!: Stream;
   private token = '';
   public me: any;
   private uid = '';
-  // public channelName = '321321321';
   public localAudio = true;
   public localVideo = true;
 
   @Output() onLeaveMeeting: any = new EventEmitter<any>();
-  @Output() removeParticipant: any = new EventEmitter<any>();
+  @Output() kickIndigent: any = new EventEmitter<any>();
 
   snack: any;
   timeStamp: Date = new Date();
+  flagInterval: any;
   constructor(
     private ngxAgoraService: NgxAgoraService,
     private api: ApiService,
     private store: Store<{ user: User }>,
     private snackbar: MatSnackBar,
     private socket: Socket,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private room: RoomService,
+    private conference: ConferenceService,
+    private router: Router
   ) {
     setInterval(() => {
       this.timeStamp = new Date();
@@ -65,15 +71,62 @@ export class RtVideoComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.channelName);
     this.startConference();
-    setInterval(() => {
-      console.log(this.remoteCalls);
-      console.log(this.remoteDetails);
-    }, 3000);
+    this.flagInterval = setInterval(() => {
+      this.detailChecker();
+    }, 500);
   }
 
   ngOnChanges(changes: SimpleChange) {
     console.log(changes);
-    this.removeOnRemote();
+  }
+
+  //CHECK IF TRANSACTION IS DONE...WILL AUTOMATICALLY KICK INDIGENT IF TRANSACTION IS DONE
+  detailChecker() {
+    this.store.select('user').subscribe((res: User) => {
+      this.me = res;
+      console.log(this.me);
+      if (this.me.type !== 'Notary') {
+        let query = { find: [] };
+        this.room.get(query).subscribe((res: any) => {
+          console.log(res.env.room[0].currentTransaction);
+          this.conference.getScheduled(query).subscribe((resp: any) => {
+            let schedules = resp.env.schedules;
+
+            if (!schedules.length) {
+              this.leaveNow();
+              clearInterval(this.flagInterval);
+            }
+            // console.log(resp);
+            let findCurrentTransaction: any;
+            let transactions: any;
+
+            schedules.forEach((sched: any) => {
+              console.log(sched);
+              sched._folderIds.forEach((folder: any) => {
+                // console.log(folder);
+                transactions = folder._transactions;
+                console.log(transactions);
+              });
+            });
+
+            findCurrentTransaction = transactions.find(
+              (trans: any) =>
+                trans._id === res.env.room[0].currentTransaction._id
+            );
+
+            if (
+              findCurrentTransaction &&
+              findCurrentTransaction.transactionStatus === 'Done'
+            ) {
+              // console.log(findCurrentTransaction);
+              console.log('TAPOS NA ITONG TRANSACTION', findCurrentTransaction);
+              clearInterval(this.flagInterval);
+              this.leaveNow();
+            }
+          });
+        });
+      }
+    });
   }
 
   removeOnRemote() {
@@ -293,6 +346,22 @@ export class RtVideoComponent implements OnInit {
   publish(): void {
     this.client.publish(this.localStream, (err) => {
       console.log('Publish local stream error: ' + err);
+    });
+  }
+
+  leaveNow() {
+    clearInterval(this.flagInterval);
+    this.client.leave(() => {
+      this.localStream.stop();
+      this.localStream.close();
+      this.dialog.open(ActionResultComponent, {
+        data: {
+          msg: 'Transaction Completed!',
+          success: true,
+          button: 'Okay',
+        },
+      });
+      this.kickIndigent.emit();
     });
   }
 
