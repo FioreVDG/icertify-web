@@ -5,6 +5,8 @@ import { ApiService } from './../../../../../service/api/api.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FILT_BTN } from './config';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
+import { ViewTransactionComponent } from '../document-receiving/view-transaction/view-transaction.component';
+import { VIEW_TRANSACTION_TABLE } from '../document-receiving/view-transaction/config';
 
 @Component({
   selector: 'app-video-conferencing',
@@ -100,7 +102,14 @@ export class VideoConferencingComponent implements OnInit {
     }, 1000);
   }
 
-  onRowClick(event: any) {}
+  onRowClick(event: any) {
+    this.dialog.open(ViewTransactionComponent, {
+      data: { event, column: VIEW_TRANSACTION_TABLE },
+      height: 'auto',
+      width: '85%',
+      disableClose: true,
+    });
+  }
 
   onCheckBoxSelect(event: any) {
     console.log(event);
@@ -122,7 +131,6 @@ export class VideoConferencingComponent implements OnInit {
         console.log(res);
         if (res) {
           this.appTable?.checkedRows.clear();
-
           this.fetchData(this.page);
         }
       });

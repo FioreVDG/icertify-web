@@ -143,7 +143,7 @@ export class ViewBatchTransactionsComponent implements OnInit {
 
   viewPersonalInfo(obj: any) {
     this.dialog.open(RegistrantFormComponent, {
-      data: { header: `View Information`, obj },
+      data: { header: `Registrant Information`, obj },
       disableClose: true,
       width: 'auto',
       height: 'auto',
