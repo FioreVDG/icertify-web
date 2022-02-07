@@ -52,15 +52,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     label: 'Uploaded',
     selected: false,
     isCheckbox: false,
-    bottomSheet: [
-      { label: 'View Document/s', action: 'viewDoc', icon: 'description' },
-      {
-        label: 'View Personal Information/Proof of Identity',
-        action: 'viewInfo',
-        icon: 'assignment_ind',
-      },
-      { label: 'View Video Of Signing', action: 'viewVid', icon: 'duo' },
-    ],
+    bottomSheet: [],
     populate: [],
     column: [
       {

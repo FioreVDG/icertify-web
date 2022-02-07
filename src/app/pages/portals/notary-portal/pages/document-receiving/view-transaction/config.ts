@@ -10,7 +10,7 @@ export const VIEW_TRANSACTION_TABLE: Column[] = [
     selected: true,
   },
   {
-    title: 'Owner',
+    title: 'QC Indigent',
     breakpoint: 'sm',
     path: 'sender',
     paths: ['sender.firstName', 'sender.lastName'],

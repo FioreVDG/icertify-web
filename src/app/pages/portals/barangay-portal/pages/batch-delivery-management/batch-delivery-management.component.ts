@@ -189,7 +189,8 @@ export class BatchDeliveryManagementComponent implements OnInit {
     this.dialog.open(ViewTransactionComponent, {
       data: { event: obj, column: TRANSAC_TABLE_COLUMN },
       height: 'auto',
-      width: '70%',
+      width: '85%',
+      disableClose: true,
     });
     // this.router.navigate([
     //   `/barangay-portal/batch-delivery-management/batch-folder`,
