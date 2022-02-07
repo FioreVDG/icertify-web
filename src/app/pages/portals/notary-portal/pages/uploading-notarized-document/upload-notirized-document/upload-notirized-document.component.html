@@ -2,11 +2,38 @@
 <mat-icon (click)="dialogRef.close(false)" class="close-btn" color="warn"
   >close</mat-icon
 >
-
-<div mat-dialog-conent>
-  <button (click)="test()">test upload</button>
+<div align="center" class="grid">
+  <p *ngIf="!toUploadDocument" class="col-12">No File Uploaded</p>
+  <div align="center" class="col-12">
+    <img
+      [src]="toUploadDocument.link"
+      *ngIf="toUploadDocument && toUploadDocument.isImage"
+    />
+    <ngx-doc-viewer
+      class="docviewer"
+      *ngIf="toUploadDocument && !toUploadDocument.isImage"
+      style="min-width: 100%; min-height: 100%"
+      [url]="toUploadDocument.link"
+      viewer="google"
+    ></ngx-doc-viewer>
+  </div>
+  <p class="col-12" style="margin: 0" *ngIf="toUploadDocument">
+    {{ toUploadDocument.name }}
+  </p>
 </div>
+<div mat-dialog-conent></div>
 
 <div mat-dialog-actions align="center">
-  <button mat-flat-button color="primary">Upload</button>
+  <button mat-flat-button (click)="selectFile()">
+    {{ !toUploadDocument ? "Select File" : "Select another file" }}
+  </button>
+  <button
+    *ngIf="toUploadDocument"
+    mat-flat-button
+    color="primary"
+    (click)="upload()"
+    [disabled]="uploading"
+  >
+    {{ uploading ? "Uploading..." : "Upload" }}
+  </button>
 </div>

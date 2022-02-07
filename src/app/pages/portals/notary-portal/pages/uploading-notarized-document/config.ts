@@ -6,7 +6,6 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
   {
     label: 'For Uploading',
     selected: true,
-    isCheckbox: true,
     bottomSheet: [],
     populate: [],
     column: [
@@ -52,7 +51,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     label: 'Uploaded',
     selected: false,
     isCheckbox: false,
-    bottomSheet: [],
+    // bottomSheet: [],
     populate: [],
     column: [
       {
@@ -100,6 +99,11 @@ export const FIND_FOR_UPLOADING: Find[] = [
     operator: '=',
     value: 'Active',
   },
+  {
+    field: 'notarizedDocument.dateUploaded',
+    operator: '[in]=',
+    value: 'null',
+  },
 ];
 export const FIND_UPLOADED: Find[] = [
   {
@@ -109,7 +113,7 @@ export const FIND_UPLOADED: Find[] = [
   },
   {
     field: 'notarizedDocument',
-    operator: '[nin]=',
+    operator: '[ne]=',
     value: 'null',
   },
 ];

@@ -6,14 +6,19 @@ import { UploadingNotarizedDocumentComponent } from './uploading-notarized-docum
 import { ComponentModule } from 'src/app/shared/components/component.module';
 import { MaterialModule } from 'src/app/shared/material/material.module';
 import { UploadNotirizedDocumentComponent } from './upload-notirized-document/upload-notirized-document.component';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
 @NgModule({
-  declarations: [UploadingNotarizedDocumentComponent, UploadNotirizedDocumentComponent],
+  declarations: [
+    UploadingNotarizedDocumentComponent,
+    UploadNotirizedDocumentComponent,
+  ],
   imports: [
     CommonModule,
     UploadingNotarizedDocumentRoutingModule,
     ComponentModule,
     MaterialModule,
+    NgxDocViewerModule,
   ],
 })
 export class UploadingNotarizedDocumentModule {}
