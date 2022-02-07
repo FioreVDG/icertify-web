@@ -97,15 +97,23 @@ export class DocumentReceivingComponent implements OnInit {
   }
 
   viewVideoOfSigning(path_display: string) {
+    const dialogLoader = this.util.startLoading('Fetching video...');
+
     this.dbx.getTempLink(path_display).subscribe(
       (res: any) => {
-        this.dialog.open(ViewVideoComponent, {
-          width: '50%',
-          disableClose: true,
-          data: { video: res.result.link, header: 'Video of Signing' },
-        });
+        this.dialog
+          .open(ViewVideoComponent, {
+            width: '50%',
+            disableClose: true,
+            data: { video: res.result.link, header: 'Video of Signing' },
+          })
+          .afterOpened()
+          .subscribe((res) => {
+            this.util.stopLoading(dialogLoader);
+          });
       },
       (error) => {
+        this.util.stopLoading(dialogLoader);
         console.log(error);
       }
     );

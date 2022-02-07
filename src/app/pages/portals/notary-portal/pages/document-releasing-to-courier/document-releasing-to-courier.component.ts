@@ -129,7 +129,8 @@ export class DocumentReleasingToCourierComponent implements OnInit {
     this.dialog.open(ViewTransactionComponent, {
       data: { event, column: VIEW_TRANSACTION_TABLE_DOC_RELEASING },
       height: 'auto',
-      width: '70%',
+      width: '85%',
+      disableClose: true,
     });
   }
 

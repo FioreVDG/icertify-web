@@ -10,6 +10,7 @@ import { TableOutput } from 'src/app/models/tableemit.interface';
 import { RoomComponent } from 'src/app/pages/portals/notary-portal/pages/video-conferencing/room/room.component';
 import { ApiService } from 'src/app/service/api/api.service';
 import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
+import { UtilService } from 'src/app/service/util/util.service';
 import { RegistrantFormComponent } from 'src/app/shared/components/registrant-form/registrant-form.component';
 import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachments/view-attachments.component';
 import { ViewVideoComponent } from 'src/app/shared/components/view-video/view-video.component';
@@ -44,7 +45,8 @@ export class ViewBatchTransactionsComponent implements OnInit {
     public dialogRef: MatDialogRef<ViewBatchTransactionsComponent>,
     private api: ApiService,
     private dbx: DropboxService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private util: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -127,15 +129,22 @@ export class ViewBatchTransactionsComponent implements OnInit {
   }
 
   viewVideoOfSigning(path_display: string) {
+    const dialogLoader = this.util.startLoading('Fetching video...');
     this.dbx.getTempLink(path_display).subscribe(
       (res: any) => {
-        this.dialog.open(ViewVideoComponent, {
-          width: '50%',
-          disableClose: true,
-          data: { video: res.result.link, header: 'Video of Signing' },
-        });
+        this.dialog
+          .open(ViewVideoComponent, {
+            width: '50%',
+            disableClose: true,
+            data: { video: res.result.link, header: 'Video of Signing' },
+          })
+          .afterOpened()
+          .subscribe((res) => {
+            this.util.stopLoading(dialogLoader);
+          });
       },
       (error) => {
+        this.util.stopLoading(dialogLoader);
         console.log(error);
       }
     );
@@ -143,7 +152,7 @@ export class ViewBatchTransactionsComponent implements OnInit {
 
   viewPersonalInfo(obj: any) {
     this.dialog.open(RegistrantFormComponent, {
-      data: { header: `View Information`, obj },
+      data: { header: `Registrant Information`, obj },
       disableClose: true,
       width: 'auto',
       height: 'auto',

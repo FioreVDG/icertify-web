@@ -5,12 +5,14 @@ import { Injectable } from '@angular/core';
 import { REG_PROV_CITYMUN } from 'src/app/config/url';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { User } from 'src/app/models/user.interface';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UtilService {
   empties = [null, undefined];
+  public sideNavState$: Subject<boolean> = new Subject();
   constructor(
     private http: HttpClient,
     public clipboard: Clipboard,
