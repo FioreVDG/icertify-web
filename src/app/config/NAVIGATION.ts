@@ -96,4 +96,10 @@ export const SUPERADMIN_NAVS: NavNode[] = [
     route: 'sla',
     hasAccess: false,
   },
+  {
+    label: 'Settings',
+    icon: 'settings',
+    route: 'settings',
+    hasAccess: false,
+  },
 ];

@@ -36,6 +36,7 @@
 </mat-accordion> -->
 
 <app-table
+  #table
   [dataSource]="dataSource"
   (onRowClick)="onRowClick($event)"
   [dataLength]="dataLength"

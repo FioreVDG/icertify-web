@@ -25,6 +25,13 @@ const routes: Routes = [
         loadChildren: () =>
           import('./pages/sla/sla.module').then((m) => m.SlaModule),
       },
+      {
+        path: 'settings',
+        loadChildren: () =>
+          import('./pages/settings/settings.module').then(
+            (m) => m.SettingsModule
+          ),
+      },
     ],
   },
 ];

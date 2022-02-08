@@ -1,1 +1,39 @@
-<p>settings works!</p>
+<mat-accordion>
+  <mat-expansion-panel>
+    <!-- SLA -->
+    <mat-expansion-panel-header>
+      <mat-panel-title>Service Level Agreements</mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-service-level-agreement></app-service-level-agreement>
+  </mat-expansion-panel>
+  <mat-expansion-panel>
+    <!-- Cluster -->
+    <mat-expansion-panel-header>
+      <mat-panel-title>Assigning Cluster to Notary</mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-assigning-cluster-to-notary></app-assigning-cluster-to-notary>
+  </mat-expansion-panel>
+  <mat-expansion-panel>
+    <!-- Rider -->
+    <mat-expansion-panel-header>
+      <mat-panel-title>Assigning Barangay to Rider</mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-assigning-barangay-to-rider></app-assigning-barangay-to-rider>
+  </mat-expansion-panel>
+  <mat-expansion-panel>
+    <!-- Video Conference -->
+    <mat-expansion-panel-header>
+      <mat-panel-title>Video Conference Duration</mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-video-conference-duration></app-video-conference-duration>
+  </mat-expansion-panel>
+  <mat-expansion-panel>
+    <!-- Num of Docs -->
+    <mat-expansion-panel-header>
+      <mat-panel-title
+        >Number of Documents to be Batched (Brgy Hall)</mat-panel-title
+      >
+    </mat-expansion-panel-header>
+    <app-num-of-doc-to-be-batched></app-num-of-doc-to-be-batched>
+  </mat-expansion-panel>
+</mat-accordion>
