@@ -9,6 +9,7 @@ import { ViewDocumentComponent } from 'src/app/shared/components/view-document/v
 import { RegistrantFormComponent } from 'src/app/shared/components/registrant-form/registrant-form.component';
 import { ViewVideoComponent } from 'src/app/shared/components/view-video/view-video.component';
 import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachments/view-attachments.component';
+import { UtilService } from 'src/app/service/util/util.service';
 
 @Component({
   selector: 'app-batch-folder',
@@ -30,7 +31,8 @@ export class BatchFolderComponent implements OnInit {
     private api: ApiService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
-    private dbx: DropboxService
+    private dbx: DropboxService,
+    private util: UtilService
   ) {
     this.folderId = this.route.snapshot.paramMap.get('id');
   }
@@ -78,16 +80,23 @@ export class BatchFolderComponent implements OnInit {
         });
         break;
       case 'viewVid':
+        const dialogLoader = this.util.startLoading('Fetching video...');
         this.dbx.getTempLink(event.obj.videoOfSignature.path_display).subscribe(
           (res: any) => {
-            this.dialog.open(ViewVideoComponent, {
-              width: '50%',
-              disableClose: true,
-              data: { video: res.result.link, header: 'Video of Signing' },
-            });
+            this.dialog
+              .open(ViewVideoComponent, {
+                width: '50%',
+                disableClose: true,
+                data: { video: res.result.link, header: 'Video of Signing' },
+              })
+              .afterOpened()
+              .subscribe((res) => {
+                this.util.stopLoading(dialogLoader);
+              });
           },
           (error) => {
             console.log(error);
+            this.util.stopLoading(dialogLoader);
           }
         );
 

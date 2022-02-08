@@ -9,6 +9,7 @@ import { QueryParams } from 'src/app/models/queryparams.interface';
 import { TableOutput } from 'src/app/models/tableemit.interface';
 import { ApiService } from 'src/app/service/api/api.service';
 import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
+import { UtilService } from 'src/app/service/util/util.service';
 import { RegistrantFormComponent } from 'src/app/shared/components/registrant-form/registrant-form.component';
 import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachments/view-attachments.component';
 import { ViewVideoComponent } from 'src/app/shared/components/view-video/view-video.component';
@@ -39,7 +40,8 @@ export class ViewFolderTransactionsComponent implements OnInit {
     public dialogRef: MatDialogRef<ViewFolderTransactionsComponent>,
     private api: ApiService,
     private dbx: DropboxService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private util: UtilService
   ) {}
   ngOnInit(): void {
     console.log(this.data);
@@ -108,15 +110,23 @@ export class ViewFolderTransactionsComponent implements OnInit {
   }
 
   viewVideoOfSigning(path_display: string) {
+    const dialogLoader = this.util.startLoading('Fetching video...');
     this.dbx.getTempLink(path_display).subscribe(
       (res: any) => {
-        this.dialog.open(ViewVideoComponent, {
-          width: '50%',
-          disableClose: true,
-          data: { video: res.result.link, header: 'Video of Signing' },
-        });
+        this.dialog
+          .open(ViewVideoComponent, {
+            width: '50%',
+            disableClose: true,
+            data: { video: res.result.link, header: 'Video of Signing' },
+          })
+          .afterOpened()
+          .subscribe((res) => {
+            this.util.stopLoading(dialogLoader);
+          });
       },
       (error) => {
+        this.util.stopLoading(dialogLoader);
+
         console.log(error);
       }
     );

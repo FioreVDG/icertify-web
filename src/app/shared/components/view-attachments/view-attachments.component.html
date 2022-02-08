@@ -48,6 +48,7 @@
             class="grid"
             *ngIf="
               item.data.documentStatus === 'Notarized' &&
+              item.screenshot &&
               item.screenshot.length > 0
             "
           >
