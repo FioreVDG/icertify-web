@@ -3,7 +3,6 @@ import { ActionResultComponent } from './../../../../../../shared/dialogs/action
 import { QueryParams } from './../../../../../../models/queryparams.interface';
 import { RoomService } from './../../../../../../service/api/room/room.service';
 import { RegistrantFormComponent } from './../../../../../../shared/components/registrant-form/registrant-form.component';
-import { AreYouSureComponent } from './../../../../../../shared/dialogs/are-you-sure/are-you-sure.component';
 import { MarkAsNotarizedComponent } from './mark-as-notarized/mark-as-notarized.component';
 import { USER_INFO } from './config';
 import { DropboxService } from './../../../../../../service/dropbox/dropbox.service';
@@ -449,9 +448,5 @@ export class RoomComponent implements OnInit {
       data: event,
       panelClass: 'dialog-transparent',
     });
-  }
-
-  removeOnMeeting() {
-    delete this.remoteCallDetails;
   }
 }
