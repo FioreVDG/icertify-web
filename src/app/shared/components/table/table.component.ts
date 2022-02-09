@@ -56,6 +56,7 @@ export class TableComponent implements OnInit {
         if (index === 0) {
           this.checkBox = i.isCheckbox;
           this.duplicateColumns = i.column;
+          this.bottomSheet = i.bottomSheet;
           i.selected = true;
           this.onUpdateTableEmit.emit(i);
         } else {
@@ -104,7 +105,7 @@ export class TableComponent implements OnInit {
     }, 500);
   }
   rowClick(element: any) {
-    if (this.bottomSheet) {
+    if (this.bottomSheet && this.bottomSheet.length) {
       this._bs
         .open(BottomSheetComponent, { data: { config: this.bottomSheet } })
         .afterDismissed()
@@ -136,9 +137,10 @@ export class TableComponent implements OnInit {
         this.onUpdateTableEmit.emit(i);
       } else {
         i.selected = false;
-        this.bottomSheet = null;
       }
     });
+
+    console.log(this.bottomSheet);
     // console.log(this.duplicateColumns);
     this.updateBreakpoint();
   }

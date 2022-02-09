@@ -30,6 +30,12 @@ export const NOTARY_NAVS: NavNode[] = [
     route: 'uploading-notarized-document',
     hasAccess: false,
   },
+  {
+    label: 'Transaction',
+    icon: 'receipt_long',
+    route: 'transaction',
+    hasAccess: false,
+  },
 ];
 
 export const BARANGAY_NAVS: NavNode[] = [
