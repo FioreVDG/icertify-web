@@ -3,7 +3,11 @@
   <div *ngIf="step === 1">
     <h3 class="upper">STEP 1 - Upload Document for Notarization</h3>
     <div class="grid">
-      <mat-form-field appearance="fill" class="col-8">
+      <mat-form-field
+        appearance="fill"
+        class="col-8"
+        *ngIf="docsArray.length < 1"
+      >
         <mat-label>Select Document Type</mat-label>
         <mat-select
           [(ngModel)]="documentType"
