@@ -25,6 +25,13 @@ const routes: Routes = [
         loadChildren: () =>
           import('./pages/sla/sla.module').then((m) => m.SlaModule),
       },
+      {
+        path: 'clusters',
+        loadChildren: () =>
+          import('./pages/clusters/clusters.module').then(
+            (m) => m.ClustersModule
+          ),
+      },
     ],
   },
 ];

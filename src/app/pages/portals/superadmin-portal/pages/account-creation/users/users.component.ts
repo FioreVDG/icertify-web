@@ -37,6 +37,7 @@ export class UsersComponent implements OnInit {
     this.userType = this.route.snapshot.paramMap.get('userType');
     this.fetchUser(this.page);
   }
+
   onAdd() {
     this.dialog
       .open(UserDialogFormComponent, {

@@ -102,4 +102,10 @@ export const SUPERADMIN_NAVS: NavNode[] = [
     route: 'sla',
     hasAccess: false,
   },
+  {
+    label: 'Clusters',
+    icon: 'adjust',
+    route: 'clusters',
+    hasAccess: false,
+  },
 ];

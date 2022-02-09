@@ -11,6 +11,9 @@ export class UserService {
   getAllUser(query: QueryParams) {
     return this.http.start('get', `/users`, {}, query);
   }
+  getById(id: string) {
+    return this.http.start('get', `/user/${id}`, {});
+  }
   createAdmin(body: Object) {
     return this.http.start('post', '/users/admins', body);
   }
