@@ -27,6 +27,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'registrant-db',
+        loadChildren: () =>
+          import('./pages/registrants-db/registrants-db.module').then(
+            (m) => m.RegistrantsDbModule
+          ),
+      },
+      {
         path: 'new-transaction',
         loadChildren: () =>
           import('./pages/new-transaction/new-transaction.module').then(
@@ -67,6 +74,13 @@ const routes: Routes = [
           import(
             './pages/notarized-document-releasing/notarized-document-releasing.module'
           ).then((m) => m.NotarizedDocumentReleasingModule),
+      },
+      {
+        path: 'document-tracker',
+        loadChildren: () =>
+          import('./pages/document-tracker/document-tracker.module').then(
+            (m) => m.DocumentTrackerModule
+          ),
       },
     ],
   },

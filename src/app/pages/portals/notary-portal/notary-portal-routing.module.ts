@@ -47,6 +47,13 @@ const routes: Routes = [
             './pages/uploading-notarized-document/uploading-notarized-document.module'
           ).then((m) => m.UploadingNotarizedDocumentModule),
       },
+      {
+        path: 'transaction',
+        loadChildren: () =>
+          import('./pages/transaction/transaction.module').then(
+            (m) => m.TransactionModule
+          ),
+      },
     ],
   },
 ];

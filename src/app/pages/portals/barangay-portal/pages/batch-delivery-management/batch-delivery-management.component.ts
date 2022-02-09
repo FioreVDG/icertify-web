@@ -1,3 +1,4 @@
+import { MarkAsEnrouteComponent } from './mark-as-enroute/mark-as-enroute.component';
 import { DropboxService } from './../../../../../service/dropbox/dropbox.service';
 import { ActionResultComponent } from './../../../../../shared/dialogs/action-result/action-result.component';
 import { AreYouSureComponent } from './../../../../../shared/dialogs/are-you-sure/are-you-sure.component';
@@ -19,6 +20,7 @@ import { TRANSAC_TABLE_COLUMN } from './batch-folder/config';
 import { Find } from 'src/app/models/queryparams.interface';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
 import { UtilService } from 'src/app/service/util/util.service';
+import _ from 'lodash';
 
 @Component({
   selector: 'app-batch-delivery-management',
@@ -29,7 +31,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
   @ViewChild('table') appTable: TableComponent | undefined;
   filtBtnConfig = FILT_BTN_CONFIG;
   isCheckbox: boolean = true;
-  selected = [];
+  selected: any = [];
   currTable: any;
   currPopulate: any;
   loading = true;
@@ -42,10 +44,15 @@ export class BatchDeliveryManagementComponent implements OnInit {
         field: '_createdBy',
       },
     ],
+    sort: {
+      active: 'updatedAt',
+      direction: 'desc',
+    },
     bottomSheet: this.bsConfig,
   };
   routeLength = 3;
   dataSource = [];
+  isLimit: any = 2;
   dataLength: number = 0;
   constructor(
     private api: ApiService,
@@ -69,6 +76,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
       limit: (event.pageSize || 10) + '',
       filter: event.filter,
       populates: event.populate ? event.populate : [],
+      sort: event.sort,
     };
     if (event.filter) qry.filter = event.filter;
 
@@ -88,25 +96,31 @@ export class BatchDeliveryManagementComponent implements OnInit {
         res.env && res.env.transactions ? res.env.transactions : res.folders;
       this.dataLength = res.count;
       this.loading = false;
+      console.log('Here');
     });
     this.currTable = event.label;
     this.page.populate = event.populate;
     this.isCheckbox = event.isCheckbox || true;
     this.bsConfig = event.bottomSheet;
+    this.isLimit = event.isLimit;
   }
   tableUpdateEmit(event: any) {
+    this.selected = [];
     event['label'] = event.label || this.currTable;
-    console.log(event.populate);
+    // console.log(event.populate);
     this.fetchData(event);
-    setTimeout(() => {
-      this.loading = false;
-      console.log(this.loading);
-    }, 1000);
-    console.log(event);
+    this.loading = false;
+
+    // console.log(event);
   }
   onCheckBoxSelect(event: any) {
-    console.log(event);
-    this.selected = event;
+    //filter duplicates
+    event.forEach((i: any) => {
+      if (!_.some(this.selected, { id: i.id })) {
+        this.selected.push(i);
+      }
+    });
+    console.log(this.selected);
   }
   onMark() {
     let ids: any = [];
@@ -116,38 +130,22 @@ export class BatchDeliveryManagementComponent implements OnInit {
     ids = ids.join(',');
     console.log(ids);
     this.dialog
-      .open(AreYouSureComponent, {
-        data: {
-          msg: 'Enroute this/these transaction/s',
-        },
+      .open(MarkAsEnrouteComponent, {
+        width: '70% ',
+        data: this.selected,
       })
       .afterClosed()
       .subscribe((res: any) => {
+        console.log(res);
         if (res) {
-          this.api.transaction
-            .createBatchTransaction(ids)
-            .subscribe((res: any) => {
-              console.log(res);
-              this.dialog
-                .open(ActionResultComponent, {
-                  data: {
-                    success: true,
-                    msg: `Batch ${res.env.batched.folderName} successfully marked as enroute!`,
-                    button: 'Okay',
-                  },
-                })
-                .afterClosed()
-                .subscribe((res: any) => {
-                  this.appTable?.checkedRows.clear();
-                  this.fetchData(this.page);
-                  this.selected = [];
-                });
-            });
+          this.appTable?.checkedRows.clear();
+          this.fetchData(this.page);
+          this.selected = [];
         }
       });
   }
   onRowClick(event: any) {
-    console.log(event);
+    // console.log(event);
     switch (event.action) {
       case 'viewDoc':
         this.dialog.open(ViewAttachmentsComponent, {
@@ -210,9 +208,9 @@ export class BatchDeliveryManagementComponent implements OnInit {
   }
 
   onRouteActivate() {
-    console.log('Here');
+    // console.log('Here');
     let count = this.router.url.split('/').length;
-    console.log(count);
+    // console.log(count);
     this.routeLength = count;
   }
 }

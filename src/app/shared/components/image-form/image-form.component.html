@@ -1,12 +1,54 @@
 <div>
   <h5>Proof of Identity</h5>
   <div class="grid">
-    <ng-container *ngFor="let image of imgArray">
-      <div class="col-6 mt-1">
+    <div class="col-12 mt-3" *ngIf="!certificateOfIndigencyExist">
+      <label
+        ><b>{{ choices.section }}</b></label
+      >
+      <mat-radio-group
+        class="example-radio-group"
+        [(ngModel)]="selectedChoice"
+        (ngModelChange)="choose($event)"
+      >
+        <mat-radio-button
+          *ngFor="let choice of choices.choices"
+          [value]="choice.value"
+          >{{ choice.label }}</mat-radio-button
+        >
+      </mat-radio-group>
+      <mat-form-field
+        *ngIf="selectedChoice === 'no'"
+        appearance="fill"
+        style="width: 55%"
+      >
+        <mat-label>Select Reason</mat-label>
+        <mat-select [(ngModel)]="reason">
+          <mat-option
+            style="font-size: 13px"
+            *ngFor="let reason of reasons"
+            [value]="reason"
+            >{{ reason }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <mat-divider></mat-divider>
+    <ng-container *ngFor="let image of imgArray; let i = index">
+      <div class="col-6 mt-1" *ngIf="image.show">
         <h4>{{ image.label }}</h4>
-        <div [class]="image.hasError ? 'img-container-error' : 'img-container'">
+        <div class="img-container">
+          <mat-spinner
+            *ngIf="!image.loaded && image.imgLink !== ''"
+            [diameter]="35"
+            style="position: absolute"
+          ></mat-spinner>
           <p *ngIf="image?.imgLink === ''">No Image Uploaded</p>
-          <img *ngIf="image?.imgLink !== ''" [src]="image?.imgLink" alt="" />
+          <img
+            *ngIf="image?.imgLink !== ''"
+            [src]="image?.imgLink"
+            (load)="imageLoaded(i)"
+            alt=""
+          />
           <button
             *ngIf="!image.disable"
             mat-fab
@@ -18,10 +60,9 @@
             <mat-icon>upload</mat-icon>
           </button>
         </div>
-        <small style="color: red" *ngIf="image.hasError"
+        <small style="color: red" *ngIf="image.required && image.imgLink === ''"
           >{{ image.label }} is required*</small
         >
-        <mat-icon style="color: #3bbb95" *ngIf="!image.hasError">done</mat-icon>
       </div>
     </ng-container>
   </div>
