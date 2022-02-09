@@ -59,6 +59,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         label: 'Download Document',
         action: 'downloadDoc',
         icon: 'file_download',
+        showIf: 'notarizedDocument/!=/undefined',
       },
     ],
     populate: [],
@@ -149,6 +150,12 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     ],
   },
 ];
+
+export const CHECKBOX_DISABLER = {
+  column: 'notarizedDocument',
+  value: 'undefined',
+};
+
 export const FIND_NOTARIZED: Find[] = [
   {
     field: 'status',

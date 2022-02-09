@@ -1,8 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ApiService } from 'src/app/service/api/api.service';
+import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
+import { TableComponent } from 'src/app/shared/components/table/table.component';
 import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachments/view-attachments.component';
-import { FILT_BTN_CONFIG, FIND_NOTARIZED, FIND_UNNOTARIZED } from './config';
+import {
+  CHECKBOX_DISABLER,
+  FILT_BTN_CONFIG,
+  FIND_NOTARIZED,
+  FIND_UNNOTARIZED,
+} from './config';
 
 @Component({
   selector: 'app-transaction',
@@ -10,7 +17,10 @@ import { FILT_BTN_CONFIG, FIND_NOTARIZED, FIND_UNNOTARIZED } from './config';
   styleUrls: ['./transaction.component.scss'],
 })
 export class TransactionComponent implements OnInit {
+  @ViewChild('table') appTable: TableComponent | undefined;
+  isCheckbox: boolean = true;
   filtBtnConfig = FILT_BTN_CONFIG;
+  checkBoxDisableField = CHECKBOX_DISABLER;
   selected = [];
   currTable: any;
   currPopulate: any;
@@ -29,7 +39,11 @@ export class TransactionComponent implements OnInit {
   dataLength: number = 0;
   me: any;
 
-  constructor(private api: ApiService, private dialog: MatDialog) {}
+  constructor(
+    private api: ApiService,
+    private dialog: MatDialog,
+    private dbx: DropboxService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -87,6 +101,7 @@ export class TransactionComponent implements OnInit {
           this.viewAttachments(event.obj._documents, event.obj.refCode);
           break;
         case 'downloadDoc':
+          this.downloadDocu(event.obj.notarizedDocument);
           break;
         default:
       }
@@ -105,5 +120,24 @@ export class TransactionComponent implements OnInit {
     });
   }
 
-  downloadDocu() {}
+  downloadDocu(doc: any) {
+    this.dbx.getTempLink(doc.dropbox.path_display).subscribe((res: any) => {
+      console.log(res);
+      window.open(res.result.link, '_blank');
+    });
+  }
+
+  onCheckBoxSelect(event: any) {
+    console.log(event);
+    this.selected = event;
+  }
+
+  onMark() {
+    let ids: any = [];
+    this.selected.forEach((id: any) => {
+      ids.push(id);
+      this.downloadDocu(id.notarizedDocument);
+    });
+    console.log(ids);
+  }
 }

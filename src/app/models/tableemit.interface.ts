@@ -3,6 +3,7 @@ import { Find, Populate } from './queryparams.interface';
 
 export interface TableOutput {
   populate?: Array<Populate>;
+
   pageSize: number;
   length?: number;
   pageIndex: number;

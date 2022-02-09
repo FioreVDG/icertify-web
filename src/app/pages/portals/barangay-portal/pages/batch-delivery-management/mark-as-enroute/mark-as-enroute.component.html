@@ -1,0 +1,34 @@
+<div align="center">
+  <h1 style="margin: 0">Are you sure?</h1>
+  <p>
+    Clicking "Confirm" will batch the following documents and will generate the
+    Batch Reference Code for this batch.
+  </p>
+
+  <table>
+    <tr>
+      <th *ngFor="let t of tableConfig">{{ t.title }}</th>
+    </tr>
+
+    <tr *ngFor="let d of data">
+      <ng-container *ngFor="let t of tableConfig">
+        <td *ngIf="t.path">{{ util.deepFind(d, t.path) }}</td>
+        <td *ngIf="t.paths">
+          <span *ngFor="let p of t.paths">{{ util.deepFind(d, p) }} </span>
+        </td>
+      </ng-container>
+    </tr>
+  </table>
+  <div style="width: 50%; margin-top: 2rem">
+    <app-auto-complete
+      #riderDetails
+      [opt]="riderList"
+      (onSelect)="onSelect($event)"
+    ></app-auto-complete>
+  </div>
+</div>
+
+<mat-dialog-actions>
+  <button mat-button>Cancel</button>
+  <button mat-button (click)="onMark()">Confirm</button>
+</mat-dialog-actions>

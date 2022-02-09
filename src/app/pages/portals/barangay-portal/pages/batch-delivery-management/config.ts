@@ -7,6 +7,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     label: 'For Pick Up',
     selected: true,
     isCheckbox: true,
+    isLimit: 5,
     bottomSheet: [
       { label: 'View Document/s', action: 'viewDoc', icon: 'description' },
       {
@@ -22,6 +23,10 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         select: 'firstName,lastName,middleName',
       },
     ],
+    sort: {
+      active: 'updatedAt',
+      direction: 'desc',
+    },
 
     column: [
       {
@@ -83,6 +88,10 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         select: 'firstName,lastName,middleName',
       },
     ],
+    sort: {
+      active: 'updatedAt',
+      direction: 'desc',
+    },
     column: [
       {
         title: 'Batch Name',
