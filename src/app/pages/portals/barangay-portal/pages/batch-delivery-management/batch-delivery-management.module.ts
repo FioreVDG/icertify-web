@@ -6,9 +6,10 @@ import { CommonModule } from '@angular/common';
 
 import { BatchDeliveryManagementRoutingModule } from './batch-delivery-management-routing.module';
 import { BatchDeliveryManagementComponent } from './batch-delivery-management.component';
+import { MarkAsEnrouteComponent } from './mark-as-enroute/mark-as-enroute.component';
 
 @NgModule({
-  declarations: [BatchDeliveryManagementComponent],
+  declarations: [BatchDeliveryManagementComponent, MarkAsEnrouteComponent],
   imports: [
     CommonModule,
     BatchDeliveryManagementRoutingModule,
