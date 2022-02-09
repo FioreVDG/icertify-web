@@ -25,7 +25,6 @@ export class ViewAttachmentsComponent implements OnInit {
     console.log(this.data.obj);
     if (this.data.documents) this.fetchAttachments(this.data.documents, 0);
     else {
-      this.loading = true;
       this.files.push({
         data: this.data.obj,
         name: this.data.obj.documentName,
@@ -36,7 +35,7 @@ export class ViewAttachmentsComponent implements OnInit {
       setTimeout(() => {
         this.loading = false;
         this.util.stopLoading(this.loader);
-      }, 2000);
+      }, 1000);
     }
   }
 

@@ -34,15 +34,17 @@
         <ng-container matColumnDef="select" *ngIf="checkBox">
           <th mat-header-cell class="pr-2" *matHeaderCellDef>
             <mat-checkbox
-              *ngIf="uniqueCheckbox === false"
+              *ngIf="!isLimit && uniqueCheckbox === false"
               [indeterminate]="
                 checkedRows.hasValue() &&
                 dataSource.length !== checkedRows.selected.length
               "
               [checked]="
                 checkedRows.hasValue() &&
-                dataSource.length === checkedRows.selected.length
+                dataSource.length === checkedRows.selected.length &&
+                !isLimit
               "
+              [disabled]="isLimit"
               (click)="$event.stopPropagation()"
               (change)="$event ? checkAll() : null"
             >
@@ -50,17 +52,23 @@
           </th>
           <td
             mat-cell
-            *matCellDef="let row"
+            *matCellDef="let row; let i = index"
             class="pr-2"
             (click)="$event.stopPropagation()"
           >
             <span>
               <mat-checkbox
-                [checked]="checkedRows.isSelected(row)"
+                [checked]="autoCheck(row, i)"
                 [disabled]="
                   checkBoxDisableField
-                    ? row[checkBoxDisableField.column] ===
-                      checkBoxDisableField.value
+                    ? row[checkBoxDisableField.column] ==
+                      (checkBoxDisableField.value == 'null'
+                        ? null
+                        : checkBoxDisableField.value == 'undefined'
+                        ? undefined
+                        : checkBoxDisableField.value)
+                    : isLimit
+                    ? true
                     : false
                 "
                 (click)="$event.stopPropagation()"

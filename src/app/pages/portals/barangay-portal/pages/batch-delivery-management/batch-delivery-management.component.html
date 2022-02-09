@@ -7,7 +7,7 @@
     class="mark-btn"
     (click)="onMark()"
   >
-    Mark as Enroute
+    Mark as Enroute ({{ selected.length }})
   </button>
 
   <app-table
@@ -21,6 +21,7 @@
     [pagination]="page"
     [checkBox]="isCheckbox"
     [bottomSheet]="bsConfig"
+    [isLimit]="isLimit"
     (onCheckBoxSelect)="onCheckBoxSelect($event)"
   ></app-table
 ></ng-container>

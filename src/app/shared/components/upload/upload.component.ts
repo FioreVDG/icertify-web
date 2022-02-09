@@ -44,13 +44,13 @@ export class UploadComponent implements OnInit {
 
   public dropped(files: NgxFileDropEntry[]) {
     this.files = files;
+    let acceptableLength: any;
 
     for (const droppedFile of files) {
       // Is it a file?
       if (droppedFile.fileEntry.isFile) {
         const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
-        fileEntry.file((file: File) => {
-          console.log(file.type);
+        fileEntry.file(async (file: File) => {
           var flag = false;
 
           this.accepted.split(',').forEach((a) => {
@@ -58,7 +58,8 @@ export class UploadComponent implements OnInit {
             if (file.type === this.fileTypes[a.trim()]) flag = true;
           });
           if (flag) {
-            this.save(file);
+            if (this.data.format === 'VIDEO') this.getVideoLength(file);
+            else this.save(file);
           } else {
             console.log(file);
             this.sb.open('Incorrect Format!', 'Okay', {
@@ -93,6 +94,7 @@ export class UploadComponent implements OnInit {
     let filename: any = this.data.name ? this.data.name : fileNameArray[0];
     console.log(fileNameArray);
     console.log(filename);
+
     this.dbx
       .uploadFile(
         '/' + 'ICertify' + '/' + path + mobilenum + '/',
@@ -123,5 +125,24 @@ export class UploadComponent implements OnInit {
           });
         }
       );
+  }
+  getVideoLength(file: any) {
+    let length: number;
+    var video = document.createElement('video');
+    video.preload = 'metadata';
+    video.onloadedmetadata = function () {
+      window.URL.revokeObjectURL(video.src);
+      // alert('Duration : ' + video.duration + ' seconds');
+    };
+    video.src = URL.createObjectURL(file);
+    if (video.duration <= 61) {
+      this.save(file);
+    } else
+      this.sb.open('Video length should be less than a minute', 'Okay', {
+        duration: 3000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'center',
+        panelClass: ['failed'],
+      });
   }
 }
