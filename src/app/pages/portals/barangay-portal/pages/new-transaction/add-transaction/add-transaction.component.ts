@@ -72,7 +72,7 @@ export class AddTransactionComponent implements OnInit {
 
   upload() {
     console.log(this.docsArray.length);
-    if (this.docsArray.length === 3) {
+    if (this.docsArray.length === 1) {
       this.dialog.open(ActionResultComponent, {
         data: {
           msg: 'You can only upload a maximum of 3 files',
