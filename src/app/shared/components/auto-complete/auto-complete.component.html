@@ -1,5 +1,8 @@
 <form [formGroup]="form">
-  <mat-form-field appearance="outline" floatLabel="always">
+  <mat-form-field
+    [appearance]="appearance ? appearance : 'outline'"
+    floatLabel="always"
+  >
     <mat-label>{{ opt.title }}</mat-label>
     <input
       type="text"
@@ -18,7 +21,7 @@
         *ngFor="let option of filteredOpt | async"
         [value]="option.label ? option.label : option.value"
       >
-        {{ option.label ? option.label : option.value }}
+        {{ option.label ? option.label : option.value.name }}
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>

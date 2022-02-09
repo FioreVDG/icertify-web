@@ -14,6 +14,7 @@ export class AutoCompleteComponent implements OnInit {
   @Output() onSelect: any = new EventEmitter<any>();
   @Input() defaultValue: any;
   @Input() opt: any;
+  @Input() appearance: any;
   selectedOpt: any;
   filteredOpt: Observable<any> | undefined;
   constructor(private fb: FormBuilder) {
@@ -28,18 +29,23 @@ export class AutoCompleteComponent implements OnInit {
     if (this.defaultValue) this.optForm.setValue(this.defaultValue);
   }
   private _filter(value: any) {
+    console.log(value);
     if (typeof value !== 'object' && value !== '') {
       return this.opt.item.filter((option: any) =>
-        option.label.toLowerCase().includes(value.toLowerCase())
+        option.label
+          ? option.label.toLowerCase().includes(value.toLowerCase())
+          : option.value.name.toLowerCase().includes(value.toLowerCase())
       );
     }
+
+    console.log(this.opt.item);
     return this.opt.item;
   }
   onOptionSelect(event: any) {
-    let opt = event?.option?.value || event;
-    this.selectedOpt = event?.option?.value || event;
+    console.log(event);
+    let opt = event?.option?.value?.name || event?.option?.value || event;
     this.optForm.setValue(opt);
     console.log(this.optForm.value);
-    this.onSelect.emit(this.optForm.value);
+    this.onSelect.emit(event.option.value);
   }
 }

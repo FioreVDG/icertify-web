@@ -22,6 +22,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 export class TableComponent implements OnInit {
   checkedRows = new SelectionModel<any>(true, []);
   @Input() dataSource: any = [];
+  @Input() isLimit: any;
   @Input() checkBox: any;
   @Input() dataLength: number = 0;
   @Input() columns!: Array<Column>;
@@ -45,7 +46,7 @@ export class TableComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
   }
   ngOnInit(): void {
-    console.log(this.checkBox);
+    console.log(this.dataSource);
     this.duplicateColumns = JSON.parse(
       JSON.stringify(this.columns ? this.columns : this.defaultColumn())
     );
@@ -99,6 +100,7 @@ export class TableComponent implements OnInit {
     if (this.checkBox) {
       this.displayedColumns.unshift('select');
     }
+
     setTimeout(() => {
       this.loading = false;
     }, 500);
@@ -123,6 +125,7 @@ export class TableComponent implements OnInit {
     return this.filterButtonConfig[0].column;
   }
   onFilterButtonClick(index: any) {
+    this.dataSource = [];
     this.keyword = '';
     this.loading = true;
     this.duplicateColumns = [];
@@ -139,6 +142,7 @@ export class TableComponent implements OnInit {
         this.bottomSheet = null;
       }
     });
+    this.checkedRows.clear();
     // console.log(this.duplicateColumns);
     this.updateBreakpoint();
   }
@@ -164,9 +168,9 @@ export class TableComponent implements OnInit {
       pageSize: 10,
       find: [],
     };
-    console.log(this.keyword);
-    console.log(this.duplicateColumns);
-    console.log(fields);
+    // console.log(this.keyword);
+    // console.log(this.duplicateColumns);
+    // console.log(fields);
     if (this.keyword)
       toEmit['filter'] = {
         value: this.keyword,
@@ -179,11 +183,11 @@ export class TableComponent implements OnInit {
       };
     }
     if (this.pagination.populate) toEmit['populate'] = this.pagination.populate;
-    console.log(this.keyword);
+    // console.log(this.keyword);
     this.onUpdateTableEmit.emit(toEmit);
   }
   onClickPagination(event: TableOutput) {
-    console.log(event);
+    // console.log(event);
     event['pageIndex'] = event.pageIndex + 1;
     this.curPageIndex = event.pageIndex;
     this.dataSource = [];
@@ -202,7 +206,7 @@ export class TableComponent implements OnInit {
     this.onUpdateTableEmit.emit(this.pagination);
   }
   onCheckBoxChange(row: any) {
-    console.log(row);
+    // console.log(row);
     this.checkedRows.toggle(row);
     this.onCheckBoxSelect.emit(this.checkedRows.selected);
   }
@@ -272,5 +276,13 @@ export class TableComponent implements OnInit {
       if (valueToDisable === value) return true;
     }
     return false;
+  }
+  autoCheck(row: any, index: any) {
+    // console.log(row, index);
+    if (this.isLimit && index + 1 <= this.isLimit) {
+      this.checkedRows.select(row);
+    }
+    this.onCheckBoxSelect.emit(this.checkedRows.selected);
+    return this.checkedRows.isSelected(row);
   }
 }
