@@ -1,1 +1,33 @@
-<p>video-conference-duration works!</p>
+<div mat-dialog-content>
+  <div class="grid">
+    <div class="col-5">
+      <mat-form-field class="full-width">
+        <input matInput type="text" [value]="defaultDate" readonly
+      /></mat-form-field>
+    </div>
+    <div class="col-5">
+      <mat-form-field class="full-width" *ngIf="checkCustomDate()">
+        <input matInput type="text" [value]="customDate" readonly
+      /></mat-form-field>
+    </div>
+    <div class="col-2">
+      <div class="grid">
+        <div class="col-2">
+          <button mat-icon-button><mat-icon>edit</mat-icon></button>
+        </div>
+        <div class="col-2">
+          <button mat-icon-button><mat-icon>close</mat-icon></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button
+  mat-fab
+  *ngIf="!checkCustomDate()"
+  color="primary"
+  class="bottom-right-button"
+>
+  <mat-icon>add</mat-icon>
+</button>

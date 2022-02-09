@@ -11,6 +11,7 @@ import { NumOfDocToBeBatchedComponent } from './num-of-doc-to-be-batched/num-of-
 import { AddClusterComponent } from './assigning-cluster-to-notary/add-cluster/add-cluster.component';
 import { AssigningBarangayToRiderComponent } from './assigning-barangay-to-rider/assigning-barangay-to-rider.component';
 import { AssigningClusterToNotaryComponent } from './assigning-cluster-to-notary/assigning-cluster-to-notary.component';
+import { AddRiderComponent } from './assigning-barangay-to-rider/add-rider/add-rider.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { AssigningClusterToNotaryComponent } from './assigning-cluster-to-notary
     AddClusterComponent,
     AssigningBarangayToRiderComponent,
     AssigningClusterToNotaryComponent,
+    AddRiderComponent,
   ],
   imports: [
     CommonModule,

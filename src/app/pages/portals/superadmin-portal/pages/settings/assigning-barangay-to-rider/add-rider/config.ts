@@ -1,0 +1,113 @@
+import { Section } from 'src/app/models/form.interface';
+
+export const ADD_RIDER: Section[] = [
+  {
+    section: 'Personal Details',
+    show: true,
+    items: [
+      {
+        label: 'Family Name',
+        type: 'text',
+        colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
+        fcname: 'lastName',
+        show: true,
+        path: 'lastName',
+        appearance: 'outline',
+      },
+      {
+        label: 'First Name',
+        type: 'text',
+        colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
+        fcname: 'firstName',
+        show: true,
+        path: 'firstName',
+        appearance: 'outline',
+      },
+      {
+        label: 'Middle Name',
+        type: 'text',
+        colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
+        fcname: 'middleName',
+        show: true,
+        path: 'middleName',
+        appearance: 'outline',
+        optional: true,
+      },
+      {
+        label: 'Suffix',
+        type: 'select',
+        colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
+        choices: ['Sr.', 'Jr.', 'I', 'II', 'III'],
+        fcname: 'suffix',
+        show: true,
+        path: 'suffix',
+        appearance: 'outline',
+        optional: true,
+      },
+    ],
+  },
+  {
+    section: 'Contact Information',
+    show: true,
+    items: [
+      {
+        label: 'Mobile Number',
+        type: 'text',
+        colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
+        fcname: 'mobileNumber',
+        show: true,
+        path: 'mobileNumber',
+        appearance: 'outline',
+      },
+      {
+        label: 'Complete Address',
+        type: 'text',
+        colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
+        fcname: 'fullAddress',
+        show: true,
+        path: 'fullAddress',
+        appearance: 'outline',
+      },
+    ],
+  },
+  {
+    section: 'Other Information',
+    show: true,
+    items: [
+      {
+        label: 'Sex',
+        type: 'select',
+        colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
+        choices: ['Male', 'Female'],
+        fcname: 'sex',
+        show: true,
+        path: 'sex',
+        appearance: 'outline',
+      },
+      {
+        label: 'Birth Date',
+        type: 'text',
+        colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
+        fcname: 'birthDate',
+        show: true,
+        path: 'birthDate',
+        appearance: 'outline',
+      },
+    ],
+  },
+  {
+    section: 'Select Barangay',
+    show: true,
+    items: [
+      {
+        label: 'Barangay',
+        type: 'text',
+        colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
+        fcname: '_barangays',
+        show: true,
+        path: '_barangays',
+        appearance: 'outline',
+      },
+    ],
+  },
+];

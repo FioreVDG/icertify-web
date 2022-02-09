@@ -1,1 +1,12 @@
-<p>assigning-barangay-to-rider works!</p>
+<app-table
+  [dataSource]="dataSource"
+  [dataLength]="dataLength"
+  [columns]="columns"
+  [pagination]="page"
+  [loading]="loading"
+>
+</app-table>
+
+<button mat-fab color="primary" class="bottom-right-button" (click)="onAdd()">
+  <mat-icon>add</mat-icon>
+</button>

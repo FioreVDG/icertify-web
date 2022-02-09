@@ -1,11 +1,11 @@
-<h1 mat-dialog-title>Add Cluster</h1>
+<h1 mat-dialog-title>Add Rider</h1>
 <mat-icon mat-dialog-close class="close-btn" color="warn">close</mat-icon>
 
 <div mat-dialog-content>
   <app-form
-    #addCluster
+    #addRider
     *ngIf="!loading"
-    [formfields]="addClusterForm"
+    [formfields]="addRiderForm"
     (formInitiated)="formInitialized($event)"
     (formListener)="formListener($event)"
   ></app-form>
@@ -16,7 +16,7 @@
   <button
     mat-flat-button
     color="primary"
-    [disabled]="!addCluster || !addCluster.form.valid"
+    [disabled]="!addRider || !addRider.form.valid"
   >
     Create
   </button>
