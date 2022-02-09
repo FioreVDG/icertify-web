@@ -15,10 +15,11 @@
     [obj]="this.data.obj"
   ></app-form>
   <app-image-form
-    [disable]="checkHeaderDisabler()"
-    [mobileNumber]="this.data.mobileNumber"
+    [disable]="checkImageBtnDisabler()"
+    [mobileNumber]="this.data.mobileNumber || this.data.obj.mobileNumber"
     [obj]="this.data.obj?.images ? this.data.obj.images : {}"
     (imageEmitter)="imageEmitter($event)"
+    [reasonVal]="reasonVal || ''"
   ></app-image-form>
 </div>
 
@@ -31,6 +32,15 @@
     [disabled]="!imageFormValid || !registrantDetails.form.valid || saving"
   >
     <mat-icon>save_as</mat-icon>&nbsp;Save
+  </button>
+  <button
+    *ngIf="data.header === 'Edit Registrant Details'"
+    mat-flat-button
+    color="primary"
+    (click)="updateIndigent()"
+    [disabled]="saving || (!imageFormDirty && !registrantDetails.form.dirty)"
+  >
+    <mat-icon>save_as</mat-icon>&nbsp;Update
   </button>
   <button
     *ngIf="this.data.header === 'Review Details'"

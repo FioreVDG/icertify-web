@@ -1,0 +1,10 @@
+<app-table
+  [filterButtonConfig]="filtBtnConfig"
+  (onUpdateTableEmit)="tableUpdateEmit($event)"
+  (onRowClick)="onRowClick($event)"
+  [loading]="loading"
+  [dataSource]="dataSource"
+  [dataLength]="dataLength"
+  [pagination]="page"
+  [bottomSheet]="bsConfig"
+></app-table>

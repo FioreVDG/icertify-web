@@ -46,6 +46,12 @@ export const BARANGAY_NAVS: NavNode[] = [
     hasAccess: false,
   },
   {
+    label: 'Registrants Database',
+    icon: 'contact_mail',
+    route: 'registrant-db',
+    hasAccess: false,
+  },
+  {
     label: 'New Transaction',
     icon: 'post_add',
     route: 'new-transaction',

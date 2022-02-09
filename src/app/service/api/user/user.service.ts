@@ -31,4 +31,10 @@ export class UserService {
       mobileNumber,
     });
   }
+  getAllIndigent(query: QueryParams) {
+    return this.http.start('get', '/users/users', {}, query);
+  }
+  updateIndigent(id: string, body: object) {
+    return this.http.start('patch', `/users/indigent/${id}`, body);
+  }
 }

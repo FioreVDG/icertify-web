@@ -67,6 +67,17 @@ export const REGISTRATION_FORM: Array<Section> = [
         path: 'gender',
         appearance: 'standard',
       },
+      {
+        label: 'Mobile Number',
+        type: 'text',
+        colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
+        fcname: 'mobileNumber',
+        show: true,
+        default: '',
+        path: 'mobileNumber',
+        optional: true,
+        appearance: 'standard',
+      },
     ],
   },
   {

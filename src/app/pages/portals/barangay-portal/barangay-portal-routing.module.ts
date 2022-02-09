@@ -27,6 +27,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'registrant-db',
+        loadChildren: () =>
+          import('./pages/registrants-db/registrants-db.module').then(
+            (m) => m.RegistrantsDbModule
+          ),
+      },
+      {
         path: 'new-transaction',
         loadChildren: () =>
           import('./pages/new-transaction/new-transaction.module').then(

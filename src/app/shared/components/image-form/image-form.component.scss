@@ -17,7 +17,7 @@ h5 {
   flex-direction: column;
   height: 18rem;
   padding: 0.7rem;
-  border: 2px solid #3bbb95;
+  border: 2px solid #79797975;
   border-radius: 0.25rem;
   transition: 0.1s ease-in;
   position: relative;
@@ -36,7 +36,12 @@ h5 {
     transform: translateY(-5px);
   }
 }
-
+.example-radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+  align-items: flex-start;
+}
 .img-container-error {
   display: flex;
   align-items: center;
