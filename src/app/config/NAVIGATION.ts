@@ -81,6 +81,12 @@ export const BARANGAY_NAVS: NavNode[] = [
     route: 'notarized-document-releasing',
     hasAccess: false,
   },
+  {
+    label: 'Document Tracking',
+    icon: 'account_tree',
+    route: 'document-tracker',
+    hasAccess: false,
+  },
 ];
 
 export const SUPERADMIN_NAVS: NavNode[] = [

@@ -68,6 +68,13 @@ const routes: Routes = [
             './pages/notarized-document-releasing/notarized-document-releasing.module'
           ).then((m) => m.NotarizedDocumentReleasingModule),
       },
+      {
+        path: 'document-tracker',
+        loadChildren: () =>
+          import('./pages/document-tracker/document-tracker.module').then(
+            (m) => m.DocumentTrackerModule
+          ),
+      },
     ],
   },
 ];
