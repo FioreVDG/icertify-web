@@ -147,6 +147,7 @@ export class NotarizedDocumentReleasingComponent implements OnInit {
               {
                 _releasedBy: this.me._id,
                 dateReleased: new Date(),
+                locationStatus: 'Released to Indigent',
               },
               id
             );
@@ -178,6 +179,17 @@ export class NotarizedDocumentReleasingComponent implements OnInit {
           );
         }
       });
+  }
+
+  onCheckBoxClick(event: any) {
+    switch (event.action) {
+      case 'release':
+        this.onMark();
+        break;
+
+      default:
+        break;
+    }
   }
 
   onRowClick(event: any) {
