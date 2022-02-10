@@ -93,12 +93,27 @@ export class TransactionComponent implements OnInit {
     console.log(event);
   }
 
+  onCheckBoxClick(event: any) {
+    switch (event.action) {
+      case 'downloadDocuments':
+        this.downloadNotarizedDocuments();
+        break;
+
+      case 'downloadScreenshots':
+        this.downloadScreenshots();
+        break;
+
+      default:
+        break;
+    }
+  }
+
   onRowClick(event: any) {
     console.log(event);
     if (event.action) {
       switch (event.action) {
         case 'viewDoc':
-          this.viewAttachments(event.obj._documents, event.obj.refCode);
+          this.viewAttachments([event.obj], event.obj.refCode);
           break;
         case 'downloadDoc':
           this.downloadDocu(event.obj.notarizedDocument);
@@ -120,6 +135,28 @@ export class TransactionComponent implements OnInit {
     });
   }
 
+  onCheckBoxSelect(event: any) {
+    console.log(event);
+    this.selected = event;
+  }
+
+  downloadNotarizedDocuments() {
+    let docs: any = [];
+    this.selected.forEach((doc: any) => {
+      docs.push(doc);
+      this.downloadDocu(doc.notarizedDocument);
+    });
+    console.log(docs);
+  }
+  downloadScreenshots() {
+    let docs: any = [];
+    this.selected.forEach((doc: any) => {
+      docs.push(doc);
+      this.downloadSS(doc);
+    });
+    console.log(docs);
+  }
+
   downloadDocu(doc: any) {
     this.dbx.getTempLink(doc.dropbox.path_display).subscribe((res: any) => {
       console.log(res);
@@ -127,17 +164,5 @@ export class TransactionComponent implements OnInit {
     });
   }
 
-  onCheckBoxSelect(event: any) {
-    console.log(event);
-    this.selected = event;
-  }
-
-  onMark() {
-    let ids: any = [];
-    this.selected.forEach((id: any) => {
-      ids.push(id);
-      this.downloadDocu(id.notarizedDocument);
-    });
-    console.log(ids);
-  }
+  downloadSS(doc: any) {}
 }

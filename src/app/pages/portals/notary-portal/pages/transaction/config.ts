@@ -7,7 +7,11 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     label: 'All',
     selected: true,
     bottomSheet: [
-      { label: 'View Document/s', action: 'viewDoc', icon: 'description' },
+      {
+        label: 'View Document/s & Screenshot/s',
+        action: 'viewDoc',
+        icon: 'description',
+      },
     ],
     populate: [],
     column: [
@@ -54,7 +58,11 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     selected: true,
     isCheckbox: true,
     bottomSheet: [
-      { label: 'View Document', action: 'viewDoc', icon: 'description' },
+      {
+        label: 'View Document/s & Screenshot/s',
+        action: 'viewDoc',
+        icon: 'description',
+      },
       {
         label: 'Download Document',
         action: 'downloadDoc',
@@ -101,13 +109,27 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
     ],
+    checkBoxBtns: [
+      {
+        label: 'Download Notarized Document',
+        action: 'downloadDocuments',
+      },
+      {
+        label: 'Download Screen Shot',
+        action: 'downloadScreenshots',
+      },
+    ],
   },
   {
     label: 'Unnotarized',
     selected: false,
     isCheckbox: false,
     bottomSheet: [
-      { label: 'View Document/s', action: 'viewDoc', icon: 'description' },
+      {
+        label: 'View Document/s & Screenshot/s',
+        action: 'viewDoc',
+        icon: 'description',
+      },
     ],
     populate: [],
     column: [
