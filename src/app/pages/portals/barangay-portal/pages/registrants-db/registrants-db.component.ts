@@ -28,6 +28,7 @@ export class RegistrantsDbComponent implements OnInit {
     pageIndex: 1,
     populate: [],
     bottomSheet: this.bsConfig,
+    label: 'W/O Certificate of Indigency',
   };
   dataSource = [];
   dataLength: number = 0;
@@ -65,13 +66,14 @@ export class RegistrantsDbComponent implements OnInit {
     api.subscribe((res: any) => {
       console.log(res);
       if (res.status === 'success') {
-        this.dataSource = res.env.users;
+        this.dataSource = res.env.usersFinal;
         this.dataLength = res.total;
       }
       this.loading = false;
     });
     this.currTable = event.label;
     this.bsConfig = event.bottomSheet;
+    console.log(this.bsConfig);
   }
 
   tableUpdateEmit(event: any) {
@@ -89,6 +91,7 @@ export class RegistrantsDbComponent implements OnInit {
     console.log(event);
     if (event.obj.images.cert_of_indigency === 'Empty')
       delete event.obj.images.cert_of_indigency;
+
     switch (event.action) {
       case 'editRegistrant':
         this.dialog

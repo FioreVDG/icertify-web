@@ -1,3 +1,4 @@
+import { OtpComponent } from 'src/app/shared/components/otp/otp.component';
 import { ApiService } from 'src/app/service/api/api.service';
 import { UtilService } from 'src/app/service/util/util.service';
 import { ActionResultComponent } from './../../dialogs/action-result/action-result.component';
@@ -261,6 +262,26 @@ export class RegistrantFormComponent implements OnInit {
     console.log(this.toUpdataData);
     console.log(this.imgObj);
     console.log(this.addressTemp);
+    if (this.data.obj.mobileNumber !== this.toUpdataData.mobileNumber) {
+      console.log('MAY OTP');
+      this.dialog
+        .open(OtpComponent, {
+          data: { mobileNumber: this.toUpdataData.mobileNumber },
+          panelClass: 'dialog-responsive-dark',
+          disableClose: true,
+        })
+        .afterClosed()
+        .subscribe((res: any) => {
+          if (res) {
+            this.proceedUpdating();
+          }
+        });
+    } else {
+      this.proceedUpdating();
+    }
+  }
+
+  proceedUpdating() {
     const loader = this.util.startLoading('Saving');
     delete this.toUpdataData.address1;
     delete this.toUpdataData.address2;
@@ -289,7 +310,7 @@ export class RegistrantFormComponent implements OnInit {
           this.dialog
             .open(ActionResultComponent, {
               data: {
-                msg: 'Registrant updated successfully!',
+                msg: 'Registrant details successfully updated!',
                 success: true,
                 button: 'Okay',
               },

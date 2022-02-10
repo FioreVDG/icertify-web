@@ -3,35 +3,38 @@
 <mat-sidenav-container *ngIf="!loading && !loggingOut" autosize>
   <mat-sidenav #sidenav mode="side" opened="true">
     <mat-nav-list style="padding-top: 0">
-      <mat-toolbar>
-        <img
-          src="../../../assets/images/iCertify-logo.png"
-          class="img"
-          alt=""
-        />
+      <mat-toolbar color="primary">
+        <div class="logo-container">
+          <img
+            src="../../../assets/images/iCertify-logo.png"
+            class="img"
+            alt=""
+          />
+        </div>
         <div *ngIf="isExpanded" class="logo-text">
           <h3>iCertify, Inc.</h3>
-          <!-- <p>NOTARY</p> -->
+          <p>NOTARY</p>
         </div>
       </mat-toolbar>
-      <ng-container *ngFor="let item of notaryNav">
-        <mat-list-item
-          style="height: 2.8rem"
-          [routerLink]="item.route"
-          (click)="changeRoute(item)"
-          routerLinkActive="router-active-link"
-        >
-          <mat-icon
-            class="font-light"
-            fontSet="material-icons-outlined"
-            style="font-size: 21px; margin-right: 0.3rem"
-            [matTooltip]="isExpanded ? '' : item.label"
-            matTooltipPosition="right"
-            mat-list-icon
-            >{{ item.icon }}</mat-icon
-          ><span *ngIf="isExpanded" class="font-light">{{ item.label }}</span>
-        </mat-list-item>
-      </ng-container>
+      <div style="padding: 0.5rem">
+        <ng-container *ngFor="let item of notaryNav">
+          <mat-list-item
+            style="height: 2.8rem; padding: 0"
+            [routerLink]="item.route"
+            (click)="changeRoute(item)"
+            routerLinkActive="router-active-link"
+          >
+            <mat-icon
+              class="light"
+              fontSet="material-icons-outlined"
+              [matTooltip]="isExpanded ? '' : item.label"
+              matTooltipPosition="right"
+              mat-list-icon
+              >{{ item.icon }}</mat-icon
+            ><span *ngIf="isExpanded" class="light">{{ item.label }}</span>
+          </mat-list-item>
+        </ng-container>
+      </div>
     </mat-nav-list>
   </mat-sidenav>
 
