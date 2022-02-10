@@ -15,7 +15,7 @@ export class UserService {
     return this.http.start('post', '/users/admins', body);
   }
   updateUser(id: string, body: object) {
-    return this.http.start('patch', `/user/${id}`);
+    return this.http.start('patch', `/users/user/${id}`, body);
   }
   deleteAdmin(id: string) {
     return this.http.start('delete', `/users/admin/${id}`);

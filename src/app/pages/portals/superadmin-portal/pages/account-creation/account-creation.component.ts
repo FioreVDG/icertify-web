@@ -78,6 +78,22 @@ export class AccountCreationComponent implements OnInit {
         ]);
         this.onRouteActive();
         break;
+      case 'qclegal':
+        this.dialog
+          .open(ActionMenuComponent, {
+            width: '70%',
+            height: '50%',
+            panelClass: ['dialog-no-background'],
+            disableClose: true,
+            backdropClass: 'bdrop',
+            data: { userType: 'QCLegal' },
+          })
+          .afterClosed()
+          .subscribe((res: any) => {
+            console.log(res);
+            this.onRouteActive();
+          });
+        break;
 
       default:
         break;

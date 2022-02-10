@@ -281,8 +281,9 @@ export class TableComponent implements OnInit {
     // console.log(row, index);
     if (this.isLimit && index + 1 <= this.isLimit) {
       this.checkedRows.select(row);
+
+      this.onCheckBoxSelect.emit(this.checkedRows.selected);
     }
-    this.onCheckBoxSelect.emit(this.checkedRows.selected);
     return this.checkedRows.isSelected(row);
   }
 }
