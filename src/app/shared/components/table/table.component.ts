@@ -149,7 +149,10 @@ export class TableComponent implements OnInit {
         }
       });
       this._bs
-        .open(BottomSheetComponent, { data: { config: filteredBS } })
+        .open(BottomSheetComponent, {
+          data: { config: filteredBS },
+          panelClass: 'btm-darken',
+        })
         .afterDismissed()
         .subscribe((res: any) => {
           let event = {
