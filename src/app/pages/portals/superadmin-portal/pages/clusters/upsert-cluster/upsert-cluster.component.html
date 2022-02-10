@@ -1,78 +1,228 @@
+<div mat-dialog-title>
+  <h3>Add Cluster</h3>
+</div>
 <div mat-dialog-content>
-  <div class="grid">
-    <div class="col-2"></div>
-    <div class="col-10">
-      <form [formGroup]="clusterForm" class="grid">
-        <div class="col-12">
-          <b>Details</b>
-          <div class="divider"></div>
-        </div>
-        <div class="col-12">
-          <mat-form-field class="full-width">
-            <mat-label>Cluster Name</mat-label>
-            <input matInput formControlName="name" />
-          </mat-form-field>
-          <mat-form-field class="full-width">
-            <mat-label>Notary</mat-label>
-            <input matInput formControlName="_notaryId" />
-          </mat-form-field>
-        </div>
-        <div class="col-12">
-          <b>Active Days</b>
-          <div class="divider"></div>
-        </div>
-        <div class="col-12" formGroupName="day">
-          <div class="grid" *ngFor="let d of days" [formGroupName]="d">
-            <div class="col-1">
-              <p style="margin-left: 1rem">
-                <mat-checkbox formControlName="status"></mat-checkbox>
-              </p>
-            </div>
-            <div class="col-3">
-              <p [class]="clusterForm.value.day[d].status ? 'green' : 'gray'">
-                <b>{{ d.charAt(0) | uppercase }}{{ d.substr(1) }}</b>
-              </p>
-            </div>
-            <div class="col-8" *ngIf="!clusterForm.value.day[d].status">
-              <p><small>//check box to input start time//</small></p>
-            </div>
-            <div class="col-4" *ngIf="clusterForm.value.day[d].status">
-              <mat-form-field class="full-width">
-                <mat-label>AM Start</mat-label>
-                <input
-                  type="time"
-                  min="00:00"
-                  max="10:00"
-                  matInput
-                  formControlName="am"
-                />
-              </mat-form-field>
-            </div>
-            <div class="col-4" *ngIf="clusterForm.value.day[d].status">
-              <mat-form-field class="full-width">
-                <mat-label>PM Start</mat-label>
-                <input
-                  type="time"
-                  min="12:00"
-                  max="23:00"
-                  matInput
-                  formControlName="pm"
-                />
-              </mat-form-field>
-            </div>
-          </div>
-        </div>
-      </form>
+  <form [formGroup]="clusterForm" class="grid">
+    <div class="col-2">
+      <p>
+        <b>Details</b>
+      </p>
+      <div class="divider"></div>
     </div>
-  </div>
+    <div class="col-10">
+      <mat-form-field class="full-width">
+        <mat-label>Cluster Name</mat-label>
+        <input matInput formControlName="name" />
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Notary</mat-label>
+        <input
+          type="text"
+          matInput
+          [formControl]="notaryCtrl"
+          [matAutocomplete]="auto"
+        />
+        <mat-autocomplete
+          autoActiveFirstOption
+          [displayWith]="displayWith"
+          #auto="matAutocomplete"
+          (optionSelected)="notarySelected($event)"
+        >
+          <mat-option
+            *ngFor="let notary of filteredNotaries | async"
+            [value]="notary"
+          >
+            {{ notary.firstName + " " + notary.lastName }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <!--  -->
+    <div class="col-2">
+      <p>
+        <b>Active Days</b>
+      </p>
+      <div class="divider"></div>
+    </div>
+    <div class="col-10" formGroupName="day">
+      <div class="grid" *ngFor="let d of days" [formGroupName]="d">
+        <div class="col-1">
+          <p style="margin-left: 1rem">
+            <mat-checkbox formControlName="status"></mat-checkbox>
+          </p>
+        </div>
+        <div class="col-3">
+          <p [class]="clusterForm.value.day[d].status ? 'green' : 'gray'">
+            <b>{{ d.charAt(0) | uppercase }}{{ d.substr(1) }}</b>
+          </p>
+        </div>
+        <div class="col-8" *ngIf="!clusterForm.value.day[d].status">
+          <p><small>//check box to input start time//</small></p>
+        </div>
+        <div class="col-4" *ngIf="clusterForm.value.day[d].status">
+          <mat-form-field class="full-width">
+            <mat-label>AM Start</mat-label>
+            <input
+              type="time"
+              min="00:00"
+              max="10:00"
+              matInput
+              formControlName="am"
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-4" *ngIf="clusterForm.value.day[d].status">
+          <mat-form-field class="full-width">
+            <mat-label>PM Start</mat-label>
+            <input
+              type="time"
+              min="12:00"
+              max="23:00"
+              matInput
+              formControlName="pm"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <!--  -->
+    <div class="col-2">
+      <p>
+        <b>Assigned Rider/s</b>
+      </p>
+      <div class="divider"></div>
+    </div>
+    <div class="col-10">
+      <mat-form-field class="full-width">
+        <mat-label>Riders</mat-label>
+        <mat-chip-list #chipList>
+          <mat-chip
+            *ngFor="let rider of clusterForm.value._riders; let i = index"
+            (removed)="removeRider(i)"
+          >
+            {{ rider.firstName + " " + rider.lastName | uppercase }}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip>
+          <input
+            placeholder="Type a name of rider..."
+            #riderInput
+            [matAutocomplete]="autoRider"
+            [formControl]="riderCtrl"
+            [matChipInputFor]="chipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          />
+        </mat-chip-list>
+        <mat-autocomplete
+          #autoRider="matAutocomplete"
+          (optionSelected)="selected($event)"
+        >
+          <mat-option
+            *ngFor="let rider of filteredRiders | async"
+            [value]="rider"
+          >
+            {{ rider.firstName + " " + rider.lastName | uppercase }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <!--  -->
+    <div class="col-2">
+      <p>
+        <b>Assigned Barangay/s</b>
+      </p>
+      <div class="divider"></div>
+    </div>
+    <div class="col-10" formArrayName="barangays">
+      <div
+        class="grid"
+        *ngFor="let brgy of barangayControls; let i = index"
+        [formGroupName]="i"
+      >
+        <div class="col-3">
+          <button
+            mat-stroked-button
+            color="{{
+              clusterForm.value.barangays[i]._brgyId ? 'primary' : 'warn'
+            }}"
+            (click)="selectBarangay(i)"
+            class="full-width"
+            style="margin-top: 10px"
+          >
+            {{
+              clusterForm.value.barangays[i]._brgyId
+                ? clusterForm.value.barangays[i].barangay.brgyDesc
+                : "Click to Select Barangay"
+            }}
+          </button>
+        </div>
+        <div class="col-2">
+          <mat-form-field class="full-width">
+            <mat-label>Min Document</mat-label>
+            <input type="number" matInput formControlName="minDoc" />
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <mat-form-field class="full-width">
+            <mat-label>Max Document</mat-label>
+            <input type="number" matInput formControlName="maxDoc" />
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <mat-form-field class="full-width">
+            <mat-label>Duration per Docu.</mat-label>
+            <input type="number" matInput formControlName="duration" />
+            <span matSuffix>min</span>
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <p
+            class=" {{
+              clusterForm.value.barangays[i].maxDoc *
+                clusterForm.value.barangays[i].duration >
+              120
+                ? 'red'
+                : 'green'
+            }}"
+            style="padding-bottom: 4px; border-bottom: 1px solid gray"
+          >
+            <b>{{
+              clusterForm.value.barangays[i].maxDoc *
+                clusterForm.value.barangays[i].duration
+            }}</b>
+            Minutes
+          </p>
+        </div>
+        <div class="col-1">
+          <p>
+            <mat-icon
+              color="warn"
+              (click)="deleteBarangayForm(i)"
+              style="cursor: pointer"
+              *ngIf="barangayControls.length > 1"
+            >
+              close
+            </mat-icon>
+          </p>
+        </div>
+      </div>
+      <button mat-flat-button color="primary" (click)="addBarangayForm()">
+        Add Barangay
+      </button>
+      <span
+        style="margin-left: 16px"
+        class="{{ getTotalDuration() > 120 ? 'red' : 'green' }}"
+      >
+        *Total Minutes is {{ getTotalDuration() }}
+      </span>
+    </div>
+  </form>
 </div>
-<div mat-dialog-actions>
-  <button
-    mat-flat-button
-    color="primary"
-    (click)="saveCluster()"
-    [disabled]="!clusterForm.valid || !activeFlag"
-  >
-    Save
-  </button>
+<div mat-dialog-actions align="end">
+  <button mat-button color="warn" mat-dialog-close>Discard and Close</button>
+  <button mat-flat-button color="primary" (click)="saveCluster()">Save</button>
 </div>
+
+<!-- 
+    [disabled]="!clusterForm.valid || !activeFlag" -->
