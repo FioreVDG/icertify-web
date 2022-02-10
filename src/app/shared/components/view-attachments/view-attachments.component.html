@@ -1,19 +1,7 @@
 <h3 mat-dialog-title>{{ data.refCode ? data.refCode : "View Attachments" }}</h3>
 <mat-icon mat-dialog-close class="close-btn" color="warn">close</mat-icon>
-<!-- // ADD IMAGE VIEWRR -->
+
 <div mat-dialog-content *ngIf="!loading">
-  <!-- <div *ngFor="let attachment of files">
-    <ngx-extended-pdf-viewer
-      *ngIf="!attachment.isImage"
-      [src]="attachment.link"
-      [useBrowserLocale]="true"
-      height="80vh"
-      [zoom]="'auto'"
-    ></ngx-extended-pdf-viewer>
-    <ng-container *ngIf="attachment.isImage"
-      ><img style="height: 100%; width: 100%" [src]="data.link"
-    /></ng-container>
-  </div> -->
   <div class="grid">
     <div class="col-12">
       <div
@@ -26,9 +14,9 @@
         *ngFor="let item of files; let i = index"
       >
         <div class="col-6">
-          <p>Document Title: {{ item.name }}</p>
+          <p><b>Document Title:</b> {{ item.name }}</p>
           <p *ngIf="item.data.documentStatus">
-            Status:
+            <b>Status:</b>
             <span
               [ngStyle]="{
                 color:
@@ -39,11 +27,11 @@
               >{{ item.data.documentStatus }}
             </span>
           </p>
-          <p>Document Type: {{ item.data.documentType }}</p>
+          <p><b>Document Type:</b> {{ item.data.documentType }}</p>
           <p *ngIf="item.data.documentType === 'Others'">
-            Document Type Specific: {{ item.data.documentTypeSpecific }}
+            <b>Document Type Specific:</b> {{ item.data.documentTypeSpecific }}
           </p>
-          <p>Reference Code: {{ item.data.refCode }}</p>
+          <p><b>Reference Code:</b> {{ item.data.refCode }}</p>
           <div
             class="grid"
             *ngIf="
@@ -52,7 +40,7 @@
               item.screenshot.length > 0
             "
           >
-            <p class="col-12">Screenshots</p>
+            <p class="col-12"><b>Screenshots</b></p>
 
             <div
               (click)="openNewWindow(s.link)"
@@ -66,33 +54,86 @@
             </div>
           </div>
         </div>
-        <div class="col-6 img-container">
-          <mat-spinner
-            *ngIf="!item.loaded"
-            style="position: absolute"
-          ></mat-spinner>
-          <p>Uploaded Document</p>
-          <img
-            *ngIf="item.isImage"
-            [src]="item.link"
-            alt=""
-            (load)="fileLoaded(i)"
-          />
-          <ngx-doc-viewer
-            *ngIf="!item.isImage"
-            style="min-width: 100%; min-height: 100%"
-            [url]="item.link"
-            viewer="google"
-            (loaded)="fileLoaded(i)"
-          ></ngx-doc-viewer>
-        </div>
       </div>
     </div>
   </div>
+  <div class="grid">
+    <div class="col-12">
+      <ng-container *ngFor="let item of files; let i = index">
+        <div class="grid">
+          <div *ngIf="!item.notarizedFile" class="col-6">
+            <p align="center">Uploaded Document</p>
+            <div class="img-container">
+              <mat-spinner
+                *ngIf="!item.loaded"
+                style="position: absolute"
+              ></mat-spinner>
+              <img
+                *ngIf="item.isImage"
+                [src]="item.link"
+                alt=""
+                (load)="fileLoaded(i)"
+              />
+              <ngx-doc-viewer
+                *ngIf="!item.isImage"
+                style="min-width: 100%; min-height: 100%"
+                [url]="item.link"
+                viewer="google"
+                (loaded)="fileLoaded(i)"
+              ></ngx-doc-viewer>
+            </div>
+          </div>
+          <div *ngIf="item.notarizedFile" class="col-6">
+            <p align="center">Uploaded Document</p>
+            <div class="img-container-small">
+              <mat-spinner
+                *ngIf="!item.loaded"
+                style="position: absolute"
+              ></mat-spinner>
+              <img
+                *ngIf="item.isImage"
+                [src]="item.link"
+                alt=""
+                (load)="fileLoaded(i)"
+              />
+              <ngx-doc-viewer
+                *ngIf="!item.isImage"
+                style="min-width: 100%; min-height: 100%"
+                [url]="item.link"
+                viewer="google"
+                (loaded)="fileLoaded(i)"
+              ></ngx-doc-viewer>
+            </div>
+          </div>
+          <div *ngIf="item.notarizedFile" class="col-6">
+            <p align="center">Notarized Document</p>
+            <div class="img-container-small">
+              <mat-spinner
+                *ngIf="!item.loaded"
+                style="position: absolute"
+              ></mat-spinner>
+              <img
+                *ngIf="item.notarizedFile.isImage"
+                [src]="item.notarizedFile.link"
+                alt=""
+                (load)="fileLoaded(i)"
+              />
+              <ngx-doc-viewer
+                *ngIf="!item.notarizedFile.isImage"
+                style="min-width: 100%; min-height: 100%"
+                [url]="item.notarizedFile.link"
+                viewer="google"
+                (loaded)="fileLoaded(i)"
+              ></ngx-doc-viewer>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <mat-dialog-actions *ngIf="data.downloadButton">
+    <button mat-button color="primary" (click)="downloadFile()">
+      Download File <mat-icon>download</mat-icon>
+    </button>
+  </mat-dialog-actions>
 </div>
-
-<mat-dialog-actions *ngIf="data.downloadButton">
-  <button mat-button color="primary" (click)="downloadFile()">
-    Download File <mat-icon>download</mat-icon>
-  </button>
-</mat-dialog-actions>
