@@ -64,8 +64,8 @@ export const ROLE_TABLE: Column[] = [
 ];
 
 export const ROLE_BOTTOMSHEET = [
-  { label: 'Edit Details', action: 'update' },
-  { label: 'Delete', action: 'delete' },
+  { label: 'Edit Details', action: 'update', icon: 'edit' },
+  { label: 'Delete', action: 'delete', icon: 'delete' },
 ];
 
 export const ROLE_POPULATES: Populate[] = [
