@@ -40,8 +40,9 @@ export class AccessRolesComponent implements OnInit {
 
   addBtnAccess: Boolean = true;
   accountType: any;
+  _brgyId: any;
+  _notaryId: any;
   constructor(
-    private store: Store<{ user: User }>,
     private util: UtilService,
     private router: Router,
     private api: ApiService,
@@ -50,19 +51,11 @@ export class AccessRolesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this._brgyId = this.route.snapshot.paramMap.get('brgyId');
+    this._notaryId = this.route.snapshot.paramMap.get('_notaryId');
     this.accountType = this.route.snapshot.paramMap.get('userType');
     // const currRoute = this.router.url.split('/').pop();
-    this.store.select('user').subscribe((res: User) => {
-      console.log(res);
-      this.me = res;
-      // let routeAccess = this.util.findAccessRoute(res, currRoute);
-      // if (routeAccess && routeAccess.children && routeAccess.children.length) {
-      //   this.bottomSheetOptions = routeAccess.children;
-      //   this.addBtnAccess =
-      //     routeAccess.children.find((o: any) => o.action == 'add')?.hasAccess ||
-      //     false;
-      // }
-    });
+
     this.fetchData(this.page);
   }
 
@@ -77,6 +70,22 @@ export class AccessRolesComponent implements OnInit {
       page: event.pageIndex,
       limit: event.pageSize + '',
     };
+
+    if (this.accountType) {
+      query.find.push({
+        field: 'type',
+        operator: '=',
+        value: this.accountType === 'iCertify' ? 'Admin' : this.accountType,
+      });
+    }
+    if (this._brgyId && this._brgyId !== 'undefined')
+      query.find.push({ field: '_brgyId', operator: '=', value: this._brgyId });
+    if (this._notaryId && this._notaryId !== 'undefined')
+      query.find.push({
+        field: '_notaryId',
+        operator: '=',
+        value: this._notaryId,
+      });
     if (event.sort) {
       query.sort =
         (event.sort.direction === 'asc' ? '' : '-') + event.sort.active;
@@ -87,11 +96,11 @@ export class AccessRolesComponent implements OnInit {
     console.log(query);
     this.api.role.getAll(query).subscribe((res: any) => {
       console.log(res);
-      // res.env.roles.forEach((role: ROLE) => {
-      //   this.api.role.checkRoleInUsers(role._id).subscribe((res: any) => {
-      //     role['accessCount'] = res.total || '0';
-      //   });
-      // });
+      res.env.roles.forEach((role: ROLE) => {
+        this.api.role.checkRoleInUsers(role._id).subscribe((res: any) => {
+          role['accessCount'] = res.total || '0';
+        });
+      });
       this.dataSource = res.env.roles;
       this.dataLength = res.total;
       this.loading = false;
@@ -103,6 +112,9 @@ export class AccessRolesComponent implements OnInit {
       type: 'role',
       action: 'add',
       form: '',
+      _brgyId: this._brgyId,
+      _notaryId: this._notaryId,
+      accountType: this.accountType,
       navType:
         this.accountType == 'iCertify'
           ? SUPERADMIN_NAVS
@@ -133,14 +145,14 @@ export class AccessRolesComponent implements OnInit {
       case 'delete':
         this.dialog
           .open(AreYouSureComponent, {
-            data: { isDelete: true, msg: 'Delete this User' },
+            data: {
+              isDelete: true,
+              msg: 'Delete the Role:' + event.obj.name,
+            },
           })
           .afterClosed()
           .subscribe((res: any) => {
             if (res) {
-              this.api.user.deleteUser(event.obj._id).subscribe((res: any) => {
-                console.log(res);
-              });
             }
           });
 
@@ -148,8 +160,8 @@ export class AccessRolesComponent implements OnInit {
       case 'update':
         let sendData = {
           type: 'role',
-          action: event,
-          form: '',
+          action: event.action,
+          form: event.obj,
           navType:
             this.accountType == 'iCertify'
               ? SUPERADMIN_NAVS

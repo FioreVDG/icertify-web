@@ -115,9 +115,9 @@ export const SUPERADMIN_NAVS: NavNode[] = [
     hasAccess: false,
   },
   {
-    label: 'Settings',
-    icon: 'settings',
-    route: 'settings',
+    label: 'Clusters',
+    icon: 'adjust',
+    route: 'clusters',
     hasAccess: false,
   },
 ];

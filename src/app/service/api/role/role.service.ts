@@ -23,4 +23,7 @@ export class RoleService {
   delete(id: String) {
     return this.http.start('delete', `/roles/${id}`);
   }
+  checkRoleInUsers(id: String) {
+    return this.http.start('get', `/roles/checkRoleInUsers/${id}`);
+  }
 }

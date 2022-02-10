@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddRiderComponent } from './add-rider.component';
+import { ClustersComponent } from './clusters.component';
 
-describe('AddRiderComponent', () => {
-  let component: AddRiderComponent;
-  let fixture: ComponentFixture<AddRiderComponent>;
+describe('ClustersComponent', () => {
+  let component: ClustersComponent;
+  let fixture: ComponentFixture<ClustersComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddRiderComponent ]
+      declarations: [ ClustersComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddRiderComponent);
+    fixture = TestBed.createComponent(ClustersComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

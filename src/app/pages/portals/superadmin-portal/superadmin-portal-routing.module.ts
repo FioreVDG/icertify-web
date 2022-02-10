@@ -26,10 +26,10 @@ const routes: Routes = [
           import('./pages/sla/sla.module').then((m) => m.SlaModule),
       },
       {
-        path: 'settings',
+        path: 'clusters',
         loadChildren: () =>
-          import('./pages/settings/settings.module').then(
-            (m) => m.SettingsModule
+          import('./pages/clusters/clusters.module').then(
+            (m) => m.ClustersModule
           ),
       },
     ],

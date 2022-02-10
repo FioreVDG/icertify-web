@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SettingsComponent } from './settings.component';
+import { UpsertClusterComponent } from './upsert-cluster.component';
 
-describe('SettingsComponent', () => {
-  let component: SettingsComponent;
-  let fixture: ComponentFixture<SettingsComponent>;
+describe('UpsertClusterComponent', () => {
+  let component: UpsertClusterComponent;
+  let fixture: ComponentFixture<UpsertClusterComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SettingsComponent ]
+      declarations: [ UpsertClusterComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SettingsComponent);
+    fixture = TestBed.createComponent(UpsertClusterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

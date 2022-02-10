@@ -1,6 +1,6 @@
 export interface Find {
   field: string;
-  operator: string;
+  operator: string; //todo, specify all operators
   value: string | number | boolean | Date | null | undefined;
 }
 

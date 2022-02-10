@@ -15,5 +15,7 @@ export class BottomSheetComponent implements OnInit {
     public _bsRef: MatBottomSheetRef
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.data);
+  }
 }

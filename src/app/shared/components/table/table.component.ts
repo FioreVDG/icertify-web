@@ -121,6 +121,8 @@ export class TableComponent implements OnInit {
               ? null
               : cond[2] == 'undefined'
               ? undefined
+              : cond[2] == '1'
+              ? 1
               : cond[2];
           switch (operand) {
             case '=':
@@ -134,6 +136,11 @@ export class TableComponent implements OnInit {
                 filteredBS.push(bs);
               }
               break;
+            case '>':
+              if (elVal > value) {
+                filteredBS.push(bs);
+              }
+              break;
             default:
               break;
           }
@@ -142,7 +149,10 @@ export class TableComponent implements OnInit {
         }
       });
       this._bs
-        .open(BottomSheetComponent, { data: { config: filteredBS } })
+        .open(BottomSheetComponent, {
+          data: { config: filteredBS },
+          panelClass: 'btm-darken',
+        })
         .afterDismissed()
         .subscribe((res: any) => {
           let event = {

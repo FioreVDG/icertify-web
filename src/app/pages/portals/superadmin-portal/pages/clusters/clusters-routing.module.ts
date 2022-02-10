@@ -1,11 +1,16 @@
-import { SettingsComponent } from './settings.component';
+import { ClustersComponent } from './clusters.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-const routes: Routes = [{ path: '', component: SettingsComponent }];
+const routes: Routes = [
+  {
+    path: '',
+    component: ClustersComponent,
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class SettingsRoutingModule {}
+export class ClustersRoutingModule {}
