@@ -42,16 +42,18 @@ export class RegistrantFormComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.data);
-    if (this.data.obj) {
-      this.toUpdataData = this.data.obj;
-      this.imgObj = this.data.obj.images;
-      this.addressTemp = this.data.obj.address;
-      // this.imgObj.cert_of_indigency = 'Empty';
-      console.log(this.imgObj);
-    }
-    console.log(this.toUpdataData);
-    if (this.data && this.data.obj.images.reason_coi) {
-      this.reasonVal = this.data.obj.images.reason_coi;
+    if (this.data !== null) {
+      if (this.data.obj) {
+        this.toUpdataData = this.data.obj;
+        this.imgObj = this.data.obj.images;
+        this.addressTemp = this.data.obj.address;
+        // this.imgObj.cert_of_indigency = 'Empty';
+        console.log(this.imgObj);
+      }
+      console.log(this.toUpdataData);
+      if (this.data.obj?.images?.reason_coi) {
+        this.reasonVal = this.data.obj.images.reason_coi;
+      }
     }
     let tempInfo: any = localStorage.getItem('BARANGAY_INFORMATION');
     this.brgyInfo = JSON.parse(tempInfo);
@@ -61,15 +63,9 @@ export class RegistrantFormComponent implements OnInit {
     this.findDefaultValue('province');
     this.findDefaultValue('region');
 
+    let findMobileNum: any;
     this.registrantFromFields.forEach((el: any) => {
-      let findMobileNum: any = el.items.find(
-        (f: any) => f.fcname === 'mobileNumber'
-      );
-
-      if (findMobileNum) {
-        findMobileNum.default = '(+63)' + this.data.mobileNumber;
-        findMobileNum.disabled = true;
-      }
+      console.log(el);
       const disabledItemHeaders = [
         'Review Details',
         'Registrant Information',
@@ -80,6 +76,12 @@ export class RegistrantFormComponent implements OnInit {
           item.disabled = true;
         else item.disabled = false;
       });
+      findMobileNum = el.items.find((f: any) => f.fcname === 'mobileNumber');
+      console.log(findMobileNum);
+      if (findMobileNum && this.data.header === 'Add Indigent') {
+        findMobileNum.default = this.data.mobileNumber;
+        findMobileNum.disabled = true;
+      }
     });
   }
 
@@ -143,6 +145,7 @@ export class RegistrantFormComponent implements OnInit {
           break;
       }
     }
+    console.log(result);
     return result;
   }
 
