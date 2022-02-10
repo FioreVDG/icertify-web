@@ -26,24 +26,25 @@
           <p>SUPER ADMIN</p>
         </div>
       </mat-toolbar>
-      <ng-container *ngFor="let item of superadminNav">
-        <mat-list-item
-          style="height: 2.8rem"
-          [routerLink]="item.route"
-          (click)="changeRoute(item)"
-          routerLinkActive="router-active-link"
-          [matTooltip]="isExpanded ? '' : item.label"
-          matTooltipPosition="right"
-        >
-          <mat-icon
-            class="light"
-            fontSet="material-icons-outlined"
-            style="font-size: 24px; margin-left: 0.3rem; margin-right: 0.3rem"
-            mat-list-icon
-            >{{ item.icon }}</mat-icon
-          ><span *ngIf="isExpanded" class="light">{{ item.label }}</span>
-        </mat-list-item>
-      </ng-container>
+      <div style="padding: 0.5rem">
+        <ng-container *ngFor="let item of superadminNav">
+          <mat-list-item
+            style="height: 2.8rem; padding: 0"
+            [routerLink]="item.route"
+            (click)="changeRoute(item)"
+            routerLinkActive="router-active-link"
+            [matTooltip]="isExpanded ? '' : item.label"
+            matTooltipPosition="right"
+          >
+            <mat-icon
+              class="light"
+              fontSet="material-icons-outlined"
+              mat-list-icon
+              >{{ item.icon }}</mat-icon
+            ><span *ngIf="isExpanded" class="light">{{ item.label }}</span>
+          </mat-list-item>
+        </ng-container>
+      </div>
     </mat-nav-list>
   </mat-sidenav>
 

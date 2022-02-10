@@ -78,6 +78,12 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         // ],
       },
     ],
+    checkBoxBtns: [
+      {
+        label: 'Mark as Released',
+        action: 'release',
+      },
+    ],
   },
   {
     label: 'Released',

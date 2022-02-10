@@ -13,6 +13,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { TableOutput } from 'src/app/models/tableemit.interface';
 import { MatPaginator } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
+import { BUTTON } from 'src/app/models/table-button.interface';
 
 @Component({
   selector: 'app-table',
@@ -29,8 +30,11 @@ export class TableComponent implements OnInit {
   @Input() bottomSheet: any;
   @Input() checkBoxDisableField!: any;
   @Input() pagination: any;
+  @Output() onCheckBoxBtnClick: any = new EventEmitter<any>();
   @Output() onRowClick: any = new EventEmitter<any>();
   @Input() filterButtonConfig: any = [];
+  @Input() buttonConfig: any = {};
+
   duplicateColumns!: Array<Column>;
   @Output() onUpdateTableEmit: any = new EventEmitter<any>();
   @Input() uniqueCheckbox: any = false;
@@ -58,6 +62,7 @@ export class TableComponent implements OnInit {
           this.checkBox = i.isCheckbox;
           this.duplicateColumns = i.column;
           this.bottomSheet = i.bottomSheet;
+          this.buttonConfig.checkBoxBtnConfig = i.checkBoxBtns;
           i.selected = true;
           this.onUpdateTableEmit.emit(i);
         } else {
@@ -121,6 +126,8 @@ export class TableComponent implements OnInit {
               ? null
               : cond[2] == 'undefined'
               ? undefined
+              : cond[2] == '1'
+              ? 1
               : cond[2];
           switch (operand) {
             case '=':
@@ -134,6 +141,11 @@ export class TableComponent implements OnInit {
                 filteredBS.push(bs);
               }
               break;
+            case '<':
+              if (elVal < value) {
+                filteredBS.push(bs);
+              }
+              break;
             default:
               break;
           }
@@ -142,7 +154,10 @@ export class TableComponent implements OnInit {
         }
       });
       this._bs
-        .open(BottomSheetComponent, { data: { config: filteredBS } })
+        .open(BottomSheetComponent, {
+          data: { config: filteredBS },
+          panelClass: 'btm-darken',
+        })
         .afterDismissed()
         .subscribe((res: any) => {
           let event = {
@@ -169,6 +184,7 @@ export class TableComponent implements OnInit {
         this.checkBox = i.isCheckbox;
         this.duplicateColumns = i.column;
         this.bottomSheet = i.bottomSheet;
+        this.buttonConfig.checkBoxBtnConfig = i.checkBoxBtns;
         i.selected = true;
         this.onUpdateTableEmit.emit(i);
       } else {
@@ -179,6 +195,14 @@ export class TableComponent implements OnInit {
     // console.log(this.duplicateColumns);
     this.updateBreakpoint();
   }
+
+  checkBoxBtnClick(action: any) {
+    this.onCheckBoxBtnClick.emit({
+      selected: this.checkedRows.selected,
+      action,
+    });
+  }
+
   onTriggerSearch() {
     this.dataSource = [];
     var fields: Array<string> = [];

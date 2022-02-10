@@ -1,3 +1,4 @@
+import { OtpComponent } from 'src/app/shared/components/otp/otp.component';
 import { ApiService } from 'src/app/service/api/api.service';
 import { UtilService } from 'src/app/service/util/util.service';
 import { ActionResultComponent } from './../../dialogs/action-result/action-result.component';
@@ -41,16 +42,18 @@ export class RegistrantFormComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.data);
-    if (this.data.obj) {
-      this.toUpdataData = this.data.obj;
-      this.imgObj = this.data.obj.images;
-      this.addressTemp = this.data.obj.address;
-      // this.imgObj.cert_of_indigency = 'Empty';
-      console.log(this.imgObj);
-    }
-    console.log(this.toUpdataData);
-    if (this.data && this.data.obj.images.reason_coi) {
-      this.reasonVal = this.data.obj.images.reason_coi;
+    if (this.data !== null) {
+      if (this.data.obj) {
+        this.toUpdataData = this.data.obj;
+        this.imgObj = this.data.obj.images;
+        this.addressTemp = this.data.obj.address;
+        // this.imgObj.cert_of_indigency = 'Empty';
+        console.log(this.imgObj);
+      }
+      console.log(this.toUpdataData);
+      if (this.data.obj?.images?.reason_coi) {
+        this.reasonVal = this.data.obj.images.reason_coi;
+      }
     }
     let tempInfo: any = localStorage.getItem('BARANGAY_INFORMATION');
     this.brgyInfo = JSON.parse(tempInfo);
@@ -60,15 +63,9 @@ export class RegistrantFormComponent implements OnInit {
     this.findDefaultValue('province');
     this.findDefaultValue('region');
 
+    let findMobileNum: any;
     this.registrantFromFields.forEach((el: any) => {
-      let findMobileNum: any = el.items.find(
-        (f: any) => f.fcname === 'mobileNumber'
-      );
-
-      if (findMobileNum) {
-        findMobileNum.default = '(+63)' + this.data.mobileNumber;
-        findMobileNum.disabled = true;
-      }
+      console.log(el);
       const disabledItemHeaders = [
         'Review Details',
         'Registrant Information',
@@ -79,6 +76,12 @@ export class RegistrantFormComponent implements OnInit {
           item.disabled = true;
         else item.disabled = false;
       });
+      findMobileNum = el.items.find((f: any) => f.fcname === 'mobileNumber');
+      console.log(findMobileNum);
+      if (findMobileNum && this.data.header === 'Add Indigent') {
+        findMobileNum.default = this.data.mobileNumber;
+        findMobileNum.disabled = true;
+      }
     });
   }
 
@@ -142,6 +145,7 @@ export class RegistrantFormComponent implements OnInit {
           break;
       }
     }
+    console.log(result);
     return result;
   }
 
@@ -261,6 +265,26 @@ export class RegistrantFormComponent implements OnInit {
     console.log(this.toUpdataData);
     console.log(this.imgObj);
     console.log(this.addressTemp);
+    if (this.data.obj.mobileNumber !== this.toUpdataData.mobileNumber) {
+      console.log('MAY OTP');
+      this.dialog
+        .open(OtpComponent, {
+          data: { mobileNumber: this.toUpdataData.mobileNumber },
+          panelClass: 'dialog-responsive-dark',
+          disableClose: true,
+        })
+        .afterClosed()
+        .subscribe((res: any) => {
+          if (res) {
+            this.proceedUpdating();
+          }
+        });
+    } else {
+      this.proceedUpdating();
+    }
+  }
+
+  proceedUpdating() {
     const loader = this.util.startLoading('Saving');
     delete this.toUpdataData.address1;
     delete this.toUpdataData.address2;
@@ -289,7 +313,7 @@ export class RegistrantFormComponent implements OnInit {
           this.dialog
             .open(ActionResultComponent, {
               data: {
-                msg: 'Registrant updated successfully!',
+                msg: 'Registrant details successfully updated!',
                 success: true,
                 button: 'Okay',
               },

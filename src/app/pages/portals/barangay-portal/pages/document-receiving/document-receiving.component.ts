@@ -7,7 +7,11 @@ import { TableOutput } from 'src/app/models/tableemit.interface';
 import { ApiService } from 'src/app/service/api/api.service';
 import { UtilService } from 'src/app/service/util/util.service';
 import { AutoCompleteComponent } from 'src/app/shared/components/auto-complete/auto-complete.component';
-import { DOCUMENT_RECEIVING_TABLE, DOC_RECEIVING_BOTTOMSHEET } from './config';
+import {
+  DOCUMENT_RECEIVING_TABLE,
+  DOC_RECEIVING_BOTTOMSHEET,
+  DOC_RECEIVING_FIND,
+} from './config';
 import { ViewDocumentComponent } from 'src/app/shared/components/view-document/view-document.component';
 import { RegistrantFormComponent } from 'src/app/shared/components/registrant-form/registrant-form.component';
 import { ViewVideoComponent } from 'src/app/shared/components/view-video/view-video.component';
@@ -60,11 +64,13 @@ export class DocumentReceivingComponent implements OnInit {
         },
       ],
     };
+    query.find = query.find.concat(DOC_RECEIVING_FIND);
     if (event.filter) query.filter = event.filter;
     if (event.sort) {
       query.sort =
         (event.sort.direction === 'asc' ? '' : '-') + event.sort.active;
     }
+    console.log(query);
 
     this.api.transaction.getAll(query).subscribe(
       (res: any) => {

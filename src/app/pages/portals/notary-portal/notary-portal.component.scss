@@ -9,8 +9,18 @@
   margin-top: 2rem;
   height: auto;
 }
+.light {
+  color: #5f5f5f;
+  font-weight: 500;
+  font-size: 12.5px;
+}
+.avatar {
+  cursor: pointer;
+}
 mat-sidenav-container {
   height: 100%;
+  background: #f7f8fb;
+  overflow-x: hidden;
 
   mat-sidenav {
     overflow-x: hidden;
@@ -35,17 +45,30 @@ mat-sidenav-container {
     transform: rotate(180deg);
   }
 }
-.img {
-  width: auto;
-  height: 75%;
-  //   margin-left: 0.3rem;
+
+.logo-container {
+  height: 3rem;
+  width: 3rem;
+  background: radial-gradient(#f1f1f1 30%, #ddd 50%, #aeadaf 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0rem;
+  .img {
+    width: auto;
+    height: 75%;
+    display: block;
+    margin: auto;
+  }
 }
-.text {
+.logo-text {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   padding: 0rem 1.1rem;
+  margin-left: 0.7rem;
   p {
     font-size: 9px;
     margin: 0;
@@ -58,6 +81,62 @@ mat-sidenav-container {
     margin: 0;
     font-family: "Tomatoes" !important;
     line-height: 1.3rem;
+    letter-spacing: 0.1rem;
+    font-weight: 600;
+    font-size: 22px;
     color: #fff;
+  }
+}
+
+.mat-nav-list .mat-list-item:hover {
+  background: linear-gradient(
+    90deg,
+    rgb(44, 14, 90) 18%,
+    rgb(95, 47, 140) 100%
+  );
+  border-radius: 5px;
+  color: #fff;
+  transition: 0.1s;
+  span {
+    color: #fefefe;
+  }
+  mat-icon {
+    color: #fefefe;
+  }
+}
+
+.mat-nav-list .mat-list-item:focus {
+  background: linear-gradient(
+    90deg,
+    rgb(44, 14, 90) 18%,
+    rgb(95, 47, 140) 100%
+  );
+  border-radius: 5px;
+  color: #fff;
+  transition: 0.1s;
+  span {
+    color: #fefefe;
+  }
+  mat-icon {
+    color: #fefefe;
+  }
+}
+.mat-nav-list .mat-list-item {
+  margin: 0.1rem 0rem;
+}
+
+.router-active-link {
+  background: linear-gradient(
+    90deg,
+    rgb(44, 14, 90) 18%,
+    rgb(95, 47, 140) 100%
+  );
+  border-radius: 5px;
+  margin: 0rem;
+  span {
+    color: #fefefe;
+  }
+  mat-icon {
+    color: #fefefe;
   }
 }

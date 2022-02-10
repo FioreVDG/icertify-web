@@ -167,6 +167,11 @@ export const FIND_NOTARIZED: Find[] = [
     operator: '=',
     value: 'Notarized',
   },
+  {
+    field: 'notarizedDocument.dateUploaded',
+    operator: '[nin]=',
+    value: 'null',
+  },
 ];
 export const FIND_UNNOTARIZED: Find[] = [
   {

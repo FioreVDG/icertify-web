@@ -28,6 +28,7 @@ import _ from 'lodash';
   styleUrls: ['./batch-delivery-management.component.scss'],
 })
 export class BatchDeliveryManagementComponent implements OnInit {
+  //TODO ADD RIDER SETTINGS BINDING
   @ViewChild('table') appTable: TableComponent | undefined;
   filtBtnConfig = FILT_BTN_CONFIG;
   isCheckbox: boolean = true;
@@ -191,6 +192,18 @@ export class BatchDeliveryManagementComponent implements OnInit {
 
         break;
       default:
+    }
+  }
+
+  onMarkButtonClick(event: any) {
+    // console.log(event);
+    switch (event.action) {
+      case 'enroute':
+        this.onMark();
+        break;
+
+      default:
+        break;
     }
   }
 

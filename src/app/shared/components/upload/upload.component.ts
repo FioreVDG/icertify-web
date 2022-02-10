@@ -127,22 +127,26 @@ export class UploadComponent implements OnInit {
       );
   }
   getVideoLength(file: any) {
-    let length: number;
     var video = document.createElement('video');
     video.preload = 'metadata';
-    video.onloadedmetadata = function () {
-      window.URL.revokeObjectURL(video.src);
-      // alert('Duration : ' + video.duration + ' seconds');
-    };
-    video.src = URL.createObjectURL(file);
-    if (video.duration <= 61) {
-      this.save(file);
-    } else
-      this.sb.open('Video length should be less than a minute', 'Okay', {
-        duration: 3000,
-        verticalPosition: 'bottom',
-        horizontalPosition: 'center',
-        panelClass: ['failed'],
+    const getDuration = () =>
+      new Promise((resolve) => {
+        video.onloadedmetadata = () => {
+          resolve(video.duration);
+        };
       });
+    video.src = URL.createObjectURL(file);
+    getDuration().then((l: any) => {
+      console.log(l);
+      if (l <= 61) {
+        this.save(file);
+      } else
+        this.sb.open('Video length should be less than a minute', 'Okay', {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          horizontalPosition: 'center',
+          panelClass: ['failed'],
+        });
+    });
   }
 }

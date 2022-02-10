@@ -64,7 +64,13 @@ export const DOCUMENT_RECEIVING_TABLE: Column[] = [
   },
 ];
 
-export const DOC_RECEIVING_FIND: Find[] = [];
+export const DOC_RECEIVING_FIND: Find[] = [
+  {
+    field: 'locationStatus',
+    operator: '[in]=',
+    value: 'For Pick Up (Barangay),Enroute to Notary',
+  },
+];
 
 export const DOC_RECEIVING_BOTTOMSHEET: BottomSheetItem[] = [
   { label: 'View Document/s', action: 'viewDoc', icon: 'description' },

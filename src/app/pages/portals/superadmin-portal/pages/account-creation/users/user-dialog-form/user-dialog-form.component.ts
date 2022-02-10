@@ -21,7 +21,7 @@ import * as _ from 'lodash';
 })
 export class UserDialogFormComponent implements OnInit {
   @ViewChild('userDetails') userDetails!: FormComponent;
-  dialogTitle: string = 'ADD USER FORM';
+  dialogTitle: string = 'USER FORM';
   userFormFields: Section[] = USER_FORM;
   regions = [];
   provinces = [];
@@ -169,7 +169,10 @@ export class UserDialogFormComponent implements OnInit {
     toSaveData = _.omit(toSaveData, omitField);
 
     console.log(toSaveData);
-    this.api.user.createUser(toSaveData).subscribe(
+    let api = this.api.user.createUser(toSaveData);
+    if (this.data.obj)
+      api = this.api.user.updateUser(this.data.obj._id, toSaveData);
+    api.subscribe(
       (res: any) => {
         console.log(res);
         this.saving = false;
