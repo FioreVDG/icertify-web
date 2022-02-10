@@ -84,3 +84,56 @@ mat-sidenav-container {
     color: #fff;
   }
 }
+
+.mat-nav-list .mat-list-item:hover {
+  background: linear-gradient(
+    90deg,
+    rgb(44, 14, 90) 18%,
+    rgb(95, 47, 140) 100%
+  );
+  border-radius: 5px;
+  color: #fff;
+  transition: 0.1s;
+  span {
+    color: #fefefe;
+  }
+  mat-icon {
+    color: #fefefe;
+  }
+}
+
+.mat-nav-list .mat-list-item:focus {
+  background: linear-gradient(
+    90deg,
+    rgb(44, 14, 90) 18%,
+    rgb(95, 47, 140) 100%
+  );
+  border-radius: 5px;
+  color: #fff;
+  transition: 0.1s;
+  span {
+    color: #fefefe;
+  }
+  mat-icon {
+    color: #fefefe;
+  }
+}
+.mat-nav-list .mat-list-item {
+  margin: 0.1rem 0rem;
+}
+
+.router-active-link {
+  background: linear-gradient(
+    90deg,
+    rgb(44, 14, 90) 18%,
+    rgb(95, 47, 140) 100%
+  );
+  border-radius: 5px;
+  margin: 0rem;
+  span {
+    color: #fefefe;
+  }
+  mat-icon {
+    color: #fefefe;
+  }
+}

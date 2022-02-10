@@ -28,6 +28,7 @@ import _ from 'lodash';
   styleUrls: ['./batch-delivery-management.component.scss'],
 })
 export class BatchDeliveryManagementComponent implements OnInit {
+  //TODO ADD RIDER SETTINGS BINDING
   @ViewChild('table') appTable: TableComponent | undefined;
   filtBtnConfig = FILT_BTN_CONFIG;
   isCheckbox: boolean = true;

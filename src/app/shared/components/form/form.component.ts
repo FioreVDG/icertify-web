@@ -42,7 +42,8 @@ export class FormComponent implements OnInit {
         i.disabled = i.disabled || false || this.viewMode;
         if (this.obj && i.path) {
           i.default =
-            i.type === 'mobileNumber'
+            i.type === 'mobileNumber' &&
+            this.utilService.deepFind(this.obj, i.path).length != 10
               ? this.utilService.deepFind(this.obj, i.path).slice(3)
               : this.utilService.deepFind(this.obj, i.path);
         }

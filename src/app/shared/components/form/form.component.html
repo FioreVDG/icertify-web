@@ -26,6 +26,7 @@
               "
               oninput="this.value = this.value.toUpperCase()"
             />
+            <p matPrefix>{{ field.prefix }}</p>
             <button
               *ngIf="form.controls[field.fcname].value && field.addCopyText"
               matSuffix
