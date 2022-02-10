@@ -1,3 +1,4 @@
+import { ClusterService } from './cluster/cluster.service';
 import { AgoraService } from './agora/agora.service';
 import { NotarialService } from './notarial/notarial.service';
 import { Inject, Injectable } from '@angular/core';
@@ -31,6 +32,7 @@ export class ApiService {
     public agora: AgoraService,
     public sla: SlaService,
     public room: RoomService,
-    public sms: SmsService
+    public sms: SmsService,
+    public cluster: ClusterService
   ) {}
 }
