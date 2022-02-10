@@ -121,6 +121,8 @@ export class TableComponent implements OnInit {
               ? null
               : cond[2] == 'undefined'
               ? undefined
+              : cond[2] == '1'
+              ? 1
               : cond[2];
           switch (operand) {
             case '=':
@@ -131,6 +133,11 @@ export class TableComponent implements OnInit {
               break;
             case '!=':
               if (elVal !== value) {
+                filteredBS.push(bs);
+              }
+              break;
+            case '>':
+              if (elVal > value) {
                 filteredBS.push(bs);
               }
               break;
