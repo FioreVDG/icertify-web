@@ -7,9 +7,10 @@ import { CommonModule } from '@angular/common';
 import { ClustersRoutingModule } from './clusters-routing.module';
 import { ClustersComponent } from './clusters.component';
 import { UpsertClusterComponent } from './upsert-cluster/upsert-cluster.component';
+import { AutocompleteDialogComponent } from './upsert-cluster/autocomplete-dialog/autocomplete-dialog.component';
 
 @NgModule({
-  declarations: [ClustersComponent, UpsertClusterComponent],
+  declarations: [ClustersComponent, UpsertClusterComponent, AutocompleteDialogComponent],
   imports: [
     CommonModule,
     ClustersRoutingModule,

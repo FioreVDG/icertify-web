@@ -1,7 +1,26 @@
+import { ActionResultComponent } from './../../../../../../shared/dialogs/action-result/action-result.component';
+import { AutocompleteDialogComponent } from './autocomplete-dialog/autocomplete-dialog.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  startWith,
+  switchMap,
+} from 'rxjs/operators';
 import { QueryParams } from './../../../../../../models/queryparams.interface';
 import { ApiService } from './../../../../../../service/api/api.service';
-import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  FormArray,
+  AbstractControl,
+} from '@angular/forms';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { Observable } from 'rxjs';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-upsert-cluster',
@@ -9,6 +28,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./upsert-cluster.component.scss'],
 })
 export class UpsertClusterComponent implements OnInit {
+  @ViewChild('riderInput') riderInput!: ElementRef<HTMLInputElement>;
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  totalDuration = 0;
   clusterForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
     day: new FormGroup({
@@ -53,7 +75,11 @@ export class UpsertClusterComponent implements OnInit {
     barangays: new FormArray([]),
   });
 
-  riders = [];
+  riderCtrl = new FormControl();
+  filteredRiders: Observable<any[]>;
+  notaryCtrl = new FormControl();
+  filteredNotaries: Observable<any[]>;
+  barangayControls: AbstractControl[] = [];
 
   activeFlag = false;
 
@@ -67,30 +93,149 @@ export class UpsertClusterComponent implements OnInit {
     'sunday',
   ];
 
-  addRider(_riderId: string) {
-    const _riderForm = new FormControl('', [Validators.required]);
-    (this.clusterForm.get('_rider') as FormArray).push(_riderForm);
+  addBarangayForm() {
+    (this.clusterForm.get('barangays') as FormArray).push(
+      new FormGroup({
+        barangay: new FormControl({}, [Validators.required]),
+        _brgyId: new FormControl('', [Validators.required]),
+        minDoc: new FormControl('', [Validators.required]),
+        maxDoc: new FormControl('', [Validators.required]),
+        duration: new FormControl('', [Validators.required]),
+      })
+    );
+
+    this.barangayControls = (
+      this.clusterForm.get('barangays') as FormArray
+    ).controls;
   }
 
-  addBarangay(_riderId: string) {
-    const _riderForm = new FormControl('', [Validators.required]);
-    (this.clusterForm.get('_rider') as FormArray).push(_riderForm);
+  deleteBarangayForm(i: number) {
+    // ask question here
+    (this.clusterForm.get('barangays') as FormArray).removeAt(i);
   }
 
-  constructor(private api: ApiService) {
+  selectBarangay(i: number) {
+    this.dialog
+      .open(AutocompleteDialogComponent)
+      .afterClosed()
+      .subscribe((res) => {
+        console.log(res);
+        if (res) {
+          (this.clusterForm.get('barangays') as FormArray)
+            .at(i)
+            .get('_brgyId')
+            ?.setValue(res._brgyId);
+
+          (this.clusterForm.get('barangays') as FormArray)
+            .at(i)
+            .get('barangay')
+            ?.setValue(res.address.barangay);
+        }
+      });
+  }
+
+  getTotalDuration() {
+    var totalDuration = 0;
+    this.clusterForm.value.barangays.forEach((brgy: any) => {
+      totalDuration += brgy.duration * brgy.maxDoc;
+    });
+    this.totalDuration = totalDuration;
+    return totalDuration;
+  }
+
+  constructor(
+    private api: ApiService,
+    private dialog: MatDialog,
+    private dialogRef: MatDialogRef<UpsertClusterComponent>
+  ) {
+    this.filteredRiders = this.riderCtrl.valueChanges.pipe(
+      startWith(''),
+      debounceTime(400),
+      distinctUntilChanged(),
+      switchMap((val) => {
+        return this._filter(val || '', 'Rider');
+      })
+    );
+
+    this.filteredNotaries = this.notaryCtrl.valueChanges.pipe(
+      startWith(''),
+      debounceTime(400),
+      distinctUntilChanged(),
+      switchMap((val) => {
+        return this._filter(val || '', 'Notary');
+      })
+    );
+
+    this.addBarangayForm();
+  }
+
+  private _filter(value: string, type: string): Observable<any[]> {
+    var mobileNumbers: Array<string> = [];
+    // this.clusterForm.value._riders.forEach((rider: any) => {
+    //   mobileNumbers.push(rider.mobileNumber);
+    // });
     var query: QueryParams = {
       find: [
         {
-          value: 'Rider',
+          value: type,
           field: 'type',
           operator: '=',
         },
+        {
+          value: 'true',
+          field: 'isMain',
+          operator: '=',
+        },
       ],
+      filter: {
+        value,
+        fields: ['firstName', 'lastName'],
+      },
     };
+    if (mobileNumbers.length) {
+      query.find.push({
+        field: 'mobileNumber',
+        operator: '[nin]',
+        value: mobileNumbers.join(','),
+      });
+    }
+    console.log(query);
     // todo, add interface for response of endpoints
-    this.api.user.getAllUser(query).subscribe((res: any) => {
-      console.log(res);
+    return this.api.user.getAllUser(query).pipe(
+      map((res: any) => {
+        console.log(res);
+        return res.env.users;
+      })
+    );
+  }
+
+  notarySelected(event: MatAutocompleteSelectedEvent): void {
+    console.log(event.option.value);
+    this.clusterForm.get('_notaryId')?.setValue(event.option.value._id);
+  }
+
+  displayWith(option: any) {
+    if (option) return (option.firstName + ' ' + option.lastName).toUpperCase();
+    return '';
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    // this.fruits.push(event.option.viewValue);
+    console.log(event.option.value);
+    var rider = event.option.value;
+    let riderFormGroup = new FormGroup({
+      _id: new FormControl(rider._id),
+      firstName: new FormControl(rider.firstName),
+      lastName: new FormControl(rider.lastName),
+      mobileNumber: new FormControl(rider.mobileNumber),
     });
+    (this.clusterForm.get('_riders') as FormArray).push(riderFormGroup);
+    this.riderInput.nativeElement.value = '';
+    this.riderCtrl.setValue(null);
+  }
+
+  removeRider(i: number) {
+    (this.clusterForm.get('_riders') as FormArray).removeAt(i);
   }
 
   ngOnInit(): void {
@@ -134,6 +279,30 @@ export class UpsertClusterComponent implements OnInit {
   }
 
   saveCluster() {
-    console.log(this.clusterForm.getRawValue());
+    var cluster = this.clusterForm.getRawValue();
+    this.days.forEach((d) => {
+      cluster.day[d].status = cluster.day[d].status ? 'Open' : 'Closed';
+    });
+    this.api.cluster.create(cluster).subscribe(
+      (res) => {
+        this.dialog.open(ActionResultComponent, {
+          data: {
+            msg: cluster.name + ' successfully added!',
+            success: true,
+            button: 'Got it!',
+          },
+        });
+        this.dialogRef.close(true);
+      },
+      (err) => {
+        this.dialog.open(ActionResultComponent, {
+          data: {
+            msg: 'Error: ' + err.error.message,
+            success: false,
+            button: 'Got it!',
+          },
+        });
+      }
+    );
   }
 }
