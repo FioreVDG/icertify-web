@@ -42,6 +42,11 @@ export class AutocompleteDialogComponent implements OnInit {
           field: 'type',
           operator: '=',
         },
+        {
+          value: true,
+          field: 'isMain',
+          operator: '=',
+        },
       ],
       filter: {
         value,
@@ -60,7 +65,8 @@ export class AutocompleteDialogComponent implements OnInit {
   ngOnInit(): void {}
 
   displayWith(option: any) {
-    return option.address.barangay.brgyDesc.toUpperCase();
+    if (option) return option.address.barangay.brgyDesc.toUpperCase();
+    return '';
   }
 
   close() {

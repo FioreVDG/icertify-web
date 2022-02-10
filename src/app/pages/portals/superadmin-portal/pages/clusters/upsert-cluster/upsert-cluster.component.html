@@ -32,7 +32,7 @@
             *ngFor="let notary of filteredNotaries | async"
             [value]="notary"
           >
-            {{ notary.firstName + " " + notary.lastName }}
+            {{ notary.firstName + " " + notary.lastName }} {{ notary.isMain }}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>

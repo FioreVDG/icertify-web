@@ -1,5 +1,6 @@
+import { ActionResultComponent } from './../../../../../../shared/dialogs/action-result/action-result.component';
 import { AutocompleteDialogComponent } from './autocomplete-dialog/autocomplete-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -142,7 +143,11 @@ export class UpsertClusterComponent implements OnInit {
     return totalDuration;
   }
 
-  constructor(private api: ApiService, private dialog: MatDialog) {
+  constructor(
+    private api: ApiService,
+    private dialog: MatDialog,
+    private dialogRef: MatDialogRef<UpsertClusterComponent>
+  ) {
     this.filteredRiders = this.riderCtrl.valueChanges.pipe(
       startWith(''),
       debounceTime(400),
@@ -176,6 +181,11 @@ export class UpsertClusterComponent implements OnInit {
           field: 'type',
           operator: '=',
         },
+        {
+          value: 'true',
+          field: 'isMain',
+          operator: '=',
+        },
       ],
       filter: {
         value,
@@ -205,7 +215,8 @@ export class UpsertClusterComponent implements OnInit {
   }
 
   displayWith(option: any) {
-    return (option.firstName + ' ' + option.lastName).toUpperCase();
+    if (option) return (option.firstName + ' ' + option.lastName).toUpperCase();
+    return '';
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
@@ -268,6 +279,30 @@ export class UpsertClusterComponent implements OnInit {
   }
 
   saveCluster() {
-    console.log(this.clusterForm.getRawValue());
+    var cluster = this.clusterForm.getRawValue();
+    this.days.forEach((d) => {
+      cluster.day[d].status = cluster.day[d].status ? 'Open' : 'Closed';
+    });
+    this.api.cluster.create(cluster).subscribe(
+      (res) => {
+        this.dialog.open(ActionResultComponent, {
+          data: {
+            msg: cluster.name + ' successfully added!',
+            success: true,
+            button: 'Got it!',
+          },
+        });
+        this.dialogRef.close(true);
+      },
+      (err) => {
+        this.dialog.open(ActionResultComponent, {
+          data: {
+            msg: 'Error: ' + err.error.message,
+            success: false,
+            button: 'Got it!',
+          },
+        });
+      }
+    );
   }
 }
