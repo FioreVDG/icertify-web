@@ -11,6 +11,9 @@ export class UserService {
   getAllUser(query: QueryParams) {
     return this.http.start('get', `/users`, {}, query);
   }
+  getById(id: string) {
+    return this.http.start('get', `/user/${id}`, {});
+  }
   createAdmin(body: Object) {
     return this.http.start('post', '/users/admins', body);
   }
@@ -30,5 +33,11 @@ export class UserService {
     return this.http.start('post', `/users/checkExistingMobileNumber`, {
       mobileNumber,
     });
+  }
+  getAllIndigent(query: QueryParams) {
+    return this.http.start('get', '/users/users', {}, query);
+  }
+  updateIndigent(id: string, body: object) {
+    return this.http.start('patch', `/users/indigent/${id}`, body);
   }
 }

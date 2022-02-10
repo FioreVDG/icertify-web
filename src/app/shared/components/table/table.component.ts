@@ -57,6 +57,7 @@ export class TableComponent implements OnInit {
         if (index === 0) {
           this.checkBox = i.isCheckbox;
           this.duplicateColumns = i.column;
+          this.bottomSheet = i.bottomSheet;
           i.selected = true;
           this.onUpdateTableEmit.emit(i);
         } else {
@@ -106,9 +107,52 @@ export class TableComponent implements OnInit {
     }, 500);
   }
   rowClick(element: any) {
-    if (this.bottomSheet) {
+    console.log(element);
+    if (this.bottomSheet && this.bottomSheet.length) {
+      let filteredBS: any[] = [];
+      this.bottomSheet.forEach((bs: any, index: number) => {
+        if (bs.showIf) {
+          let cond = bs.showIf.split('/');
+          console.log(cond);
+          let elVal = element[cond[0]];
+          let operand = cond[1];
+          let value =
+            cond[2] == 'null'
+              ? null
+              : cond[2] == 'undefined'
+              ? undefined
+              : cond[2] == '1'
+              ? 1
+              : cond[2];
+          switch (operand) {
+            case '=':
+              console.log(elVal, value);
+              if (elVal == value) {
+                filteredBS.push(bs);
+              }
+              break;
+            case '!=':
+              if (elVal !== value) {
+                filteredBS.push(bs);
+              }
+              break;
+            case '<':
+              if (elVal < value) {
+                filteredBS.push(bs);
+              }
+              break;
+            default:
+              break;
+          }
+        } else {
+          filteredBS.push(bs);
+        }
+      });
       this._bs
-        .open(BottomSheetComponent, { data: { config: this.bottomSheet } })
+        .open(BottomSheetComponent, {
+          data: { config: filteredBS },
+          panelClass: 'btm-darken',
+        })
         .afterDismissed()
         .subscribe((res: any) => {
           let event = {
@@ -139,7 +183,6 @@ export class TableComponent implements OnInit {
         this.onUpdateTableEmit.emit(i);
       } else {
         i.selected = false;
-        this.bottomSheet = null;
       }
     });
     this.checkedRows.clear();
@@ -242,7 +285,11 @@ export class TableComponent implements OnInit {
       const numSelectedMinusDisabled = this.dataSource.filter((row: any) => {
         return (
           row[this.checkBoxDisableField.column] !==
-          this.checkBoxDisableField.value
+          (this.checkBoxDisableField.value == 'null'
+            ? null
+            : this.checkBoxDisableField.value == 'undefined'
+            ? undefined
+            : this.checkBoxDisableField.value)
         );
       }).length;
 
@@ -254,7 +301,11 @@ export class TableComponent implements OnInit {
         this.dataSource.forEach((row: any) => {
           if (
             row[this.checkBoxDisableField.column] !==
-            this.checkBoxDisableField.value
+            (this.checkBoxDisableField.value == 'null'
+              ? null
+              : this.checkBoxDisableField.value == 'undefined'
+              ? undefined
+              : this.checkBoxDisableField.value)
           )
             this.checkedRows.select(row);
         });
@@ -281,7 +332,6 @@ export class TableComponent implements OnInit {
     // console.log(row, index);
     if (this.isLimit && index + 1 <= this.isLimit) {
       this.checkedRows.select(row);
-
       this.onCheckBoxSelect.emit(this.checkedRows.selected);
     }
     return this.checkedRows.isSelected(row);

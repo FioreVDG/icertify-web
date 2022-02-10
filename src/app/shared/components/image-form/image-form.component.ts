@@ -1,5 +1,5 @@
 import { UploadComponent } from './../upload/upload.component';
-import { IMAGE_FORM } from './enum';
+import { IMAGE_FORM, CHOICES } from './enum';
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,14 +13,24 @@ import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
 })
 export class ImageFormComponent implements OnInit {
   images = IMAGE_FORM;
+  choices = CHOICES;
+  reason: string = '';
+  reasons = [
+    'Barangay Chairman/Captain/Officer-in-Charge of signing is not present to sign the certificate.',
+    'Complete requirements to get the certificate are yet to be submitted by the registrant.',
+  ];
+  selectedChoice: string = '';
   @Output() imageEmitter = new EventEmitter<any>();
   @Input() obj: any = {};
   @Input() mobileNumber: string = '';
   @Input() disable: any;
+  @Input() reasonVal: string = '';
+  @Input() header: string = '';
   imgArray: Array<any> = [];
   me: any;
   imageForm = this.fb.group({});
   loadingImage: boolean = false;
+  certificateOfIndigencyExist: boolean = false;
   constructor(
     public dialog: MatDialog,
     public dbx: DropboxService,
@@ -29,12 +39,15 @@ export class ImageFormComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    // if (this.obj !== null)
     await this.getImage();
+    console.log(this.header);
+    if (this.reasonVal !== '') {
+      this.reason = this.reasonVal;
+      this.selectedChoice = 'no';
+    }
   }
 
   getImage() {
-    //Not yet final
     console.log(this.obj);
     this.loadingImage = true;
     let temp: any = {};
@@ -42,32 +55,40 @@ export class ImageFormComponent implements OnInit {
 
     this.images.forEach((img) => {
       img.fields.forEach(async (field: any) => {
-        console.log(field.visible);
+        let validators = field.validator || [];
+        if (field.required) validators.push(Validators.required);
+
         temp[field.fcname] = new FormControl(
           this.obj && this.obj[field.fcname] ? this.obj[field.fcname] : '',
-          [Validators.required]
+          validators
         );
-        // console.log(this.obj[field.fcname]);
-
         tempImg =
           this.obj && this.obj[field.fcname]
             ? await this.getTempLink(this.obj[field.fcname]['path_display'])
             : '';
 
-        console.log(tempImg);
-        this.imgArray.push({
-          visible: field.visible,
-          fcname: field.fcname,
-          label: field.label,
-          hasError: this.disable ? false : field.hasError,
-          imgLink: tempImg ? tempImg : '',
-          disable: this.disable,
-        });
-
-        // console.log(this.obj[field.fcname]['path_display']);
-        console.log(this.imgArray);
+        if (this.obj.cert_of_indigency) {
+          this.certificateOfIndigencyExist = true;
+          this.imgArray.push({
+            fcname: field.fcname,
+            label: field.label,
+            required: field.required,
+            imgLink: tempImg ? tempImg : '',
+            show: true,
+            disable: this.disable,
+          });
+        } else {
+          this.certificateOfIndigencyExist = false;
+          this.imgArray.push({
+            fcname: field.fcname,
+            label: field.label,
+            required: field.required,
+            imgLink: tempImg ? tempImg : '',
+            show: field.show,
+            disable: this.disable,
+          });
+        }
       });
-      console.log(temp);
       this.imageForm = this.fb.group(temp);
     });
     this.loadingImage = false;
@@ -91,37 +112,55 @@ export class ImageFormComponent implements OnInit {
       .afterClosed()
       .subscribe((res: any) => {
         if (res) {
-          console.log(res);
-          console.log(this.imgArray);
-          console.log(this.imageForm);
           this.imgArray.forEach(async (img: any) => {
             if (fcname === img.fcname) {
               img.imgLink = await this.getTempLink(res.result.path_display);
               img.hasError = false;
-              console.log(img.imgLink);
             }
           });
 
           this.obj[fcname] = res.result;
-          console.log(this.obj);
 
-          this.imageForm.get(fcname)?.setValue(res.result);
-          console.log(this.imageForm.get(fcname));
+          this.imageForm.get(fcname)?.setValue(res.result || 'Empty');
           this.imageForm.markAsDirty();
           this.imageEmitter.emit({
             images: this.imageForm.getRawValue(),
             formValid: this.imageForm.valid,
             formDirty: this.imageForm.dirty,
+            reason: this.reason,
           });
           console.log(this.imageForm);
         }
       });
   }
 
+  choose(event: any) {
+    console.log(event);
+    console.log(this.imgArray);
+    let findHiddenForm: any = this.imgArray.find(
+      (f: any) => f.fcname === 'cert_of_indigency'
+    );
+    if (findHiddenForm && event === 'yes') {
+      findHiddenForm.show = true;
+      findHiddenForm.required = true;
+    } else {
+      findHiddenForm.show = false;
+      findHiddenForm.required = false;
+    }
+    if (this.header === 'Edit Registrant Details' && event === 'no') {
+      this.imageForm.get('cert_of_indigency')?.setValue('Empty');
+      console.log(this.imageForm);
+      delete findHiddenForm.imgLink;
+    }
+  }
+
+  imageLoaded(index: number) {
+    this.imgArray[index].loaded = true;
+  }
+
   async getTempLink(data: any) {
     console.log(data);
     const response = await this.dbx.getTempLink(data).toPromise();
-    console.log(response);
     return response.result.link;
   }
 }

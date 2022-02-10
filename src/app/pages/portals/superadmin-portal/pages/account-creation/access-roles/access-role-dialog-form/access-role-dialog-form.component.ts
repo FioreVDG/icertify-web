@@ -131,6 +131,12 @@ export class AccessRoleDialogFormComponent implements OnInit {
       name: this.details.name,
       description: this.details.description,
       access: this.accesses,
+      _brgyId:
+        this.data._brgyId !== 'undefined' ? this.data._brgyId : undefined,
+      _notaryId:
+        this.data._notaryId !== 'undefined' ? this.data._notaryId : undefined,
+      type:
+        this.data.accountType === 'iCertify' ? 'Admin' : this.data.accountType,
     };
     console.log(body);
     if (this.data.action == 'add') {

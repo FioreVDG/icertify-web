@@ -30,6 +30,12 @@ export const NOTARY_NAVS: NavNode[] = [
     route: 'uploading-notarized-document',
     hasAccess: false,
   },
+  {
+    label: 'Transaction',
+    icon: 'receipt_long',
+    route: 'transaction',
+    hasAccess: false,
+  },
 ];
 
 export const BARANGAY_NAVS: NavNode[] = [
@@ -43,6 +49,12 @@ export const BARANGAY_NAVS: NavNode[] = [
     label: 'Registration',
     icon: 'person_add_alt',
     route: 'registration',
+    hasAccess: false,
+  },
+  {
+    label: 'Registrants Database',
+    icon: 'contact_mail',
+    route: 'registrant-db',
     hasAccess: false,
   },
   {
@@ -100,6 +112,12 @@ export const SUPERADMIN_NAVS: NavNode[] = [
     label: 'SLA',
     icon: 'description',
     route: 'sla',
+    hasAccess: false,
+  },
+  {
+    label: 'Clusters',
+    icon: 'adjust',
+    route: 'clusters',
     hasAccess: false,
   },
 ];

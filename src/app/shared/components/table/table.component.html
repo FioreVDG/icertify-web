@@ -61,8 +61,12 @@
                 [checked]="autoCheck(row, i)"
                 [disabled]="
                   checkBoxDisableField
-                    ? row[checkBoxDisableField.column] ===
-                      checkBoxDisableField.value
+                    ? row[checkBoxDisableField.column] ==
+                      (checkBoxDisableField.value == 'null'
+                        ? null
+                        : checkBoxDisableField.value == 'undefined'
+                        ? undefined
+                        : checkBoxDisableField.value)
                     : isLimit
                     ? true
                     : false

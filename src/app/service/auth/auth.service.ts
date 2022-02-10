@@ -50,6 +50,6 @@ export class AuthService {
   }
 
   registerUser(body: Object) {
-    return this.http.post(this.url + '/auth/register', body);
+    return this.http.post(this.url + '/auth/register', body, this.getHeaders());
   }
 }

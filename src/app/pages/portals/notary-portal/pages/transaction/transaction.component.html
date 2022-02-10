@@ -1,0 +1,21 @@
+<button
+  mat-raised-button
+  *ngIf="selected.length && currTable == 'Notarized'"
+  style="position: relative; top: 9rem; left: 85%"
+  class="mark-btn"
+  (click)="onMark()"
+>
+  <mat-icon>file_download</mat-icon> Document/s
+</button>
+<app-table
+  [filterButtonConfig]="filtBtnConfig"
+  [checkBoxDisableField]="checkBoxDisableField"
+  (onCheckBoxSelect)="onCheckBoxSelect($event)"
+  [loading]="loading"
+  (onUpdateTableEmit)="tableUpdateEmit($event)"
+  (onRowClick)="onRowClick($event)"
+  [dataSource]="dataSource"
+  [dataLength]="dataLength"
+  [pagination]="page"
+>
+</app-table>

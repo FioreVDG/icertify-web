@@ -1,10 +1,11 @@
+import { ApiService } from './../../../../../service/api/api.service';
 import { UtilService } from 'src/app/service/util/util.service';
 import { SelectBarangayComponent } from './select-barangay/select-barangay.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MENU } from './config';
 import { Component, OnInit } from '@angular/core';
 import { ActionMenuComponent } from './action-menu/action-menu.component';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-account-creation',
@@ -15,17 +16,36 @@ export class AccountCreationComponent implements OnInit {
   menu = MENU;
   brgys = [];
   currRoute: any;
+  _brgyId = '';
+  _notaryId = '';
+  userType = '';
+
   constructor(
     private dialog: MatDialog,
     private util: UtilService,
-    private router: Router
+    private router: Router,
+    private api: ApiService,
+    private activatedRoute: ActivatedRoute
   ) {
     this.getListOfBarangay();
     this.onRouteActive();
   }
   onRouteActive() {
     this.currRoute = this.router.url.split('/');
+    console.log(this.activatedRoute.snapshot);
+    if (this._brgyId || this._notaryId) this.getAccountDetails();
   }
+
+  getAccountDetails() {
+    console.log('peeking');
+    this.api.user
+      .getById(this._brgyId || this._notaryId)
+      .subscribe((res: any) => {
+        console.log(res);
+        console.log('check here');
+      });
+  }
+
   ngOnInit(): void {}
   openMenu(action: string) {
     switch (action) {
