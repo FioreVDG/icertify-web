@@ -1,6 +1,7 @@
 import { BottomSheetItem } from 'src/app/models/bottomsheet.interface';
 import { FILTER_BUTTON_COLUMN } from 'src/app/models/filter-button-conf.interface';
 import { Find } from 'src/app/models/queryparams.interface';
+import { TABLE_BUTTON_CONFIG } from 'src/app/models/table-button.interface';
 
 export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
   {
@@ -68,6 +69,12 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         isVirtual: true,
         type: 'text',
         selected: true,
+      },
+    ],
+    checkBoxBtns: [
+      {
+        label: 'Mark as Enroute',
+        action: 'enroute',
       },
     ],
   },

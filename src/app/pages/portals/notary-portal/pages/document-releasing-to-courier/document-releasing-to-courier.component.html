@@ -1,6 +1,6 @@
 <router-outlet (activate)="onRouteActivate()"></router-outlet>
 <ng-container *ngIf="routeLength < 4">
-  <button
+  <!-- <button
     mat-raised-button
     *ngIf="selected.length && currTable !== 'Received'"
     style="position: relative; top: 9rem; left: 85%"
@@ -8,7 +8,7 @@
     (click)="onMark()"
   >
     Mark as Enroute
-  </button>
+  </button> -->
 
   <app-table
     #table
@@ -24,5 +24,6 @@
     [bottomSheet]="bsConfig"
     (onCheckBoxSelect)="onCheckBoxSelect($event)"
     [uniqueCheckbox]="true"
+    (onCheckBoxBtnClick)="onCheckBoxBtnClick($event)"
   ></app-table
 ></ng-container>

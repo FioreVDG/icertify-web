@@ -188,6 +188,17 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
       });
   }
 
+  onCheckBoxButtonClick(event: any) {
+    switch (event.action) {
+      case 'receive':
+        this.onMark();
+        break;
+
+      default:
+        break;
+    }
+  }
+
   onRowClick(event: any) {
     console.log(event);
     switch (event.action) {

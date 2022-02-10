@@ -1,4 +1,5 @@
 <div class="grid">
+  <!-- FILTER BUTTONS  -->
   <div
     *ngIf="filterButtonConfig"
     class="col-12 flex justify-content-end flex-wrap mb-1"
@@ -15,6 +16,7 @@
   </div>
   <div class="col-12 main">
     <mat-toolbar>
+      <!-- SEARCHBOX -->
       <div class="search-box">
         <button class="btn-search" (click)="onTriggerSearch()">
           <mat-icon>search</mat-icon>
@@ -27,12 +29,29 @@
         />
       </div>
       <div class="flex-stretch"></div>
+
+      <!-- CHECKBOX BUTTONS -->
+      <div
+        *ngIf="buttonConfig && checkedRows.selected.length"
+        class="flex justify-content-end flex-wrap"
+      >
+        <button
+          mat-raised-button
+          class="checkbox-btn"
+          *ngFor="let btn of buttonConfig.checkBoxBtnConfig"
+          (click)="checkBoxBtnClick(btn.action)"
+        >
+          {{ btn.label }}
+        </button>
+      </div>
     </mat-toolbar>
 
+    <!-- TABLE -->
     <div class="table-responsive">
       <table mat-table [dataSource]="dataSource" *ngIf="!loading">
         <ng-container matColumnDef="select" *ngIf="checkBox">
           <th mat-header-cell class="pr-2" *matHeaderCellDef>
+            <!-- CHECKBOX -->
             <mat-checkbox
               *ngIf="!isLimit && uniqueCheckbox === false"
               [indeterminate]="
@@ -133,6 +152,16 @@
         (page)="onClickPagination($event)"
       >
       </mat-paginator>
+
+      <!-- BOTTOM BUTTONS -->
+      <div
+        *ngIf="buttonConfig.bottomButtons"
+        class="col-12 flex justify-content-end flex-wrap mb-1"
+      >
+        <button mat-raised-button>Test</button>
+      </div>
+
+      <!-- LOADER -->
       <div *ngIf="!dataSource?.length && !loading" align="center">
         <p>No Records Found</p>
       </div>

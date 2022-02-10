@@ -1,4 +1,4 @@
-<button
+<!-- <button
   mat-stroked-button
   color="primary"
   *ngIf="countSelected > 0 && currentTable === 'For Scheduling'"
@@ -6,7 +6,7 @@
   (click)="onSetSchedule()"
 >
   Set Schedule
-</button>
+</button> -->
 <button
   mat-stroked-button
   color="primary"
@@ -28,6 +28,7 @@
   (onRowClick)="onRowClick($event)"
   [dataLength]="dataLength"
   (onCheckBoxSelect)="onCheckBoxSelect($event)"
+  (onCheckBoxBtnClick)="onCheckBoxBtnClick($event)"
 ></app-table>
 <small *ngIf="countSelected > 0 && currentTable === 'For Scheduling'">
   <b>{{ countSelected }}</b> {{ countSelected > 1 ? "batches" : "batch" }} has
