@@ -77,6 +77,7 @@ export const REGISTRATION_FORM: Array<Section> = [
         path: 'mobileNumber',
         optional: true,
         appearance: 'standard',
+        prefix: '(+63)',
       },
     ],
   },

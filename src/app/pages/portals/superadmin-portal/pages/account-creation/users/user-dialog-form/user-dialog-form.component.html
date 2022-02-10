@@ -33,11 +33,21 @@
             </mat-form-field></ng-container
           >
         </form>
-        <div>
+        <div
+          *ngIf="
+            (data.obj && data.obj.type !== 'QCLegal') ||
+            (data.type && data.type !== 'QCLegal')
+          "
+        >
           <button mat-button matStepperNext>Next</button>
         </div></mat-step
       >
-      <mat-step>
+      <mat-step
+        *ngIf="
+          (data.obj && data.obj.type !== 'QCLegal') ||
+          (data.type && data.type !== 'QCLegal')
+        "
+      >
         <ng-template matStepLabel>Role Access</ng-template>
         <div>
           <button mat-button matStepperPrevious>Back</button>

@@ -141,8 +141,8 @@ export class TableComponent implements OnInit {
                 filteredBS.push(bs);
               }
               break;
-            case '>':
-              if (elVal > value) {
+            case '<':
+              if (elVal < value) {
                 filteredBS.push(bs);
               }
               break;
