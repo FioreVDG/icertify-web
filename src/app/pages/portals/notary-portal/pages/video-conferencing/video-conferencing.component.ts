@@ -110,6 +110,16 @@ export class VideoConferencingComponent implements OnInit {
       disableClose: true,
     });
   }
+  onCheckBoxBtnClick(event: any) {
+    switch (event.action) {
+      case 'schedule':
+        this.onSetSchedule();
+        break;
+
+      default:
+        break;
+    }
+  }
 
   onCheckBoxSelect(event: any) {
     console.log(event);

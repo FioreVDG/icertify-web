@@ -134,6 +134,17 @@ export class DocumentReleasingToCourierComponent implements OnInit {
     });
   }
 
+  onCheckBoxBtnClick(event: any) {
+    switch (event.action) {
+      case 'enroute':
+        this.onMark();
+        break;
+
+      default:
+        break;
+    }
+  }
+
   onRouteActivate() {
     console.log('Here');
     let count = this.router.url.split('/').length;

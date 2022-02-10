@@ -195,6 +195,18 @@ export class BatchDeliveryManagementComponent implements OnInit {
     }
   }
 
+  onMarkButtonClick(event: any) {
+    // console.log(event);
+    switch (event.action) {
+      case 'enroute':
+        this.onMark();
+        break;
+
+      default:
+        break;
+    }
+  }
+
   onViewTransac(obj: any) {
     this.dialog.open(ViewTransactionComponent, {
       data: { event: obj, column: TRANSAC_TABLE_COLUMN },

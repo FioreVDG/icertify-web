@@ -71,6 +71,12 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
           ],
         },
       ],
+      checkBoxBtns: [
+        {
+          label: 'Mark as Enroute',
+          action: 'enroute',
+        },
+      ],
     },
     {
       label: 'Enroute',
@@ -143,7 +149,7 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
           select: 'firstName,lastName,middleName',
         },
         {
-          field: '_receivedByBarangay',
+          field: '_brgyReceivedBy',
           select: 'firstName,lastName,middleName',
         },
       ],

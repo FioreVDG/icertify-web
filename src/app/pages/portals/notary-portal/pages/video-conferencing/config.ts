@@ -44,6 +44,12 @@ export const FILT_BTN: Array<FILTER_BUTTON_COLUMN> = [
         path: 'transactionCount',
       },
     ],
+    checkBoxBtns: [
+      {
+        label: 'Set Schedule',
+        action: 'schedule',
+      },
+    ],
   },
   {
     label: 'Scheduled',

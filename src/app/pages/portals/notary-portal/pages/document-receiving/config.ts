@@ -54,6 +54,12 @@ export const NOTARY_DOC_RECEIVING_FILT_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
     ],
+    checkBoxBtns: [
+      {
+        label: 'Mark as Received',
+        action: 'receive',
+      },
+    ],
   },
   {
     label: 'Received',
