@@ -26,6 +26,7 @@ import { StoreModule } from '@ngrx/store';
 import { userReducer } from 'src/app/store/user/user.reducer';
 import { ConferenceRoomComponent } from './conference-room/conference-room.component';
 import { RoomComponent } from './room/room.component';
+import { DocumentLogsViewerComponent } from './document-logs-viewer/document-logs-viewer.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { RoomComponent } from './room/room.component';
     ConferenceRoomComponent,
     RtVideoComponent,
     RoomComponent,
+    DocumentLogsViewerComponent,
   ],
   imports: [
     MaterialModule,

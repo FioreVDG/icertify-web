@@ -1,3 +1,4 @@
+import { DocumentLogsViewerComponent } from './../../../../../shared/components/document-logs-viewer/document-logs-viewer.component';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ApiService } from 'src/app/service/api/api.service';
@@ -22,9 +23,9 @@ export class DocumentTrackerComponent implements OnInit {
   page = {
     pageSize: 10,
     pageIndex: 1,
-    populate: [
+    populates: [
       {
-        field: '_transactionId',
+        field: '_documents',
       },
     ],
     bottomSheet: this.bsConfig,
@@ -49,24 +50,33 @@ export class DocumentTrackerComponent implements OnInit {
       page: event.pageIndex || 1,
       limit: (event.pageSize || 10) + '',
       filter: event.filter,
-      populate: event.populate ? event.populate : [],
+      populates: event.populates ? event.populates : [],
     };
 
     let api: any;
     if (event && event.label === 'Ongoing') {
       query.find = query.find.concat(FIND_ONGOING);
       console.log(query);
-      api = this.api.document.getAll(query);
+      api = this.api.transaction.getAll(query);
     } else {
       query.find = query.find.concat(FIND_FINISHED);
-      api = this.api.document.getAll(query);
+      api = this.api.transaction.getAll(query);
     }
 
     api.subscribe((res: any) => {
-      console.log(res);
+      // console.log(res);
       if (res.status === 'Success') {
-        this.dataSource = res.env.documents;
-        this.dataLength = res.total;
+        res.env.transactions.forEach((el: any) => {
+          el.newDocument = el._documents[0];
+          el.tempFolderId = el._folderId ? el._folderId : 'Not Batched';
+        });
+        console.log(res);
+        res.env.transactions = res.env.transactions.filter(
+          (o: any) => o.tempFolderId !== 'Not Batched'
+        );
+        console.log(res.env.transactions);
+        this.dataSource = res.env.transactions;
+        this.dataLength = res.env.transactions.length;
       }
       this.loading = false;
     });
@@ -84,5 +94,14 @@ export class DocumentTrackerComponent implements OnInit {
     }, 1000);
     console.log(event);
   }
-  onRowClick(event: any) {}
+  onRowClick(event: any) {
+    console.log(event);
+    switch (event.action) {
+      case 'viewDoc':
+        this.dialog.open(DocumentLogsViewerComponent, {
+          data: event.obj,
+          width: '60vw',
+        });
+    }
+  }
 }

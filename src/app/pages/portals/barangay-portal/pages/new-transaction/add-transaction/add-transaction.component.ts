@@ -1,3 +1,4 @@
+import { ApiService } from 'src/app/service/api/api.service';
 import { UtilService } from 'src/app/service/util/util.service';
 import { TransactionService } from './../../../../../../service/api/transaction/transaction.service';
 import { AreYouSureComponent } from './../../../../../../shared/dialogs/are-you-sure/are-you-sure.component';
@@ -41,6 +42,7 @@ export class AddTransactionComponent implements OnInit {
     private dialog: MatDialog,
     private dbx: DropboxService,
     private transaction: TransactionService,
+    private api: ApiService,
     private util: UtilService
   ) {}
 
@@ -208,7 +210,21 @@ export class AddTransactionComponent implements OnInit {
           this.step = this.step + 1;
           this.refCode = res.env.transaction.refCode;
           this.docs = res.env.documents;
-          this.util.stopLoading(loader);
+
+          //FOR DOCUMENT LOGS
+          let docLogs: any = {};
+          this.docsArray[0]._documentId = res.env.documents[0]._id;
+          this.docsArray[0].refCode = res.env.transaction.refCode;
+          console.log(this.docsArray[0]);
+          docLogs.docDetails = this.docsArray[0];
+          docLogs.message = 'Received by Brgy Hall Staff';
+          this.api.documentlogs.createDocumentLogs(docLogs).subscribe(
+            (res: any) => {
+              console.log(res);
+              this.util.stopLoading(loader);
+            },
+            (err) => console.log(err)
+          );
         }
       },
       (err) => {

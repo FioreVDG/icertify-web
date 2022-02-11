@@ -1,0 +1,44 @@
+<h3 mat-dialog-title>
+  {{ data.refCode }}: {{ data.sender.firstName }} {{ data.sender.lastName }}
+</h3>
+<mat-icon (click)="dialogRef.close()" class="close-btn" color="warn"
+  >close</mat-icon
+>
+<div mat-dialog-content>
+  <div class="grid">
+    <div class="col-12">
+      <div class="grid">
+        <div class="col-8">
+          <mat-card>
+            <div class="grid">
+              <div class="col-6">
+                <div class="text-wrap">
+                  <p>
+                    <b>{{ data._documents[0].documentName }}</b>
+                  </p>
+                  <p>Document Name</p>
+                </div>
+                <div class="text-wrap">
+                  <p>
+                    <b>{{ data._documents[0].documentType }}</b>
+                  </p>
+                  <p>Document Type</p>
+                </div>
+                <div class="text-wrap">
+                  <p>
+                    <b>{{ data.tempFolderId.folderName }}</b>
+                  </p>
+                  <p>Batch Reference Code</p>
+                </div>
+              </div>
+              <div class="col-6"></div>
+            </div>
+          </mat-card>
+        </div>
+        <div class="col-4">
+          <mat-card></mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

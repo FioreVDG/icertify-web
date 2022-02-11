@@ -98,7 +98,7 @@ export class TransactionComponent implements OnInit {
     if (event.action) {
       switch (event.action) {
         case 'viewDoc':
-          this.viewAttachments(event.obj._documents, event.obj.refCode);
+          this.viewAttachments([event.obj], event.obj.refCode);
           break;
         case 'downloadDoc':
           this.downloadDocu(event.obj.notarizedDocument);

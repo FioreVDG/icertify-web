@@ -13,7 +13,7 @@ export class ViewAttachmentsComponent implements OnInit {
   loading: boolean = false;
   files: any[] = [];
   loader = this.util.startLoading('Loading...');
-
+  testtt = 2;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<ViewAttachmentsComponent>,
@@ -22,7 +22,7 @@ export class ViewAttachmentsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.data.obj);
+    console.log(this.data);
     if (this.data.documents) this.fetchAttachments(this.data.documents, 0);
     else {
       this.files.push({
@@ -56,6 +56,8 @@ export class ViewAttachmentsComponent implements OnInit {
         let fileType = res.result.metadata.name.split('.');
         let fileName = fileType.slice(0, -1).join(' ');
         fileType = fileType[fileType.length - 1].toLowerCase();
+        let fileLink = res.result.link;
+        let notarizedFile = {};
         let screenshot: any = [];
         if (doc[index].screenShots.length) {
           doc[index].screenShots.forEach((s: any, index: any) => {
@@ -67,21 +69,55 @@ export class ViewAttachmentsComponent implements OnInit {
             });
           });
         }
-        this.files.push({
-          data: doc[index],
-          name: fileName,
-          link: res.result.link,
-          isImage: fileType === 'pdf' ? false : true,
-          loaded: false,
-          screenshot,
-        });
 
-        if (this.data.documents.length - 1 === index) {
-          this.loading = false;
-          this.util.stopLoading(this.loader);
-          console.log(this.files);
+        if (doc[index].notarizedDocument) {
+          // console.log(doc[index].notarizedDocument);
+          this.dbx
+            .getTempLink(doc[index].notarizedDocument.dropbox.path_display)
+            .subscribe((res: any) => {
+              let notarizedFileType = res.result.metadata.name.split('.');
+              notarizedFileType =
+                notarizedFileType[notarizedFileType.length - 1].toLowerCase();
+              let link = res.result.link;
+
+              notarizedFile = {
+                link,
+                isImage: notarizedFile === 'pdf' ? false : true,
+              };
+
+              this.files.push({
+                data: doc[index],
+                name: fileName,
+                link: fileLink,
+                isImage: fileType === 'pdf' ? false : true,
+                loaded: false,
+                screenshot,
+                notarizedFile,
+              });
+              if (this.data.documents.length - 1 === index) {
+                this.loading = false;
+                this.util.stopLoading(this.loader);
+                console.log(this.files);
+              } else {
+                this.fetchAttachments(this.data.documents, index + 1);
+              }
+            });
         } else {
-          this.fetchAttachments(this.data.documents, index + 1);
+          this.files.push({
+            data: doc[index],
+            name: fileName,
+            link: fileLink,
+            isImage: fileType === 'pdf' ? false : true,
+            loaded: false,
+            screenshot,
+          });
+          if (this.data.documents.length - 1 === index) {
+            this.loading = false;
+            this.util.stopLoading(this.loader);
+            console.log(this.files);
+          } else {
+            this.fetchAttachments(this.data.documents, index + 1);
+          }
         }
       },
       (error) => {
