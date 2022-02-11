@@ -9,6 +9,7 @@ import { Component, Inject, OnInit } from '@angular/core';
   styleUrls: ['./document-logs-viewer.component.scss'],
 })
 export class DocumentLogsViewerComponent implements OnInit {
+  documentLogs: Array<any> = [];
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<DocumentLogsViewerComponent>,
@@ -25,11 +26,17 @@ export class DocumentLogsViewerComponent implements OnInit {
           value: this.data._documents[0].refCode,
         },
       ],
+      populates: [
+        {
+          field: '_createdBy',
+        },
+      ],
     };
     console.log(query);
     this.api.documentlogs.getDocumentLogs(query).subscribe(
       (res: any) => {
         console.log(res);
+        this.documentLogs = res.env.documentLogs;
       },
       (err) => {
         console.log(err);

@@ -31,14 +31,49 @@
                   <p>Batch Reference Code</p>
                 </div>
               </div>
-              <div class="col-6"></div>
+              <div class="col-6">
+                <div class="text-wrap">
+                  <p>
+                    <b
+                      >{{ data._folderId?._notaryId?.firstName }}
+                      {{ data._folderId?._notaryId?.lastName }}</b
+                    >
+                  </p>
+                  <p>Notary</p>
+                </div>
+                <div class="text-wrap">
+                  <p>
+                    <b>{{ data._documents[0].documentStatus }}</b>
+                  </p>
+                  <p>Notarization Status</p>
+                </div>
+              </div>
             </div>
           </mat-card>
         </div>
         <div class="col-4">
-          <mat-card></mat-card>
+          <mat-card> </mat-card>
         </div>
       </div>
+      <mat-card>
+        <div class="timeline">
+          <div *ngFor="let log of documentLogs">
+            <ul>
+              <li>
+                <span>
+                  {{ log.createdAt | date: "medium" }}
+                </span>
+                <div class="content">
+                  <h3>
+                    {{ log._createdBy.firstName }} {{ log._createdBy.lastName }}
+                  </h3>
+                  <p>{{ log.message }}</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </mat-card>
     </div>
   </div>
 </div>
