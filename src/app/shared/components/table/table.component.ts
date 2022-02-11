@@ -209,7 +209,7 @@ export class TableComponent implements OnInit {
     this.duplicateColumns.forEach((c) => {
       if (
         c.path &&
-        !['date', 'special'].includes(c.type) &&
+        !['date', 'special', 'count'].includes(c.type) &&
         c.path !== '_roleId' &&
         !c.isVirtual
       )

@@ -1,5 +1,5 @@
 <div mat-dialog-title>
-  <h3>Add Cluster</h3>
+  <h3>{{ data ? "Edit" : "Add" }} Cluster</h3>
 </div>
 <div mat-dialog-content>
   <form [formGroup]="clusterForm" class="grid">
@@ -48,7 +48,10 @@
       <div class="grid" *ngFor="let d of days" [formGroupName]="d">
         <div class="col-1">
           <p style="margin-left: 1rem">
-            <mat-checkbox formControlName="status"></mat-checkbox>
+            <mat-checkbox
+              formControlName="status"
+              [checked]="clusterForm.value.day[d].status ? true : false"
+            ></mat-checkbox>
           </p>
         </div>
         <div class="col-3">
@@ -221,7 +224,14 @@
 </div>
 <div mat-dialog-actions align="end">
   <button mat-button color="warn" mat-dialog-close>Discard and Close</button>
-  <button mat-flat-button color="primary" (click)="saveCluster()">Save</button>
+  <button
+    [disabled]="!clusterForm.valid && !clusterForm.dirty"
+    mat-flat-button
+    color="primary"
+    (click)="saveCluster()"
+  >
+    Save
+  </button>
 </div>
 
 <!-- 
