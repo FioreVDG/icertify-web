@@ -10,6 +10,7 @@ import {
   MatDialogRef,
   MatDialog,
 } from '@angular/material/dialog';
+import { ApiService } from 'src/app/service/api/api.service';
 
 @Component({
   selector: 'app-add-transaction',
@@ -41,7 +42,8 @@ export class AddTransactionComponent implements OnInit {
     private dialog: MatDialog,
     private dbx: DropboxService,
     private transaction: TransactionService,
-    private util: UtilService
+    private util: UtilService,
+    private api: ApiService
   ) {}
 
   ngOnInit(): void {
@@ -208,7 +210,22 @@ export class AddTransactionComponent implements OnInit {
           this.step = this.step + 1;
           this.refCode = res.env.transaction.refCode;
           this.docs = res.env.documents;
-          this.util.stopLoading(loader);
+
+          console.log(this.docs[0]);
+          let smsData = {
+            mobileNumber: `+63${this.data.mobileNumber}`,
+            message: this.messageFormat(this.docs[0]),
+          };
+          this.api.sms.send(smsData).subscribe(
+            (res) => {
+              console.log(res);
+              this.util.stopLoading(loader);
+            },
+            (err) => {
+              console.log(err);
+              this.util.stopLoading(loader);
+            }
+          );
         }
       },
       (err) => {
@@ -223,5 +240,15 @@ export class AddTransactionComponent implements OnInit {
         });
       }
     );
+  }
+
+  messageFormat(document: any) {
+    return `Good day ${
+      document.sender.firstName
+    },\nThe document you submmitted has been succesfully received on ${new Date(
+      document.createdAt
+    ).toLocaleString()}.\n\nYour Document reference code is ${
+      document.refCode
+    }\nPlease wait for the schedule  of your videoconference with Atty. Carlo Javier as part of the RON process of the document that you have submitted.\n\nYou can track your document through this link: http://www.trackmydocument.com\n\nFor more information, contact iCertify: 09123456789 Thank you. `;
   }
 }
