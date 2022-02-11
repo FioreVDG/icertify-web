@@ -23,4 +23,7 @@ export class ClusterService {
   delete(id: String) {
     return this.http.start('delete', `/clusters/${id}`);
   }
+  getOne(_brgyId: String) {
+    return this.http.start('get', `/clusters/getOne/${_brgyId}`);
+  }
 }
