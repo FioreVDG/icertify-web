@@ -71,9 +71,6 @@ export class DocumentTrackerComponent implements OnInit {
           el.tempFolderId = el._folderId ? el._folderId : 'Not Batched';
         });
         console.log(res);
-        res.env.transactions = res.env.transactions.filter(
-          (o: any) => o.tempFolderId !== 'Not Batched'
-        );
         console.log(res.env.transactions);
         this.dataSource = res.env.transactions;
         this.dataLength = res.env.transactions.length;

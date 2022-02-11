@@ -151,12 +151,18 @@ export class DocumentReceivingComponent implements OnInit {
   onMark() {
     let ids: any = [];
     let docLogs: any = [];
+    console.log(this.selected);
     this.selected.forEach((id: any) => {
       ids.push(id._id);
-      docLogs.push({
-        docDetails: id._documents[0],
-        message: 'Received by Notarial Staff',
+      console.log(id);
+      id._transactions.forEach((el: any) => {
+        console.log(el);
+        docLogs.push({
+          docDetails: el._documents[0],
+          message: 'Received by Notarial Staff',
+        });
       });
+      console.log(docLogs);
     });
     this.dialog
       .open(AreYouSureComponent, {
