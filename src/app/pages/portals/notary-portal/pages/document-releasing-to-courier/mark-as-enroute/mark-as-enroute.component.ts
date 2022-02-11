@@ -5,6 +5,7 @@ import {
   MatDialog,
 } from '@angular/material/dialog';
 import { Section } from 'src/app/models/form.interface';
+import { CHOICES_RIDER_DATA } from 'src/app/pages/portals/barangay-portal/pages/batch-delivery-management/mark-as-enroute/config';
 import { ApiService } from 'src/app/service/api/api.service';
 import { FormComponent } from 'src/app/shared/components/form/form.component';
 import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
@@ -18,9 +19,13 @@ import { MARK_AS_ENROUTE_FORM } from './mark-as-enroute';
 })
 export class MarkAsEnrouteComponent implements OnInit {
   @ViewChild('enrouteDetails') enrouteDetails!: FormComponent;
+  @ViewChild('riderForm') riderForm!: FormComponent;
+
   loading: boolean = true;
   saving: boolean = false;
   obj: any;
+  riderList: any = CHOICES_RIDER_DATA;
+  riderObj: any;
 
   toAddData: any = {};
   markAsEnrouteFormFields: Array<Section> = MARK_AS_ENROUTE_FORM;
@@ -35,6 +40,12 @@ export class MarkAsEnrouteComponent implements OnInit {
     this.obj = { ...this.data.selected[0] };
     console.log(this.obj);
     console.log(this.data.selected[0]._id);
+
+    this.data.setting._riders.forEach((i: any) => {
+      this.riderList.item.push({
+        value: { name: i.firstName + ' ' + i.lastName, id: i._id },
+      });
+    });
   }
 
   formInitialized() {}
@@ -42,9 +53,15 @@ export class MarkAsEnrouteComponent implements OnInit {
   formListener(event: any) {
     this.toAddData = { ...event };
   }
+
+  onSelect(event: any) {
+    console.log(event);
+    this.riderObj = event.id;
+  }
+
   submit() {
     let toAdd = {
-      riderNotaryToBarangay: { ...this.toAddData },
+      riderNotaryToBarangay: this.riderObj,
       datePickedFromNotary: new Date(),
       locationStatus: 'Enroute to Barangay',
     };
