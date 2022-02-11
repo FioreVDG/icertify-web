@@ -150,8 +150,13 @@ export class DocumentReceivingComponent implements OnInit {
 
   onMark() {
     let ids: any = [];
+    let docLogs: any = [];
     this.selected.forEach((id: any) => {
       ids.push(id._id);
+      docLogs.push({
+        docDetails: id._documents[0],
+        message: 'Received by Notarial Staff',
+      });
     });
     this.dialog
       .open(AreYouSureComponent, {
@@ -180,6 +185,15 @@ export class DocumentReceivingComponent implements OnInit {
 
           forkJoin(apiQueries).subscribe(
             (res: any) => {
+              console.log(docLogs);
+              this.api.documentlogs.createDocumentLogsMany(docLogs).subscribe(
+                (res: any) => {
+                  console.log(res);
+                },
+                (err) => {
+                  console.log(err);
+                }
+              );
               this.util.stopLoading(loader);
               console.log(res);
               this.dialog

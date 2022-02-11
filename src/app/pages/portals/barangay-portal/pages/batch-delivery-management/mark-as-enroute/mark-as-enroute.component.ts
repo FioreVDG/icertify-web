@@ -35,8 +35,13 @@ export class MarkAsEnrouteComponent implements OnInit {
   }
   onMark() {
     let ids: any = [];
+    let docLogs: any = [];
     this.data.forEach((id: any) => {
       ids.push(id._id);
+      docLogs.push({
+        docDetails: id._documents[0],
+        message: 'Batched and Marked as Enroute to Notary by Brgy Hall Staff',
+      });
     });
     ids = ids.join(',');
     console.log(ids);
@@ -53,6 +58,16 @@ export class MarkAsEnrouteComponent implements OnInit {
             .createBatchTransaction(ids)
             .subscribe((res: any) => {
               console.log(res);
+              //DOCUMENT LOGS HERE
+              console.log(docLogs);
+              this.api.documentlogs.createDocumentLogsMany(docLogs).subscribe(
+                (res: any) => {
+                  console.log(res);
+                },
+                (err) => {
+                  console.log(err);
+                }
+              );
               this.dialog
                 .open(ActionResultComponent, {
                   data: {

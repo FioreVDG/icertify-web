@@ -121,7 +121,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
         this.selected.push(i);
       }
     });
-    console.log(this.selected);
+    // console.log(this.selected);
   }
   onMark() {
     let ids: any = [];
