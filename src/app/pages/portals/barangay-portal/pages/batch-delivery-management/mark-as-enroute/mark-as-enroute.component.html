@@ -10,7 +10,7 @@
       <th *ngFor="let t of tableConfig">{{ t.title }}</th>
     </tr>
 
-    <tr *ngFor="let d of data">
+    <tr *ngFor="let d of data.obj">
       <ng-container *ngFor="let t of tableConfig">
         <td *ngIf="t.path">{{ util.deepFind(d, t.path) }}</td>
         <td *ngIf="t.paths">
