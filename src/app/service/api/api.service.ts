@@ -1,3 +1,4 @@
+import { DocumentLogsService } from './document-logs/document-logs.service';
 import { ClusterService } from './cluster/cluster.service';
 import { AgoraService } from './agora/agora.service';
 import { NotarialService } from './notarial/notarial.service';
@@ -33,6 +34,7 @@ export class ApiService {
     public sla: SlaService,
     public room: RoomService,
     public sms: SmsService,
+    public documentlogs: DocumentLogsService,
     public cluster: ClusterService
   ) {}
 }

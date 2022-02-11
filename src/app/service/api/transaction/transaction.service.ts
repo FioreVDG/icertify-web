@@ -32,7 +32,7 @@ export class TransactionService {
   getAllFolder(query: QueryParams) {
     return this.http.start('get', `/transactions/folder`, {}, query);
   }
-  createBatchTransaction(ids: string) {
-    return this.http.start('post', `/transactions/batch/${ids}`);
+  createBatchTransaction(ids: string, body: Object) {
+    return this.http.start('post', `/transactions/batch/${ids}`, body);
   }
 }

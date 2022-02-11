@@ -1,3 +1,4 @@
+import { ApiService } from 'src/app/service/api/api.service';
 import { UtilService } from 'src/app/service/util/util.service';
 import { TransactionService } from './../../../../../../service/api/transaction/transaction.service';
 import { AreYouSureComponent } from './../../../../../../shared/dialogs/are-you-sure/are-you-sure.component';
@@ -10,7 +11,6 @@ import {
   MatDialogRef,
   MatDialog,
 } from '@angular/material/dialog';
-import { ApiService } from 'src/app/service/api/api.service';
 
 @Component({
   selector: 'app-add-transaction',
@@ -216,15 +216,30 @@ export class AddTransactionComponent implements OnInit {
             mobileNumber: `+63${this.data.mobileNumber}`,
             message: this.messageFormat(this.docs[0]),
           };
-          this.api.sms.send(smsData).subscribe(
-            (res) => {
+
+          //FOR DOCUMENT LOGS
+          let docLogs: any = {};
+          this.docsArray[0]._documentId = res.env.documents[0]._id;
+          this.docsArray[0].refCode = res.env.transaction.refCode;
+          console.log(this.docsArray[0]);
+          docLogs.docDetails = this.docsArray[0];
+          docLogs.message = 'Received by Brgy Hall Staff';
+          this.api.documentlogs.createDocumentLogs(docLogs).subscribe(
+            (res: any) => {
               console.log(res);
-              this.util.stopLoading(loader);
+
+              this.api.sms.send(smsData).subscribe(
+                (res) => {
+                  console.log(res);
+                  this.util.stopLoading(loader);
+                },
+                (err) => {
+                  console.log(err);
+                  this.util.stopLoading(loader);
+                }
+              );
             },
-            (err) => {
-              console.log(err);
-              this.util.stopLoading(loader);
-            }
+            (err) => console.log(err)
           );
         }
       },

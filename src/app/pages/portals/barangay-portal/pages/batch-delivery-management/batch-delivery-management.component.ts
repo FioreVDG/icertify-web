@@ -21,6 +21,8 @@ import { Find } from 'src/app/models/queryparams.interface';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
 import { UtilService } from 'src/app/service/util/util.service';
 import _ from 'lodash';
+import { Store } from '@ngrx/store';
+import { User } from 'src/app/models/user.interface';
 
 @Component({
   selector: 'app-batch-delivery-management',
@@ -28,7 +30,6 @@ import _ from 'lodash';
   styleUrls: ['./batch-delivery-management.component.scss'],
 })
 export class BatchDeliveryManagementComponent implements OnInit {
-  //TODO ADD RIDER SETTINGS BINDING
   @ViewChild('table') appTable: TableComponent | undefined;
   filtBtnConfig = FILT_BTN_CONFIG;
   isCheckbox: boolean = true;
@@ -53,7 +54,8 @@ export class BatchDeliveryManagementComponent implements OnInit {
   };
   routeLength = 3;
   dataSource = [];
-  isLimit: any = 2;
+  isLimit: any;
+  setting: any;
   dataLength: number = 0;
   constructor(
     private api: ApiService,
@@ -61,11 +63,26 @@ export class BatchDeliveryManagementComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private dbx: DropboxService,
-    private util: UtilService
+    private util: UtilService,
+
+    private store: Store<{ user: User }>
   ) {}
 
   ngOnInit(): void {
     this.fetchData(this.page);
+    this.getSetting();
+  }
+  getSetting() {
+    this.store.select('user').subscribe((me: any) => {
+      this.api.cluster.getOne(me._brgyId).subscribe((res: any) => {
+        this.setting = res.env.cluster;
+        let resp: any = res.env.cluster.barangays.find(
+          (i: any) => i._brgyId === me._brgyId
+        );
+        this.isLimit = resp.maxDoc;
+        console.log(this.isLimit);
+      });
+    });
   }
   fetchData(event: any) {
     this.loading = true;
@@ -103,7 +120,6 @@ export class BatchDeliveryManagementComponent implements OnInit {
     this.page.populate = event.populate;
     this.isCheckbox = event.isCheckbox || true;
     this.bsConfig = event.bottomSheet;
-    this.isLimit = event.isLimit;
   }
   tableUpdateEmit(event: any) {
     this.selected = [];
@@ -121,7 +137,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
         this.selected.push(i);
       }
     });
-    console.log(this.selected);
+    // console.log(this.selected);
   }
   onMark() {
     let ids: any = [];
@@ -133,7 +149,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
     this.dialog
       .open(MarkAsEnrouteComponent, {
         width: '70% ',
-        data: this.selected,
+        data: { obj: this.selected, setting: this.setting },
       })
       .afterClosed()
       .subscribe((res: any) => {

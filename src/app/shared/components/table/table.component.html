@@ -108,14 +108,18 @@
                 *ngIf="
                   col.type !== 'special' &&
                   col.type !== 'date' &&
-                  !col.textColor
+                  !col.textColor &&
+                  col.type !== 'count'
                 "
                 >{{ col.path === "mobileNumber" ? "(+63)" : ""
                 }}{{ util.deepFind(element, col.path) }}</span
               >
               <span
                 *ngIf="
-                  col.type !== 'special' && col.type !== 'date' && col.textColor
+                  col.type !== 'special' &&
+                  col.type !== 'date' &&
+                  col.textColor &&
+                  col.type !== 'count'
                 "
                 [ngStyle]="{
                   color: getTextColor(col, util.deepFind(element, col.path))
@@ -131,6 +135,9 @@
               >
               <span *ngIf="col.type === 'date'">{{
                 util.deepFind(element, col.path) | date: "medium"
+              }}</span>
+              <span *ngIf="col.type === 'count'">{{
+                element[col.path].length
               }}</span>
             </td>
           </ng-container>

@@ -8,7 +8,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     label: 'For Pick Up',
     selected: true,
     isCheckbox: true,
-    isLimit: 5,
+
     bottomSheet: [
       { label: 'View Document/s', action: 'viewDoc', icon: 'description' },
       {
@@ -26,7 +26,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     ],
     sort: {
       active: 'updatedAt',
-      direction: 'desc',
+      direction: 'asc',
     },
 
     column: [
@@ -96,7 +96,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
       },
     ],
     sort: {
-      active: 'updatedAt',
+      active: 'folderName',
       direction: 'desc',
     },
     column: [

@@ -68,6 +68,6 @@ export const USERS: Column[] = [
 ];
 
 export const USER_BOTTOMSHEET = [
-  { label: 'Edit Details', action: 'edit' },
-  { label: 'Delete', action: 'delete' },
+  { label: 'Edit Details', action: 'edit', icon: 'edit  ' },
+  { label: 'Delete', action: 'delete', icon: 'delete' },
 ];
