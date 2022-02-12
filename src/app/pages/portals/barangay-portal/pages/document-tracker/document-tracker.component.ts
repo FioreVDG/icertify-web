@@ -73,7 +73,7 @@ export class DocumentTrackerComponent implements OnInit {
         console.log(res);
         console.log(res.env.transactions);
         this.dataSource = res.env.transactions;
-        this.dataLength = res.env.transactions.length;
+        this.dataLength = res.total;
       }
       this.loading = false;
     });
