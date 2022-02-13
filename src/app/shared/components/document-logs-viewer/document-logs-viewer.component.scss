@@ -1,0 +1,71 @@
+@import "../../../../assets/styles/variables.scss";
+
+.close-btn {
+  margin-right: -3px !important;
+  margin-top: -65px !important;
+  float: right;
+}
+.text-wrap {
+  p {
+    margin: 0;
+    margin-bottom: 0.5rem;
+  }
+  b {
+    margin-top: 0.2rem;
+  }
+}
+.timeline {
+  color: #565656;
+  padding: 30px 20px;
+}
+.timeline ul {
+  margin: 0;
+  list-style-type: none;
+  border-left: 2px solid #094a68;
+  padding: 0px 5px;
+}
+.timeline ul li {
+  padding: 20px 20px;
+  position: relative;
+  cursor: pointer;
+  transition: 0.5s;
+}
+.timeline ul li span {
+  display: inline-block;
+  background-color: $primary;
+  border-radius: 25px;
+  padding: 2px 5px;
+  font-size: 15px;
+  text-align: center;
+  color: #fff;
+}
+.timeline ul li .content h3 {
+  color: $primary;
+  font-size: 17px;
+  padding-top: 5px;
+  margin-bottom: 0;
+}
+.timeline ul li .content p {
+  // padding: 5px 0px 15px 0px;
+  margin: 0;
+  font-size: 15px;
+  margin-top: 0;
+}
+.timeline ul li:before {
+  position: absolute;
+  content: "";
+  width: 10px;
+  height: 10px;
+  background-color: $primary;
+  border-radius: 50%;
+  left: -11px;
+  top: 28px;
+  transition: 0.5s;
+}
+.timeline ul li:hover {
+  background-color: #c2c2c286;
+}
+.timeline ul li:hover:before {
+  background-color: #e6e6e6;
+  box-shadow: 0px 0px 10px 2px #fefefe;
+}

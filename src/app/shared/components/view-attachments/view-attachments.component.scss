@@ -18,22 +18,7 @@
     max-height: 100%;
   }
 }
-.img-container-small {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  height: 15rem;
-  padding: 0.7rem;
-  border: 2px solid #acacac;
-  border-radius: 0.25rem;
-  transition: 0.1s ease-in;
-  position: relative;
-  img {
-    max-width: 100%;
-    max-height: 100%;
-  }
-}
+
 .imgtext {
   color: white;
   width: 5rem;

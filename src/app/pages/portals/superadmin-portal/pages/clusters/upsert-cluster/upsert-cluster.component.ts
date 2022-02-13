@@ -1,6 +1,10 @@
 import { ActionResultComponent } from './../../../../../../shared/dialogs/action-result/action-result.component';
 import { AutocompleteDialogComponent } from './autocomplete-dialog/autocomplete-dialog.component';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -17,7 +21,13 @@ import {
   FormArray,
   AbstractControl,
 } from '@angular/forms';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Observable } from 'rxjs';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
@@ -32,42 +42,71 @@ export class UpsertClusterComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   totalDuration = 0;
   clusterForm = new FormGroup({
-    name: new FormControl('', [Validators.required]),
+    name: new FormControl(this.data ? this.data.name : '', [
+      Validators.required,
+    ]),
     day: new FormGroup({
       monday: new FormGroup({
-        am: new FormControl(''),
-        pm: new FormControl(''),
-        status: new FormControl(false, [Validators.required]),
+        am: new FormControl(this.data ? this.data.day.monday.am : ''),
+        pm: new FormControl(this.data ? this.data.day.monday.pm : ''),
+        status: new FormControl(
+          this.data && this.data.day.monday.status === 'Open' ? 'Open' : false,
+          [Validators.required]
+        ),
       }),
       tuesday: new FormGroup({
-        am: new FormControl(''),
-        pm: new FormControl(''),
-        status: new FormControl(false, [Validators.required]),
+        am: new FormControl(this.data ? this.data.day.tuesday.am : ''),
+        pm: new FormControl(this.data ? this.data.day.tuesday.pm : ''),
+        status: new FormControl(
+          this.data && this.data.day.tuesday.status === 'Open' ? 'Open' : false,
+          [Validators.required]
+        ),
       }),
       wednesday: new FormGroup({
-        am: new FormControl(''),
-        pm: new FormControl(''),
-        status: new FormControl(false, [Validators.required]),
+        am: new FormControl(this.data ? this.data.day.wednesday.am : ''),
+        pm: new FormControl(this.data ? this.data.day.wednesday.pm : ''),
+        status: new FormControl(
+          this.data && this.data.day.wednesday.status === 'Open'
+            ? 'Open'
+            : false,
+          [Validators.required]
+        ),
       }),
       thursday: new FormGroup({
-        am: new FormControl(''),
-        pm: new FormControl(''),
-        status: new FormControl(false, [Validators.required]),
+        am: new FormControl(this.data ? this.data.day.thursday.am : ''),
+        pm: new FormControl(this.data ? this.data.day.thursday.pm : ''),
+        status: new FormControl(
+          this.data && this.data.day.thursday.status === 'Open'
+            ? 'Open'
+            : false,
+          [Validators.required]
+        ),
       }),
       friday: new FormGroup({
-        am: new FormControl(''),
-        pm: new FormControl(''),
-        status: new FormControl(false, [Validators.required]),
+        am: new FormControl(this.data ? this.data.day.friday.am : ''),
+        pm: new FormControl(this.data ? this.data.day.friday.pm : ''),
+        status: new FormControl(
+          this.data && this.data.day.friday.status === 'Open' ? 'Open' : false,
+          [Validators.required]
+        ),
       }),
       saturday: new FormGroup({
-        am: new FormControl(''),
-        pm: new FormControl(''),
-        status: new FormControl(false, [Validators.required]),
+        am: new FormControl(this.data ? this.data.day.saturday.am : ''),
+        pm: new FormControl(this.data ? this.data.day.saturday.pm : ''),
+        status: new FormControl(
+          this.data && this.data.day.saturday.status === 'Open'
+            ? 'Open'
+            : false,
+          [Validators.required]
+        ),
       }),
       sunday: new FormGroup({
-        am: new FormControl(''),
-        pm: new FormControl(''),
-        status: new FormControl(false, [Validators.required]),
+        am: new FormControl(this.data ? this.data.day.sunday.am : ''),
+        pm: new FormControl(this.data ? this.data.day.sunday.pm : ''),
+        status: new FormControl(
+          this.data && this.data.day.sunday.status === 'Open' ? 'Open' : false,
+          [Validators.required]
+        ),
       }),
     }),
     _notaryId: new FormControl('', [Validators.required]),
@@ -77,7 +116,7 @@ export class UpsertClusterComponent implements OnInit {
 
   riderCtrl = new FormControl();
   filteredRiders: Observable<any[]>;
-  notaryCtrl = new FormControl();
+  notaryCtrl = new FormControl(this.data ? this.data._notaryId : '');
   filteredNotaries: Observable<any[]>;
   barangayControls: AbstractControl[] = [];
 
@@ -93,14 +132,18 @@ export class UpsertClusterComponent implements OnInit {
     'sunday',
   ];
 
-  addBarangayForm() {
+  addBarangayForm(def?: any) {
     (this.clusterForm.get('barangays') as FormArray).push(
       new FormGroup({
-        barangay: new FormControl({}, [Validators.required]),
-        _brgyId: new FormControl('', [Validators.required]),
-        minDoc: new FormControl('', [Validators.required]),
-        maxDoc: new FormControl('', [Validators.required]),
-        duration: new FormControl('', [Validators.required]),
+        barangay: new FormControl(def ? def.barangay : {}, [
+          Validators.required,
+        ]),
+        _brgyId: new FormControl(def ? def._brgyId : '', [Validators.required]),
+        minDoc: new FormControl(def ? def.minDoc : '', [Validators.required]),
+        maxDoc: new FormControl(def ? def.maxDoc : '', [Validators.required]),
+        duration: new FormControl(def ? def.duration : '', [
+          Validators.required,
+        ]),
       })
     );
 
@@ -144,6 +187,7 @@ export class UpsertClusterComponent implements OnInit {
   }
 
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private api: ApiService,
     private dialog: MatDialog,
     private dialogRef: MatDialogRef<UpsertClusterComponent>
@@ -162,11 +206,12 @@ export class UpsertClusterComponent implements OnInit {
       debounceTime(400),
       distinctUntilChanged(),
       switchMap((val) => {
-        return this._filter(val || '', 'Notary');
+        console.log(val);
+        return this._filter(val || this.data._notaryId.email || '', 'Notary');
       })
     );
 
-    this.addBarangayForm();
+    if (!this.data) this.addBarangayForm();
   }
 
   private _filter(value: string, type: string): Observable<any[]> {
@@ -182,14 +227,14 @@ export class UpsertClusterComponent implements OnInit {
           operator: '=',
         },
         {
-          value: 'true',
+          value: true,
           field: 'isMain',
           operator: '=',
         },
       ],
       filter: {
         value,
-        fields: ['firstName', 'lastName'],
+        fields: ['firstName', 'lastName', 'email'],
       },
     };
     if (mobileNumbers.length) {
@@ -215,6 +260,7 @@ export class UpsertClusterComponent implements OnInit {
   }
 
   displayWith(option: any) {
+    console.log(option);
     if (option) return (option.firstName + ' ' + option.lastName).toUpperCase();
     return '';
   }
@@ -267,6 +313,8 @@ export class UpsertClusterComponent implements OnInit {
           this.checkActiveDay();
         });
     });
+    if (this.data) this.setDefaultValueFormArray();
+    console.log(this.notaryCtrl.value);
   }
 
   checkActiveDay() {
@@ -283,11 +331,17 @@ export class UpsertClusterComponent implements OnInit {
     this.days.forEach((d) => {
       cluster.day[d].status = cluster.day[d].status ? 'Open' : 'Closed';
     });
-    this.api.cluster.create(cluster).subscribe(
+    let api = this.api.cluster.create(cluster);
+    if (this.data) api = this.api.cluster.update(cluster, this.data.id);
+    api.subscribe(
       (res) => {
+        console.log(res);
         this.dialog.open(ActionResultComponent, {
           data: {
-            msg: cluster.name + ' successfully added!',
+            msg:
+              cluster.name + ' successfully ' + this.data
+                ? 'updated!'
+                : 'added!',
             success: true,
             button: 'Got it!',
           },
@@ -304,5 +358,21 @@ export class UpsertClusterComponent implements OnInit {
         });
       }
     );
+  }
+
+  setDefaultValueFormArray() {
+    this.data.barangays.forEach((i: any) => {
+      this.addBarangayForm(i);
+    });
+    this.data._riders.forEach((i: any) => {
+      console.log(i);
+      let riderFormGroup = new FormGroup({
+        _id: new FormControl(i._id),
+        firstName: new FormControl(i.firstName),
+        lastName: new FormControl(i.lastName),
+        mobileNumber: new FormControl(i.mobileNumber),
+      });
+      (this.clusterForm.get('_riders') as FormArray).push(riderFormGroup);
+    });
   }
 }

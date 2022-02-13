@@ -12,11 +12,14 @@
   </app-form>
 </div>
 
+<app-auto-complete #riderForm [opt]="riderList" (onSelect)="onSelect($event)">
+</app-auto-complete>
+
 <div mat-dialog-actions align="center">
   <button
     mat-flat-button
     color="primary"
-    [disabled]="!enrouteDetails.form.valid || saving"
+    [disabled]="saving || !riderObj"
     (click)="submit()"
   >
     Enroute

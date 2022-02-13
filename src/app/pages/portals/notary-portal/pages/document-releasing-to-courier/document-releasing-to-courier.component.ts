@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { forkJoin } from 'rxjs';
 import { QueryParams } from 'src/app/models/queryparams.interface';
 import { TableOutput } from 'src/app/models/tableemit.interface';
+import { User } from 'src/app/models/user.interface';
 import { ApiService } from 'src/app/service/api/api.service';
 import { AuthService } from 'src/app/service/auth/auth.service';
 import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
@@ -35,6 +37,8 @@ export class DocumentReleasingToCourierComponent implements OnInit {
   currTable: any;
   currPopulate: any;
   loading: boolean = true;
+  setting: any;
+
   page = {
     pageSize: 10,
     pageIndex: 1,
@@ -57,7 +61,8 @@ export class DocumentReleasingToCourierComponent implements OnInit {
     private router: Router,
     private auth: AuthService,
     private route: ActivatedRoute,
-    private dbx: DropboxService
+    private dbx: DropboxService,
+    private store: Store<{ user: User }>
   ) {}
 
   ngOnInit(): void {
@@ -67,6 +72,7 @@ export class DocumentReleasingToCourierComponent implements OnInit {
     });
 
     this.fetchData(this.page);
+    this.getSetting();
   }
 
   fetchData(event: TableOutput) {
@@ -111,6 +117,15 @@ export class DocumentReleasingToCourierComponent implements OnInit {
 
     this.isCheckbox = event.isCheckbox || true;
     this.bsConfig = event.bottomSheet;
+  }
+  getSetting() {
+    this.store.select('user').subscribe((me: any) => {
+      console.log(me);
+      this.api.cluster.getOneNotary(me._notaryId).subscribe((res: any) => {
+        this.setting = res.env.cluster;
+        console.log(this.setting);
+      });
+    });
   }
 
   tableUpdateEmit(event: any) {
@@ -165,7 +180,7 @@ export class DocumentReleasingToCourierComponent implements OnInit {
 
     this.dialog
       .open(MarkAsEnrouteComponent, {
-        data: { selected: ids, me: this.me },
+        data: { selected: ids, me: this.me, setting: this.setting },
         height: 'auto',
         width: '60%',
       })

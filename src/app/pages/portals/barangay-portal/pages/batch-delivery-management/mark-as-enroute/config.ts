@@ -34,7 +34,7 @@ export const TABLE_CONFIG = [
   },
 ];
 
-export const MOCK_RIDER_DATA: AUTO_COMPLETE_FIELDS = {
+export const CHOICES_RIDER_DATA: AUTO_COMPLETE_FIELDS = {
   title: 'Select a Rider',
-  item: [{ value: { name: 'Leo', id: '6781gf21gf7613' } }],
+  item: [],
 };

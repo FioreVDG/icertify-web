@@ -1,3 +1,4 @@
+import { ApiService } from 'src/app/service/api/api.service';
 import { ActionResultComponent } from './../../../../../../../shared/dialogs/action-result/action-result.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UtilService } from './../../../../../../../service/util/util.service';
@@ -33,7 +34,8 @@ export class MarkAsNotarizedComponent implements OnInit {
     private document: DocumentService,
     private dbx: DropboxService,
     private util: UtilService,
-    private sb: MatSnackBar
+    private sb: MatSnackBar,
+    private api: ApiService
   ) {}
 
   ngOnInit(): void {
@@ -58,6 +60,7 @@ export class MarkAsNotarizedComponent implements OnInit {
   }
 
   changeDocumentStatus(event: any) {
+    console.log(event);
     if (this.data.type === 'Notarized') {
       const loader = this.util.startLoading('Confirming Please wait...');
       //UPLOADING TO DBX
@@ -78,6 +81,17 @@ export class MarkAsNotarizedComponent implements OnInit {
             this.document.notarize(event, event._id).subscribe((res: any) => {
               console.log(res);
               if (res) {
+                let docLogs: any = {};
+                docLogs.docDetails = this.data.document;
+                docLogs.message = 'Marked as Notarized';
+                this.api.documentlogs.createDocumentLogs(docLogs).subscribe(
+                  (res: any) => {
+                    console.log(res);
+                  },
+                  (err) => {
+                    console.log(err);
+                  }
+                );
                 this.util.stopLoading(loader);
                 this.dialog
                   .open(ActionResultComponent, {
@@ -126,6 +140,17 @@ export class MarkAsNotarizedComponent implements OnInit {
         (res: any) => {
           console.log(res);
           if (res) {
+            let docLogs: any = {};
+            docLogs.docDetails = this.data.document;
+            docLogs.message = 'Marked as Unnotarized';
+            this.api.documentlogs.createDocumentLogs(docLogs).subscribe(
+              (res: any) => {
+                console.log(res);
+              },
+              (err) => {
+                console.log(err);
+              }
+            );
             this.util.stopLoading(loader);
             this.dialog
               .open(ActionResultComponent, {
