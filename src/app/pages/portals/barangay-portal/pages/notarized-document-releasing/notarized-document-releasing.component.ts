@@ -128,9 +128,16 @@ export class NotarizedDocumentReleasingComponent implements OnInit {
 
   onMark() {
     let ids: any = [];
+    let docLogs: any = [];
     this.selected.forEach((id: any) => {
       ids.push(id._id);
+      docLogs.push({
+        docDetails: id._documents[0],
+        message: 'Document Released to Indigent by Brgy Hall Staff',
+      });
     });
+    console.log(this.selected);
+    console.log(docLogs);
     this.dialog
       .open(AreYouSureComponent, {
         data: {
@@ -140,8 +147,8 @@ export class NotarizedDocumentReleasingComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res: any) => {
-        const loader = this.util.startLoading('Saving...');
         if (res) {
+          const loader = this.util.startLoading('Saving...');
           let apiQueries = ids.map((id: any) => {
             return this.api.transaction.update(
               {
@@ -155,6 +162,14 @@ export class NotarizedDocumentReleasingComponent implements OnInit {
 
           forkJoin(apiQueries).subscribe(
             (res: any) => {
+              this.api.documentlogs.createDocumentLogsMany(docLogs).subscribe(
+                (res: any) => {
+                  console.log(res);
+                },
+                (err) => {
+                  console.log(err);
+                }
+              );
               this.util.stopLoading(loader);
               console.log(res);
               this.dialog

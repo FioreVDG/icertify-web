@@ -54,6 +54,14 @@ const routes: Routes = [
             (m) => m.TransactionModule
           ),
       },
+
+      {
+        path: 'document-tracker',
+        loadChildren: () =>
+          import(
+            './pages/notary-document-tracker/notary-document-tracker.module'
+          ).then((m) => m.NotaryDocumentTrackerModule),
+      },
     ],
   },
 ];

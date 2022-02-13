@@ -27,6 +27,7 @@ import { userReducer } from 'src/app/store/user/user.reducer';
 import { ConferenceRoomComponent } from './conference-room/conference-room.component';
 import { RoomComponent } from './room/room.component';
 import { DocumentLogsViewerComponent } from './document-logs-viewer/document-logs-viewer.component';
+import { DocumentTrackerTableComponent } from './document-tracker-table/document-tracker-table.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { DocumentLogsViewerComponent } from './document-logs-viewer/document-log
     RtVideoComponent,
     RoomComponent,
     DocumentLogsViewerComponent,
+    DocumentTrackerTableComponent,
   ],
   imports: [
     MaterialModule,
@@ -73,6 +75,7 @@ import { DocumentLogsViewerComponent } from './document-logs-viewer/document-log
     ConferenceRoomComponent,
     AutoCompleteComponent,
     RtVideoComponent,
+    DocumentTrackerTableComponent,
   ],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
