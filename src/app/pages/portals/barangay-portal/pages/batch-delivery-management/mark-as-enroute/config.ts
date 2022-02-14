@@ -13,7 +13,7 @@ export const MARK_AS_ENROUTE_FORM: Array<Section> = [
         fcname: 'rider',
         show: true,
         default: '',
-        path: 'riderNotaryToBarangay.lastName',
+        path: '_riderFromNotary.lastName',
         appearance: 'standard',
       },
     ],
