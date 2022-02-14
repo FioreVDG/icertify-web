@@ -32,7 +32,7 @@ import {
 })
 export class BarangayPortalComponent implements OnInit {
   isExpanded: boolean = false;
-  barangayNav = BARANGAY_NAVS;
+  barangayNav: any[] = [];
   me: any;
   loading: boolean = false;
   loggingOut: boolean = false;
@@ -77,6 +77,15 @@ export class BarangayPortalComponent implements OnInit {
         this.me = res.env.user;
         this.store.dispatch(setUser({ user: res.env.user }));
         localStorage.setItem('BARANGAY_INFORMATION', JSON.stringify(this.me));
+
+        if (!this.me.isMain && this.me._role && this.me._role.access.length) {
+          this.barangayNav = this.me._role.access;
+          console.log(this.barangayNav);
+        } else {
+          this.barangayNav = BARANGAY_NAVS;
+          console.log(this.barangayNav);
+        }
+
         this.loading = false;
       },
       (err) => {

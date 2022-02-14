@@ -31,9 +31,9 @@ export const NOTARY_NAVS: NavNode[] = [
     hasAccess: false,
   },
   {
-    label: 'Transaction',
+    label: 'Transaction History',
     icon: 'receipt_long',
-    route: 'transaction',
+    route: 'transaction-history',
     hasAccess: false,
   },
   {
@@ -97,6 +97,12 @@ export const BARANGAY_NAVS: NavNode[] = [
     label: 'Document Releasing to Indigent',
     icon: 'verified',
     route: 'notarized-document-releasing',
+    hasAccess: false,
+  },
+  {
+    label: 'Transaction History',
+    icon: 'receipt_long',
+    route: 'transaction-history',
     hasAccess: false,
   },
   {

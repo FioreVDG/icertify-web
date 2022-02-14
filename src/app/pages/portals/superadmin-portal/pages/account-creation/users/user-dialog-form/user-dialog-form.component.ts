@@ -10,9 +10,10 @@ import { UtilService } from './../../../../../../../service/util/util.service';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { Section } from 'src/app/models/form.interface';
 import { FormComponent } from 'src/app/shared/components/form/form.component';
-import { USER_FORM, ADDRESS_SELECT } from './config';
+import { USER_FORM, ADDRESS_SELECT, ROLE_ACCESS } from './config';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
+import { ROLE } from 'src/app/models/role.interface';
 
 @Component({
   selector: 'app-user-dialog-form',
@@ -21,15 +22,20 @@ import * as _ from 'lodash';
 })
 export class UserDialogFormComponent implements OnInit {
   @ViewChild('userDetails') userDetails!: FormComponent;
+  @ViewChild('roleDetails') roleDetails!: FormComponent;
+
   dialogTitle: string = 'USER FORM';
   userFormFields: Section[] = USER_FORM;
+  roleFormFields: Section[] = ROLE_ACCESS;
   regions = [];
   provinces = [];
+  selectedAccessRole: any = [];
   brgyFields = ADDRESS_SELECT;
   brgyForm = this.fb.group({});
-
+  RoleInterface: ROLE = <ROLE>{};
   loading = true;
   saving = false;
+  formInitiated = false;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public util: UtilService,
@@ -43,6 +49,7 @@ export class UserDialogFormComponent implements OnInit {
   ngOnInit(): void {
     this.getRegions();
     this.initializeBrgyForm();
+    this.initRoles();
     console.log(this.data);
   }
 
@@ -53,8 +60,24 @@ export class UserDialogFormComponent implements OnInit {
       this.loading = false;
     });
   }
+
+  initRoles() {
+    this.roleFormFields[0].items[0].choices = this.data.accessRoles;
+
+    // if (this.data.obj._role) {
+    //   this.selectRole(this.data.obj._role);
+    // }
+  }
+
+  roleFormListener(raw: any) {
+    console.log(raw);
+    console.log(this.roleDetails.form.valid);
+  }
+
   formInitialized() {
     console.log('Initialized');
+    this.formInitiated = true;
+
     // this.userDetails.form.get('region')?.valueChanges.subscribe((res: any) => {
     //   console.log(res);
     //   this.getProvinces(res);
@@ -159,6 +182,7 @@ export class UserDialogFormComponent implements OnInit {
       _notaryId:
         this.data._notaryId !== 'undefined' ? this.data._notaryId : undefined,
       type: this.data.type,
+      _role: this.roleDetails.form.value._role,
     };
     toSaveData['address'] = {
       ...this.brgyForm.value,

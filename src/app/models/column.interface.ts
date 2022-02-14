@@ -13,6 +13,9 @@ export interface Column {
   textColor?: Array<Color>;
   isCheckbox?: boolean;
   disableCheckbox?: Array<CheckboxDisabler>;
+  useAsFilter?: Boolean;
+  choices?: Array<string>;
+  value?: string;
 }
 
 interface CheckboxDisabler {
