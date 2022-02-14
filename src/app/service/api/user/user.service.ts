@@ -26,6 +26,9 @@ export class UserService {
   createUser(body: Object) {
     return this.http.start('post', '/users/users', body);
   }
+  createRider(body: Object) {
+    return this.http.start('post', '/users/riders', body);
+  }
   deleteUser(id: string) {
     return this.http.start('delete', `/users/user/${id}`);
   }
@@ -36,6 +39,9 @@ export class UserService {
   }
   getAllIndigent(query: QueryParams) {
     return this.http.start('get', '/users/users', {}, query);
+  }
+  getAllRiders(query: QueryParams) {
+    return this.http.start('get', '/users/riders', {}, query);
   }
   updateIndigent(id: string, body: object) {
     return this.http.start('patch', `/users/indigent/${id}`, body);

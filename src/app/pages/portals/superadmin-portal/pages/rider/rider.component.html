@@ -1,0 +1,21 @@
+<button
+  *ngIf="!loading"
+  mat-fab
+  color="primary"
+  class="bottom-right-button"
+  (click)="onAdd()"
+>
+  <mat-icon>add</mat-icon>
+</button>
+
+<app-table
+  [columns]="columns"
+  [dataSource]="dataSource"
+  [bottomSheet]="bsConfig"
+  (onRowClick)="onRowClick($event)"
+  [pagination]="page"
+  [dataLength]="dataLength"
+  [loading]="loading"
+  (onUpdateTableEmit)="onTableUpdate($event)"
+>
+</app-table>

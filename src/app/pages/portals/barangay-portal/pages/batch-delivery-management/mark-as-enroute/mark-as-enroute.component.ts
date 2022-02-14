@@ -49,7 +49,7 @@ export class MarkAsEnrouteComponent implements OnInit {
   }
   onSelect(event: any) {
     console.log(event);
-    this.riderObj = event.id;
+    this.riderObj = { id: event.id };
   }
   onMark() {
     let ids: any = [];
