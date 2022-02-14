@@ -22,7 +22,7 @@ import { setUser } from 'src/app/store/user/user.action';
 })
 export class NotaryPortalComponent implements OnInit {
   isExpanded: boolean = false;
-  notaryNav = NOTARY_NAVS;
+  notaryNav: any[] = [];
   me!: User;
   navigation: any;
   loading: boolean = false;
@@ -64,6 +64,13 @@ export class NotaryPortalComponent implements OnInit {
         this.me = res.env.user;
         this.store.dispatch(setUser({ user: res.env.user }));
         localStorage.setItem('BARANGAY_INFORMATION', JSON.stringify(this.me));
+
+        if (!this.me.isMain && this.me._role && this.me._role.access.length) {
+          this.notaryNav = this.me._role.access;
+        } else {
+          this.notaryNav = NOTARY_NAVS;
+        }
+
         this.loading = false;
       },
       (err) => {
