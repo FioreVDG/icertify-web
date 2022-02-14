@@ -14,6 +14,7 @@ import { TableOutput } from 'src/app/models/tableemit.interface';
 import { MatPaginator } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 import { BUTTON } from 'src/app/models/table-button.interface';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-table',
@@ -34,33 +35,28 @@ export class TableComponent implements OnInit {
   @Output() onRowClick: any = new EventEmitter<any>();
   @Input() filterButtonConfig: any = [];
   @Input() buttonConfig: any = {};
-
-  duplicateColumns!: Array<Column>;
   @Output() onUpdateTableEmit: any = new EventEmitter<any>();
   @Input() uniqueCheckbox: any = false;
-
   @Output() onCheckBoxSelect = new EventEmitter<any>();
   @Input() loading = false;
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   displayedColumns: Array<string> = [];
   keyword: string = '';
   curPageIndex: number = 1;
+  duplicateColumns!: Array<Column>;
+
   constructor(public util: UtilService, private _bs: MatBottomSheet) {}
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
   ngOnInit(): void {
     console.log(this.dataSource);
-    this.duplicateColumns = JSON.parse(
-      JSON.stringify(this.columns ? this.columns : this.defaultColumn())
-    );
-    this.updateBreakpoint();
-
+    console.log(this.filterButtonConfig);
     if (this.filterButtonConfig) {
       this.filterButtonConfig.forEach((i: any, index: any) => {
         if (index === 0) {
           this.checkBox = i.isCheckbox;
-          this.duplicateColumns = i.column;
+          this.columns = i.column;
           this.bottomSheet = i.bottomSheet;
           this.buttonConfig.checkBoxBtnConfig = i.checkBoxBtns;
           i.selected = true;
@@ -71,6 +67,11 @@ export class TableComponent implements OnInit {
       });
       console.log(this.filterButtonConfig);
     }
+    this.duplicateColumns = JSON.parse(
+      JSON.stringify(this.columns ? this.columns : this.defaultColumn())
+    );
+    this.updateBreakpoint();
+    console.log(this.columns);
   }
   updateBreakpoint() {
     this.displayedColumns = [];
@@ -182,7 +183,7 @@ export class TableComponent implements OnInit {
     this.filterButtonConfig.forEach((i: any) => {
       if (i.label === index) {
         this.checkBox = i.isCheckbox;
-        this.duplicateColumns = i.column;
+        this.columns = i.column;
         this.bottomSheet = i.bottomSheet;
         this.buttonConfig.checkBoxBtnConfig = i.checkBoxBtns;
         i.selected = true;
@@ -191,6 +192,9 @@ export class TableComponent implements OnInit {
         i.selected = false;
       }
     });
+    this.duplicateColumns = JSON.parse(
+      JSON.stringify(this.columns ? this.columns : this.defaultColumn())
+    );
     this.checkedRows.clear();
     // console.log(this.duplicateColumns);
     this.updateBreakpoint();
@@ -203,7 +207,7 @@ export class TableComponent implements OnInit {
     });
   }
 
-  onTriggerSearch() {
+  onTriggerSearch(toFind?: any) {
     this.dataSource = [];
     var fields: Array<string> = [];
     this.duplicateColumns.forEach((c) => {
@@ -220,14 +224,13 @@ export class TableComponent implements OnInit {
         });
       }
     });
+
     let toEmit: TableOutput = {
       pageIndex: 0,
       pageSize: 10,
-      find: [],
+      find: toFind ? toFind : [],
     };
-    // console.log(this.keyword);
-    // console.log(this.duplicateColumns);
-    // console.log(fields);
+
     if (this.keyword)
       toEmit['filter'] = {
         value: this.keyword,
@@ -349,5 +352,50 @@ export class TableComponent implements OnInit {
       this.onCheckBoxSelect.emit(this.checkedRows.selected);
     }
     return this.checkedRows.isSelected(row);
+  }
+
+  ShowColumns(event: any) {
+    this.updateBreakpoint();
+  }
+
+  filter() {
+    this.dataSource = [];
+    let tempFilter: any = [];
+
+    let findVal: any = this.columns.filter((o: any) => o.value);
+    console.log(findVal);
+    if (findVal) {
+      findVal.forEach((val: any) => {
+        let path = val.path;
+        let operator = 'eq';
+        if (path.split('.').length !== 1) {
+          let pathArray = path.split('.');
+          path = pathArray[0];
+          operator = pathArray[1];
+        }
+        tempFilter.push({
+          field: path,
+          operator: `[${operator}]=`,
+          value: val.value,
+        });
+      });
+    }
+    console.log([...tempFilter]);
+    let toFind = [...tempFilter];
+    this.onTriggerSearch(toFind);
+  }
+
+  checkExistingValue(filt: any) {
+    let chk: any = filt.filter((o: any) => o.value);
+    if (chk.length) return false;
+    else return true;
+  }
+
+  clearValues() {
+    this.columns.forEach((f: any) => {
+      delete f.value;
+    });
+    this.keyword = '';
+    this.onTriggerSearch([]);
   }
 }

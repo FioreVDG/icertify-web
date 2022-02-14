@@ -28,6 +28,7 @@ import { ConferenceRoomComponent } from './conference-room/conference-room.compo
 import { RoomComponent } from './room/room.component';
 import { DocumentLogsViewerComponent } from './document-logs-viewer/document-logs-viewer.component';
 import { DocumentTrackerTableComponent } from './document-tracker-table/document-tracker-table.component';
+import { TransactionHistoryTableComponent } from './transaction-history-table/transaction-history-table.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { DocumentTrackerTableComponent } from './document-tracker-table/document
     RoomComponent,
     DocumentLogsViewerComponent,
     DocumentTrackerTableComponent,
+    TransactionHistoryTableComponent,
   ],
   imports: [
     MaterialModule,
@@ -76,6 +78,7 @@ import { DocumentTrackerTableComponent } from './document-tracker-table/document
     AutoCompleteComponent,
     RtVideoComponent,
     DocumentTrackerTableComponent,
+    TransactionHistoryTableComponent,
   ],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

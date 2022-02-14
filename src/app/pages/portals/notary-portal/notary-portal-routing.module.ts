@@ -48,13 +48,12 @@ const routes: Routes = [
           ).then((m) => m.UploadingNotarizedDocumentModule),
       },
       {
-        path: 'transaction',
+        path: 'transaction-history',
         loadChildren: () =>
-          import('./pages/transaction/transaction.module').then(
-            (m) => m.TransactionModule
-          ),
+          import(
+            './pages/notary-transaction-history/notary-transaction-history.module'
+          ).then((m) => m.NotaryTransactionHistoryModule),
       },
-
       {
         path: 'document-tracker',
         loadChildren: () =>

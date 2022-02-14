@@ -1,26 +1,28 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ApiService } from 'src/app/service/api/api.service';
 import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
-import { TableComponent } from 'src/app/shared/components/table/table.component';
-import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachments/view-attachments.component';
+import jsPDF from 'jspdf';
+import { ViewAttachmentsComponent } from '../view-attachments/view-attachments.component';
 import {
   CHECKBOX_DISABLER,
   FILT_BTN_CONFIG,
   FIND_NOTARIZED,
   FIND_UNNOTARIZED,
-} from './config';
-import jsPDF from 'jspdf';
+  NOTARY_FILT_BTN_CONFIG,
+  NOTARY_FIND_NOTARIZED,
+  NOTARY_FIND_UNNOTARIZED,
+} from './transaction-history.config';
 
 @Component({
-  selector: 'app-transaction',
-  templateUrl: './transaction.component.html',
-  styleUrls: ['./transaction.component.scss'],
+  selector: 'app-transaction-history-table',
+  templateUrl: './transaction-history-table.component.html',
+  styleUrls: ['./transaction-history-table.component.scss'],
 })
-export class TransactionComponent implements OnInit {
-  @ViewChild('table') appTable: TableComponent | undefined;
+export class TransactionHistoryTableComponent implements OnInit {
+  @Input() header: any;
   isCheckbox: boolean = true;
-  filtBtnConfig = FILT_BTN_CONFIG;
+  filtBtnConfig: any;
   checkBoxDisableField = CHECKBOX_DISABLER;
   selected = [];
   currTable: any;
@@ -35,14 +37,20 @@ export class TransactionComponent implements OnInit {
   dataSource = [];
   dataLength: number = 0;
   me: any;
-
   constructor(
     private api: ApiService,
     private dialog: MatDialog,
     private dbx: DropboxService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.header);
+    if (this.header == 'NOTARY') {
+      this.filtBtnConfig = NOTARY_FILT_BTN_CONFIG;
+    } else {
+      this.filtBtnConfig = FILT_BTN_CONFIG;
+    }
+  }
 
   fetchData(event: any) {
     this.loading = true;
@@ -58,14 +66,26 @@ export class TransactionComponent implements OnInit {
     if (event.filter) qry.filter = event.filter;
 
     let api: any;
-    if (event && event.label === 'Notarized') {
-      qry.find = qry.find.concat(FIND_NOTARIZED);
-      api = this.api.document.getAll(qry);
-    } else if (event && event.label === 'Unnotarized') {
-      qry.find = qry.find.concat(FIND_UNNOTARIZED);
-      api = this.api.document.getAll(qry);
+    if (this.header == 'NOTARY') {
+      if (event && event.label === 'Notarized') {
+        qry.find = qry.find.concat(NOTARY_FIND_NOTARIZED);
+        api = this.api.document.getAll(qry);
+      } else if (event && event.label === 'Unnotarized') {
+        qry.find = qry.find.concat(NOTARY_FIND_UNNOTARIZED);
+        api = this.api.document.getAll(qry);
+      } else {
+        api = this.api.document.getAll(qry);
+      }
     } else {
-      api = this.api.document.getAll(qry);
+      if (event && event.label === 'Notarized') {
+        qry.find = qry.find.concat(FIND_NOTARIZED);
+        api = this.api.document.getAll(qry);
+      } else if (event && event.label === 'Unnotarized') {
+        qry.find = qry.find.concat(FIND_UNNOTARIZED);
+        api = this.api.document.getAll(qry);
+      } else {
+        api = this.api.document.getAll(qry);
+      }
     }
     console.log(qry);
     api.subscribe((res: any) => {
@@ -230,8 +250,17 @@ export class TransactionComponent implements OnInit {
       borderWidth - 3.6,
       ySpacing
     );
-    // for (let screenshot of data.screenShots)
+    for (let screenshot of data.screenShots) {
+      this.dbx
+        .getTempLink(screenshot.dropbox.path_display)
+        .subscribe((res: any) => {
+          console.log(res);
+          doc.addImage(res.result.link, 'PNG', 0.9, 0.3, 0.9, 0.9);
+        });
+    }
 
-    doc.save('test.pdf');
+    doc.save(
+      data.sender.lastName + ' ' + data.documentType.toUpperCase() + '.pdf'
+    );
   }
 }
