@@ -123,9 +123,18 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
 
   onMark() {
     let ids: any = [];
+    let docLogs: any = [];
     this.selected.forEach((id: any) => {
       ids.push(id._id);
+      id._transactions.forEach((trans: any) => {
+        docLogs.push({
+          docDetails: trans._documents[0],
+          message: 'Document Received from Notary by Brgy Hall Staff',
+        });
+      });
     });
+    console.log(this.selected);
+    console.log(docLogs);
     this.dialog
       .open(AreYouSureComponent, {
         data: {
@@ -158,6 +167,16 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
               forkJoin(smsQueries).subscribe(
                 (res) => {
                   console.log(res);
+                  this.api.documentlogs
+                    .createDocumentLogsMany(docLogs)
+                    .subscribe(
+                      (res: any) => {
+                        console.log(res);
+                      },
+                      (err) => {
+                        console.log(err);
+                      }
+                    );
                   this.util.stopLoading(loader);
                   this.dialog
                     .open(ActionResultComponent, {

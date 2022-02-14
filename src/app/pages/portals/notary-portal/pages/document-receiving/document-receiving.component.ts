@@ -173,8 +173,8 @@ export class DocumentReceivingComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res: any) => {
-        const loader = this.util.startLoading('Saving...');
         if (res) {
+          const loader = this.util.startLoading('Saving...');
           let apiQueries = ids.map((id: any) => {
             return this.api.folder.update(
               {

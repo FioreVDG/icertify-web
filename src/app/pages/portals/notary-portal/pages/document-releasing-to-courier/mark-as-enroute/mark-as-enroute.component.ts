@@ -60,12 +60,20 @@ export class MarkAsEnrouteComponent implements OnInit {
   }
 
   submit() {
+    let docLogs: any = [];
     let toAdd = {
       riderNotaryToBarangay: this.riderObj,
       datePickedFromNotary: new Date(),
       locationStatus: 'Enroute to Barangay',
     };
     console.log(toAdd);
+    this.obj._transactions.forEach((el: any) => {
+      docLogs.push({
+        docDetails: el._documents[0],
+        message: 'Marked as Enroute to Brgy Hall by Notarial Staff',
+      });
+    });
+    console.log(docLogs);
 
     this.dialog
       .open(AreYouSureComponent, {
@@ -77,6 +85,14 @@ export class MarkAsEnrouteComponent implements OnInit {
           this.api.folder
             .enroute(toAdd, this.data.selected[0]._id)
             .subscribe((res) => {
+              this.api.documentlogs.createDocumentLogsMany(docLogs).subscribe(
+                (resp: any) => {
+                  console.log(resp);
+                },
+                (err) => {
+                  console.log(err);
+                }
+              );
               this.dialog
                 .open(ActionResultComponent, {
                   data: {

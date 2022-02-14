@@ -10,6 +10,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 })
 export class DocumentLogsViewerComponent implements OnInit {
   documentLogs: Array<any> = [];
+  filteredFinal: any;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<DocumentLogsViewerComponent>,
@@ -23,7 +24,7 @@ export class DocumentLogsViewerComponent implements OnInit {
         {
           field: 'docDetails.refCode',
           operator: '=',
-          value: this.data._documents[0].refCode,
+          value: this.data.obj._documents[0].refCode,
         },
       ],
       populates: [
@@ -35,8 +36,15 @@ export class DocumentLogsViewerComponent implements OnInit {
     console.log(query);
     this.api.documentlogs.getDocumentLogs(query).subscribe(
       (res: any) => {
-        console.log(res);
         this.documentLogs = res.env.documentLogs;
+        console.log(this.documentLogs);
+        this.filteredFinal = this.documentLogs.find(
+          (o: any) =>
+            o.message === 'Document Released to Indigent by Brgy Hall Staff'
+        );
+        if (this.filteredFinal) {
+          console.log(this.filteredFinal);
+        }
       },
       (err) => {
         console.log(err);

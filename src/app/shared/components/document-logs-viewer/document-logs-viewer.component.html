@@ -1,5 +1,6 @@
 <h3 mat-dialog-title>
-  {{ data.refCode }}: {{ data.sender.firstName }} {{ data.sender.lastName }}
+  {{ data.obj.refCode }}: {{ data.obj.sender.firstName }}
+  {{ data.obj.sender.lastName }}
 </h3>
 <mat-icon (click)="dialogRef.close()" class="close-btn" color="warn"
   >close</mat-icon
@@ -14,19 +15,19 @@
               <div class="col-6">
                 <div class="text-wrap">
                   <p>
-                    <b>{{ data._documents[0].documentName }}</b>
+                    <b>{{ data.obj._documents[0].documentName }}</b>
                   </p>
                   <p>Document Name</p>
                 </div>
                 <div class="text-wrap">
                   <p>
-                    <b>{{ data._documents[0].documentType }}</b>
+                    <b>{{ data.obj._documents[0].documentType }}</b>
                   </p>
                   <p>Document Type</p>
                 </div>
                 <div class="text-wrap">
                   <p>
-                    <b>{{ data.tempFolderId.folderName }}</b>
+                    <b>{{ data.obj.tempFolderId.folderName }}</b>
                   </p>
                   <p>Batch Reference Code</p>
                 </div>
@@ -35,15 +36,15 @@
                 <div class="text-wrap">
                   <p>
                     <b
-                      >{{ data._folderId?._notaryId?.firstName }}
-                      {{ data._folderId?._notaryId?.lastName }}</b
+                      >{{ data.obj._folderId?._notaryId?.firstName }}
+                      {{ data.obj._folderId?._notaryId?.lastName }}</b
                     >
                   </p>
                   <p>Notary</p>
                 </div>
                 <div class="text-wrap">
                   <p>
-                    <b>{{ data._documents[0].documentStatus }}</b>
+                    <b>{{ data.obj._documents[0].documentStatus }}</b>
                   </p>
                   <p>Notarization Status</p>
                 </div>
@@ -52,7 +53,23 @@
           </mat-card>
         </div>
         <div class="col-4">
-          <mat-card> </mat-card>
+          <mat-card>
+            <div class="text-wrap">
+              <p>
+                <b>{{ filteredFinal?.createdAt | date: "medium" }}</b>
+              </p>
+              <p>Date and Time Released</p>
+            </div>
+            <div class="text-wrap">
+              <p>
+                <b
+                  >{{ filteredFinal?._createdBy.firstName }}
+                  {{ filteredFinal?._createdBy.firstName }}</b
+                >
+              </p>
+              <p>Released by</p>
+            </div>
+          </mat-card>
         </div>
       </div>
       <mat-card>
