@@ -44,7 +44,68 @@
           {{ btn.label }}
         </button>
       </div>
+      <button
+        mat-mini-fab
+        class="tbl-btn"
+        color="primary"
+        [matMenuTriggerFor]="menu"
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" xPosition="before">
+        <button mat-menu-item [matMenuTriggerFor]="showColumns">
+          <mat-icon>view_column</mat-icon>
+          <span>Select Column to Display</span>
+        </button>
+      </mat-menu>
+      <mat-menu #showColumns="matMenu">
+        <div class="columns" *ngFor="let col of columns">
+          <mat-checkbox
+            *ngIf="col.title !== ''"
+            [(ngModel)]="col.selected"
+            color="primary"
+            (ngModelChange)="ShowColumns($event)"
+            (click)="$event.stopPropagation()"
+          >
+            {{ col.title }}
+          </mat-checkbox>
+        </div>
+      </mat-menu>
     </mat-toolbar>
+    <div class="grid">
+      <ng-container *ngFor="let filt of columns; let i = index">
+        <div class="col-2" *ngIf="filt.useAsFilter">
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>{{ filt.title }}</mat-label>
+            <mat-select matInput [(ngModel)]="filt.value">
+              <mat-option *ngFor="let opt of filt.choices" [value]="opt">{{
+                opt
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </ng-container>
+      <div class="col btns">
+        <button
+          [disabled]="checkExistingValue(columns) || loading"
+          color="primary"
+          class="filt"
+          mat-flat-button
+          (click)="filter()"
+        >
+          {{ loading ? "Filtering..." : "Filter" }}
+          <mat-icon>fast_forward</mat-icon>
+        </button>
+        <button
+          [disabled]="checkExistingValue(columns) || loading"
+          mat-stroked-button
+          color="warn"
+          (click)="clearValues()"
+        >
+          Clear
+        </button>
+      </div>
+    </div>
 
     <!-- TABLE -->
     <div class="table-responsive">

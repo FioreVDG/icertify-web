@@ -76,6 +76,13 @@ const routes: Routes = [
           ).then((m) => m.NotarizedDocumentReleasingModule),
       },
       {
+        path: 'transaction-history',
+        loadChildren: () =>
+          import(
+            './pages/barangay-transaction-history/barangay-transaction-history.module'
+          ).then((m) => m.BarangayTransactionHistoryModule),
+      },
+      {
         path: 'document-tracker',
         loadChildren: () =>
           import('./pages/document-tracker/document-tracker.module').then(
