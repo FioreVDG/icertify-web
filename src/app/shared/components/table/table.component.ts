@@ -44,6 +44,7 @@ export class TableComponent implements OnInit {
   keyword: string = '';
   curPageIndex: number = 1;
   duplicateColumns!: Array<Column>;
+  hasFilter: boolean = false;
 
   constructor(public util: UtilService, private _bs: MatBottomSheet) {}
   ngAfterViewInit() {
@@ -61,6 +62,10 @@ export class TableComponent implements OnInit {
           this.buttonConfig.checkBoxBtnConfig = i.checkBoxBtns;
           i.selected = true;
           this.onUpdateTableEmit.emit(i);
+          let findFilterExist = i.column.find(
+            (col: any) => col.useAsFilter === true
+          );
+          if (findFilterExist) this.hasFilter = true;
         } else {
           i.selected = false;
         }
