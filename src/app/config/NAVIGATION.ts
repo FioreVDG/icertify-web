@@ -36,6 +36,12 @@ export const NOTARY_NAVS: NavNode[] = [
     route: 'transaction',
     hasAccess: false,
   },
+  {
+    label: 'Document Tracker',
+    icon: 'account_tree',
+    route: 'document-tracker',
+    hasAccess: false,
+  },
 ];
 
 export const BARANGAY_NAVS: NavNode[] = [
