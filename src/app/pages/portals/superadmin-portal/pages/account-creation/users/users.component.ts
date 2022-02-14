@@ -145,19 +145,33 @@ export class UsersComponent implements OnInit {
 
         break;
       case 'edit':
-        this.dialog
-          .open(UserDialogFormComponent, {
-            data: {
-              obj: event.obj,
-              action: event.action,
+        let query = {
+          find: [
+            {
+              field: '_brgyId',
+              operator: '=',
+              value: this._brgyId,
             },
-          })
-          .afterClosed()
-          .subscribe((res: any) => {
-            if (res) {
-              this.fetchUser(this.page);
-            }
-          });
+          ],
+        };
+        this.api.role.getAll(query).subscribe((res: any) => {
+          this.accessRoles = res.env.roles;
+          this.dialog
+            .open(UserDialogFormComponent, {
+              data: {
+                obj: event.obj,
+                action: event.action,
+                accessRoles: this.accessRoles,
+              },
+            })
+            .afterClosed()
+            .subscribe((res: any) => {
+              if (res) {
+                this.fetchUser(this.page);
+              }
+            });
+        });
+
         break;
       default:
         break;
