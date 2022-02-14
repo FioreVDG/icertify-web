@@ -2,6 +2,7 @@ import { QueryParams } from 'src/app/models/queryparams.interface';
 import { ApiService } from 'src/app/service/api/api.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
+import { FIND_NOTARY_ONLY } from './doc-viewer-logs.config';
 
 @Component({
   selector: 'app-document-logs-viewer',
@@ -19,6 +20,10 @@ export class DocumentLogsViewerComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.data);
+    this.initializeInfo();
+  }
+
+  initializeInfo() {
     let query: QueryParams = {
       find: [
         {
@@ -33,10 +38,33 @@ export class DocumentLogsViewerComponent implements OnInit {
         },
       ],
     };
+    let query2: QueryParams = {
+      find: [
+        {
+          field: 'docDetails.refCode',
+          operator: '=',
+          value: this.data.obj._documents[0].refCode,
+        },
+        {
+          field: 'message',
+          operator: '[in]=',
+          value:
+            'Received by Notarial Staff,Video Conference Scheduled by Notarial Staff,Marked as Notarized,Marked as Unnotarized,Marked as Enroute to Brgy Hall by Notarial Staff,Document Received from Notary by Brgy Hall Staff,Document Released to Indigent by Brgy Hall Staf',
+        },
+      ],
+      populates: [
+        {
+          field: '_createdBy',
+        },
+      ],
+    };
     console.log(query);
-    this.api.documentlogs.getDocumentLogs(query).subscribe(
+    let finalQuery: any;
+    finalQuery = this.data.header === 'NOTARY' ? query2 : query;
+    this.api.documentlogs.getDocumentLogs(finalQuery).subscribe(
       (res: any) => {
         this.documentLogs = res.env.documentLogs;
+
         console.log(this.documentLogs);
         this.filteredFinal = this.documentLogs.find(
           (o: any) =>
