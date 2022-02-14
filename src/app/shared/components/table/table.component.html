@@ -72,9 +72,9 @@
         </div>
       </mat-menu>
     </mat-toolbar>
-    <div class="grid">
+    <div class="grid" *ngIf="hasFilter">
       <ng-container *ngFor="let filt of columns; let i = index">
-        <div class="col-2" *ngIf="filt.useAsFilter">
+        <div style="font-size: 11px" class="col-2" *ngIf="filt.useAsFilter">
           <mat-form-field class="full-width" appearance="outline">
             <mat-label>{{ filt.title }}</mat-label>
             <mat-select matInput [(ngModel)]="filt.value">
