@@ -121,7 +121,6 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         title: 'Date and Time Picked up',
         breakpoint: 'sm',
         path: 'datePickedByRiderFromBrgy',
-
         type: 'date',
         selected: true,
       },
