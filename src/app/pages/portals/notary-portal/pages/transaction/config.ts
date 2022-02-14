@@ -12,8 +12,18 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         action: 'viewDoc',
         icon: 'description',
       },
+      {
+        label: 'Download Screenshot',
+        action: 'downloadSS',
+        icon: 'file_download',
+        showIf: 'screenShots/!=/undefined',
+      },
     ],
-    populate: [],
+    populate: [
+      {
+        field: '_notaryId',
+      },
+    ],
     column: [
       {
         title: 'Document Reference Code',
@@ -70,7 +80,11 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         showIf: 'notarizedDocument/!=/undefined',
       },
     ],
-    populate: [],
+    populate: [
+      {
+        field: '_notaryId',
+      },
+    ],
     column: [
       {
         title: 'Document Reference Code',
@@ -131,7 +145,11 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         icon: 'description',
       },
     ],
-    populate: [],
+    populate: [
+      {
+        field: '_notaryId',
+      },
+    ],
     column: [
       {
         title: 'Document Reference Code',

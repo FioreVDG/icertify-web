@@ -10,6 +10,7 @@ import {
   FIND_NOTARIZED,
   FIND_UNNOTARIZED,
 } from './config';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-transaction',
@@ -28,11 +29,7 @@ export class TransactionComponent implements OnInit {
   page = {
     pageSize: 10,
     pageIndex: 1,
-    populate: [
-      {
-        field: '_createdBy',
-      },
-    ],
+    populate: [],
   };
   routeLength = 3;
   dataSource = [];
@@ -118,6 +115,9 @@ export class TransactionComponent implements OnInit {
         case 'downloadDoc':
           this.downloadDocu(event.obj.notarizedDocument);
           break;
+        case 'downloadSS':
+          this.downloadSS(event.obj);
+          break;
         default:
       }
     }
@@ -164,5 +164,74 @@ export class TransactionComponent implements OnInit {
     });
   }
 
-  downloadSS(doc: any) {}
+  font = {
+    size: {
+      h1: 13,
+      h2: 12,
+      h3: 11,
+      h4: 10,
+      h5: 9,
+      small: 8,
+    },
+    type: {
+      bold: 'bold',
+      italic: 'italic',
+      normal: 'normal',
+      bolditalic: 'bolditalic',
+    },
+  };
+  downloadSS(data: any) {
+    console.log(data);
+    const doc = new jsPDF('p', 'in', [8.5, 14]);
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const borderWidth = pageWidth - 1;
+    let ySpacing = 0;
+
+    doc.setFontSize(this.font.size.h1);
+    doc.setFont('Times', this.font.type.bold);
+
+    ySpacing += 0.6;
+    doc.text('iCertify VIDEO CONFERENCE SCREENSHOT', pageWidth / 2, ySpacing, {
+      align: 'center',
+    });
+
+    doc.setFontSize(this.font.size.h2);
+    doc.setFont('Times', this.font.type.normal);
+
+    ySpacing += 0.4;
+    doc.text('QC Indigent: ', borderWidth - 6.5, ySpacing);
+    doc.text(
+      data.sender.firstName + ' ' + data.sender.lastName,
+      borderWidth - 3.6,
+      ySpacing
+    );
+    ySpacing += 0.2;
+    doc.text('Notary: ', borderWidth - 6.5, ySpacing);
+    doc.text(
+      data._notaryId.firstName + ' ' + data._notaryId.lastName,
+      borderWidth - 3.6,
+      ySpacing
+    );
+    ySpacing += 0.2;
+    doc.text(
+      'Date and Time of Video Conference: ',
+      borderWidth - 6.5,
+      ySpacing
+    );
+    doc.text(
+      data.sender.firstName + ' ' + data.sender.lastName,
+      borderWidth - 3.6,
+      ySpacing
+    );
+    ySpacing += 0.2;
+    doc.text('Barangay: ', borderWidth - 6.5, ySpacing);
+    doc.text(
+      data.sender.firstName + ' ' + data.sender.lastName,
+      borderWidth - 3.6,
+      ySpacing
+    );
+    // for (let screenshot of data.screenShots)
+
+    doc.save('test.pdf');
+  }
 }
