@@ -167,3 +167,25 @@ export const ADDRESS_SELECT = [
     path: 'address.barangay',
   },
 ];
+
+export const ROLE_ACCESS: Section[] = [
+  {
+    section: '',
+    show: true,
+    items: [
+      {
+        label: 'Select Access Role',
+        type: 'select',
+        colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
+        fcname: '_role',
+        show: true,
+        default: '',
+        path: '_id',
+        appearance: 'outline',
+        choices: [],
+        choiceLabel: 'name',
+        choiceValue: '_id',
+      },
+    ],
+  },
+];

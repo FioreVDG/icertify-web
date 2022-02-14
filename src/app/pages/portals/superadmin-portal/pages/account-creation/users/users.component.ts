@@ -6,6 +6,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { USERS, USER_BOTTOMSHEET } from './config';
+import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-users',
@@ -19,6 +21,7 @@ export class UsersComponent implements OnInit {
   userType: any;
   _notaryId: any;
   dataSource = [];
+  accessRoles = [];
   page = {
     pageSize: 10,
     pageIndex: 1,
@@ -27,6 +30,7 @@ export class UsersComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
+    private sb: MatSnackBar,
     private dialog: MatDialog,
     private api: ApiService
   ) {}
@@ -39,25 +43,56 @@ export class UsersComponent implements OnInit {
   }
 
   onAdd() {
-    this.dialog
-      .open(UserDialogFormComponent, {
-        panelClass: 'custom-dialog-container',
-        data: {
-          _brgyId: this._brgyId,
-          _notaryId: this._notaryId,
-          type: this.userType,
-        },
-      })
-      .afterClosed()
-      .subscribe(
-        (res: any) => {
-          if (res) this.fetchUser(this.page);
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
+    this.fetchAccessRoles();
   }
+
+  fetchAccessRoles() {
+    let query = {
+      find: [
+        {
+          field: '_brgyId',
+          operator: '=',
+          value: this._brgyId,
+        },
+      ],
+    };
+    this.api.role.getAll(query).subscribe(
+      (res: any) => {
+        if (res.env.roles.length) {
+          this.accessRoles = res.env.roles;
+
+          this.dialog
+            .open(UserDialogFormComponent, {
+              panelClass: 'custom-dialog-container',
+              data: {
+                _brgyId: this._brgyId,
+                _notaryId: this._notaryId,
+                type: this.userType,
+                accessRoles: this.accessRoles,
+              },
+            })
+            .afterClosed()
+            .subscribe(
+              (res: any) => {
+                if (res) this.fetchUser(this.page);
+              },
+              (err) => {
+                console.log(err);
+              }
+            );
+        } else {
+          this.sb.open('No Access role found.', undefined, {
+            panelClass: ['failed'],
+            duration: 1500,
+          });
+        }
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
   fetchUser(event?: any) {
     let qry: QueryParams = {
       find: [],

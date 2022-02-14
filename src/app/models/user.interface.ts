@@ -9,7 +9,9 @@ export interface User {
   email?: string;
   gender?: string;
   _brgyId?: string;
+  _role?: any;
   type?: string;
+  isMain?: boolean;
 }
 export enum USER_REDUCER_ACTIONS {
   SetUser = 'SET_USER',
