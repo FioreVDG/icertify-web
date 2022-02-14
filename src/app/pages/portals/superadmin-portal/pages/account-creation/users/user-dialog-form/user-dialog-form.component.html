@@ -8,12 +8,11 @@
   </h1>
   <div mat-dialog-content>
     <mat-stepper orientation="vertical" [linear]="true" #stepper>
-      <mat-step [stepControl]="userDetails.form || brgyDetails.form">
+      <mat-step [stepControl]="userDetails.form && brgyForm">
         <ng-template matStepLabel>USER DETAILS</ng-template>
         <app-form
           #userDetails
           [formfields]="userFormFields"
-          (formInitiated)="formInitialized()"
           (formListener)="formListener($event)"
           [obj]="data && data.obj ? data.obj : undefined"
         ></app-form>
@@ -49,6 +48,14 @@
         "
       >
         <ng-template matStepLabel>Role Access</ng-template>
+        <app-form
+          #roleDetails
+          [formfields]="roleFormFields"
+          (formInitiated)="formInitialized()"
+          (formListener)="roleFormListener($event)"
+          [obj]="RoleInterface"
+        >
+        </app-form>
         <div>
           <button mat-button matStepperPrevious>Back</button>
         </div>
@@ -57,9 +64,13 @@
   </div>
   <mat-dialog-actions>
     <button
+      *ngIf="formInitiated"
       mat-button
       color="primary"
-      [disabled]="(!userDetails.form.valid && !brgyDetails.valid) || saving"
+      [disabled]="
+        !(userDetails.form.valid && brgyForm.valid && roleDetails.form.valid) ||
+        saving
+      "
       (click)="onSave()"
     >
       {{ saving ? "Saving..." : "Save" }}
