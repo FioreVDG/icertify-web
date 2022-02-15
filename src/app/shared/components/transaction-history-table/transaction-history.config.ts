@@ -52,7 +52,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         ],
       },
       {
-        title: 'Owner',
+        title: 'QC Indigent',
         breakpoint: 'sm',
         path: 'sender',
         paths: ['sender.firstName', 'sender.lastName'],
@@ -60,9 +60,17 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
       {
-        title: 'Date and Time Received',
+        title: 'Notary',
         breakpoint: 'sm',
-        path: 'createdAt',
+        path: '_notaryId',
+        paths: ['_notaryId.firstName', '_notaryId.lastName'],
+        type: 'special',
+        selected: true,
+      },
+      {
+        title: 'Date and Time of Notarization',
+        breakpoint: 'sm',
+        path: 'dateNotarized',
         type: 'date',
         selected: true,
       },
@@ -116,7 +124,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         ],
       },
       {
-        title: 'Owner',
+        title: 'QC Indigent',
         breakpoint: 'sm',
         path: 'sender',
         paths: ['sender.firstName', 'sender.lastName'],
@@ -124,9 +132,17 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
       {
-        title: 'Date and Time Received',
+        title: 'Notary',
         breakpoint: 'sm',
-        path: 'createdAt',
+        path: '_notaryId',
+        paths: ['_notaryId.firstName', '_notaryId.lastName'],
+        type: 'special',
+        selected: true,
+      },
+      {
+        title: 'Date and Time of Notarization',
+        breakpoint: 'sm',
+        path: 'dateNotarized',
         type: 'date',
         selected: true,
       },
@@ -180,7 +196,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         ],
       },
       {
-        title: 'Owner',
+        title: 'QC Indigent',
         breakpoint: 'sm',
         path: 'sender',
         paths: ['sender.firstName', 'sender.lastName'],
@@ -188,10 +204,25 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
       {
-        title: 'Date and Time Received',
+        title: 'Notary',
         breakpoint: 'sm',
-        path: 'createdAt',
+        path: '_notaryId',
+        paths: ['_notaryId.firstName', '_notaryId.lastName'],
+        type: 'special',
+        selected: true,
+      },
+      {
+        title: 'Date and Time of Notarization',
+        breakpoint: 'sm',
+        path: 'dateNotarized',
         type: 'date',
+        selected: true,
+      },
+      {
+        title: 'Remarks',
+        breakpoint: 'sm',
+        path: 'remark',
+        type: 'text',
         selected: true,
       },
     ],
@@ -213,7 +244,7 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         label: 'Download Screenshot',
         action: 'downloadSS',
         icon: 'file_download',
-        showIf: 'screenShots/!=/undefined',
+        showIf: 'screenShots/>/0',
       },
     ],
     populate: [
@@ -254,7 +285,7 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         ],
       },
       {
-        title: 'Owner',
+        title: 'QC Indigent',
         breakpoint: 'sm',
         path: 'sender',
         paths: ['sender.firstName', 'sender.lastName'],
@@ -262,9 +293,17 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
       {
-        title: 'Date and Time Received',
+        title: 'Notary',
         breakpoint: 'sm',
-        path: 'createdAt',
+        path: '_notaryId',
+        paths: ['_notaryId.firstName', '_notaryId.lastName'],
+        type: 'special',
+        selected: true,
+      },
+      {
+        title: 'Date and Time of Notarization',
+        breakpoint: 'sm',
+        path: 'dateNotarized',
         type: 'date',
         selected: true,
       },
@@ -325,7 +364,7 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         ],
       },
       {
-        title: 'Owner',
+        title: 'QC Indigent',
         breakpoint: 'sm',
         path: 'sender',
         paths: ['sender.firstName', 'sender.lastName'],
@@ -333,9 +372,17 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
       {
-        title: 'Date and Time Received',
+        title: 'Notary',
         breakpoint: 'sm',
-        path: 'createdAt',
+        path: '_notaryId',
+        paths: ['_notaryId.firstName', '_notaryId.lastName'],
+        type: 'special',
+        selected: true,
+      },
+      {
+        title: 'Date and Time of Notarization',
+        breakpoint: 'sm',
+        path: 'dateNotarized',
         type: 'date',
         selected: true,
       },
@@ -400,7 +447,7 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         ],
       },
       {
-        title: 'Owner',
+        title: 'QC Indigent',
         breakpoint: 'sm',
         path: 'sender',
         paths: ['sender.firstName', 'sender.lastName'],
@@ -408,13 +455,41 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
       {
-        title: 'Date and Time Received',
+        title: 'Notary',
         breakpoint: 'sm',
-        path: 'createdAt',
+        path: '_notaryId',
+        paths: ['_notaryId.firstName', '_notaryId.lastName'],
+        type: 'special',
+        selected: true,
+      },
+      {
+        title: 'Date and Time of Notarization',
+        breakpoint: 'sm',
+        path: 'dateNotarized',
         type: 'date',
         selected: true,
       },
+      {
+        title: 'Remarks',
+        breakpoint: 'sm',
+        path: 'remark',
+        type: 'text',
+        selected: true,
+      },
     ],
+  },
+];
+
+export const FIND_ALL: Find[] = [
+  {
+    field: 'status',
+    operator: '=',
+    value: 'Active',
+  },
+  {
+    field: 'documentStatus',
+    operator: '[in]=',
+    value: 'Notarized,Unnotarized',
   },
 ];
 
@@ -430,11 +505,11 @@ export const FIND_NOTARIZED: Find[] = [
     operator: '=',
     value: 'Notarized',
   },
-  {
-    field: 'notarizedDocument.dateUploaded',
-    operator: '[nin]=',
-    value: 'null',
-  },
+  // {
+  //   field: 'notarizedDocument.dateUploaded',
+  //   operator: '[nin]=',
+  //   value: 'null',
+  // },
 ];
 export const FIND_UNNOTARIZED: Find[] = [
   {
@@ -461,11 +536,11 @@ export const NOTARY_FIND_NOTARIZED: Find[] = [
     operator: '=',
     value: 'Notarized',
   },
-  {
-    field: 'notarizedDocument.dateUploaded',
-    operator: '[nin]=',
-    value: 'null',
-  },
+  // {
+  //   field: 'notarizedDocument.dateUploaded',
+  //   operator: '[nin]=',
+  //   value: 'null',
+  // },
 ];
 export const NOTARY_FIND_UNNOTARIZED: Find[] = [
   {
