@@ -8,6 +8,10 @@ export const COLLECTIONS = [
         path: 'dateCreated',
       },
       {
+        label: 'Date Batch Enrouted by Barangay',
+        path: 'dateEnroutedByBarangay',
+      },
+      {
         label: 'Date Picked from Barangay',
         path: 'datePickedByRiderFromBrgy',
       },
@@ -34,16 +38,16 @@ export const COLLECTIONS = [
     name: 'transaction',
     paths: [
       {
-        label: 'Date Accepted by the Barangay',
-        path: 'dateAccepted',
-      },
-      {
         label: 'Date Assessed by the Notary',
         path: 'dateAssessed',
       },
       {
         label: 'Date Released by the Barangay',
         path: 'dateReleased',
+      },
+      {
+        label: 'Date Uploaded of Certificate of Indigency',
+        path: 'dateUploadedOfIndigency',
       },
     ],
   },
