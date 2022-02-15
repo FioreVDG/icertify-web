@@ -147,15 +147,15 @@
           <button
             mat-stroked-button
             color="{{
-              clusterForm.value.barangays[i]._brgyId ? 'primary' : 'warn'
+              clusterForm.value.barangays[i]._barangay ? 'primary' : 'warn'
             }}"
             (click)="selectBarangay(i)"
             class="full-width"
             style="margin-top: 10px"
           >
             {{
-              clusterForm.value.barangays[i]._brgyId
-                ? clusterForm.value.barangays[i].barangay.brgyDesc
+              clusterForm.value.barangays[i]._barangay
+                ? clusterForm.value.barangays[i]._barangay.brgyDesc
                 : "Click to Select Barangay"
             }}
           </button>

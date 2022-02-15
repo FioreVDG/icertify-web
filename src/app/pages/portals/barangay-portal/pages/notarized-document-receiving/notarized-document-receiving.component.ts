@@ -76,17 +76,17 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
     if (event && event.label === 'For Receiving') {
       qry.find = qry.find.concat(FIND_FOR_RECEIVING);
       qry.find.push({
-        field: '_brgyId',
+        field: '_barangay.brgyCode',
         operator: '=',
-        value: this.me._brgyId,
+        value: this.me._barangay.brgyCode,
       });
       api = this.api.folder.getAll(qry);
     } else {
       qry.find = qry.find.concat(FIND_RECEIVED);
       qry.find.push({
-        field: '_brgyId',
+        field: '_barangay.brgyCode',
         operator: '=',
-        value: this.me._brgyId,
+        value: this.me._barangay.brgyCode,
       });
       api = this.api.folder.getAll(qry);
     }

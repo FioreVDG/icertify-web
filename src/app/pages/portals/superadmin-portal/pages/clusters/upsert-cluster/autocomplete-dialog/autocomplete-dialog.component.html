@@ -1,5 +1,5 @@
 <mat-form-field class="full-width">
-  <mat-label>Notary</mat-label>
+  <mat-label>Select Barangay</mat-label>
   <input
     type="text"
     matInput
@@ -13,7 +13,7 @@
     (optionSelected)="close()"
   >
     <mat-option *ngFor="let brgy of filteredBarangays | async" [value]="brgy">
-      {{ brgy.address.barangay.brgyDesc | uppercase }}
+      {{ brgy._barangay.brgyDesc | uppercase }}
     </mat-option>
   </mat-autocomplete>
 </mat-form-field>

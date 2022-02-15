@@ -19,7 +19,7 @@ export const FILT_BTN: Array<FILTER_BUTTON_COLUMN> = [
         breakpoint: 'sm',
         type: 'text',
         selected: true,
-        path: '_brgyId',
+        path: '_barangay.brgyDesc',
       },
       {
         title: 'Received by',
@@ -68,7 +68,7 @@ export const FILT_BTN: Array<FILTER_BUTTON_COLUMN> = [
         breakpoint: 'sm',
         type: 'text',
         selected: true,
-        path: '_brgyId',
+        path: '_barangay.brgyDesc',
       },
       {
         title: 'Received by',

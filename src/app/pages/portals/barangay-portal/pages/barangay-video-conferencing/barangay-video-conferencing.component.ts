@@ -57,9 +57,9 @@ export class BarangayVideoConferencingComponent implements OnInit {
     let query = {
       find: [
         {
-          field: '_brgyId',
+          field: '_barangay.brgyCode',
           operator: '=',
-          value: this.me._brgyId,
+          value: this.me._barangay.brgyCode,
         },
       ],
       page: event.pageIndex || 1,

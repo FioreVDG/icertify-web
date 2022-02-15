@@ -1,4 +1,4 @@
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { QueryParams } from 'src/app/models/queryparams.interface';
 import {
   debounceTime,
@@ -10,7 +10,7 @@ import {
 import { Observable } from 'rxjs';
 import { ApiService } from './../../../../../../../service/api/api.service';
 import { FormControl } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-autocomplete-dialog',
@@ -19,8 +19,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AutocompleteDialogComponent implements OnInit {
   brgyCtrl = new FormControl();
+  selectedBarangays: any[] = [];
   filteredBarangays: Observable<any[]>;
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private api: ApiService,
     private dialogRef: MatDialogRef<AutocompleteDialogComponent>
   ) {
@@ -50,10 +52,12 @@ export class AutocompleteDialogComponent implements OnInit {
       ],
       filter: {
         value,
-        fields: ['address.barangay.brgyDesc'],
+        fields: ['_barangay.brgyDesc'],
       },
     };
     // todo, add interface for response of endpoints
+
+    // Todo filter CLUSTERED barangays
     return this.api.user.getAllUser(query).pipe(
       map((res: any) => {
         console.log(res);
@@ -62,14 +66,35 @@ export class AutocompleteDialogComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.data.barangays.length) {
+      for (const barangay of this.data.barangays) {
+        if (barangay._barangay)
+          this.selectedBarangays.push(barangay._barangay.brgyCode);
+      }
+    }
+    console.log(this.selectedBarangays);
+
+    this.getClusters();
+  }
 
   displayWith(option: any) {
-    if (option) return option.address.barangay.brgyDesc.toUpperCase();
+    if (option) return option._barangay.brgyDesc.toUpperCase();
     return '';
   }
 
   close() {
     this.dialogRef.close(this.brgyCtrl.value);
+  }
+
+  getClusters() {
+    this.api.cluster.getAll({ find: [] }).subscribe((res: any) => {
+      console.log(res);
+
+      if (res.env.clusters.length) {
+        for (let cluster of res.env.clusters) {
+        }
+      }
+    });
   }
 }

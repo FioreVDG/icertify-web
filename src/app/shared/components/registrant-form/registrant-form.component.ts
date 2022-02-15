@@ -219,7 +219,7 @@ export class RegistrantFormComponent implements OnInit {
     ).toLocaleDateString();
     this.toAddData.mobileNumber = this.data.mobileNumber;
     this.toAddData.type = 'Consumer';
-    this.toAddData._brgyId = this.brgyInfo._brgyId;
+    this.toAddData._barangay = this.brgyInfo._barangay;
     console.log(this.toAddData);
 
     this.auth.registerUser(this.toAddData).subscribe(

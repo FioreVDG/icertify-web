@@ -13,7 +13,7 @@ export const CLUSTER_COLUMNS: Array<Column> = [
     title: 'Barangays',
     breakpoint: 'sm',
     path: 'barangays',
-    paths: ['barangays.barangay.brgyDesc'],
+    paths: ['barangays._barangay.brgyDesc'],
     type: 'special',
     selected: true,
   },
