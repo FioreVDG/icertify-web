@@ -79,7 +79,7 @@ export class AccountCreationComponent implements OnInit {
         userType: userType,
         header: header,
       },
-      minWidth: '50vw',
+      minWidth: '60vw',
       minHeight: 'auto',
       disableClose: true,
     });
