@@ -1,0 +1,15 @@
+<div style="display: flex; align-content: flex-end; justify-content: flex-end">
+  <button mat-raised-button (click)="openDialog()" color="primary">
+    <mat-icon>add</mat-icon>&nbsp;Add Notarial Commission
+  </button>
+</div>
+<app-table
+  [loading]="loading"
+  [bottomSheet]="bottomSheet"
+  [columns]="column"
+  [dataSource]="dataSource"
+  (onRowClick)="onRowClick($event)"
+  [pagination]="page"
+  [dataLength]="dataLength"
+  (onUpdateTableEmit)="onTableUpdate($event)"
+></app-table>

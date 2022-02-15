@@ -1,5 +1,4 @@
 import { SELECTIONS } from './selection.config';
-import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
   Component,
@@ -17,15 +16,13 @@ import { FormControl, Validators } from '@angular/forms';
   styleUrls: ['./action-menu.component.scss'],
 })
 export class ActionMenuComponent implements OnInit {
+  @Output() selectionEmitter = new EventEmitter<any>();
   @Input() brgyDetails: any;
   selectedItem: FormControl = new FormControl(0, [Validators.required]);
   selections = SELECTIONS;
-  @Output() selectionEmitter = new EventEmitter<any>();
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public dialogRef: MatDialogRef<ActionMenuComponent>,
-    private router: Router,
-    private route: ActivatedRoute
+    public dialogRef: MatDialogRef<ActionMenuComponent>
   ) {}
 
   ngOnInit(): void {
@@ -35,7 +32,7 @@ export class ActionMenuComponent implements OnInit {
     console.log(this.brgyDetails);
   }
 
-  onSelectAccessLevel(val: any) {
+  onSelectItem(val: any) {
     this.selectedItem.setValue(val);
     this.selectedItem.markAsDirty();
     let isDirty = this.selectedItem.dirty;
@@ -46,35 +43,5 @@ export class ActionMenuComponent implements OnInit {
       isDirty: isDirty,
       value: val,
     });
-  }
-
-  redirectTo(route: any) {
-    let type = this.router.url.split('/');
-    let userType =
-      this.data && this.data.userType ? this.data.userType : undefined;
-    let brgyId =
-      this.data && this.data.brgyDtls && this.data.brgyDtls.brgyCode
-        ? this.data.brgyDtls.brgyCode
-        : undefined;
-    switch (route) {
-      case 0:
-        this.router.navigate([
-          `/${type[1]}/account-creation/users`,
-          { brgyId, userType },
-        ]);
-        this.dialogRef.close();
-        break;
-
-      case 1:
-        this.router.navigate([
-          `/${type[1]}/account-creation/access-roles`,
-          { brgyId, userType },
-        ]);
-        this.dialogRef.close();
-        break;
-
-      default:
-        break;
-    }
   }
 }

@@ -31,4 +31,16 @@ export class UpsertAccountsComponent implements OnInit {
     this.hasSelected = event.isDirty;
     this.referenceValue = event.value;
   }
+
+  backBtnLogic() {
+    let temp: any = this.data.header;
+    if (temp === 'iCertify Admin' && this.data.step === 2)
+      this.dialogRef.close();
+    else if (temp === 'Barangay Hall' && this.data.step === 1)
+      this.dialogRef.close();
+    else if (temp === 'Notary') this.dialogRef.close();
+    else if (temp === 'QC Legal Department' && this.data.step === 3)
+      this.dialogRef.close();
+    else this.data.step = this.data.step - 1;
+  }
 }

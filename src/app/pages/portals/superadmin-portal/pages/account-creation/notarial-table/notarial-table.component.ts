@@ -1,17 +1,18 @@
-import { ApiService } from './../../../../../../service/api/api.service';
-import { UpsertNotarialCommissionComponent } from './upsert-notarial-commission/upsert-notarial-commission.component';
-import { NOTARIAL, NOTARIAL_BOTTOMSHEET } from './config';
+import { AccessRoleTableComponent } from './../access-role-table/access-role-table.component';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ApiService } from 'src/app/service/api/api.service';
 import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
-import { Router } from '@angular/router';
+import { UsersTableComponent } from '../users-table/users-table.component';
+import { NOTARIAL, NOTARIAL_BOTTOMSHEET } from './notarial-table.config';
+import { UpsertNotarialCommissionComponent } from './upsert-notarial-commission/upsert-notarial-commission.component';
 
 @Component({
-  selector: 'app-notarial',
-  templateUrl: './notarial.component.html',
-  styleUrls: ['./notarial.component.scss'],
+  selector: 'app-notarial-table',
+  templateUrl: './notarial-table.component.html',
+  styleUrls: ['./notarial-table.component.scss'],
 })
-export class NotarialComponent implements OnInit {
+export class NotarialTableComponent implements OnInit {
   column = NOTARIAL;
   dataSource = [];
   bottomSheet = NOTARIAL_BOTTOMSHEET;
@@ -20,15 +21,13 @@ export class NotarialComponent implements OnInit {
     pageIndex: 1,
   };
   dataLength: number = 0;
-  constructor(
-    private dialog: MatDialog,
-    private api: ApiService,
-    private route: Router
-  ) {}
+  loading: boolean = false;
+  constructor(private dialog: MatDialog, private api: ApiService) {}
 
   ngOnInit(): void {
     this.fetchNotarial(this.page);
   }
+
   openDialog() {
     this.dialog
       .open(UpsertNotarialCommissionComponent)
@@ -43,6 +42,7 @@ export class NotarialComponent implements OnInit {
         }
       );
   }
+
   fetchNotarial(event?: any) {
     let qry: any = {
       find: [
@@ -64,9 +64,10 @@ export class NotarialComponent implements OnInit {
     if (event && event.filter) {
       qry['filter'] = event.filter;
     }
+    this.loading = true;
     this.api.user.getAllUser(qry).subscribe((res: any) => {
       console.log(res);
-
+      this.loading = false;
       this.dataSource = res.env.users;
       this.dataLength = res.count;
     });
@@ -98,12 +99,31 @@ export class NotarialComponent implements OnInit {
           });
         break;
       case 'users':
-        this.route.navigate([
-          'superadmin-portal/account-creation/users',
-          { _notaryId: event.obj._id, userType: 'Notary' },
-        ]);
+        // this.route.navigate([
+        //   'superadmin-portal/account-creation/users',
+        //   { _notaryId: event.obj._id, userType: 'Notary' },
+        // ]);
+        this.dialog.open(UsersTableComponent, {
+          data: {
+            notary: {
+              notaryId: event.obj._id,
+              userType: 'Notary',
+              brgyInfo: event.obj._barangay,
+            },
+          },
+        });
         break;
-
+      case 'accessroles':
+        this.dialog.open(AccessRoleTableComponent, {
+          data: {
+            notary: {
+              notaryId: event.obj._id,
+              userType: 'Notary',
+              brgyInfo: event.obj._barangay,
+            },
+          },
+        });
+        break;
       default:
         break;
     }

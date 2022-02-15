@@ -1,3 +1,4 @@
+import { UpsertNotarialCommissionComponent } from './notarial-table/upsert-notarial-commission/upsert-notarial-commission.component';
 import { DialogsModule } from './../../../../../shared/dialogs/dialogs.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from './../../../../../shared/material/material.module';
@@ -14,6 +15,7 @@ import { UsersTableComponent } from './users-table/users-table.component';
 import { UserFormComponent } from './users-table/user-form/user-form.component';
 import { AccessRoleTableComponent } from './access-role-table/access-role-table.component';
 import { AccessRoleFormComponent } from './access-role-table/access-role-form/access-role-form.component';
+import { NotarialTableComponent } from './notarial-table/notarial-table.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,8 @@ import { AccessRoleFormComponent } from './access-role-table/access-role-form/ac
     UserFormComponent,
     AccessRoleTableComponent,
     AccessRoleFormComponent,
+    NotarialTableComponent,
+    UpsertNotarialCommissionComponent,
   ],
   imports: [
     CommonModule,

@@ -1,4 +1,4 @@
-import { AUTO_COMPLETE_FIELDS } from './../../../../../../../models/auto-complete.interface';
+import { AUTO_COMPLETE_FIELDS } from '../../../../../../../models/auto-complete.interface';
 import { Section } from 'src/app/models/form.interface';
 
 export const NOTARIAL_FORM: Section[] = [
@@ -14,7 +14,7 @@ export const NOTARIAL_FORM: Section[] = [
         show: true,
         default: '',
         path: 'lastName',
-        appearance: 'outline',
+        appearance: 'standard',
       },
       {
         label: 'First Name',
@@ -24,7 +24,7 @@ export const NOTARIAL_FORM: Section[] = [
         show: true,
         default: '',
         path: 'firstName',
-        appearance: 'outline',
+        appearance: 'standard',
       },
       {
         label: 'Middle Name',
@@ -34,7 +34,7 @@ export const NOTARIAL_FORM: Section[] = [
         show: true,
         default: '',
         path: 'middleName',
-        appearance: 'outline',
+        appearance: 'standard',
       },
       {
         label: 'Suffix',
@@ -46,7 +46,7 @@ export const NOTARIAL_FORM: Section[] = [
         path: 'others.suffix',
         optional: true,
         placeholder: 'Suffix(optional)',
-        appearance: 'outline',
+        appearance: 'standard',
       },
       {
         label: 'Email',
@@ -56,7 +56,7 @@ export const NOTARIAL_FORM: Section[] = [
         show: true,
         default: '',
         path: 'email',
-        appearance: 'outline',
+        appearance: 'standard',
       },
       {
         label: 'Mobile Number',
@@ -67,7 +67,7 @@ export const NOTARIAL_FORM: Section[] = [
         default: '',
         path: 'mobileNumber',
         placeholder: '9123456789',
-        appearance: 'outline',
+        appearance: 'standard',
       },
       {
         label: 'Roll Number',
@@ -77,7 +77,7 @@ export const NOTARIAL_FORM: Section[] = [
         show: true,
         default: '',
         path: 'roll_number',
-        appearance: 'outline',
+        appearance: 'standard',
       },
     ],
   },
@@ -98,7 +98,7 @@ export const HOME_ADDRESS_FIELD: Section[] = [
         path: 'address.address1',
         placeholder: 'Street No./Building',
         optional: true,
-        appearance: 'outline',
+        appearance: 'standard',
       },
       {
         label: 'Address Line 2',
@@ -110,7 +110,7 @@ export const HOME_ADDRESS_FIELD: Section[] = [
         path: 'address.address2',
         placeholder: 'Village/Apartment/Unit/Building/Etc.',
         optional: true,
-        appearance: 'outline',
+        appearance: 'standard',
       },
     ],
   },
@@ -130,7 +130,7 @@ export const OFFICE_ADDRESS_FIELD: Section[] = [
         path: 'office_address.address1',
         placeholder: 'Street No./Building',
         optional: true,
-        appearance: 'outline',
+        appearance: 'standard',
       },
       {
         label: 'Address Line 2',
@@ -142,7 +142,7 @@ export const OFFICE_ADDRESS_FIELD: Section[] = [
         path: 'office_address.address2',
         placeholder: 'Village/Apartment/Unit/Building/Etc.',
         optional: true,
-        appearance: 'outline',
+        appearance: 'standard',
       },
     ],
   },
@@ -160,7 +160,7 @@ export const PERIOD_OF_VALIDITY: Section[] = [
         show: true,
         default: '',
         path: 'period_startDate',
-        appearance: 'outline',
+        appearance: 'standard',
       },
       {
         label: 'End Date',
@@ -170,7 +170,7 @@ export const PERIOD_OF_VALIDITY: Section[] = [
         show: true,
         default: '',
         path: 'period_endDate',
-        appearance: 'outline',
+        appearance: 'standard',
       },
     ],
   },

@@ -16,12 +16,14 @@
     ></app-form>
     <app-auto-complete
       #ibpchapterDetails
+      [appearance]="'standard'"
       [opt]="ibp_chapter"
       [defaultValue]="data ? data.obj['ibp_chapter_region'] : undefined"
       (onSelect)="initializeIbpProv($event, 'ibp_chapter_region')"
     ></app-auto-complete>
     <app-auto-complete
       #ibpprovDetails
+      [appearance]="'standard'"
       [opt]="ibp_provinces"
       (onSelect)="initializeIbpProv($event, 'ibp_chapter_city_prov')"
       [defaultValue]="data ? data.obj['ibp_chapter_city_prov'] : undefined"
@@ -35,7 +37,7 @@
     ></app-form>
     <form #officebrgyDetails [formGroup]="officeBrgyForm" class="grid">
       <ng-container *ngFor="let f of office_brgyFields">
-        <mat-form-field class="col-3" appearance="fill" *ngIf="f.show">
+        <mat-form-field class="col-3" appearance="standard" *ngIf="f.show">
           <mat-label>{{ f.label }}</mat-label>
 
           <mat-select [formControlName]="f.fcname">
@@ -58,7 +60,7 @@
     ></app-form>
     <form #homebrgyDetails [formGroup]="homeBrgyForm" class="grid">
       <ng-container *ngFor="let f of home_brgyFields">
-        <mat-form-field class="col-3" appearance="fill" *ngIf="f.show">
+        <mat-form-field class="col-3" appearance="standard" *ngIf="f.show">
           <mat-label>{{ f.label }}</mat-label>
 
           <mat-select [formControlName]="f.fcname">

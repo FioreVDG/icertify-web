@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, Inject, Input, OnInit } from '@angular/core';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
   BARANGAY_NAVS,
   NOTARY_NAVS,
@@ -42,11 +42,23 @@ export class AccessRoleTableComponent implements OnInit {
   accountType: any;
   brgyId: any;
   notaryId: any;
-  constructor(private api: ApiService, private dialog: MatDialog) {}
+  constructor(
+    private api: ApiService,
+    private dialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
 
   ngOnInit(): void {
     console.log(this.detailBrgy);
+    console.log(this.data);
     this.brgyId = this.detailBrgy?.brgyCode;
+    if (this.data.notary) {
+      console.log('GALING SA DIALOGGGGGGG!!!!!!');
+      this.userType = this.data.notary.userType;
+      this.notaryId = this.data.notary.notaryId;
+      this.detailBrgy = this.data.notary.brgyInfo;
+      this.brgyId = this.data.notary.brgyInfo.brgyCode;
+    }
     this.fetchData(this.page);
   }
 

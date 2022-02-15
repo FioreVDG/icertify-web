@@ -3,7 +3,7 @@
   <div class="grid">
     <div class="col-12">
       <app-select-barangay
-        *ngIf="data.step === 1"
+        *ngIf="data.step === 1 && data.userType === 'Barangay'"
         (selectedEmitter)="selectBrgy($event)"
         [brgys]="data.brgys"
       ></app-select-barangay>
@@ -25,16 +25,17 @@
         [userType]="data.userType"
         *ngIf="data.step === 3 && referenceValue === 'Access Roles'"
       ></app-access-role-table>
+      <app-notarial-table
+        *ngIf="data.userType === 'Notary'"
+      ></app-notarial-table>
     </div>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions align="center">
-  <button mat-flat-button color="warn" (click)="data.step = data.step - 1">
-    Back
-  </button>
+  <button mat-flat-button color="warn" (click)="backBtnLogic()">Back</button>
   <button
     [disabled]="!isFormValid"
-    *ngIf="data.step < 2"
+    *ngIf="data.step < 2 && data.userType === 'Barangay'"
     mat-flat-button
     color="primary"
     (click)="data.step = data.step + 1"

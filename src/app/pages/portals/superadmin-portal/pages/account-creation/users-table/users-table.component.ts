@@ -1,8 +1,9 @@
+import { ActionResultComponent } from './../../../../../../shared/dialogs/action-result/action-result.component';
 import { UtilService } from './../../../../../../service/util/util.service';
 import { QueryParams } from './../../../../../../models/queryparams.interface';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ApiService } from './../../../../../../service/api/api.service';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { USERS, USER_BOTTOMSHEET } from './user-table.config';
 import { UserFormComponent } from './user-form/user-form.component';
 import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
@@ -32,17 +33,26 @@ export class UsersTableComponent implements OnInit {
   constructor(
     private api: ApiService,
     private dialog: MatDialog,
-    private util: UtilService
+    private util: UtilService,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
   ngOnInit(): void {
-    console.log(this.brgyDetail);
     this.brgyId = this.brgyDetail?.brgyCode;
     this.userType = this.header;
+    if (this.data.notary) {
+      console.log(this.data);
+      console.log('GALING SA DIALOGGGGGGG!!!!!!');
+      this.userType = this.data.notary.userType;
+      this.notaryId = this.data.notary.notaryId;
+      this.brgyDetail = this.data.notary.brgyInfo;
+      this.brgyId = this.data.notary.brgyInfo.brgyCode;
+    }
     this.fetchUser(this.page);
     this.getRoles();
     console.log(this.brgyId);
     console.log(this.userType);
+    console.log(this.brgyDetail);
   }
 
   getRoles() {
@@ -57,7 +67,10 @@ export class UsersTableComponent implements OnInit {
       query.find.push({ field: 'type', operator: '=', value: 'Admin' });
 
     if (this.userType === 'Notary')
-      query.find.push({ field: 'type', operator: '=', value: 'Notary' });
+      query.find.push(
+        { field: 'type', operator: '=', value: 'Notary' },
+        { field: '_notaryId', operator: '=', value: this.notaryId }
+      );
 
     console.log(query);
     if (this.userType !== 'QCLegal') {
@@ -66,7 +79,16 @@ export class UsersTableComponent implements OnInit {
         if (res.env.roles.length) {
           this.accessRoles = res.env.roles;
           this.btnDisabled = false;
-        } else this.btnDisabled = true;
+        } else {
+          this.btnDisabled = true;
+          this.dialog.open(ActionResultComponent, {
+            data: {
+              msg: 'NO ACCESS ROLE FOUND! Add access role/s first to be able to add user/s Thank you',
+              success: false,
+              button: 'Okay',
+            },
+          });
+        }
       });
     } else this.btnDisabled = false;
   }
@@ -174,6 +196,12 @@ export class UsersTableComponent implements OnInit {
         field: '_barangay.brgyCode',
         operator: '=',
         value: this.brgyId,
+      });
+    if (this.notaryId !== 'undefined' && this.userType !== 'iCertify')
+      query.find.push({
+        field: '_notaryId',
+        operator: '=',
+        value: this.notaryId,
       });
     if (event && event.filter) {
       query['filter'] = event.filter;

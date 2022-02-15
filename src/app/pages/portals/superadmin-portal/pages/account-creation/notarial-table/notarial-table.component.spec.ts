@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AccessRolesComponent } from './access-roles.component';
+import { NotarialTableComponent } from './notarial-table.component';
 
-describe('AccessRolesComponent', () => {
-  let component: AccessRolesComponent;
-  let fixture: ComponentFixture<AccessRolesComponent>;
+describe('NotarialTableComponent', () => {
+  let component: NotarialTableComponent;
+  let fixture: ComponentFixture<NotarialTableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AccessRolesComponent ]
+      declarations: [ NotarialTableComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AccessRolesComponent);
+    fixture = TestBed.createComponent(NotarialTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
