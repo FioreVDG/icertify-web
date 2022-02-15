@@ -9,19 +9,19 @@ export const COLLECTIONS = [
       },
       {
         label: 'Date Picked from Barangay',
-        path: 'datePickedFromBarangay',
+        path: 'datePickedByRiderFromBrgy',
       },
       {
         label: 'Date Dropped to Notary',
-        path: 'dateDropToNotary',
+        path: 'dateReceivedByNotary',
       },
       {
         label: 'Date Picked from Notary',
-        path: 'datePickedFromNotary',
+        path: 'datePickedByRiderFromNotary',
       },
       {
         label: 'Date Dropped to Barangay',
-        path: 'dateDropToBarangay',
+        path: 'dateReceivedByBrgy',
       },
       {
         label: 'Date Completed by Notary',

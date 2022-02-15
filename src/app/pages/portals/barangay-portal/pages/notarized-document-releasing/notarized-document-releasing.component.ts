@@ -81,17 +81,17 @@ export class NotarizedDocumentReleasingComponent implements OnInit {
     if (event && event.label === 'For Releasing') {
       qry.find = qry.find.concat(FIND_FOR_RELEASING);
       qry.find.push({
-        field: '_brgyId',
+        field: '_barangay.brgyCode',
         operator: '=',
-        value: this.me._brgyId,
+        value: this.me._barangay.brgyCode,
       });
       api = this.api.transaction.getAll(qry);
     } else {
       qry.find = qry.find.concat(FIND_RELEASED);
       qry.find.push({
-        field: '_brgyId',
+        field: '_barangay.brgyCode',
         operator: '=',
-        value: this.me._brgyId,
+        value: this.me._barangay.brgyCode,
       });
       api = this.api.transaction.getAll(qry);
     }

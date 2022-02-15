@@ -39,6 +39,11 @@ export class UtilService {
       config
     );
   }
+
+  getOneRPC(collection: string, config: object) {
+    return this.http.post(REG_PROV_CITYMUN + '/u-getOne/' + collection, config);
+  }
+
   traverseArray(arr: any[], path: string, values: any[] = []): any {
     if (!arr.length) return values.join(', ');
 

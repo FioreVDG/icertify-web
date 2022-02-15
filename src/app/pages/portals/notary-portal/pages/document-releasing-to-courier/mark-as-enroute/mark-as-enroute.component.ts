@@ -4,7 +4,9 @@ import {
   MatDialogRef,
   MatDialog,
 } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
 import { Section } from 'src/app/models/form.interface';
+import { User } from 'src/app/models/user.interface';
 import { CHOICES_RIDER_DATA } from 'src/app/pages/portals/barangay-portal/pages/batch-delivery-management/mark-as-enroute/config';
 import { ApiService } from 'src/app/service/api/api.service';
 import { FormComponent } from 'src/app/shared/components/form/form.component';
@@ -27,16 +29,21 @@ export class MarkAsEnrouteComponent implements OnInit {
   riderList: any = CHOICES_RIDER_DATA;
   riderObj: any;
 
+  me: any;
   toAddData: any = {};
   markAsEnrouteFormFields: Array<Section> = MARK_AS_ENROUTE_FORM;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<MarkAsEnrouteComponent>,
     private api: ApiService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private store: Store<{ user: User }>
   ) {}
 
   ngOnInit(): void {
+    this.store.select('user').subscribe((res: User) => {
+      this.me = res;
+    });
     this.obj = { ...this.data.selected[0] };
     console.log(this.obj);
     console.log(this.data.selected[0]._id);
@@ -62,8 +69,10 @@ export class MarkAsEnrouteComponent implements OnInit {
   submit() {
     let docLogs: any = [];
     let toAdd = {
-      riderNotaryToBarangay: this.riderObj,
-      datePickedFromNotary: new Date(),
+      _riderFromNotary: this.riderObj,
+      _enroutedByNotary: this.me._id,
+      datePickedByRiderFromNotary: new Date(),
+      dateEnroutedByNotary: new Date(),
       locationStatus: 'Enroute to Barangay',
     };
     console.log(toAdd);

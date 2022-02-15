@@ -74,10 +74,10 @@ export class BatchDeliveryManagementComponent implements OnInit {
   }
   getSetting() {
     this.store.select('user').subscribe((me: any) => {
-      this.api.cluster.getOne(me._brgyId).subscribe((res: any) => {
+      this.api.cluster.getOne(me._barangay.brgyCode).subscribe((res: any) => {
         this.setting = res.env.cluster;
         let resp: any = res.env.cluster.barangays.find(
-          (i: any) => i._brgyId === me._brgyId
+          (i: any) => i._barangay.brgyCode === me._barangay.brgyCode
         );
         this.isLimit = resp.maxDoc;
         console.log(this.isLimit);

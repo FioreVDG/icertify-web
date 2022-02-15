@@ -181,7 +181,7 @@ export class UserDialogFormComponent implements OnInit {
         this.data._brgyId !== 'undefined' ? this.data._brgyId : undefined,
       _notaryId:
         this.data._notaryId !== 'undefined' ? this.data._notaryId : undefined,
-      type: this.data.type,
+      type: this.data.type === 'iCertify' ? 'Admin' : this.data.type,
       _role: this.roleDetails.form.value._role,
     };
     toSaveData['address'] = {

@@ -28,7 +28,7 @@ export class VideoConferencingComponent implements OnInit {
     pageIndex: 1,
     populate: [
       {
-        field: '_receivedBy',
+        field: '_receivedByNotary',
         select: 'firstName,lastName',
       },
       {
@@ -43,7 +43,7 @@ export class VideoConferencingComponent implements OnInit {
     label: 'Scheduled',
     populate: [
       {
-        field: '_receivedBy',
+        field: '_receivedByNotary',
         select: 'firstName,lastName',
       },
       {

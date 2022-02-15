@@ -44,10 +44,8 @@ export class UpsertRiderComponent implements OnInit {
 
     if (this.riderFormFields[3].items[0].choices?.length) {
       this.obj = this.data.obj;
-      this.loading = false;
-    } else {
-      this.initCluster();
     }
+    this.loading = false;
   }
 
   formInitialized(e: any) {
