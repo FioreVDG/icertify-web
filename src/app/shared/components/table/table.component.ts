@@ -33,16 +33,16 @@ export class TableComponent implements OnInit {
   @Input() bottomSheet: any;
   @Input() checkBoxDisableField!: any;
   @Input() pagination: any;
-  @Output() onCheckBoxBtnClick: any = new EventEmitter<any>();
-  @Output() onRowClick: any = new EventEmitter<any>();
   @Input() filterButtonConfig: any = [];
   @Input() buttonConfig: any = {};
-  @Output() onUpdateTableEmit: any = new EventEmitter<any>();
   @Input() uniqueCheckbox: any = false;
-  @Output() onCheckBoxSelect = new EventEmitter<any>();
   @Input() loading = false;
   @Input() downloadExcelBtn: string = '';
   @Output() onDownloadExcelBtn = new EventEmitter<any>();
+  @Output() onCheckBoxBtnClick: any = new EventEmitter<any>();
+  @Output() onRowClick: any = new EventEmitter<any>();
+  @Output() onCheckBoxSelect = new EventEmitter<any>();
+  @Output() onUpdateTableEmit: any = new EventEmitter<any>();
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   displayedColumns: Array<string> = [];
   keyword: string = '';
@@ -255,7 +255,7 @@ export class TableComponent implements OnInit {
         });
       }
     });
-
+    this.find = toFind;
     let toEmit: TableOutput = {
       pageIndex: 0,
       pageSize: 10,
@@ -427,7 +427,6 @@ export class TableComponent implements OnInit {
     }
     console.log([...tempFilter]);
     let toFind = [...tempFilter];
-    this.find = toFind;
     this.onTriggerSearch(toFind);
   }
 
