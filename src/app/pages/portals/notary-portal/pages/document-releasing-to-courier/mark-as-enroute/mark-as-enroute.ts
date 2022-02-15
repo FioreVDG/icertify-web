@@ -23,7 +23,7 @@ export const MARK_AS_ENROUTE_FORM: Array<Section> = [
         fcname: 'barangay',
         show: true,
         default: '',
-        path: '_brgyId',
+        path: '_barangay.brgyDesc',
         appearance: 'standard',
         disabled: true,
       },

@@ -9,6 +9,7 @@ export interface User {
   email?: string;
   gender?: string;
   _brgyId?: string;
+  _barangay?: object;
   _role?: any;
   type?: string;
   isMain?: boolean;

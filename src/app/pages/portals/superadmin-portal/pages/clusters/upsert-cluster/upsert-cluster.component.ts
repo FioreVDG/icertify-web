@@ -41,6 +41,7 @@ export class UpsertClusterComponent implements OnInit {
   @ViewChild('riderInput') riderInput!: ElementRef<HTMLInputElement>;
   separatorKeysCodes: number[] = [ENTER, COMMA];
   totalDuration = 0;
+  selectedCluster: any[] = [];
   clusterForm = new FormGroup({
     name: new FormControl(this.data ? this.data.name : '', [
       Validators.required,
@@ -135,10 +136,9 @@ export class UpsertClusterComponent implements OnInit {
   addBarangayForm(def?: any) {
     (this.clusterForm.get('barangays') as FormArray).push(
       new FormGroup({
-        barangay: new FormControl(def ? def.barangay : {}, [
+        _barangay: new FormControl(def ? def._barangay : '', [
           Validators.required,
         ]),
-        _brgyId: new FormControl(def ? def._brgyId : '', [Validators.required]),
         minDoc: new FormControl(def ? def.minDoc : '', [Validators.required]),
         maxDoc: new FormControl(def ? def.maxDoc : '', [Validators.required]),
         duration: new FormControl(def ? def.duration : '', [
@@ -158,21 +158,24 @@ export class UpsertClusterComponent implements OnInit {
   }
 
   selectBarangay(i: number) {
+    let selClusters: any[] = [];
+    if (this.clusterForm.get('barangays')?.value.length) {
+      let selectedBarangays = this.clusterForm.get('barangays')?.value;
+      for (const barangay of selectedBarangays) {
+        selClusters.push(barangay);
+      }
+    }
+
     this.dialog
-      .open(AutocompleteDialogComponent)
+      .open(AutocompleteDialogComponent, { data: { barangays: selClusters } })
       .afterClosed()
       .subscribe((res) => {
         console.log(res);
         if (res) {
           (this.clusterForm.get('barangays') as FormArray)
             .at(i)
-            .get('_brgyId')
-            ?.setValue(res._brgyId);
-
-          (this.clusterForm.get('barangays') as FormArray)
-            .at(i)
-            .get('barangay')
-            ?.setValue(res.address.barangay);
+            .get('_barangay')
+            ?.setValue(res._barangay);
         }
       });
   }
@@ -315,6 +318,11 @@ export class UpsertClusterComponent implements OnInit {
     });
     if (this.data) this.setDefaultValueFormArray();
     console.log(this.notaryCtrl.value);
+
+    // this.clusterForm.valueChanges.subscribe((res: any) => {
+    //   // console.log(res);
+    //   console.log(this.clusterForm.get('barangays')?.value);
+    // });
   }
 
   checkActiveDay() {
