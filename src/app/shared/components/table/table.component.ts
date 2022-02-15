@@ -15,6 +15,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 import { BUTTON } from 'src/app/models/table-button.interface';
 import { MatDialog } from '@angular/material/dialog';
+import { QueryParams } from 'src/app/models/queryparams.interface';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-table',
@@ -39,13 +41,21 @@ export class TableComponent implements OnInit {
   @Input() uniqueCheckbox: any = false;
   @Output() onCheckBoxSelect = new EventEmitter<any>();
   @Input() loading = false;
+  @Input() downloadExcelBtn: string = '';
+  @Output() onDownloadExcelBtn = new EventEmitter<any>();
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   displayedColumns: Array<string> = [];
   keyword: string = '';
   curPageIndex: number = 1;
   duplicateColumns!: Array<Column>;
+  find: any;
+  label: any;
 
-  constructor(public util: UtilService, private _bs: MatBottomSheet) {}
+  constructor(
+    public util: UtilService,
+    private _bs: MatBottomSheet,
+    public snackbar: MatSnackBar
+  ) {}
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
@@ -55,6 +65,7 @@ export class TableComponent implements OnInit {
     if (this.filterButtonConfig) {
       this.filterButtonConfig.forEach((i: any, index: any) => {
         if (index === 0) {
+          this.label = i.label;
           this.checkBox = i.isCheckbox;
           this.columns = i.column;
           this.bottomSheet = i.bottomSheet;
@@ -129,10 +140,12 @@ export class TableComponent implements OnInit {
               ? undefined
               : cond[2] == '1'
               ? 1
+              : cond[2] == '0'
+              ? 0
               : cond[2];
+          console.log(elVal, operand, value);
           switch (operand) {
             case '=':
-              console.log(elVal, value);
               if (elVal == value) {
                 filteredBS.push(bs);
               }
@@ -141,10 +154,22 @@ export class TableComponent implements OnInit {
               if (elVal !== value) {
                 filteredBS.push(bs);
               }
+
               break;
             case '<':
               if (elVal < value) {
                 filteredBS.push(bs);
+              }
+              break;
+            case '>':
+              if (Array.isArray(elVal)) {
+                if (elVal.length > value) {
+                  filteredBS.push(bs);
+                }
+              } else {
+                if (elVal > value) {
+                  filteredBS.push(bs);
+                }
               }
               break;
             default:
@@ -182,6 +207,7 @@ export class TableComponent implements OnInit {
     this.displayedColumns = [];
     this.filterButtonConfig.forEach((i: any) => {
       if (i.label === index) {
+        this.label = i.label;
         this.checkBox = i.isCheckbox;
         this.columns = i.column;
         this.bottomSheet = i.bottomSheet;
@@ -358,6 +384,20 @@ export class TableComponent implements OnInit {
     this.updateBreakpoint();
   }
 
+  checkExistingValue(filt: any) {
+    let chk: any = filt.filter((o: any) => o.value);
+    if (chk.length) return false;
+    else return true;
+  }
+
+  clearValues() {
+    this.columns.forEach((f: any) => {
+      delete f.value;
+    });
+    this.keyword = '';
+    this.onTriggerSearch([]);
+  }
+
   filter() {
     this.dataSource = [];
     let tempFilter: any = [];
@@ -382,20 +422,60 @@ export class TableComponent implements OnInit {
     }
     console.log([...tempFilter]);
     let toFind = [...tempFilter];
+    this.find = toFind;
     this.onTriggerSearch(toFind);
   }
 
-  checkExistingValue(filt: any) {
-    let chk: any = filt.filter((o: any) => o.value);
-    if (chk.length) return false;
-    else return true;
+  triggerRefresh() {
+    this.dataSource = [];
+    var toEmit: TableOutput = {
+      pageIndex: 0,
+      pageSize: 10,
+    };
+    var fields: Array<string> = [];
+    this.duplicateColumns.forEach((c) => {
+      if (c.path) fields.push(c.path);
+    });
+
+    this.pagination['filter'] = {
+      value: this.keyword,
+      fields,
+    };
+
+    this.onTriggerSearch(this.find);
   }
 
-  clearValues() {
-    this.columns.forEach((f: any) => {
-      delete f.value;
-    });
-    this.keyword = '';
-    this.onTriggerSearch([]);
+  downloadExcel() {
+    let query: QueryParams = {
+      find: this.find ? this.find : [],
+      populates: this.pagination.populate ? this.pagination.populate : [],
+    };
+    if (this.keyword) {
+      let fields: any = [];
+      this.duplicateColumns.forEach((c) => {
+        if (
+          c.path &&
+          !['date', 'special', 'count'].includes(c.type) &&
+          c.path !== '_roleId' &&
+          !c.isVirtual
+        )
+          fields.push(c.path);
+        if (c.type === 'special') {
+          c.paths?.forEach((p: any) => {
+            fields.push(p);
+          });
+        }
+      });
+      query['filter'] = {
+        value: this.keyword,
+        fields: fields,
+      };
+    }
+    let toEmit = {
+      label: this.label,
+      query,
+      columns: this.duplicateColumns,
+    };
+    this.onDownloadExcelBtn.emit(toEmit);
   }
 }

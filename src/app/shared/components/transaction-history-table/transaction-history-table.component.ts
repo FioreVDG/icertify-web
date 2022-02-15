@@ -1,3 +1,4 @@
+import { QueryParams } from './../../../models/queryparams.interface';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ApiService } from 'src/app/service/api/api.service';
@@ -7,12 +8,18 @@ import { ViewAttachmentsComponent } from '../view-attachments/view-attachments.c
 import {
   CHECKBOX_DISABLER,
   FILT_BTN_CONFIG,
+  FIND_ALL,
   FIND_NOTARIZED,
   FIND_UNNOTARIZED,
   NOTARY_FILT_BTN_CONFIG,
   NOTARY_FIND_NOTARIZED,
   NOTARY_FIND_UNNOTARIZED,
 } from './transaction-history.config';
+import { Store } from '@ngrx/store';
+import { User } from 'src/app/models/user.interface';
+import { UtilService } from 'src/app/service/util/util.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ExcelService } from 'src/app/service/excel/excel.service';
 
 @Component({
   selector: 'app-transaction-history-table',
@@ -40,7 +47,11 @@ export class TransactionHistoryTableComponent implements OnInit {
   constructor(
     private api: ApiService,
     private dialog: MatDialog,
-    private dbx: DropboxService
+    private dbx: DropboxService,
+    private store: Store<{ user: User }>,
+    public util: UtilService,
+    public snackbar: MatSnackBar,
+    private excel: ExcelService
   ) {}
 
   ngOnInit(): void {
@@ -48,6 +59,17 @@ export class TransactionHistoryTableComponent implements OnInit {
     if (this.header == 'NOTARY') {
       this.filtBtnConfig = NOTARY_FILT_BTN_CONFIG;
     } else {
+      this.store.select('user').subscribe((me: any) => {
+        console.log(me);
+        this.me = me;
+        // this.util
+        //   .getRPC('barangay', {
+        //     query: { brgyCode: me._brgyId },
+        //   })
+        //   .subscribe((barangay: any) => {
+        //     console.log(barangay.data[0].brgyDesc);
+        //   });
+      });
       this.filtBtnConfig = FILT_BTN_CONFIG;
     }
   }
@@ -56,7 +78,7 @@ export class TransactionHistoryTableComponent implements OnInit {
     this.loading = true;
     console.log(event);
 
-    let qry = {
+    let qry: QueryParams = {
       find: event.find ? event.find : [],
       page: event.pageIndex || 1,
       limit: (event.pageSize || 10) + '',
@@ -67,23 +89,30 @@ export class TransactionHistoryTableComponent implements OnInit {
 
     let api: any;
     if (this.header == 'NOTARY') {
-      if (event && event.label === 'Notarized') {
+      if (event.label === 'Notarized') {
         qry.find = qry.find.concat(NOTARY_FIND_NOTARIZED);
         api = this.api.document.getAll(qry);
-      } else if (event && event.label === 'Unnotarized') {
+      } else if (event.label === 'Unnotarized') {
         qry.find = qry.find.concat(NOTARY_FIND_UNNOTARIZED);
         api = this.api.document.getAll(qry);
       } else {
+        qry.find = qry.find.concat(FIND_ALL);
         api = this.api.document.getAll(qry);
       }
     } else {
-      if (event && event.label === 'Notarized') {
+      if (event.label === 'Notarized') {
         qry.find = qry.find.concat(FIND_NOTARIZED);
+        qry.find.push({
+          field: '_brgyId',
+          operator: '=',
+          value: this.me._brgyId,
+        });
         api = this.api.document.getAll(qry);
-      } else if (event && event.label === 'Unnotarized') {
+      } else if (event.label === 'Unnotarized') {
         qry.find = qry.find.concat(FIND_UNNOTARIZED);
         api = this.api.document.getAll(qry);
       } else {
+        qry.find = qry.find.concat(FIND_ALL);
         api = this.api.document.getAll(qry);
       }
     }
@@ -239,7 +268,9 @@ export class TransactionHistoryTableComponent implements OnInit {
       ySpacing
     );
     doc.text(
-      data.sender.firstName + ' ' + data.sender.lastName,
+      new Date(data.dateNotarized).toDateString() +
+        ' - ' +
+        new Date(data.dateNotarized).toLocaleTimeString('en-US'),
       borderWidth - 3.6,
       ySpacing
     );
@@ -261,6 +292,86 @@ export class TransactionHistoryTableComponent implements OnInit {
 
     doc.save(
       data.sender.lastName + ' ' + data.documentType.toUpperCase() + '.pdf'
+    );
+  }
+
+  onDownloadExcelBtn(event: any) {
+    console.log(event);
+    var sb = this.snackbar.open('Exporting File. Please wait...', '', {
+      verticalPosition: 'bottom',
+    });
+    let api: any;
+    if (this.header == 'NOTARY') {
+      if (event.label === 'Notarized') {
+        event.query.find = event.query.find.concat(NOTARY_FIND_NOTARIZED);
+        api = this.api.document.getAll(event.query);
+      } else if (event.label === 'Unnotarized') {
+        event.query.find = event.query.find.concat(NOTARY_FIND_UNNOTARIZED);
+        api = this.api.document.getAll(event.query);
+      } else {
+        event.query.find = event.query.find.concat(FIND_ALL);
+        api = this.api.document.getAll(event.query);
+      }
+    } else {
+      if (event.label === 'Notarized') {
+        event.query.find = event.query.find.concat(FIND_NOTARIZED);
+        event.query.find.push({
+          field: '_brgyId',
+          operator: '=',
+          value: this.me._brgyId,
+        });
+        api = this.api.document.getAll(event.query);
+      } else if (event.label === 'Unnotarized') {
+        event.query.find = event.query.find.concat(FIND_UNNOTARIZED);
+        api = this.api.document.getAll(event.query);
+      } else {
+        event.query.find = event.query.find.concat(FIND_ALL);
+        api = this.api.document.getAll(event.query);
+      }
+    }
+    api.subscribe(
+      (res: any) => {
+        console.log(res);
+        var json: any = [];
+        res.env.documents.forEach((doc: any) => {
+          var exlObj: any = {};
+          event.columns.forEach((col: any) => {
+            if (col.type == 'text') {
+              exlObj[col.title] = this.util.deepFind(doc, col.path);
+            }
+            if (col.type == 'special') {
+              let spArray = [];
+              for (let c of col.paths) {
+                spArray.push(this.util.deepFind(doc, c));
+              }
+              console.log(spArray);
+              exlObj[col.title] = spArray.join(' ');
+            }
+            if (col.type == 'date') {
+              exlObj[col.title] =
+                new Date(this.util.deepFind(doc, col.path)).toDateString() +
+                ' - ' +
+                new Date(this.util.deepFind(doc, col.path)).toLocaleTimeString(
+                  'en-US'
+                );
+            }
+          });
+          json.push(exlObj);
+        });
+        this.excel.exportAsExcelFile(json, new Date().toDateString());
+        sb.dismiss();
+      },
+      (err: any) => {
+        sb.dismiss();
+        this.snackbar.open(
+          'Something went wrong before downloading. Please try again later',
+          'Okay',
+          {
+            verticalPosition: 'bottom',
+            duration: 4000,
+          }
+        );
+      }
     );
   }
 }
