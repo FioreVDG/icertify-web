@@ -1,27 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Column } from 'src/app/models/column.interface';
-import { QueryParams } from 'src/app/models/queryparams.interface';
-import { ROLE } from 'src/app/models/role.interface';
-import { TableOutput } from 'src/app/models/tableemit.interface';
-import { ApiService } from 'src/app/service/api/api.service';
-import { UtilService } from 'src/app/service/util/util.service';
-import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
-import { AccessRoleDialogFormComponent } from './access-role-dialog-form/access-role-dialog-form.component';
-import { ROLE_BOTTOMSHEET, ROLE_POPULATES, ROLE_TABLE } from './configs';
 import {
   BARANGAY_NAVS,
   NOTARY_NAVS,
   SUPERADMIN_NAVS,
 } from 'src/app/config/NAVIGATION';
+import { Column } from 'src/app/models/column.interface';
+import { QueryParams } from 'src/app/models/queryparams.interface';
+import { ROLE } from 'src/app/models/role.interface';
+import { ApiService } from 'src/app/service/api/api.service';
+import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
+import { AccessRoleFormComponent } from './access-role-form/access-role-form.component';
+import {
+  ROLE_BOTTOMSHEET,
+  ROLE_POPULATES,
+  ROLE_TABLE,
+} from './access-role.config';
 
 @Component({
-  selector: 'app-access-roles',
-  templateUrl: './access-roles.component.html',
-  styleUrls: ['./access-roles.component.scss'],
+  selector: 'app-access-role-table',
+  templateUrl: './access-role-table.component.html',
+  styleUrls: ['./access-role-table.component.scss'],
 })
-export class AccessRolesComponent implements OnInit {
+export class AccessRoleTableComponent implements OnInit {
+  @Input() detailBrgy: any;
+  @Input() userType: any;
   columns: Column[] = ROLE_TABLE;
   populate = ROLE_POPULATES;
   bsConfig = ROLE_BOTTOMSHEET;
@@ -37,26 +40,17 @@ export class AccessRolesComponent implements OnInit {
 
   addBtnAccess: Boolean = true;
   accountType: any;
-  _brgyId: any;
-  _notaryId: any;
-  constructor(
-    private util: UtilService,
-    private router: Router,
-    private api: ApiService,
-    private dialog: MatDialog,
-    private route: ActivatedRoute
-  ) {}
+  brgyId: any;
+  notaryId: any;
+  constructor(private api: ApiService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this._brgyId = this.route.snapshot.paramMap.get('brgyId');
-    this._notaryId = this.route.snapshot.paramMap.get('_notaryId');
-    this.accountType = this.route.snapshot.paramMap.get('userType');
-    // const currRoute = this.router.url.split('/').pop();
-
+    console.log(this.detailBrgy);
+    this.brgyId = this.detailBrgy?.brgyCode;
     this.fetchData(this.page);
   }
 
-  fetchData(event: TableOutput) {
+  fetchData(event: any) {
     this.loading = true;
     this.dataSource = [];
     this.page.pageIndex = event.pageIndex;
@@ -67,21 +61,24 @@ export class AccessRolesComponent implements OnInit {
       page: event.pageIndex,
       limit: event.pageSize + '',
     };
-
-    if (this.accountType) {
+    if (this.userType) {
       query.find.push({
         field: 'type',
         operator: '=',
-        value: this.accountType === 'iCertify' ? 'Admin' : this.accountType,
+        value: this.userType === 'iCertify' ? 'Admin' : this.userType,
       });
     }
-    if (this._brgyId && this._brgyId !== 'undefined')
-      query.find.push({ field: '_brgyId', operator: '=', value: this._brgyId });
-    if (this._notaryId && this._notaryId !== 'undefined')
+    if (this.brgyId !== 'undefined' && this.userType !== 'iCertify')
+      query.find.push({
+        field: '_barangay.brgyCode',
+        operator: '=',
+        value: this.brgyId,
+      });
+    if (this.notaryId !== 'undefined' && this.userType !== 'iCertify')
       query.find.push({
         field: '_notaryId',
         operator: '=',
-        value: this._notaryId,
+        value: this.notaryId,
       });
     if (event.sort) {
       query.sort =
@@ -102,38 +99,6 @@ export class AccessRolesComponent implements OnInit {
       this.dataLength = res.total;
       this.loading = false;
     });
-  }
-
-  onAdd() {
-    let sendData = {
-      type: 'role',
-      action: 'add',
-      form: '',
-      _brgyId: this._brgyId,
-      _notaryId: this._notaryId,
-      accountType: this.accountType,
-      navType:
-        this.accountType == 'iCertify'
-          ? SUPERADMIN_NAVS
-          : this.accountType == 'Barangay'
-          ? BARANGAY_NAVS
-          : NOTARY_NAVS,
-    };
-    this.saving = true;
-    this.dialog
-      .open(AccessRoleDialogFormComponent, {
-        disableClose: true,
-        // width: 'auto',
-        panelClass: 'dialog-large',
-        data: sendData,
-      })
-      .afterClosed()
-      .subscribe((res: string) => {
-        if (res) {
-          this.fetchData(this.page);
-          this.saving = false;
-        }
-      });
   }
 
   onRowClick(event: any) {
@@ -168,10 +133,9 @@ export class AccessRolesComponent implements OnInit {
         };
         this.saving = true;
         this.dialog
-          .open(AccessRoleDialogFormComponent, {
+          .open(AccessRoleFormComponent, {
             disableClose: true,
-            // width: 'auto',
-            panelClass: 'dialog-large',
+            width: '55vw',
             data: sendData,
           })
           .afterClosed()
@@ -187,5 +151,36 @@ export class AccessRolesComponent implements OnInit {
       default:
         break;
     }
+  }
+
+  onAdd() {
+    let sendData = {
+      type: 'role',
+      action: 'add',
+      form: '',
+      brgyDetails: this.detailBrgy,
+      _notaryId: this.notaryId,
+      accountType: this.userType,
+      navType:
+        this.userType == 'iCertify'
+          ? SUPERADMIN_NAVS
+          : this.userType == 'Barangay'
+          ? BARANGAY_NAVS
+          : NOTARY_NAVS,
+    };
+    this.saving = true;
+    this.dialog
+      .open(AccessRoleFormComponent, {
+        disableClose: true,
+        width: '55vw',
+        data: sendData,
+      })
+      .afterClosed()
+      .subscribe((res: string) => {
+        if (res) {
+          this.fetchData(this.page);
+          this.saving = false;
+        }
+      });
   }
 }

@@ -39,6 +39,8 @@ export class UsersComponent implements OnInit {
     this._brgyId = this.route.snapshot.paramMap.get('brgyId');
     this._notaryId = this.route.snapshot.paramMap.get('_notaryId');
     this.userType = this.route.snapshot.paramMap.get('userType');
+    console.log(this._notaryId);
+    console.log(this._brgyId);
     this.fetchUser(this.page);
   }
 

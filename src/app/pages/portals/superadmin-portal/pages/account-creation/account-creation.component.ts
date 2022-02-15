@@ -1,3 +1,4 @@
+import { UpsertAccountsComponent } from './upsert-accounts/upsert-accounts.component';
 import { ApiService } from './../../../../../service/api/api.service';
 import { UtilService } from 'src/app/service/util/util.service';
 import { SelectBarangayComponent } from './select-barangay/select-barangay.component';
@@ -47,7 +48,48 @@ export class AccountCreationComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  _openMenu(action: string) {
+    console.log(action);
+    let step = 0;
+    let userType: string = '';
+    let header: string = '';
+    switch (action) {
+      case 'barangay':
+        step = 1;
+        userType = 'Barangay';
+        header = 'Barangay Hall';
+        break;
+      case 'icertify':
+        step = 2;
+        userType = 'iCertify';
+        header = 'iCertify Admin';
+        break;
+      case 'notary':
+        step = 2;
+        userType = 'Notary';
+        header = 'Notary';
+        break;
+      case 'qclegal':
+        step = 3;
+        userType = 'QCLegal';
+        header = 'QC Legal Department';
+        break;
+    }
+    this.dialog.open(UpsertAccountsComponent, {
+      data: {
+        step: step,
+        brgys: this.brgys,
+        userType: userType,
+        header: header,
+      },
+      minWidth: '50vw',
+      minHeight: 'auto',
+    });
+  }
+
   openMenu(action: string) {
+    console.log(action);
     switch (action) {
       case 'barangay':
         this.dialog

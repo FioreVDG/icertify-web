@@ -1,5 +1,5 @@
 <div class="grid">
-  <div class="col" align="center">
+  <!-- <div class="col" align="center">
     <div align="center" class="box" (click)="redirectTo(0)">
       <div style="margin-top: 2rem">
         <mat-icon inline="true">people</mat-icon>
@@ -22,5 +22,11 @@
       </div>
       <p style="margin: 0">Back</p>
     </div>
-  </div>
+  </div> -->
+  <ng-container *ngFor="let selection of selections; let i = index">
+    <div class="col-6" (click)="onSelectAccessLevel(selection.label)">
+      <h3>{{ selection.label }}</h3>
+      <mat-icon>{{ selection.icon }}</mat-icon>
+    </div>
+  </ng-container>
 </div>

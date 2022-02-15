@@ -1,0 +1,53 @@
+<h3 mat-dialog-title>Create an account for {{ data.header }}</h3>
+<mat-dialog-content>
+  <div class="grid">
+    <div class="col-12">
+      <app-select-barangay
+        *ngIf="data.step === 1"
+        (selectedEmitter)="selectBrgy($event)"
+        [brgys]="data.brgys"
+      ></app-select-barangay>
+      <app-action-menu
+        *ngIf="data.step === 2"
+        [brgyDetails]="brgyDetails"
+        (selectionEmitter)="selectVal($event)"
+      ></app-action-menu>
+      <app-users-table
+        [brgyDetail]="brgyDetails"
+        [header]="data.userType"
+        *ngIf="
+          data.step === 3 &&
+          (referenceValue === 'Users' || data.userType === 'QCLegal')
+        "
+      ></app-users-table>
+      <app-access-role-table
+        [detailBrgy]="brgyDetails"
+        [userType]="data.userType"
+        *ngIf="data.step === 3 && referenceValue === 'Access Roles'"
+      ></app-access-role-table>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+  <button mat-flat-button color="warn" (click)="data.step = data.step - 1">
+    Back
+  </button>
+  <button
+    [disabled]="!isFormValid"
+    *ngIf="data.step < 2"
+    mat-flat-button
+    color="primary"
+    (click)="data.step = data.step + 1"
+  >
+    Next
+  </button>
+  <button
+    [disabled]="!hasSelected"
+    *ngIf="data.step === 2"
+    mat-flat-button
+    color="primary"
+    (click)="data.step = data.step + 1"
+  >
+    Select
+  </button>
+</mat-dialog-actions>

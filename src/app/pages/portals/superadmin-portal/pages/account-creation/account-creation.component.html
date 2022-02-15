@@ -7,7 +7,7 @@
         *ngFor="let m of menu"
         style="width: 24%"
       >
-        <div class="box" (click)="openMenu(m.action)">
+        <div class="box" (click)="_openMenu(m.action)">
           <div align="center">
             <mat-icon
               color="primary"

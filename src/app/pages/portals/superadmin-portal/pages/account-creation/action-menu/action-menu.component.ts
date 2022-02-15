@@ -1,6 +1,15 @@
+import { SELECTIONS } from './selection.config';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Component, Inject, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-action-menu',
@@ -8,6 +17,10 @@ import { Component, Inject, OnInit } from '@angular/core';
   styleUrls: ['./action-menu.component.scss'],
 })
 export class ActionMenuComponent implements OnInit {
+  @Input() brgyDetails: any;
+  selectedItem: FormControl = new FormControl(0, [Validators.required]);
+  selections = SELECTIONS;
+  @Output() selectionEmitter = new EventEmitter<any>();
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<ActionMenuComponent>,
@@ -19,7 +32,22 @@ export class ActionMenuComponent implements OnInit {
     console.log(
       this.data && this.data.userType ? this.data.userType : undefined
     );
+    console.log(this.brgyDetails);
   }
+
+  onSelectAccessLevel(val: any) {
+    this.selectedItem.setValue(val);
+    this.selectedItem.markAsDirty();
+    let isDirty = this.selectedItem.dirty;
+    let isValid = this.selectedItem.valid;
+    console.log(val);
+    this.selectionEmitter.emit({
+      isValid: isValid,
+      isDirty: isDirty,
+      value: val,
+    });
+  }
+
   redirectTo(route: any) {
     let type = this.router.url.split('/');
     let userType =
