@@ -10,7 +10,7 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
       isCheckbox: true,
       populate: [
         {
-          field: '_receivedBy',
+          field: '_notaryId',
           select: 'firstName,lastName,middleName',
         },
       ],
@@ -33,8 +33,8 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
         {
           title: 'Notary',
           breakpoint: 'sm',
-          path: '_receivedBy',
-          paths: ['_receivedBy.lastName', '_receivedBy.firstName'],
+          path: '_notaryId',
+          paths: ['_notaryId.lastName', '_notaryId.firstName'],
           type: 'special',
           selected: true,
         },
@@ -83,11 +83,11 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
       selected: false,
       populate: [
         {
-          field: '_receivedBy',
+          field: '_notaryId',
           select: 'firstName,lastName,middleName',
         },
         {
-          field: '_enrouteBy',
+          field: '_enroutedByNotary',
           select: 'firstName,lastName,middleName',
         },
       ],
@@ -110,23 +110,23 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
         {
           title: 'Notary',
           breakpoint: 'sm',
-          path: '_receivedBy',
-          paths: ['_receivedBy.lastName', '_receivedBy.firstName'],
+          path: '_notaryId',
+          paths: ['_notaryId.lastName', '_notaryId.firstName'],
           type: 'special',
           selected: true,
         },
         {
           title: 'Marked as Enroute by',
           breakpoint: 'sm',
-          path: '_enrouteBy',
-          paths: ['_enrouteBy.lastName', '_enrouteBy.firstName'],
+          path: '_enroutedByNotary',
+          paths: ['_enroutedByNotary.lastName', '_enroutedByNotary.firstName'],
           type: 'special',
           selected: true,
         },
         {
           title: 'Date and Time Picked Up',
           breakpoint: 'sm',
-          path: 'datePickedFromNotary',
+          path: 'datePickedByRiderFromNotary',
           type: 'date',
           selected: true,
         },
@@ -145,11 +145,11 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
       selected: false,
       populate: [
         {
-          field: '_receivedBy',
+          field: '_notaryId',
           select: 'firstName,lastName,middleName',
         },
         {
-          field: '_brgyReceivedBy',
+          field: '_receivedByBrgy',
           select: 'firstName,lastName,middleName',
         },
       ],
@@ -172,26 +172,23 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
         {
           title: 'Notary',
           breakpoint: 'sm',
-          path: '_receivedBy',
-          paths: ['_receivedBy.lastName', '_receivedBy.firstName'],
+          path: '_notaryId',
+          paths: ['_notaryId.lastName', '_notaryId.firstName'],
           type: 'special',
           selected: true,
         },
         {
           title: 'Received By',
           breakpoint: 'sm',
-          path: '_enrouteBy',
-          paths: [
-            '_receivedByBarangay.lastName',
-            '_receivedByBarangay.firstName',
-          ],
+          path: '_receivedByBrgy',
+          paths: ['_receivedByBrgy.lastName', '_receivedByBrgy.firstName'],
           type: 'special',
           selected: true,
         },
         {
           title: 'Date and Time Delivered',
           breakpoint: 'sm',
-          path: 'dateDropToBarangay',
+          path: 'dateReceivedByBrgy',
           type: 'date',
           selected: true,
         },

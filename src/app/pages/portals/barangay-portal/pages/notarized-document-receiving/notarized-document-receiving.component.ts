@@ -149,10 +149,10 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
           let apiQueries = ids.map((id: any) => {
             return this.api.folder.update(
               {
-                _brgyReceivedBy: this.me._id,
+                _receivedByBrgy: this.me._id,
                 location: 'Barangay',
                 locationStatus: 'Received by Barangay',
-                dateDropToBarangay: new Date(),
+                dateReceivedByBrgy: new Date(),
               },
               id
             );

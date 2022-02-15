@@ -46,6 +46,9 @@ export class DocumentReleasingToCourierComponent implements OnInit {
       {
         field: '_receivedBy',
       },
+      {
+        field: '_notaryId',
+      },
     ],
     label: 'For Pickup',
   };

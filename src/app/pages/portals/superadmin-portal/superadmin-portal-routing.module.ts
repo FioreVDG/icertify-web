@@ -32,6 +32,11 @@ const routes: Routes = [
             (m) => m.ClustersModule
           ),
       },
+      {
+        path: 'riders',
+        loadChildren: () =>
+          import('./pages/rider/rider.module').then((m) => m.RiderModule),
+      },
     ],
   },
 ];

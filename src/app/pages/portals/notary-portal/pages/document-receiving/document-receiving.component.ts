@@ -41,7 +41,10 @@ export class DocumentReceivingComponent implements OnInit {
         field: '_batchedBy',
       },
       {
-        field: '_receivedBy',
+        field: '_receivedByNotary',
+      },
+      {
+        field: '_notaryId',
       },
     ],
   };
@@ -178,12 +181,12 @@ export class DocumentReceivingComponent implements OnInit {
           let apiQueries = ids.map((id: any) => {
             return this.api.folder.update(
               {
-                _receivedBy: this.me._id,
+                dateReceivedByNotary: new Date(),
+                _receivedByNotary: this.me._id,
                 _notaryId: this.me._notaryId,
                 location: 'Notary',
                 locationStatus: 'Received by Notary',
                 folderStatus: 'For Scheduling',
-                dateDropToNotary: new Date(),
               },
               id
             );

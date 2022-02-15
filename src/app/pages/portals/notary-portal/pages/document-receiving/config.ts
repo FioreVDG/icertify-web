@@ -41,7 +41,7 @@ export const NOTARY_DOC_RECEIVING_FILT_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
       {
         title: 'Date and Time Picked up',
         breakpoint: 'sm',
-        path: 'datePickedFromBarangay',
+        path: 'datePickedByRiderFromBrgy',
         type: 'date',
         selected: true,
       },
@@ -67,7 +67,7 @@ export const NOTARY_DOC_RECEIVING_FILT_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     isCheckbox: false,
     populate: [
       {
-        field: '_receivedBy',
+        field: '_receivedByNotary',
         select: 'firstName,lastName,middleName',
       },
     ],
@@ -90,15 +90,15 @@ export const NOTARY_DOC_RECEIVING_FILT_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
       {
         title: 'Received By',
         breakpoint: 'sm',
-        path: '_receivedBy',
-        paths: ['_receivedBy.lastName', '_receivedBy.firstName'],
+        path: '_receivedByNotary',
+        paths: ['_receivedByNotary.lastName', '_receivedByNotary.firstName'],
         type: 'special',
         selected: true,
       },
       {
-        title: 'Date and Time Picked up',
+        title: 'Date and Time Received',
         breakpoint: 'sm',
-        path: 'datePickedFromBarangay',
+        path: 'dateReceivedByNotary',
         type: 'date',
         selected: true,
       },

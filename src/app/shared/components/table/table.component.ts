@@ -50,6 +50,7 @@ export class TableComponent implements OnInit {
   duplicateColumns!: Array<Column>;
   find: any;
   label: any;
+  hasFilter: boolean = false;
 
   constructor(
     public util: UtilService,
@@ -72,6 +73,10 @@ export class TableComponent implements OnInit {
           this.buttonConfig.checkBoxBtnConfig = i.checkBoxBtns;
           i.selected = true;
           this.onUpdateTableEmit.emit(i);
+          let findFilterExist = i.column.find(
+            (col: any) => col.useAsFilter === true
+          );
+          if (findFilterExist) this.hasFilter = true;
         } else {
           i.selected = false;
         }

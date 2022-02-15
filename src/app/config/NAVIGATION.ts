@@ -132,4 +132,10 @@ export const SUPERADMIN_NAVS: NavNode[] = [
     route: 'clusters',
     hasAccess: false,
   },
+  {
+    label: 'Riders',
+    icon: 'moped',
+    route: 'riders',
+    hasAccess: false,
+  },
 ];

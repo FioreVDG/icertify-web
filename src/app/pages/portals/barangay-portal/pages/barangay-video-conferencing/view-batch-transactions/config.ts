@@ -27,7 +27,7 @@ export const BATCH_TRANSACTION_TABLE: Column[] = [
   {
     title: 'Date and Time Picked up',
     breakpoint: 'sm',
-    path: '_folderId.datePickedFromBarangay',
+    path: '_folderId.datePickedByRiderFromBrgy',
     type: 'date',
     selected: true,
   },
