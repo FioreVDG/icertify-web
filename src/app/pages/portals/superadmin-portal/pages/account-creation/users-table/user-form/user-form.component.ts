@@ -25,7 +25,9 @@ export class UserFormComponent implements OnInit {
   @ViewChild('userDetails') userDetails!: FormComponent;
   @ViewChild('roleDetails') roleDetails!: FormComponent;
 
-  dialogTitle: string = 'USER FORM';
+  dialogTitle: string = `${
+    this.data && this.data.obj ? 'Update User' : 'Add User'
+  }`;
   userFormFields: Section[] = USER_FORM;
   roleFormFields: Section[] = ROLE_ACCESS;
   regions = [];

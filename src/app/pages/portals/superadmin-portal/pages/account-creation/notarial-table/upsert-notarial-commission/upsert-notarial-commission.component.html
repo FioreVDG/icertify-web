@@ -40,7 +40,7 @@
         <mat-form-field class="col-3" appearance="standard" *ngIf="f.show">
           <mat-label>{{ f.label }}</mat-label>
 
-          <mat-select [formControlName]="f.fcname">
+          <mat-select [formControlName]="f.fcname" [compareWith]="compareFn">
             <mat-option *ngFor="let o of f.choices" [value]="o">{{
               util.deepFind(o, f.choiceLabel)
             }}</mat-option>
@@ -63,7 +63,7 @@
         <mat-form-field class="col-3" appearance="standard" *ngIf="f.show">
           <mat-label>{{ f.label }}</mat-label>
 
-          <mat-select [formControlName]="f.fcname">
+          <mat-select [formControlName]="f.fcname" [compareWith]="compareFn">
             <mat-option *ngFor="let o of f.choices" [value]="o">{{
               util.deepFind(o, f.choiceLabel)
             }}</mat-option>
