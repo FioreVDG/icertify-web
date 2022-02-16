@@ -127,14 +127,14 @@ export class UpsertNotarialCommissionComponent implements OnInit {
       if (field.required) {
         required.push(Validators.required);
       }
-      temp_home[field.fcname] = new FormControl(required);
+      temp_home[field.fcname] = new FormControl('', required);
     });
     this.office_brgyFields.forEach((field: any) => {
       let required = [];
       if (field.required) {
         required.push(Validators.required);
       }
-      temp_brgy[field.fcname] = new FormControl(required);
+      temp_brgy[field.fcname] = new FormControl('', required);
     });
 
     this.homeBrgyForm = this.fb.group(temp_home);
@@ -227,9 +227,7 @@ export class UpsertNotarialCommissionComponent implements OnInit {
       });
     }
   }
-  formInitialized() {
-    console.log('Initialized');
-  }
+  formInitialized() {}
   formListener(event: any) {}
   initializeAvailableData() {
     this.ibp.controls['ibp_chapter_region'].setValue(

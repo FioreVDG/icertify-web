@@ -98,6 +98,7 @@ export class UsersTableComponent implements OnInit {
       .open(UserFormComponent, {
         panelClass: 'custom-dialog-container',
         data: {
+          initial: this.dataSource.length <= 0 ? true : false,
           _notaryId: this.notaryId,
           type: this.userType === 'iCertify' ? 'Admin' : this.userType,
           brgyDetail: this.brgyDetail,

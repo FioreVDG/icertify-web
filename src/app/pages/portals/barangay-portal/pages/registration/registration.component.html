@@ -6,27 +6,28 @@
     Enter <b>Mobile Number</b> to verify and to proceed. An <b>OTP</b> will be
     sent to this mobile number.
   </p>
-
-  <mat-form-field appearance="standard"
-    ><span matPrefix>+63&nbsp;</span>
-    <mat-icon matSuffix>phone_iphone</mat-icon>
-    <mat-label>Mobile Number</mat-label>
-    <input
-      type="text"
-      matInput
-      [(ngModel)]="mobileNumber"
-      maxlength="10"
-      minlength="10"
-      placeholder="9201234567"
-      (keypress)="numberInputOnly($event)"
-    />
-  </mat-form-field>
-
+  <form [formGroup]="mobile">
+    <mat-form-field appearance="standard"
+      ><span matPrefix>+63&nbsp;</span>
+      <mat-icon matSuffix>phone_iphone</mat-icon>
+      <mat-label>Mobile Number</mat-label>
+      <input
+        #noDtls
+        type="text"
+        matInput
+        formControlName="number"
+        maxlength="10"
+        minlength="10"
+        placeholder="9201234567"
+        (keypress)="numberInputOnly($event)"
+      />
+    </mat-form-field>
+  </form>
   <button
     mat-flat-button
     (click)="send()"
     color="primary"
-    [disabled]="verifying"
+    [disabled]="!mobile.get('number')?.valid || verifying"
   >
     {{ verifying ? "Sending..." : "send OTP" }}
   </button>
