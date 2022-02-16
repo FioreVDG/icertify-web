@@ -4,11 +4,35 @@ import { Find } from 'src/app/models/queryparams.interface';
 
 export const DOCUMENT_RECEIVING_TABLE: Column[] = [
   {
-    title: 'Transaction Reference Code',
+    title: 'Document Reference Code',
     breakpoint: 'sm',
     path: 'refCode',
     type: 'text',
     selected: true,
+  },
+  {
+    title: 'Document Title',
+    breakpoint: 'sm',
+    path: 'documentName',
+    type: 'text',
+    selected: true,
+  },
+  {
+    title: 'Document Type',
+    breakpoint: 'sm',
+    path: 'documentType',
+    type: 'text',
+    selected: true,
+    useAsFilter: true,
+    choices: [
+      'Power of Attorney',
+      'Medical Records',
+      'Sworn Statements',
+      'Affidavit',
+      'Deeds',
+      'Wills and Trusts',
+      'Others',
+    ],
   },
   {
     title: 'QC Indigent',
@@ -21,8 +45,11 @@ export const DOCUMENT_RECEIVING_TABLE: Column[] = [
   {
     title: 'Received By',
     breakpoint: 'sm',
-    path: '_createdBy',
-    paths: ['_createdBy.firstName', '_createdBy.lastName'],
+    path: '_transactionId',
+    paths: [
+      '_transactionId._createdBy.firstName',
+      '_transactionId._createdBy.lastName',
+    ],
     type: 'special',
     selected: true,
   },
@@ -33,14 +60,14 @@ export const DOCUMENT_RECEIVING_TABLE: Column[] = [
     type: 'date',
     selected: true,
   },
-  {
-    title: 'No. Of Documents',
-    breakpoint: 'sm',
-    path: 'documentCount',
-    type: 'text', // make count type
-    selected: true,
-    isVirtual: true,
-  },
+  // {
+  //   title: 'No. Of Documents',
+  //   breakpoint: 'sm',
+  //   path: 'documentCount',
+  //   type: 'text', // make count type
+  //   selected: true,
+  //   isVirtual: true,
+  // },
   {
     title: 'Status',
     breakpoint: 'sm',
@@ -48,15 +75,7 @@ export const DOCUMENT_RECEIVING_TABLE: Column[] = [
     type: 'text',
     selected: true,
     useAsFilter: true,
-    choices: [
-      'For Pick Up (Barangay)',
-      'For Pick Up (Notary)',
-      'Enroute to Notary',
-      'Enroute to Barangay',
-      'Received by Notary',
-      'Received by Barangay',
-      'Video Conference Scheduled (Notary)',
-    ],
+    choices: ['For Pick Up (Barangay)', 'Enroute to Notary'],
 
     // textColor: [
     //   {

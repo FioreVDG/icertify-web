@@ -7,6 +7,7 @@ import {
   FILT_BTN_CONFIG,
   BATCH_DELIVERY_BOTTOMSHEET,
   ENROUTE_FIND_BATCH,
+  FOR_PICKUP,
 } from './config';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -40,11 +41,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
   page = {
     pageSize: 10,
     pageIndex: 1,
-    populate: [
-      {
-        field: '_createdBy',
-      },
-    ],
+    populate: [],
     sort: {
       active: 'updatedAt',
       direction: 'desc',
@@ -52,7 +49,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
     bottomSheet: this.bsConfig,
   };
   routeLength = 3;
-  dataSource = [];
+  dataSource: any[] = [];
   isLimit: any;
   setting: any;
   dataLength: number = 0;
@@ -96,22 +93,24 @@ export class BatchDeliveryManagementComponent implements OnInit {
       sort: event.sort,
     };
     if (event.filter) qry.filter = event.filter;
+    console.log(qry);
 
     let api: any;
     if (event && event.label === 'Enroute') {
       qry.find = qry.find.concat(ENROUTE_FIND_BATCH);
+      qry.populates.push({ field: '_riderFromBarangay', select: '-__v' });
       api = this.api.transaction.getAllFolder(qry);
     } else {
-      qry.populates.push({ field: '_documents', select: '-__v' });
-      api = this.api.transaction.getAllForBatching(qry);
+      qry.find = qry.find.concat(FOR_PICKUP);
+      api = this.api.document.getAll(qry);
     }
 
-    console.log(qry);
     api.subscribe((res: any) => {
       console.log(res);
       this.dataSource =
-        res.env && res.env.transactions ? res.env.transactions : res.folders;
-      this.dataLength = res.count;
+        res.env && res.env.documents ? res.env.documents : res.folders;
+
+      this.dataLength = res.total;
       this.loading = false;
       console.log('Here');
     });
@@ -125,14 +124,14 @@ export class BatchDeliveryManagementComponent implements OnInit {
     event['label'] = event.label || this.currTable;
     // console.log(event.populate);
     this.fetchData(event);
-    this.loading = false;
+    // this.loading = false;
 
     // console.log(event);
   }
   onCheckBoxSelect(event: any) {
     //filter duplicates
     event.forEach((i: any) => {
-      if (!_.some(this.selected, { id: i.id })) {
+      if (!_.some(this.selected, { _id: i._id })) {
         this.selected.push(i);
       }
     });
@@ -140,15 +139,16 @@ export class BatchDeliveryManagementComponent implements OnInit {
   }
   onMark() {
     let ids: any = [];
+    console.log(this.selected);
     this.selected.forEach((id: any) => {
-      ids.push(id._id);
+      ids.push(id._transactionId);
     });
-    ids = ids.join(',');
-    console.log(ids);
+    // ids = ids.join(',');
+    // console.log(ids);
     this.dialog
       .open(MarkAsEnrouteComponent, {
         width: '70% ',
-        data: { obj: this.selected, setting: this.setting },
+        data: { obj: ids, setting: this.setting },
       })
       .afterClosed()
       .subscribe((res: any) => {
@@ -161,11 +161,11 @@ export class BatchDeliveryManagementComponent implements OnInit {
       });
   }
   onRowClick(event: any) {
-    // console.log(event);
+    console.log(event);
     switch (event.action) {
       case 'viewDoc':
         this.dialog.open(ViewAttachmentsComponent, {
-          data: { documents: event.obj._documents },
+          data: { documents: [event.obj] },
           disableClose: true,
           width: '70%',
           height: 'auto',
@@ -185,25 +185,27 @@ export class BatchDeliveryManagementComponent implements OnInit {
       case 'viewVid':
         const dialogLoader = this.util.startLoading('Fetching video...');
 
-        this.dbx.getTempLink(event.obj.videoOfSignature.path_display).subscribe(
-          (res: any) => {
-            this.dialog
-              .open(ViewVideoComponent, {
-                width: '50%',
-                disableClose: true,
-                data: { video: res.result.link, header: 'Video of Signing' },
-              })
-              .afterOpened()
-              .subscribe((res) => {
-                this.util.stopLoading(dialogLoader);
-              });
-          },
-          (error) => {
-            this.util.stopLoading(dialogLoader);
+        this.dbx
+          .getTempLink(event.obj._transactionId.videoOfSignature.path_display)
+          .subscribe(
+            (res: any) => {
+              this.dialog
+                .open(ViewVideoComponent, {
+                  width: '50%',
+                  disableClose: true,
+                  data: { video: res.result.link, header: 'Video of Signing' },
+                })
+                .afterOpened()
+                .subscribe((res) => {
+                  this.util.stopLoading(dialogLoader);
+                });
+            },
+            (error) => {
+              this.util.stopLoading(dialogLoader);
 
-            console.log(error);
-          }
-        );
+              console.log(error);
+            }
+          );
 
         break;
       default:

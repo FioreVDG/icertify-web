@@ -18,6 +18,7 @@ import {
 import { ViewTransactionComponent } from './view-transaction/view-transaction.component';
 import { VIEW_TRANSACTION_TABLE } from './view-transaction/config';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
+import { TRANSAC_TABLE_COLUMN } from '../../../barangay-portal/pages/batch-delivery-management/batch-folder/config';
 
 @Component({
   selector: 'app-document-receiving',
@@ -39,6 +40,9 @@ export class DocumentReceivingComponent implements OnInit {
     populate: [
       {
         field: '_batchedBy',
+      },
+      {
+        field: '_riderFromBarangay',
       },
       {
         field: '_receivedByNotary',
@@ -111,17 +115,13 @@ export class DocumentReceivingComponent implements OnInit {
     event['label'] = event.label || this.currTable;
     console.log(event.populate);
     this.fetchData(event);
-    setTimeout(() => {
-      this.loading = false;
-      console.log(this.loading);
-    }, 1000);
     console.log(event);
   }
 
   onRowClick(event: any) {
     console.log(event);
     this.dialog.open(ViewTransactionComponent, {
-      data: { event, column: VIEW_TRANSACTION_TABLE },
+      data: { event, column: TRANSAC_TABLE_COLUMN },
       height: 'auto',
       width: '85%',
       disableClose: true,

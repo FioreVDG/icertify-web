@@ -64,7 +64,15 @@ export class SuperadminPortalComponent implements OnInit {
         console.log(res);
         this.me = res.env.user;
         this.store.dispatch(setUser({ user: res.env.user }));
-        this.loading = false;
+
+        if (!this.me.isMain && this.me._role && this.me._role.access.length) {
+          this.superadminNav = this.me._role.access;
+          console.log(this.superadminNav);
+        } else {
+          this.superadminNav = SUPERADMIN_NAVS;
+          console.log(this.superadminNav);
+          this.loading = false;
+        }
       },
       (err) => {
         console.log(err);

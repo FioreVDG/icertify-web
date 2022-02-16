@@ -23,6 +23,11 @@
             [routerLink]="item.route"
             (click)="changeRoute(item)"
             routerLinkActive="router-active-link"
+            *ngIf="
+              !me.isMain && me._role && me._role.access
+                ? item.hasAccess
+                : !item.hasAccess
+            "
           >
             <mat-icon
               class="light"
