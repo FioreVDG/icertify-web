@@ -14,14 +14,18 @@
           #userDetails
           [formfields]="userFormFields"
           (formListener)="formListener($event)"
+          (formInitiated)="formInitialized()"
           [obj]="data && data.obj ? data.obj : undefined"
         ></app-form>
         <form #brgyDetails [formGroup]="brgyForm" class="grid">
           <ng-container *ngFor="let f of brgyFields">
-            <mat-form-field class="col-3" appearance="standard" *ngIf="f.show">
+            <mat-form-field class="col-3" appearance="standard">
               <mat-label>{{ f.label }}</mat-label>
 
-              <mat-select [formControlName]="f.fcname">
+              <mat-select
+                [compareWith]="compareFn"
+                [formControlName]="f.fcname"
+              >
                 <mat-option *ngFor="let o of f.choices" [value]="o">{{
                   util.deepFind(o, f.choiceLabel)
                 }}</mat-option>
@@ -76,7 +80,8 @@
       color="primary"
       (click)="submit()"
       [disabled]="
-        !(userDetails.form.valid && brgyForm.valid && roleDetails.form.valid) ||
+        (!(userDetails.form.valid && brgyForm.valid) &&
+          !(data.obj && data.obj.type !== 'QCLegal')) ||
         saving
       "
     >

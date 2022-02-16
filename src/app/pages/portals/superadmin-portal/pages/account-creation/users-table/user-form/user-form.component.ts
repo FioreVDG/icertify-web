@@ -102,8 +102,8 @@ export class UserFormComponent implements OnInit {
       temp[field.fcname] = new FormControl('', required);
     });
     this.brgyForm = this.fb.group(temp);
+
     this.brgyForm.get('region')?.valueChanges.subscribe((res: any) => {
-      console.log(res);
       this.getProvinces(res);
     });
     this.brgyForm.get('province')?.valueChanges.subscribe((res: any) => {
@@ -112,7 +112,14 @@ export class UserFormComponent implements OnInit {
     this.brgyForm.get('cityMun')?.valueChanges.subscribe((res: any) => {
       this.getBarangay(res);
     });
+    if (this.data && this.data.obj) {
+      this.brgyForm.get('region')?.setValue(this.data.obj.address.region);
+      this.brgyForm.get('province')?.setValue(this.data.obj.address.province);
+      this.brgyForm.get('cityMun')?.setValue(this.data.obj.address.cityMun);
+      this.brgyForm.get('barangay')?.setValue(this.data.obj.address.barangay);
+    }
   }
+
   getProvinces(res: any) {
     this.loadingContent = true;
     this.util
@@ -140,7 +147,6 @@ export class UserFormComponent implements OnInit {
       })
       .subscribe((cityMun: any) => {
         this.loadingContent = false;
-        console.log(cityMun);
 
         this.initializedChoices('cityMun', cityMun.data);
       });
@@ -156,7 +162,7 @@ export class UserFormComponent implements OnInit {
       })
       .subscribe((brgy: any) => {
         this.loadingContent = false;
-        console.log(brgy);
+        // console.log(brgy);
 
         this.initializedChoices('barangay', brgy.data);
       });
@@ -189,7 +195,10 @@ export class UserFormComponent implements OnInit {
       _notaryId:
         this.data._notaryId !== 'undefined' ? this.data._notaryId : undefined,
       type: this.data.type,
-      _role: this.roleDetails.form.value._role,
+      _role:
+        this.roleDetails && this.roleDetails.form
+          ? this.roleDetails.form.value._role
+          : undefined,
     };
     toSaveData['address'] = {
       ...this.brgyForm.value,
@@ -236,5 +245,9 @@ export class UserFormComponent implements OnInit {
         });
       }
     );
+  }
+  compareFn(op1: any, op2: any) {
+    console.log(op1, op2);
+    return op1.id === op2.id;
   }
 }

@@ -29,6 +29,6 @@
 </div>
 
 <mat-dialog-actions>
-  <button mat-button>Cancel</button>
+  <button mat-button (click)="dialogRef.close()">Cancel</button>
   <button mat-button (click)="onMark()">Confirm</button>
 </mat-dialog-actions>
