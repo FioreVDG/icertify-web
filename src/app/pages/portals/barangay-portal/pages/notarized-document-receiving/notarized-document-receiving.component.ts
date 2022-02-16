@@ -110,10 +110,6 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
     event['label'] = event.label || this.currTable;
     console.log(event.populate);
     this.fetchData(event);
-    setTimeout(() => {
-      this.loading = false;
-      console.log(this.loading);
-    }, 1000);
     console.log(event);
   }
   onCheckBoxSelect(event: any) {

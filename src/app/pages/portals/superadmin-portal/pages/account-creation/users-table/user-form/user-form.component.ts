@@ -213,6 +213,7 @@ export class UserFormComponent implements OnInit {
     console.log(toSaveData);
     const loader = this.util.startLoading('Saving...');
     let api = this.api.user.createUser(toSaveData);
+    if (this.data.initial) api = this.api.user.createAdmin(toSaveData);
     if (this.data.obj)
       api = this.api.user.updateUser(this.data.obj._id, toSaveData);
     api.subscribe(
