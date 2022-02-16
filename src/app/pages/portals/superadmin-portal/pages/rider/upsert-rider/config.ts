@@ -121,6 +121,7 @@ export const RIDER_FORM: Section[] = [
         choices: [],
         choiceLabel: 'name',
         choiceValue: '_id',
+        optional: true,
       },
     ],
   },

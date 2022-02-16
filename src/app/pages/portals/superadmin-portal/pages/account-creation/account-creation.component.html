@@ -1,30 +1,20 @@
-<div class="grid" align="center" *ngIf="this.currRoute.length < 4">
-  <div class="col-12" style="position: absolute; top: 25%">
-    <div class="grid" align="center">
-      <div
-        class="col-4"
-        align="center"
-        *ngFor="let m of menu"
-        style="width: 24%"
-      >
-        <div class="box" (click)="openMenu(m.action)">
-          <div align="center">
-            <mat-icon
-              color="primary"
-              inline="true"
-              style="font-size: 5rem"
-              *ngIf="m.icon"
-              >{{ m.icon }}</mat-icon
-            >
-            <img style="height: 5rem" *ngIf="m.logo" [src]="m.logo" />
+<div class="grid" *ngIf="!loading">
+  <div class="col-12">
+    <div class="header-text">
+      <h2>Create Accounts</h2>
+      <p>Select for Account that you want to create</p>
+    </div>
+    <div class="grid">
+      <div class="col-3" *ngFor="let m of menu" (click)="_openMenu(m.action)">
+        <div class="cards">
+          <div class="img-container">
+            <mat-icon color="primary" *ngIf="m.icon">{{ m.icon }}</mat-icon>
+            <img *ngIf="m.logo" [src]="m.logo" />
           </div>
-          <span>{{ m.title }}</span>
+          <p>{{ m.title }}</p>
         </div>
       </div>
     </div>
   </div>
 </div>
-<router-outlet
-  (activate)="onRouteActive()"
-  *ngIf="this.currRoute.length >= 3"
-></router-outlet>
+<app-loading *ngIf="loading" [label]="'Loading...'"></app-loading>

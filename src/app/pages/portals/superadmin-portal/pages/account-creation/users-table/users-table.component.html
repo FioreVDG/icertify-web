@@ -1,0 +1,20 @@
+<div style="display: flex; align-content: flex-end; justify-content: flex-end">
+  <button
+    [disabled]="btnDisabled"
+    mat-raised-button
+    (click)="onAdd()"
+    color="primary"
+  >
+    <mat-icon>add</mat-icon>&nbsp;Add User
+  </button>
+</div>
+<app-table
+  [columns]="column"
+  [dataSource]="dataSource"
+  [bottomSheet]="bsConfig"
+  (onRowClick)="onRowClick($event)"
+  [pagination]="page"
+  [dataLength]="dataLength"
+  (onUpdateTableEmit)="onTableUpdate($event)"
+  [loading]="loading"
+></app-table>

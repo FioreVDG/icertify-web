@@ -1,25 +1,87 @@
 @import "../../../../../../../assets/styles/variables.scss";
-.box {
-  width: 90%;
-  border: 1px solid $primary;
-  background: $primary;
-  border-radius: 10px;
-  height: 12rem;
-  cursor: pointer;
-  color: #ffff;
-  mat-icon {
-    font-size: 5rem;
+
+.header-text {
+  text-align: center;
+  padding-top: 0.7rem;
+  padding-bottom: 1.7rem;
+  h2 {
+    text-transform: capitalize;
+    color: #4e4e4e;
+    margin-bottom: 0;
+    font-size: 18px;
+  }
+  p {
+    font-size: 12px;
+    color: #7c7c7c;
+    margin-top: 0;
   }
 }
-.box:hover {
+
+.cards {
   width: 90%;
-  border: 1px solid #ffff;
-  background: #53369f;
-  border-radius: 10px;
-  height: 12rem;
+  margin: auto;
+  background-color: #f4f4f4;
+  height: 15rem;
   cursor: pointer;
-  color: #ffff;
-  mat-icon {
-    font-size: 5rem;
+  border-radius: 5px;
+  padding: 1rem;
+  padding-top: 0;
+  padding-bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  .img-container {
+    height: 7.5rem;
+    width: 7.5rem;
+    background-color: #576e9715;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    mat-icon {
+      transform: scale(5.6);
+    }
+  }
+  p {
+    position: absolute;
+    bottom: 0.3rem;
+    text-align: center;
+    text-transform: uppercase;
+    width: 100%;
+    background: $primary;
+    color: #fff;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.cards:hover {
+  box-shadow: 0px 10px 13px -7px #576f97, 5px 5px 15px 5px rgba(0, 0, 0, 0);
+  transition: 0.2s ease-in;
+  .img-container {
+    mat-icon {
+      transform: scale(6.6);
+      transition: ease-in 0.2s;
+    }
+  }
+}
+
+.selected {
+  background-color: $primary;
+  // border: 2px dashed $primary !important;
+  // box-shadow: 0px 10px 13px -7px #576e9747, 5px 5px 15px 5px rgba(0, 0, 0, 0) !important;
+  .img-container {
+    background-color: #aaaaaa15;
+    mat-icon {
+      transform: scale(6.6);
+      transition: ease-in 0.2s;
+      color: #fff;
+    }
+  }
+  p {
+    color: $primary;
+    background-color: #fff;
   }
 }

@@ -209,8 +209,7 @@ export class UpsertClusterComponent implements OnInit {
       debounceTime(400),
       distinctUntilChanged(),
       switchMap((val) => {
-        console.log(val);
-        return this._filter(val || this.data._notaryId.email || '', 'Notary');
+        return this._filter(val || '', 'Notary');
       })
     );
 
@@ -230,7 +229,7 @@ export class UpsertClusterComponent implements OnInit {
           operator: '=',
         },
         {
-          value: true,
+          value: type === 'Rider' ? false : true,
           field: 'isMain',
           operator: '=',
         },
@@ -319,10 +318,11 @@ export class UpsertClusterComponent implements OnInit {
     if (this.data) this.setDefaultValueFormArray();
     console.log(this.notaryCtrl.value);
 
-    // this.clusterForm.valueChanges.subscribe((res: any) => {
-    //   // console.log(res);
-    //   console.log(this.clusterForm.get('barangays')?.value);
-    // });
+    this.clusterForm.valueChanges.subscribe((res: any) => {
+      // console.log(res);
+      console.log(this.filteredNotaries);
+      console.log(this.filteredRiders);
+    });
   }
 
   checkActiveDay() {
