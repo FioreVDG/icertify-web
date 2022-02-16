@@ -11,7 +11,6 @@ import {
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ViewDocumentComponent } from 'src/app/shared/components/view-document/view-document.component';
 import { RegistrantFormComponent } from 'src/app/shared/components/registrant-form/registrant-form.component';
 import { ViewVideoComponent } from 'src/app/shared/components/view-video/view-video.component';
 import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachments/view-attachments.component';
@@ -74,6 +73,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
   }
   getSetting() {
     this.store.select('user').subscribe((me: any) => {
+      console.log(me._barangay.brgyCode);
       this.api.cluster.getOne(me._barangay.brgyCode).subscribe((res: any) => {
         this.setting = res.env.cluster;
         let resp: any = res.env.cluster.barangays.find(
@@ -126,8 +126,6 @@ export class BatchDeliveryManagementComponent implements OnInit {
     event['label'] = event.label || this.currTable;
     // console.log(event.populate);
     this.fetchData(event);
-    this.loading = false;
-
     // console.log(event);
   }
   onCheckBoxSelect(event: any) {

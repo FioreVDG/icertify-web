@@ -12,7 +12,6 @@ import {
   DOC_RECEIVING_BOTTOMSHEET,
   DOC_RECEIVING_FIND,
 } from './config';
-import { ViewDocumentComponent } from 'src/app/shared/components/view-document/view-document.component';
 import { RegistrantFormComponent } from 'src/app/shared/components/registrant-form/registrant-form.component';
 import { ViewVideoComponent } from 'src/app/shared/components/view-video/view-video.component';
 import { DropboxService } from 'src/app/service/dropbox/dropbox.service';

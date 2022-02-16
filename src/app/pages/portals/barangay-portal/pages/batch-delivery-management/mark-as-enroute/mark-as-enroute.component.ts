@@ -31,7 +31,7 @@ export class MarkAsEnrouteComponent implements OnInit {
     public util: UtilService,
     public dialog: MatDialog,
     private api: ApiService,
-    private dialogRef: MatDialogRef<MarkAsEnrouteComponent>,
+    public dialogRef: MatDialogRef<MarkAsEnrouteComponent>,
 
     private store: Store<{ user: User }>
   ) {}

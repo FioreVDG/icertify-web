@@ -1,3 +1,5 @@
+import { ViewProofOfIdentityComponent } from './../view-proof-of-identity/view-proof-of-identity.component';
+import { ViewScreenshotComponent } from './../view-screenshot/view-screenshot.component';
 import { QueryParams } from './../../../models/queryparams.interface';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -125,10 +127,6 @@ export class TransactionHistoryTableComponent implements OnInit {
     event['label'] = event.label || this.currTable;
     console.log(event.populate);
     this.fetchData(event);
-    setTimeout(() => {
-      this.loading = false;
-      console.log(this.loading);
-    }, 1000);
     console.log(event);
   }
 
@@ -154,6 +152,12 @@ export class TransactionHistoryTableComponent implements OnInit {
         case 'viewDoc':
           this.viewAttachments([event.obj], event.obj.refCode);
           break;
+        case 'viewSS':
+          this.viewScreenshots(event.obj);
+          break;
+        case 'viewPOI':
+          this.viewProofOfIdentity(event.obj);
+          break;
         case 'downloadDoc':
           this.downloadDocu(event.obj.notarizedDocument);
           break;
@@ -171,6 +175,28 @@ export class TransactionHistoryTableComponent implements OnInit {
       data: {
         documents: docs,
         refCode: refCode,
+      },
+      height: 'auto',
+      width: '70%',
+    });
+  }
+
+  viewScreenshots(doc: any) {
+    console.log(doc);
+    this.dialog.open(ViewScreenshotComponent, {
+      data: {
+        document: doc,
+      },
+      height: 'auto',
+      width: '70%',
+    });
+  }
+
+  viewProofOfIdentity(doc: any) {
+    console.log(doc);
+    this.dialog.open(ViewProofOfIdentityComponent, {
+      data: {
+        document: doc,
       },
       height: 'auto',
       width: '70%',

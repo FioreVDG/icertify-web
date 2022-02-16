@@ -193,7 +193,7 @@ export class UpsertClusterComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private api: ApiService,
     private dialog: MatDialog,
-    private dialogRef: MatDialogRef<UpsertClusterComponent>
+    public dialogRef: MatDialogRef<UpsertClusterComponent>
   ) {
     this.filteredRiders = this.riderCtrl.valueChanges.pipe(
       startWith(''),

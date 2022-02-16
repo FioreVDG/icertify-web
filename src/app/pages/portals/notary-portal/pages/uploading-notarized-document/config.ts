@@ -29,6 +29,16 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         path: 'documentType',
         type: 'text',
         selected: true,
+        useAsFilter: true,
+        choices: [
+          'Power of Attorney',
+          'Medical Records',
+          'Sworn Statements',
+          'Affidavit',
+          'Deeds',
+          'Wills and Trusts',
+          'Others',
+        ],
       },
       {
         title: 'Owner',
@@ -74,6 +84,16 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         path: 'documentType',
         type: 'text',
         selected: true,
+        useAsFilter: true,
+        choices: [
+          'Power of Attorney',
+          'Medical Records',
+          'Sworn Statements',
+          'Affidavit',
+          'Deeds',
+          'Wills and Trusts',
+          'Others',
+        ],
       },
       {
         title: 'Owner',

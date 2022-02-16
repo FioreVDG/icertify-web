@@ -8,7 +8,6 @@ export interface User {
   _roleId?: ROLE;
   email?: string;
   gender?: string;
-  _brgyId?: string;
   _barangay?: object;
   _role?: any;
   type?: string;

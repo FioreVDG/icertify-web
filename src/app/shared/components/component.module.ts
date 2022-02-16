@@ -14,7 +14,6 @@ import { OtpComponent } from './otp/otp.component';
 import { UploadComponent } from './upload/upload.component';
 import { NgxFileDropModule } from 'ngx-file-drop';
 import { RegistrantFormComponent } from './registrant-form/registrant-form.component';
-import { ViewDocumentComponent } from './view-document/view-document.component';
 import { ImageFormComponent } from './image-form/image-form.component';
 import { ViewAttachmentsComponent } from './view-attachments/view-attachments.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
@@ -29,11 +28,12 @@ import { RoomComponent } from './room/room.component';
 import { DocumentLogsViewerComponent } from './document-logs-viewer/document-logs-viewer.component';
 import { DocumentTrackerTableComponent } from './document-tracker-table/document-tracker-table.component';
 import { TransactionHistoryTableComponent } from './transaction-history-table/transaction-history-table.component';
+import { ViewScreenshotComponent } from './view-screenshot/view-screenshot.component';
+import { ViewProofOfIdentityComponent } from './view-proof-of-identity/view-proof-of-identity.component';
 
 @NgModule({
   declarations: [
     LoadingComponent,
-    ViewDocumentComponent,
     ProfileMenuComponent,
     FormComponent,
     TableComponent,
@@ -51,6 +51,8 @@ import { TransactionHistoryTableComponent } from './transaction-history-table/tr
     DocumentLogsViewerComponent,
     DocumentTrackerTableComponent,
     TransactionHistoryTableComponent,
+    ViewScreenshotComponent,
+    ViewProofOfIdentityComponent,
   ],
   imports: [
     MaterialModule,

@@ -55,7 +55,7 @@ export class RegistrantsDbComponent implements OnInit {
     let api: any;
     if (event && event.label === 'W/O Certificate of Indigency') {
       query.find = query.find.concat(FIND_WITHOUT_CERTIFICATE);
-      console.log(query);
+
       api = this.api.user.getAllIndigent(query);
     } else {
       query.find = query.find.concat(FIND_COMPLETE);
@@ -80,10 +80,6 @@ export class RegistrantsDbComponent implements OnInit {
     event.label = event.label || this.currTable;
 
     this.fetchData(event);
-    setTimeout(() => {
-      this.loading = false;
-      console.log(this.loading);
-    }, 1000);
     console.log(event);
   }
 
