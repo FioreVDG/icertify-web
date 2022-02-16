@@ -48,6 +48,17 @@ export const USER_FORM: Section[] = [
         appearance: 'standard',
       },
       {
+        label: 'Birth Date',
+        type: 'date',
+        colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
+        fcname: 'birthDate',
+        show: true,
+        default: '',
+        path: 'birthDate',
+        optional: true,
+        appearance: 'standard',
+      },
+      {
         label: 'Sex',
         type: 'select',
         colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
