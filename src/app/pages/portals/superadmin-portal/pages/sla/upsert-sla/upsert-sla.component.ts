@@ -56,6 +56,11 @@ export class UpsertSlaComponent implements OnInit {
                 operator: '=',
                 value: 'Barangay',
               },
+              {
+                field: 'isMain',
+                operator: '=',
+                value: true,
+              },
             ],
           })
           .subscribe((res: any) => {
@@ -78,6 +83,11 @@ export class UpsertSlaComponent implements OnInit {
                 field: 'type',
                 operator: '=',
                 value: 'Notary',
+              },
+              {
+                field: 'isMain',
+                operator: '=',
+                value: true,
               },
             ],
           })
