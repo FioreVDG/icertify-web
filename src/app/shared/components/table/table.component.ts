@@ -37,7 +37,7 @@ export class TableComponent implements OnInit {
   @Input() buttonConfig: any = {};
   @Input() uniqueCheckbox: any = false;
   @Input() loading = false;
-  @Input() downloadExcelBtn: string = '';
+  @Input() downloadExcelBtn = false;
   @Output() onDownloadExcelBtn = new EventEmitter<any>();
   @Output() onCheckBoxBtnClick: any = new EventEmitter<any>();
   @Output() onRowClick: any = new EventEmitter<any>();
@@ -124,9 +124,9 @@ export class TableComponent implements OnInit {
       this.displayedColumns.unshift('select');
     }
 
-    setTimeout(() => {
-      this.loading = false;
-    }, 500);
+    // setTimeout(() => {
+    //   this.loading = false;
+    // }, 500);
   }
   rowClick(element: any) {
     console.log(element);
@@ -205,9 +205,9 @@ export class TableComponent implements OnInit {
     return this.filterButtonConfig[0].column;
   }
   onFilterButtonClick(index: any) {
+    this.loading = true;
     this.dataSource = [];
     this.keyword = '';
-    this.loading = true;
     this.duplicateColumns = [];
     this.displayedColumns = [];
     this.filterButtonConfig.forEach((i: any) => {

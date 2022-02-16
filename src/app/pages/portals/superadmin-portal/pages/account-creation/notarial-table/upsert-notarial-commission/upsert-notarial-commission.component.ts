@@ -127,25 +127,20 @@ export class UpsertNotarialCommissionComponent implements OnInit {
       if (field.required) {
         required.push(Validators.required);
       }
-      temp_home[field.fcname] = new FormControl(required);
+      temp_home[field.fcname] = new FormControl('', required);
     });
     this.office_brgyFields.forEach((field: any) => {
       let required = [];
       if (field.required) {
         required.push(Validators.required);
       }
-      temp_brgy[field.fcname] = new FormControl(required);
+      temp_brgy[field.fcname] = new FormControl('', required);
     });
 
     this.homeBrgyForm = this.fb.group(temp_home);
     this.officeBrgyForm = this.fb.group(temp_brgy);
-    console.log(this.homeBrgyForm);
-
-    console.log(this.officeBrgyForm);
     //HOME
     this.homeBrgyForm.get('region')?.valueChanges.subscribe((res: any) => {
-      console.log(res);
-
       this.getProvinces(res, 'home');
     });
     this.homeBrgyForm.get('province')?.valueChanges.subscribe((res: any) => {
@@ -154,12 +149,20 @@ export class UpsertNotarialCommissionComponent implements OnInit {
     this.homeBrgyForm.get('cityMun')?.valueChanges.subscribe((res: any) => {
       this.getBarangay(res, 'home');
     });
+    if (this.data && this.data.obj) {
+      this.homeBrgyForm.get('region')?.setValue(this.data.obj.address.region);
+      this.homeBrgyForm
+        .get('province')
+        ?.setValue(this.data.obj.address.province);
+      this.homeBrgyForm.get('cityMun')?.setValue(this.data.obj.address.cityMun);
+      this.homeBrgyForm
+        .get('barangay')
+        ?.setValue(this.data.obj.address.barangay);
+    }
     //OFFICE
     this.officeBrgyForm
       .get('office_region')
       ?.valueChanges.subscribe((res: any) => {
-        console.log(res);
-
         this.getProvinces(res, 'office');
       });
     this.officeBrgyForm
@@ -172,6 +175,20 @@ export class UpsertNotarialCommissionComponent implements OnInit {
       ?.valueChanges.subscribe((res: any) => {
         this.getBarangay(res, 'office');
       });
+    if (this.data && this.data.obj) {
+      this.officeBrgyForm
+        .get('office_region')
+        ?.setValue(this.data.obj.office_address.office_region);
+      this.officeBrgyForm
+        .get('office_province')
+        ?.setValue(this.data.obj.office_address.office_province);
+      this.officeBrgyForm
+        .get('office_cityMun')
+        ?.setValue(this.data.obj.office_address.office_cityMun);
+      this.officeBrgyForm
+        .get('office_barangay')
+        ?.setValue(this.data.obj.office_address.office_barangay);
+    }
   }
   initializedChoices(identifier: string, object: any, type: any) {
     // this.userFormFields[1].items.forEach((i: any) => {
@@ -185,8 +202,6 @@ export class UpsertNotarialCommissionComponent implements OnInit {
 
     if (type === 'home') {
       this.home_brgyFields.forEach((item: any) => {
-        console.log(item);
-
         if (item.fcname === identifier) {
           item.choices = [];
           item.show = true;
@@ -199,7 +214,7 @@ export class UpsertNotarialCommissionComponent implements OnInit {
     }
     if (type === 'office') {
       this.office_brgyFields.forEach((item: any) => {
-        console.log(item);
+        // console.log(item);
 
         if (item.fcname === 'office_' + identifier) {
           item.choices = [];
@@ -212,9 +227,7 @@ export class UpsertNotarialCommissionComponent implements OnInit {
       });
     }
   }
-  formInitialized() {
-    console.log('Initialized');
-  }
+  formInitialized() {}
   formListener(event: any) {}
   initializeAvailableData() {
     this.ibp.controls['ibp_chapter_region'].setValue(
@@ -288,5 +301,9 @@ export class UpsertNotarialCommissionComponent implements OnInit {
           });
         }
       });
+  }
+  compareFn(op1: any, op2: any) {
+    // console.log(op1, op2);
+    return op1.id === op2.id;
   }
 }

@@ -320,6 +320,12 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         icon: 'description',
       },
       {
+        label: 'View Screenshot/s',
+        action: 'viewSS',
+        icon: 'photo_library',
+        showIf: 'screenShots/>/0',
+      },
+      {
         label: 'Download Document',
         action: 'downloadDoc',
         icon: 'file_download',

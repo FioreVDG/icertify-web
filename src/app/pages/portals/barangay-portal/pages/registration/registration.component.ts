@@ -1,3 +1,4 @@
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { QueryParams } from './../../../../../models/queryparams.interface';
 import { RegistrantFormComponent } from './../../../../../shared/components/registrant-form/registrant-form.component';
 import { Component, OnInit } from '@angular/core';
@@ -13,7 +14,9 @@ import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/acti
   styleUrls: ['./registration.component.scss'],
 })
 export class RegistrationComponent implements OnInit {
-  mobileNumber: string = '';
+  mobile = new FormGroup({
+    number: new FormControl('', [Validators.required, Validators.minLength(9)]),
+  });
   verifying: boolean = false;
   constructor(
     private util: UtilService,
@@ -32,7 +35,7 @@ export class RegistrationComponent implements OnInit {
       height: 'auto',
       data: {
         header: 'Add Indigent',
-        mobileNumber: this.mobileNumber,
+        mobileNumber: this.mobile.get('number')?.value,
       },
     });
   }
@@ -40,61 +43,63 @@ export class RegistrationComponent implements OnInit {
   send() {
     const loader = this.util.startLoading('Sending please wait');
     this.verifying = true;
-    this.user.checkExistingMobileNumber(this.mobileNumber).subscribe(
-      (res: any) => {
-        console.log(res);
-        this.verifying = false;
-        if (res) {
+    this.user
+      .checkExistingMobileNumber(this.mobile.get('number')?.value)
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+          this.verifying = false;
+          if (res) {
+            this.util.stopLoading(loader);
+            this.dialog
+              .open(OtpComponent, {
+                data: { mobileNumber: this.mobile.get('number')?.value },
+                panelClass: 'dialog-responsive-dark',
+                disableClose: true,
+              })
+              .afterClosed()
+              .subscribe((res: any) => {
+                if (res) {
+                  this.dialog
+                    .open(ActionResultComponent, {
+                      data: {
+                        msg:
+                          'Complete your registration, Please provide first all the basic information to be eligible to start a transaction. Thank you!' ||
+                          'Something went wrong! Please try again.',
+                        success: true,
+                        button: 'Proceed',
+                      },
+                      disableClose: true,
+                    })
+                    .afterClosed()
+                    .subscribe((res: any) => {
+                      if (res) {
+                        this.dialog
+                          .open(RegistrantFormComponent, {
+                            width: 'auto',
+                            height: 'auto',
+                            data: {
+                              header: 'Add Indigent',
+                              mobileNumber: this.mobile.get('number')?.value,
+                            },
+                            disableClose: true,
+                          })
+                          .afterClosed()
+                          .subscribe((res: any) => {});
+                      }
+                    });
+                }
+              });
+          }
+        },
+        (err) => {
+          console.log(err);
           this.util.stopLoading(loader);
-          this.dialog
-            .open(OtpComponent, {
-              data: { mobileNumber: this.mobileNumber },
-              panelClass: 'dialog-responsive-dark',
-              disableClose: true,
-            })
-            .afterClosed()
-            .subscribe((res: any) => {
-              if (res) {
-                this.dialog
-                  .open(ActionResultComponent, {
-                    data: {
-                      msg:
-                        'Complete your registration, Please provide first all the basic information to be eligible to start a transaction. Thank you!' ||
-                        'Something went wrong! Please try again.',
-                      success: true,
-                      button: 'Proceed',
-                    },
-                    disableClose: true,
-                  })
-                  .afterClosed()
-                  .subscribe((res: any) => {
-                    if (res) {
-                      this.dialog
-                        .open(RegistrantFormComponent, {
-                          width: 'auto',
-                          height: 'auto',
-                          data: {
-                            header: 'Add Indigent',
-                            mobileNumber: this.mobileNumber,
-                          },
-                          disableClose: true,
-                        })
-                        .afterClosed()
-                        .subscribe((res: any) => {});
-                    }
-                  });
-              }
-            });
+          this.dialog.open(ActionResultComponent, {
+            data: { msg: err.error.message, success: false, button: 'Okay' },
+          });
+          this.verifying = false;
         }
-      },
-      (err) => {
-        console.log(err);
-        this.util.stopLoading(loader);
-        this.dialog.open(ActionResultComponent, {
-          data: { msg: err.error.message, success: false, button: 'Okay' },
-        });
-        this.verifying = false;
-      }
-    );
+      );
   }
 }

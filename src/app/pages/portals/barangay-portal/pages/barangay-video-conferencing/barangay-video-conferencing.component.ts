@@ -83,9 +83,6 @@ export class BarangayVideoConferencingComponent implements OnInit {
     console.log(event);
     event.label = event.label || this.currentTable;
     this.fetchData(event);
-    setTimeout(() => {
-      this.loading = false;
-    }, 1000);
   }
 
   onRowClick(event: any) {

@@ -74,6 +74,7 @@ export class ViewTransactionComponent implements OnInit {
       console.log(res);
       this.dataSource = res.env.documents;
       this.dataLength = res.env.total;
+      this.loading = false;
     });
   }
 

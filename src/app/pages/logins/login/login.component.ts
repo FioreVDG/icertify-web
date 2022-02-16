@@ -89,18 +89,24 @@ export class LoginComponent implements OnInit {
         console.log(res);
         this.isLoggingIn = false;
 
-        localStorage.setItem('SESSION_CSURF_TOKEN', res.csrf_token);
-        localStorage.setItem('SESSION_AUTH', res.token);
-
         if (res && res.env.user.type === 'Barangay') {
           this.router.navigate(['/barangay-portal/barangay-dashboard']);
           this.isLoggedIn = true;
+
+          localStorage.setItem('SESSION_CSURF_TOKEN', res.csrf_token);
+          localStorage.setItem('SESSION_AUTH', res.token);
         } else if (res && res.env.user.type === 'Notary') {
           this.router.navigate(['/notary-portal/notary-dashboard']);
           this.isLoggedIn = true;
+
+          localStorage.setItem('SESSION_CSURF_TOKEN', res.csrf_token);
+          localStorage.setItem('SESSION_AUTH', res.token);
         } else if (res && res.env.user.type === 'Consumer') {
           this.router.navigate(['/user-portal/']);
           this.isLoggedIn = true;
+
+          localStorage.setItem('SESSION_CSURF_TOKEN', res.csrf_token);
+          localStorage.setItem('SESSION_AUTH', res.token);
         } else {
           this.dialog
             .open(ActionResultComponent, {
