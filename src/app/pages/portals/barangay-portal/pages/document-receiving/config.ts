@@ -47,6 +47,17 @@ export const DOCUMENT_RECEIVING_TABLE: Column[] = [
     path: 'locationStatus',
     type: 'text',
     selected: true,
+    useAsFilter: true,
+    choices: [
+      'For Pick Up (Barangay)',
+      'For Pick Up (Notary)',
+      'Enroute to Notary',
+      'Enroute to Barangay',
+      'Received by Notary',
+      'Received by Barangay',
+      'Video Conference Scheduled (Notary)',
+    ],
+
     // textColor: [
     //   {
     //     value: 'For Pick Up (Barangay)',
