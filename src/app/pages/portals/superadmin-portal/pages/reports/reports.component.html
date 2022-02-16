@@ -1,0 +1,44 @@
+<div align="end">
+  <button
+    *ngFor="let tab of tabs"
+    mat-flat-button
+    color="{{ currentTab === tab ? 'primary' : '' }}"
+    style="margin-left: 5px"
+    (click)="changeTab(tab)"
+  >
+    {{ tab }}
+  </button>
+</div>
+
+<div class="mat-elevation-z1 mt-5 bg-white p-3">
+  <div class="grid">
+    <mat-form-field class="col-5" appearance="outline">
+      <mat-label>Select {{ currentTab }}</mat-label>
+      <mat-select [(ngModel)]="currentUser" (selectionChange)="getSLA()">
+        <mat-option *ngFor="let user of users" [value]="user">
+          {{
+            currentTab == "Barangay"
+              ? user._barangay.brgyDesc
+              : user.firstName + " " + user.lastName
+          }}
+          | {{ user._id }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="col-5" appearance="outline" *ngIf="slas.length">
+      <mat-label>Select SLA</mat-label>
+      <mat-select [(ngModel)]="currentSLA">
+        <mat-option *ngFor="let sla of slas" [value]="sla">
+          {{ sla.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="col-2 text-right pt-3" *ngIf="slas.length && currentSLA">
+      <button mat-flat-button color="primary" (click)="generateReports()">
+        Generate
+      </button>
+    </div>
+  </div>
+</div>

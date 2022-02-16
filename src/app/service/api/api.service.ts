@@ -1,3 +1,4 @@
+import { ReportService } from './report/report.service';
 import { DocumentLogsService } from './document-logs/document-logs.service';
 import { ClusterService } from './cluster/cluster.service';
 import { AgoraService } from './agora/agora.service';
@@ -35,6 +36,7 @@ export class ApiService {
     public room: RoomService,
     public sms: SmsService,
     public documentlogs: DocumentLogsService,
-    public cluster: ClusterService
+    public cluster: ClusterService,
+    public report: ReportService
   ) {}
 }
