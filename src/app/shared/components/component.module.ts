@@ -28,6 +28,8 @@ import { RoomComponent } from './room/room.component';
 import { DocumentLogsViewerComponent } from './document-logs-viewer/document-logs-viewer.component';
 import { DocumentTrackerTableComponent } from './document-tracker-table/document-tracker-table.component';
 import { TransactionHistoryTableComponent } from './transaction-history-table/transaction-history-table.component';
+import { ViewScreenshotComponent } from './view-screenshot/view-screenshot.component';
+import { ViewProofOfIdentityComponent } from './view-proof-of-identity/view-proof-of-identity.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +51,8 @@ import { TransactionHistoryTableComponent } from './transaction-history-table/tr
     DocumentLogsViewerComponent,
     DocumentTrackerTableComponent,
     TransactionHistoryTableComponent,
+    ViewScreenshotComponent,
+    ViewProofOfIdentityComponent,
   ],
   imports: [
     MaterialModule,
