@@ -12,6 +12,7 @@ import { FIND_NOTARY_ONLY } from './doc-viewer-logs.config';
 export class DocumentLogsViewerComponent implements OnInit {
   documentLogs: Array<any> = [];
   filteredFinal: any;
+  loading: boolean = false;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<DocumentLogsViewerComponent>,
@@ -60,11 +61,12 @@ export class DocumentLogsViewerComponent implements OnInit {
     };
     console.log(query);
     let finalQuery: any;
+    this.loading = true;
     finalQuery = this.data.header === 'NOTARY' ? query2 : query;
     this.api.documentlogs.getDocumentLogs(finalQuery).subscribe(
       (res: any) => {
         this.documentLogs = res.env.documentLogs;
-
+        this.loading = false;
         console.log(this.documentLogs);
         this.filteredFinal = this.documentLogs.find(
           (o: any) =>

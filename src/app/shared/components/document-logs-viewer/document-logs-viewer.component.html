@@ -72,7 +72,13 @@
           </mat-card>
         </div>
       </div>
-      <mat-card>
+      <div style="margin: auto; width: 100%" *ngIf="loading">
+        <mat-spinner
+          style="margin: auto; margin-top: 1rem"
+          [diameter]="35"
+        ></mat-spinner>
+      </div>
+      <mat-card *ngIf="!loading">
         <div class="timeline">
           <div *ngFor="let log of documentLogs">
             <ul>
