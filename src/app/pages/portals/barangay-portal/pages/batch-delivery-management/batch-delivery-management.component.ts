@@ -126,8 +126,6 @@ export class BatchDeliveryManagementComponent implements OnInit {
     event['label'] = event.label || this.currTable;
     // console.log(event.populate);
     this.fetchData(event);
-    this.loading = false;
-
     // console.log(event);
   }
   onCheckBoxSelect(event: any) {

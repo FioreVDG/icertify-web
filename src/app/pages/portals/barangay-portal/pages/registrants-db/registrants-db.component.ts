@@ -80,10 +80,6 @@ export class RegistrantsDbComponent implements OnInit {
     event.label = event.label || this.currTable;
 
     this.fetchData(event);
-    setTimeout(() => {
-      this.loading = false;
-      console.log(this.loading);
-    }, 1000);
     console.log(event);
   }
 
