@@ -1,6 +1,13 @@
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UtilService } from 'src/app/service/util/util.service';
-import { Component, Inject, OnInit } from '@angular/core';
+import {
+  Component,
+  Inject,
+  Input,
+  OnInit,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 
@@ -13,7 +20,8 @@ import { map, startWith } from 'rxjs/operators';
 })
 export class SelectBarangayComponent implements OnInit {
   barangayForm = new FormControl('', [Validators.required]);
-  brgys = [];
+  @Input() brgys = [];
+  @Output() selectedEmitter = new EventEmitter<any>();
   selectedBrgy: any;
   filteredBrgys: Observable<any> | undefined;
   constructor(
@@ -44,6 +52,11 @@ export class SelectBarangayComponent implements OnInit {
     let brgy = event?.option?.value || event;
     this.selectedBrgy = event?.option?.value || event;
     this.barangayForm.setValue(brgy.brgyDesc);
+
+    this.selectedEmitter.emit({
+      event: event.option?.value,
+      isValid: this.barangayForm.valid,
+    });
   }
   onClose(option?: any) {
     this.dialogRef.close(option);

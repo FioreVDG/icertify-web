@@ -62,13 +62,6 @@ export class TransactionHistoryTableComponent implements OnInit {
       this.store.select('user').subscribe((me: any) => {
         console.log(me);
         this.me = me;
-        // this.util
-        //   .getRPC('barangay', {
-        //     query: { brgyCode: me._brgyId },
-        //   })
-        //   .subscribe((barangay: any) => {
-        //     console.log(barangay.data[0].brgyDesc);
-        //   });
       });
       this.filtBtnConfig = FILT_BTN_CONFIG;
     }
@@ -103,9 +96,9 @@ export class TransactionHistoryTableComponent implements OnInit {
       if (event.label === 'Notarized') {
         qry.find = qry.find.concat(FIND_NOTARIZED);
         qry.find.push({
-          field: '_brgyId',
+          field: '_barangay.brgyCode',
           operator: '=',
-          value: this.me._brgyId,
+          value: this.me._barangay.brgyCode,
         });
         api = this.api.document.getAll(qry);
       } else if (event.label === 'Unnotarized') {
@@ -316,9 +309,9 @@ export class TransactionHistoryTableComponent implements OnInit {
       if (event.label === 'Notarized') {
         event.query.find = event.query.find.concat(FIND_NOTARIZED);
         event.query.find.push({
-          field: '_brgyId',
+          field: '_barangay.brgyCode',
           operator: '=',
-          value: this.me._brgyId,
+          value: this.me._barangay.brgyCode,
         });
         api = this.api.document.getAll(event.query);
       } else if (event.label === 'Unnotarized') {

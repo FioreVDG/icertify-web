@@ -1,4 +1,4 @@
-<mat-form-field class="example-full-width" appearance="fill">
+<mat-form-field class="full-width" appearance="fill">
   <mat-label>Select a Barangay</mat-label>
   <input
     type="text"
@@ -19,15 +19,17 @@
   </mat-autocomplete>
 </mat-form-field>
 
-<mat-dialog-actions align="center">
-  <button mat-button color="warn" (click)="onClose()">Cancel</button>
+<!-- <mat-dialog-actions align="center"> -->
+<!-- <button mat-button color="warn" (click)="onClose()">Cancel</button> -->
 
-  <button
-    mat-button
-    color="primary"
-    (click)="onClose(selectedBrgy)"
-    *ngIf="barangayForm.valid"
-  >
-    Next
-  </button>
-</mat-dialog-actions>
+<!-- <button
+  align="
+  center"
+  mat-button
+  color="primary"
+  (click)="onSelect(selectedBrgy)"
+  [disabled]="!barangayForm.valid"
+>
+  Next
+</button> -->
+<!-- </mat-dialog-actions> -->
