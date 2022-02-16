@@ -46,7 +46,7 @@ export class UsersTableComponent implements OnInit {
       this.userType = this.data.notary.userType;
       this.notaryId = this.data.notary.notaryId;
       this.brgyDetail = this.data.notary.brgyInfo;
-      this.brgyId = this.data.notary.brgyInfo.brgyCode;
+      this.brgyId = this.data.notary?.brgyInfo?.brgyCode;
     }
     this.fetchUser(this.page);
     this.getRoles();
