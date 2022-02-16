@@ -55,7 +55,7 @@ export class RegistrantsDbComponent implements OnInit {
     let api: any;
     if (event && event.label === 'W/O Certificate of Indigency') {
       query.find = query.find.concat(FIND_WITHOUT_CERTIFICATE);
-      console.log(query);
+
       api = this.api.user.getAllIndigent(query);
     } else {
       query.find = query.find.concat(FIND_COMPLETE);
