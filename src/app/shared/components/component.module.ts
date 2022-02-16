@@ -14,7 +14,6 @@ import { OtpComponent } from './otp/otp.component';
 import { UploadComponent } from './upload/upload.component';
 import { NgxFileDropModule } from 'ngx-file-drop';
 import { RegistrantFormComponent } from './registrant-form/registrant-form.component';
-import { ViewDocumentComponent } from './view-document/view-document.component';
 import { ImageFormComponent } from './image-form/image-form.component';
 import { ViewAttachmentsComponent } from './view-attachments/view-attachments.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
@@ -33,7 +32,6 @@ import { TransactionHistoryTableComponent } from './transaction-history-table/tr
 @NgModule({
   declarations: [
     LoadingComponent,
-    ViewDocumentComponent,
     ProfileMenuComponent,
     FormComponent,
     TableComponent,

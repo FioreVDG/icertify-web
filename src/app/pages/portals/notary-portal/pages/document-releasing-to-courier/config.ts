@@ -26,7 +26,7 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
         {
           title: 'Barangay',
           breakpoint: 'sm',
-          path: 'barangay',
+          path: '_barangay.brgyDesc',
           type: 'text',
           selected: true,
         },
@@ -103,7 +103,7 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
         {
           title: 'Barangay',
           breakpoint: 'sm',
-          path: 'barangay',
+          path: '_barangay.brgyDesc',
           type: 'text',
           selected: true,
         },
@@ -165,7 +165,7 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
         {
           title: 'Barangay',
           breakpoint: 'sm',
-          path: 'barangay',
+          path: '_barangay.brgyDesc',
           type: 'text',
           selected: true,
         },

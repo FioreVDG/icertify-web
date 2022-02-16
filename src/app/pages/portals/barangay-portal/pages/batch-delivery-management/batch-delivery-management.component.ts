@@ -11,7 +11,6 @@ import {
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ViewDocumentComponent } from 'src/app/shared/components/view-document/view-document.component';
 import { RegistrantFormComponent } from 'src/app/shared/components/registrant-form/registrant-form.component';
 import { ViewVideoComponent } from 'src/app/shared/components/view-video/view-video.component';
 import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachments/view-attachments.component';
