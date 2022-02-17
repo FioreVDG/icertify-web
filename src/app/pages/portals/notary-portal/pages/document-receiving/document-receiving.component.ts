@@ -101,7 +101,7 @@ export class DocumentReceivingComponent implements OnInit {
     this.api.transaction.getAllFolder(query).subscribe((res: any) => {
       console.log(res);
       this.dataSource = res.folders;
-      this.dataLength = res.count;
+      this.dataLength = res.total;
       this.loading = false;
     });
     this.currTable = event.label;
