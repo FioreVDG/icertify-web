@@ -13,232 +13,10 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         action: 'viewDoc',
         icon: 'description',
       },
-    ],
-    populate: [
       {
-        field: '_notaryId',
-      },
-    ],
-    column: [
-      {
-        title: 'Document Reference Code',
-        breakpoint: 'sm',
-        path: 'refCode',
-        type: 'text',
-        selected: true,
-      },
-      {
-        title: 'Document Name/Subject',
-        breakpoint: 'sm',
-        path: 'documentName',
-        type: 'text',
-        selected: true,
-      },
-      {
-        title: 'Document Type',
-        breakpoint: 'sm',
-        path: 'documentType',
-        type: 'text',
-        selected: true,
-        useAsFilter: true,
-        choices: [
-          'Power of Attorney',
-          'Medical Records',
-          'Sworn Statements',
-          'Affidavit',
-          'Deeds',
-          'Wills and Trusts',
-          'Others',
-        ],
-      },
-      {
-        title: 'QC Indigent',
-        breakpoint: 'sm',
-        path: 'sender',
-        paths: ['sender.firstName', 'sender.lastName'],
-        type: 'special',
-        selected: true,
-      },
-      {
-        title: 'Notary',
-        breakpoint: 'sm',
-        path: '_notaryId',
-        paths: ['_notaryId.firstName', '_notaryId.lastName'],
-        type: 'special',
-        selected: true,
-      },
-      {
-        title: 'Date and Time of Notarization',
-        breakpoint: 'sm',
-        path: 'dateNotarized',
-        type: 'date',
-        selected: true,
-      },
-    ],
-  },
-  {
-    label: 'Notarized',
-    selected: true,
-    bottomSheet: [
-      {
-        label: 'View Document/s & Screenshot/s',
-        action: 'viewDoc',
-        icon: 'description',
-      },
-    ],
-    populate: [
-      {
-        field: '_notaryId',
-      },
-    ],
-    column: [
-      {
-        title: 'Document Reference Code',
-        breakpoint: 'sm',
-        path: 'refCode',
-        type: 'text',
-        selected: true,
-      },
-      {
-        title: 'Document Name/Subject',
-        breakpoint: 'sm',
-        path: 'documentName',
-        type: 'text',
-        selected: true,
-      },
-      {
-        title: 'Document Type',
-        breakpoint: 'sm',
-        path: 'documentType',
-        type: 'text',
-        selected: true,
-        useAsFilter: true,
-        choices: [
-          'Power of Attorney',
-          'Medical Records',
-          'Sworn Statements',
-          'Affidavit',
-          'Deeds',
-          'Wills and Trusts',
-          'Others',
-        ],
-      },
-      {
-        title: 'QC Indigent',
-        breakpoint: 'sm',
-        path: 'sender',
-        paths: ['sender.firstName', 'sender.lastName'],
-        type: 'special',
-        selected: true,
-      },
-      {
-        title: 'Notary',
-        breakpoint: 'sm',
-        path: '_notaryId',
-        paths: ['_notaryId.firstName', '_notaryId.lastName'],
-        type: 'special',
-        selected: true,
-      },
-      {
-        title: 'Date and Time of Notarization',
-        breakpoint: 'sm',
-        path: 'dateNotarized',
-        type: 'date',
-        selected: true,
-      },
-    ],
-  },
-  {
-    label: 'Unnotarized',
-    selected: false,
-    bottomSheet: [
-      {
-        label: 'View Document/s & Screenshot/s',
-        action: 'viewDoc',
-        icon: 'description',
-      },
-    ],
-    populate: [
-      {
-        field: '_notaryId',
-      },
-    ],
-    column: [
-      {
-        title: 'Document Reference Code',
-        breakpoint: 'sm',
-        path: 'refCode',
-        type: 'text',
-        selected: true,
-      },
-      {
-        title: 'Document Name/Subject',
-        breakpoint: 'sm',
-        path: 'documentName',
-        type: 'text',
-        selected: true,
-      },
-      {
-        title: 'Document Type',
-        breakpoint: 'sm',
-        path: 'documentType',
-        type: 'text',
-        selected: true,
-        useAsFilter: true,
-        choices: [
-          'Power of Attorney',
-          'Medical Records',
-          'Sworn Statements',
-          'Affidavit',
-          'Deeds',
-          'Wills and Trusts',
-          'Others',
-        ],
-      },
-      {
-        title: 'QC Indigent',
-        breakpoint: 'sm',
-        path: 'sender',
-        paths: ['sender.firstName', 'sender.lastName'],
-        type: 'special',
-        selected: true,
-      },
-      {
-        title: 'Notary',
-        breakpoint: 'sm',
-        path: '_notaryId',
-        paths: ['_notaryId.firstName', '_notaryId.lastName'],
-        type: 'special',
-        selected: true,
-      },
-      {
-        title: 'Date and Time of Notarization',
-        breakpoint: 'sm',
-        path: 'dateNotarized',
-        type: 'date',
-        selected: true,
-      },
-      {
-        title: 'Remarks',
-        breakpoint: 'sm',
-        path: 'remark',
-        type: 'text',
-        selected: true,
-      },
-    ],
-  },
-];
-
-//for notary
-export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
-  {
-    label: 'All',
-    selected: true,
-    bottomSheet: [
-      {
-        label: 'View Document/s & Screenshot/s',
-        action: 'viewDoc',
-        icon: 'description',
+        label: 'View Proof of Identity',
+        action: 'viewPOI',
+        icon: 'photo_library',
       },
       {
         label: 'Download Screenshot',
@@ -307,6 +85,328 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         type: 'date',
         selected: true,
       },
+      {
+        title: 'Certificate of Indigency',
+        breakpoint: 'sm',
+        path: 'sender.images.COIstatus',
+        type: 'text',
+        selected: true,
+        textColor: [
+          {
+            value: 'To Follow',
+            color: '#fbcb51' || 'yellow',
+          },
+          {
+            value: 'Uploaded',
+            color: '#83b9a1' || 'green',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'Notarized',
+    selected: true,
+    bottomSheet: [
+      {
+        label: 'View Document/s & Screenshot/s',
+        action: 'viewDoc',
+        icon: 'description',
+      },
+      {
+        label: 'View Proof of Identity',
+        action: 'viewPOI',
+        icon: 'photo_library',
+      },
+      {
+        label: 'Download Screenshot',
+        action: 'downloadSS',
+        icon: 'file_download',
+        showIf: 'screenShots/>/0',
+      },
+    ],
+    populate: [
+      {
+        field: '_notaryId',
+      },
+    ],
+    column: [
+      {
+        title: 'Document Reference Code',
+        breakpoint: 'sm',
+        path: 'refCode',
+        type: 'text',
+        selected: true,
+      },
+      {
+        title: 'Document Name/Subject',
+        breakpoint: 'sm',
+        path: 'documentName',
+        type: 'text',
+        selected: true,
+      },
+      {
+        title: 'Document Type',
+        breakpoint: 'sm',
+        path: 'documentType',
+        type: 'text',
+        selected: true,
+        useAsFilter: true,
+        choices: [
+          'Power of Attorney',
+          'Medical Records',
+          'Sworn Statements',
+          'Affidavit',
+          'Deeds',
+          'Wills and Trusts',
+          'Others',
+        ],
+      },
+      {
+        title: 'QC Indigent',
+        breakpoint: 'sm',
+        path: 'sender',
+        paths: ['sender.firstName', 'sender.lastName'],
+        type: 'special',
+        selected: true,
+      },
+      {
+        title: 'Notary',
+        breakpoint: 'sm',
+        path: '_notaryId',
+        paths: ['_notaryId.firstName', '_notaryId.lastName'],
+        type: 'special',
+        selected: true,
+      },
+      {
+        title: 'Date and Time of Notarization',
+        breakpoint: 'sm',
+        path: 'dateNotarized',
+        type: 'date',
+        selected: true,
+      },
+      {
+        title: 'Certificate of Indigency',
+        breakpoint: 'sm',
+        path: 'sender.images.COIstatus',
+        type: 'text',
+        selected: true,
+        textColor: [
+          {
+            value: 'To Follow',
+            color: '#fbcb51' || 'yellow',
+          },
+          {
+            value: 'Uploaded',
+            color: '#83b9a1' || 'green',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'Unnotarized',
+    selected: false,
+    bottomSheet: [
+      {
+        label: 'View Document/s & Screenshot/s',
+        action: 'viewDoc',
+        icon: 'description',
+      },
+      {
+        label: 'View Proof of Identity',
+        action: 'viewPOI',
+        icon: 'photo_library',
+      },
+    ],
+    populate: [
+      {
+        field: '_notaryId',
+      },
+    ],
+    column: [
+      {
+        title: 'Document Reference Code',
+        breakpoint: 'sm',
+        path: 'refCode',
+        type: 'text',
+        selected: true,
+      },
+      {
+        title: 'Document Name/Subject',
+        breakpoint: 'sm',
+        path: 'documentName',
+        type: 'text',
+        selected: true,
+      },
+      {
+        title: 'Document Type',
+        breakpoint: 'sm',
+        path: 'documentType',
+        type: 'text',
+        selected: true,
+        useAsFilter: true,
+        choices: [
+          'Power of Attorney',
+          'Medical Records',
+          'Sworn Statements',
+          'Affidavit',
+          'Deeds',
+          'Wills and Trusts',
+          'Others',
+        ],
+      },
+      {
+        title: 'QC Indigent',
+        breakpoint: 'sm',
+        path: 'sender',
+        paths: ['sender.firstName', 'sender.lastName'],
+        type: 'special',
+        selected: true,
+      },
+      {
+        title: 'Notary',
+        breakpoint: 'sm',
+        path: '_notaryId',
+        paths: ['_notaryId.firstName', '_notaryId.lastName'],
+        type: 'special',
+        selected: true,
+      },
+      {
+        title: 'Date and Time of Notarization',
+        breakpoint: 'sm',
+        path: 'dateNotarized',
+        type: 'date',
+        selected: true,
+      },
+      {
+        title: 'Certificate of Indigency',
+        breakpoint: 'sm',
+        path: 'sender.images.COIstatus',
+        type: 'text',
+        selected: true,
+        textColor: [
+          {
+            value: 'To Follow',
+            color: '#fbcb51' || 'yellow',
+          },
+          {
+            value: 'Uploaded',
+            color: '#83b9a1' || 'green',
+          },
+        ],
+      },
+      {
+        title: 'Remarks',
+        breakpoint: 'sm',
+        path: 'remark',
+        type: 'text',
+        selected: true,
+      },
+    ],
+  },
+];
+
+//for notary
+export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
+  {
+    label: 'All',
+    selected: true,
+    bottomSheet: [
+      {
+        label: 'View Document/s & Screenshot/s',
+        action: 'viewDoc',
+        icon: 'description',
+      },
+      {
+        label: 'View Proof of Identity',
+        action: 'viewPOI',
+        icon: 'photo_library',
+      },
+      {
+        label: 'Download Screenshot',
+        action: 'downloadSS',
+        icon: 'file_download',
+        showIf: 'screenShots/>/0',
+      },
+    ],
+    populate: [
+      {
+        field: '_notaryId',
+      },
+    ],
+    column: [
+      {
+        title: 'Document Reference Code',
+        breakpoint: 'sm',
+        path: 'refCode',
+        type: 'text',
+        selected: true,
+      },
+      {
+        title: 'Document Name/Subject',
+        breakpoint: 'sm',
+        path: 'documentName',
+        type: 'text',
+        selected: true,
+      },
+      {
+        title: 'Document Type',
+        breakpoint: 'sm',
+        path: 'documentType',
+        type: 'text',
+        selected: true,
+        useAsFilter: true,
+        choices: [
+          'Power of Attorney',
+          'Medical Records',
+          'Sworn Statements',
+          'Affidavit',
+          'Deeds',
+          'Wills and Trusts',
+          'Others',
+        ],
+      },
+      {
+        title: 'QC Indigent',
+        breakpoint: 'sm',
+        path: 'sender',
+        paths: ['sender.firstName', 'sender.lastName'],
+        type: 'special',
+        selected: true,
+      },
+      {
+        title: 'Notary',
+        breakpoint: 'sm',
+        path: '_notaryId',
+        paths: ['_notaryId.firstName', '_notaryId.lastName'],
+        type: 'special',
+        selected: true,
+      },
+      {
+        title: 'Date and Time of Notarization',
+        breakpoint: 'sm',
+        path: 'dateNotarized',
+        type: 'date',
+        selected: true,
+      },
+      {
+        title: 'Certificate of Indigency',
+        breakpoint: 'sm',
+        path: 'sender.images.COIstatus',
+        type: 'text',
+        selected: true,
+        textColor: [
+          {
+            value: 'To Follow',
+            color: '#fbcb51' || 'yellow',
+          },
+          {
+            value: 'Uploaded',
+            color: '#83b9a1' || 'green',
+          },
+        ],
+      },
     ],
   },
   {
@@ -323,6 +423,17 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         label: 'View Screenshot/s',
         action: 'viewSS',
         icon: 'photo_library',
+        showIf: 'screenShots/>/0',
+      },
+      {
+        label: 'View Proof of Identity',
+        action: 'viewPOI',
+        icon: 'photo_library',
+      },
+      {
+        label: 'Download Screenshot',
+        action: 'downloadSS',
+        icon: 'file_download',
         showIf: 'screenShots/>/0',
       },
       {
@@ -392,6 +503,23 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         type: 'date',
         selected: true,
       },
+      {
+        title: 'Certificate of Indigency',
+        breakpoint: 'sm',
+        path: 'sender.images.COIstatus',
+        type: 'text',
+        selected: true,
+        textColor: [
+          {
+            value: 'To Follow',
+            color: '#fbcb51' || 'yellow',
+          },
+          {
+            value: 'Uploaded',
+            color: '#83b9a1' || 'green',
+          },
+        ],
+      },
     ],
     checkBoxBtns: [
       {
@@ -413,6 +541,11 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         label: 'View Document/s & Screenshot/s',
         action: 'viewDoc',
         icon: 'description',
+      },
+      {
+        label: 'View Proof of Identity',
+        action: 'viewPOI',
+        icon: 'photo_library',
       },
     ],
     populate: [
@@ -474,6 +607,23 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         path: 'dateNotarized',
         type: 'date',
         selected: true,
+      },
+      {
+        title: 'Certificate of Indigency',
+        breakpoint: 'sm',
+        path: 'sender.images.COIstatus',
+        type: 'text',
+        selected: true,
+        textColor: [
+          {
+            value: 'To Follow',
+            color: '#fbcb51' || 'yellow',
+          },
+          {
+            value: 'Uploaded',
+            color: '#83b9a1' || 'green',
+          },
+        ],
       },
       {
         title: 'Remarks',
@@ -562,7 +712,3 @@ export const NOTARY_FIND_UNNOTARIZED: Find[] = [
 ];
 
 ///////////////////////////////////////////
-export const CHECKBOX_DISABLER = {
-  column: 'notarizedDocument',
-  value: 'undefined',
-};
