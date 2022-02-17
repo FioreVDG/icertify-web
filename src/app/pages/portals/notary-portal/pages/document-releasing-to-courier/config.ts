@@ -46,7 +46,7 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
           selected: true,
         },
         {
-          title: 'Transaction Count',
+          title: 'No. of Transactions',
           breakpoint: 'sm',
           path: 'transactionCount',
           type: 'text',
