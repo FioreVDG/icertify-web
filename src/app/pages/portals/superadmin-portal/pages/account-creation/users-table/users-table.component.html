@@ -6,7 +6,9 @@
     color="primary"
   >
     <mat-icon>add</mat-icon>&nbsp;{{
-      dataSource.length <= 0 ? "Create an Admin" : "Add User"
+      dataSource.length <= 0 && this.data.initial
+        ? "Create an Admin"
+        : "Add User"
     }}
   </button>
 </div>
