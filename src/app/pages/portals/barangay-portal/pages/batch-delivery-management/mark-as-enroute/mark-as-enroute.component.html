@@ -12,7 +12,13 @@
 
     <tr *ngFor="let d of data.obj">
       <ng-container *ngFor="let t of tableConfig">
-        <td *ngIf="t.path">{{ util.deepFind(d, t.path) }}</td>
+        <td *ngIf="t.path">
+          {{
+            t.type !== "date"
+              ? util.deepFind(d, t.path)
+              : (util.deepFind(d, t.path) | date: "medium")
+          }}
+        </td>
         <td *ngIf="t.paths">
           <span *ngFor="let p of t.paths">{{ util.deepFind(d, p) }} </span>
         </td>
@@ -29,6 +35,12 @@
 </div>
 
 <mat-dialog-actions>
-  <button mat-button (click)="dialogRef.close()">Cancel</button>
-  <button mat-button (click)="onMark()">Confirm</button>
+  <button mat-button (click)="dialogRef.close()" color="warn">Cancel</button>
+  <button
+    mat-button
+    (click)="onMark()"
+    [disabled]="!riderDetails.optForm.valid"
+  >
+    Confirm
+  </button>
 </mat-dialog-actions>

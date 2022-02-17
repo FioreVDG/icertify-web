@@ -30,6 +30,7 @@ export const TABLE_CONFIG = [
   },
   {
     title: 'Date and Time Received',
+    type: 'date',
     path: 'updatedAt',
   },
 ];

@@ -159,6 +159,7 @@ export class UpsertClusterComponent implements OnInit {
 
   selectBarangay(i: number) {
     let selClusters: any[] = [];
+    console.log(this.clusterForm.get('barangays')?.value);
     if (this.clusterForm.get('barangays')?.value.length) {
       let selectedBarangays = this.clusterForm.get('barangays')?.value;
       for (const barangay of selectedBarangays) {
