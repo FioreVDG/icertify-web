@@ -78,8 +78,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
       {
         title: 'Date and Time Received',
         breakpoint: 'sm',
-        path: 'updatedAt',
-
+        path: 'createdAt',
         type: 'date',
         selected: true,
       },

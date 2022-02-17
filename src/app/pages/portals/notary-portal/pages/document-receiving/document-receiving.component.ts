@@ -1,13 +1,11 @@
 import { UtilService } from './../../../../../service/util/util.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { QueryParams } from 'src/app/models/queryparams.interface';
 import { TableOutput } from 'src/app/models/tableemit.interface';
 import { ApiService } from 'src/app/service/api/api.service';
-import { AuthService } from 'src/app/service/auth/auth.service';
-import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
 import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
 import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
 import {
@@ -16,9 +14,10 @@ import {
   RECEIVED_FIND,
 } from './config';
 import { ViewTransactionComponent } from './view-transaction/view-transaction.component';
-import { VIEW_TRANSACTION_TABLE } from './view-transaction/config';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
 import { TRANSAC_TABLE_COLUMN } from '../../../barangay-portal/pages/batch-delivery-management/batch-folder/config';
+import { Store } from '@ngrx/store';
+import { User } from 'src/app/models/user.interface';
 
 @Component({
   selector: 'app-document-receiving',
@@ -62,18 +61,15 @@ export class DocumentReceivingComponent implements OnInit {
     private api: ApiService,
     private dialog: MatDialog,
     private router: Router,
-    private auth: AuthService,
-    private route: ActivatedRoute,
-    private dbx: DropboxService,
-    private util: UtilService
+    private util: UtilService,
+    private store: Store<{ user: User }>
   ) {}
 
   ngOnInit(): void {
-    this.auth.me().subscribe((res: any) => {
-      this.me = res.env.user;
-      console.log(this.me);
+    this.store.select('user').subscribe((res: User) => {
+      this.me = res;
+      this.fetchData(this.page);
     });
-    this.fetchData(this.page);
   }
 
   fetchData(event: TableOutput) {

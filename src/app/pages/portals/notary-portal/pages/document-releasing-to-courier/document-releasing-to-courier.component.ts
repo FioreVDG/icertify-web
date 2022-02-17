@@ -69,9 +69,9 @@ export class DocumentReleasingToCourierComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.auth.me().subscribe((res: any) => {
-      this.me = res.env.user;
-      console.log(this.me);
+    this.store.select('user').subscribe((res: User) => {
+      this.me = res;
+      console.log(res);
     });
 
     this.fetchData(this.page);
