@@ -43,6 +43,7 @@ export const NOTARIAL_FORM: Section[] = [
         fcname: 'suffix',
         show: true,
         default: '',
+        choices: ['Jr.', 'Sr.', 'I', 'II', 'III'],
         path: 'others.suffix',
         optional: true,
         placeholder: 'Suffix(optional)',
