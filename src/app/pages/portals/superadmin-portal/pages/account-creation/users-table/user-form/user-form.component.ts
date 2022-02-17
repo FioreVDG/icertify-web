@@ -174,9 +174,7 @@ export class UserFormComponent implements OnInit {
     this.dialog
       .open(AreYouSureComponent, {
         data: {
-          msg: this.data.obj
-            ? 'You want to update user'
-            : 'You want to add new user',
+          msg: this.data.obj ? 'update user' : 'add new user',
           isOthers: true,
         },
       })
