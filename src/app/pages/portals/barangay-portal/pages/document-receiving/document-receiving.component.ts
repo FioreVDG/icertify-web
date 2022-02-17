@@ -64,11 +64,18 @@ export class DocumentReceivingComponent implements OnInit {
     }
     console.log(query);
 
-    this.api.document.getAll(query).subscribe((res: any) => {
-      console.log(res);
-      this.dataSource = res.env.documents;
-      this.dataLength = res.env.total;
-    });
+    this.api.document.getAll(query).subscribe(
+      (res: any) => {
+        console.log(res);
+        this.dataSource = res.env.documents;
+        this.dataLength = res.env.total;
+        this.loading = false;
+      },
+      (error) => {
+        console.log(error);
+        this.loading = false;
+      }
+    );
   }
   onRowClick(event: any) {
     // console.log(event);

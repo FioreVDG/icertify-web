@@ -70,12 +70,18 @@ export class ViewTransactionComponent implements OnInit {
       query.sort =
         (event.sort.direction === 'asc' ? '' : '-') + event.sort.active;
     }
-    this.api.document.getAll(query).subscribe((res: any) => {
-      console.log(res);
-      this.dataSource = res.env.documents;
-      this.dataLength = res.env.total;
-      this.loading = false;
-    });
+    this.api.document.getAll(query).subscribe(
+      (res: any) => {
+        console.log(res);
+        this.dataSource = res.env.documents;
+        this.dataLength = res.env.total;
+        this.loading = false;
+      },
+      (error) => {
+        console.log(error);
+        this.loading = false;
+      }
+    );
   }
 
   onRowClick(event: any) {

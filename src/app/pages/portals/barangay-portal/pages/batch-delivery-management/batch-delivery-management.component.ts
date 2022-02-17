@@ -106,15 +106,21 @@ export class BatchDeliveryManagementComponent implements OnInit {
       api = this.api.document.getAll(qry);
     }
 
-    api.subscribe((res: any) => {
-      console.log(res);
-      this.dataSource =
-        res.env && res.env.documents ? res.env.documents : res.folders;
+    api.subscribe(
+      (res: any) => {
+        console.log(res);
+        this.dataSource =
+          res.env && res.env.documents ? res.env.documents : res.folders;
 
-      this.dataLength = res.total;
-      this.loading = false;
-      console.log('Here');
-    });
+        this.dataLength = res.total;
+        this.loading = false;
+        console.log('Here');
+      },
+      (error: any) => {
+        console.log(error);
+        this.loading = false;
+      }
+    );
     this.currTable = event.label;
     this.page.populate = event.populate;
     this.isCheckbox = event.isCheckbox || true;
