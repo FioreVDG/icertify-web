@@ -88,9 +88,10 @@
       mat-button
       color="primary"
       [disabled]="
-        (!notarialDetails.form.valid &&
-          !homeBrgyForm.valid &&
-          !validityDetails.form.valid) ||
+        (!ibpchapterDetails.optForm.valid &&
+          !officeBrgyForm.valid &&
+          !validityDetails.form.valid &&
+          !notarialDetails.form.valid) ||
         saving
       "
       (click)="onSave()"

@@ -46,7 +46,7 @@ export class UsersTableComponent implements OnInit {
       this.userType = this.data.notary.userType;
       this.notaryId = this.data.notary.notaryId;
       this.brgyDetail = this.data.notary.brgyInfo;
-      this.brgyId = this.data.notary.brgyInfo.brgyCode;
+      this.brgyId = this.data.notary?.brgyInfo?.brgyCode;
     }
     this.fetchUser(this.page);
     this.getRoles();
@@ -69,6 +69,7 @@ export class UsersTableComponent implements OnInit {
     if (this.userType === 'Notary')
       query.find.push(
         { field: 'type', operator: '=', value: 'Notary' },
+
         { field: '_notaryId', operator: '=', value: this.notaryId }
       );
 
@@ -98,6 +99,10 @@ export class UsersTableComponent implements OnInit {
       .open(UserFormComponent, {
         panelClass: 'custom-dialog-container',
         data: {
+          initial:
+            this.dataSource.length <= 0 && this.userType !== 'Notary'
+              ? true
+              : false,
           _notaryId: this.notaryId,
           type: this.userType === 'iCertify' ? 'Admin' : this.userType,
           brgyDetail: this.brgyDetail,
@@ -197,11 +202,18 @@ export class UsersTableComponent implements OnInit {
         value: this.brgyId,
       });
     if (this.notaryId !== 'undefined' && this.userType !== 'iCertify')
-      query.find.push({
-        field: '_notaryId',
-        operator: '=',
-        value: this.notaryId,
-      });
+      query.find.push(
+        {
+          field: '_notaryId',
+          operator: '=',
+          value: this.notaryId,
+        },
+        {
+          field: 'isMain',
+          operator: '=',
+          value: false,
+        }
+      );
     if (event && event.filter) {
       query['filter'] = event.filter;
     }

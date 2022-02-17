@@ -8,6 +8,8 @@ import {
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { UploadComponent } from 'src/app/shared/components/upload/upload.component';
+import { Store } from '@ngrx/store';
+import { User } from 'src/app/models/user.interface';
 
 @Component({
   selector: 'app-upload-notirized-document',
@@ -20,14 +22,20 @@ export class UploadNotirizedDocumentComponent implements OnInit {
     public dialogRef: MatDialogRef<UploadNotirizedDocumentComponent>,
     private dialog: MatDialog,
     private dbx: DropboxService,
-    private api: ApiService
+    private api: ApiService,
+    private store: Store<{ user: User }>
   ) {}
   imageChecker = ['png', 'jpeg', 'jpg'];
   toUploadDocument: any;
   uploading: boolean = false;
+  me: any;
 
   ngOnInit(): void {
     console.log(this.data);
+    this.store.select('user').subscribe((res: User) => {
+      this.me = res;
+      console.log(res);
+    });
   }
 
   selectFile() {
@@ -56,7 +64,10 @@ export class UploadNotirizedDocumentComponent implements OnInit {
   }
   upload() {
     this.uploading = true;
-    this.data['notarizedDocument'] = {};
+    this.data['notarizedDocument'] = {
+      _uploadedBy: this.me._id,
+      dateUploaded: new Date(),
+    };
     this.data.notarizedDocument['dropbox'] = this.toUploadDocument;
     this.api.document.notarize(this.data, this.data._id).subscribe(
       (res: any) => {
@@ -65,10 +76,11 @@ export class UploadNotirizedDocumentComponent implements OnInit {
           data: {
             success: true,
             msg: 'Upload Successful!',
+            button: 'Okay!',
           },
         });
         this.uploading = false;
-        this.dialogRef.close();
+        this.dialogRef.close(true);
       },
       (err) => {
         this.uploading = false;

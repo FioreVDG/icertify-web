@@ -35,6 +35,11 @@
             routerLinkActive="router-active-link"
             [matTooltip]="isExpanded ? '' : item.label"
             matTooltipPosition="right"
+            *ngIf="
+              !me.isMain && me._role && me._role.access
+                ? item.hasAccess
+                : !item.hasAccess
+            "
           >
             <mat-icon
               class="light"

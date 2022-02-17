@@ -5,7 +5,11 @@
     (click)="onAdd()"
     color="primary"
   >
-    <mat-icon>add</mat-icon>&nbsp;Add User
+    <mat-icon>add</mat-icon>&nbsp;{{
+      dataSource.length <= 0 && this.data.initial
+        ? "Create an Admin"
+        : "Add User"
+    }}
   </button>
 </div>
 <app-table

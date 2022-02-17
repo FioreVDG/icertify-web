@@ -25,7 +25,7 @@ export class AutoCompleteComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.opt.item);
+    console.log(this.defaultValue);
     if (this.defaultValue) this.optForm.setValue(this.defaultValue);
   }
   private _filter(value: any) {

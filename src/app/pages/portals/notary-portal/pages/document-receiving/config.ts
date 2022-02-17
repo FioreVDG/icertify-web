@@ -13,6 +13,10 @@ export const NOTARY_DOC_RECEIVING_FILT_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         field: '_batchedBy',
         select: 'firstName,lastName,middleName',
       },
+      {
+        field: '_riderFromBarangay',
+        select: 'firstName,lastName,middleName',
+      },
     ],
 
     column: [
@@ -35,6 +39,14 @@ export const NOTARY_DOC_RECEIVING_FILT_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         breakpoint: 'sm',
         path: '_batchedBy',
         paths: ['_batchedBy.lastName', '_batchedBy.firstName'],
+        type: 'special',
+        selected: true,
+      },
+      {
+        title: 'Pick up By',
+        breakpoint: 'sm',
+        path: '_riderFromBarangay',
+        paths: ['_riderFromBarangay.lastName', '_riderFromBarangay.firstName'],
         type: 'special',
         selected: true,
       },
@@ -70,6 +82,10 @@ export const NOTARY_DOC_RECEIVING_FILT_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         field: '_receivedByNotary',
         select: 'firstName,lastName,middleName',
       },
+      {
+        field: '_riderFromBarangay',
+        select: 'firstName,lastName,middleName',
+      },
     ],
 
     column: [
@@ -92,6 +108,14 @@ export const NOTARY_DOC_RECEIVING_FILT_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         breakpoint: 'sm',
         path: '_receivedByNotary',
         paths: ['_receivedByNotary.lastName', '_receivedByNotary.firstName'],
+        type: 'special',
+        selected: true,
+      },
+      {
+        title: 'Delivered By',
+        breakpoint: 'sm',
+        path: '_riderFromBarangay',
+        paths: ['_riderFromBarangay.lastName', '_riderFromBarangay.firstName'],
         type: 'special',
         selected: true,
       },

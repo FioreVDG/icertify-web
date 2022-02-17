@@ -73,7 +73,6 @@ export class AutocompleteDialogComponent implements OnInit {
           this.selectedBarangays.push(barangay._barangay.brgyCode);
       }
     }
-    console.log(this.selectedBarangays);
 
     this.getClusters();
   }
