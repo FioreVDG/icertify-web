@@ -45,8 +45,8 @@
         </form>
         <div
           *ngIf="
-            (data.obj && data.obj.type !== 'QCLegal') ||
-            (data.type && data.type !== 'QCLegal')
+            (data.obj && data.obj.type !== 'QCLegal' && !this.data.initial) ||
+            (data.type && data.type !== 'QCLegal' && !this.data.initial)
           "
         >
           <button mat-button matStepperNext>Next</button>
@@ -54,8 +54,8 @@
       >
       <mat-step
         *ngIf="
-          (data.obj && data.obj.type !== 'QCLegal') ||
-          (data.type && data.type !== 'QCLegal')
+          (data.obj && data.obj.type !== 'QCLegal' && !this.data.initial) ||
+          (data.type && data.type !== 'QCLegal' && !this.data.initial)
         "
       >
         <ng-template matStepLabel>Role Access</ng-template>
@@ -81,7 +81,7 @@
       (click)="submit()"
       [disabled]="
         (!(userDetails.form.valid && brgyForm.valid) &&
-          !(data.obj && data.obj.type !== 'QCLegal')) ||
+          !(data.obj && data.obj.type !== 'QCLegal' && !this.data.initial)) ||
         saving
       "
     >
