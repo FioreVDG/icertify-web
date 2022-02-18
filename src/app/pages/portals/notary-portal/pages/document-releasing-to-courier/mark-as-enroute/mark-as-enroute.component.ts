@@ -102,7 +102,7 @@ export class MarkAsEnrouteComponent implements OnInit {
 
     this.dialog
       .open(AreYouSureComponent, {
-        data: { msg: 'Mark as received this batch?' },
+        data: { msg: 'Mark as Enroute this batch?' },
       })
       .afterClosed()
       .subscribe((res: any) => {

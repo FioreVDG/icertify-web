@@ -58,7 +58,7 @@
           (data.type && data.type !== 'QCLegal' && !this.data.initial)
         "
       >
-        <ng-template matStepLabel>Role Access</ng-template>
+        <ng-template matStepLabel>Access Role </ng-template>
         <app-form
           #roleDetails
           [formfields]="roleFormFields"
@@ -80,8 +80,12 @@
       color="primary"
       (click)="submit()"
       [disabled]="
-        (!(userDetails.form.valid && brgyForm.valid) &&
-          !(data.obj && data.obj.type !== 'QCLegal' && !this.data.initial)) ||
+        (!(
+          userDetails.form.valid &&
+          brgyForm.valid &&
+          roleDetails.form.valid
+        ) &&
+          !(data.obj && data.obj.type !== 'QCLegal')) ||
         saving
       "
     >
