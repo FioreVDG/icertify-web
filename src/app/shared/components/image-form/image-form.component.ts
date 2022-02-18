@@ -25,7 +25,7 @@ export class ImageFormComponent implements OnInit {
   @Input() mobileNumber: string = '';
   @Input() disable: any;
   @Input() reasonVal: string = '';
-  @Input() header: string = '';
+  @Input() header: any;
   imgArray: Array<any> = [];
   me: any;
   imageForm = this.fb.group({});
