@@ -38,10 +38,10 @@ export class UsersTableComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.data);
     this.brgyId = this.brgyDetail?.brgyCode;
     this.userType = this.header;
     if (this.data.notary) {
-      console.log(this.data);
       console.log('GALING SA DIALOGGGGGGG!!!!!!');
       this.userType = this.data.notary.userType;
       this.notaryId = this.data.notary.notaryId;
@@ -56,7 +56,7 @@ export class UsersTableComponent implements OnInit {
   }
 
   getRoles() {
-    let query: any = { find: [] };
+    let query: QueryParams = { find: [] };
     if (this.userType === 'Barangay')
       query.find.push({
         field: '_barangay.brgyCode',
@@ -141,32 +141,20 @@ export class UsersTableComponent implements OnInit {
 
         break;
       case 'edit':
-        let query = {
-          find: [
-            {
-              field: '_barangay.brgyCode',
-              operator: '=',
-              value: this.brgyId,
+        this.dialog
+          .open(UserFormComponent, {
+            data: {
+              obj: event.obj,
+              action: event.action,
+              accessRoles: this.accessRoles,
             },
-          ],
-        };
-        this.api.role.getAll(query).subscribe((res: any) => {
-          this.accessRoles = res.env.roles;
-          this.dialog
-            .open(UserFormComponent, {
-              data: {
-                obj: event.obj,
-                action: event.action,
-                accessRoles: this.accessRoles,
-              },
-            })
-            .afterClosed()
-            .subscribe((res: any) => {
-              if (res) {
-                this.fetchUser(this.page);
-              }
-            });
-        });
+          })
+          .afterClosed()
+          .subscribe((res: any) => {
+            if (res) {
+              this.fetchUser(this.page);
+            }
+          });
 
         break;
       default:
@@ -214,6 +202,11 @@ export class UsersTableComponent implements OnInit {
           value: false,
         }
       );
+    query.populates = [
+      {
+        field: '_role',
+      },
+    ];
     if (event && event.filter) {
       query['filter'] = event.filter;
     }

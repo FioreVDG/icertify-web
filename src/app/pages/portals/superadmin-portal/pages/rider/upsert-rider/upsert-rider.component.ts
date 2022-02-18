@@ -35,18 +35,18 @@ export class UpsertRiderComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.data);
-    this.initCluster();
+    // this.initCluster();
   }
 
-  initCluster() {
-    this.loading = true;
-    this.riderFormFields[3].items[0].choices = this.data.clusters;
+  // initCluster() {
+  //   this.loading = true;
+  //   this.riderFormFields[3].items[0].choices = this.data.clusters;
 
-    if (this.riderFormFields[3].items[0].choices?.length) {
-      this.obj = this.data.obj;
-    }
-    this.loading = false;
-  }
+  //   if (this.riderFormFields[3].items[0].choices?.length) {
+  //     this.obj = this.data.obj;
+  //   }
+  //   this.loading = false;
+  // }
 
   formInitialized(e: any) {
     this.isFormInitiated = true;
@@ -64,7 +64,7 @@ export class UpsertRiderComponent implements OnInit {
       address1: this.riderDetails.form.controls['address'].value,
     };
 
-    if (this.data.obj) toSaveData.currentCluster = this.data.obj._clusterId._id;
+    // if (this.data.obj) toSaveData.currentCluster = this.data.obj._clusterId._id;
 
     console.log(toSaveData);
     this.dialog

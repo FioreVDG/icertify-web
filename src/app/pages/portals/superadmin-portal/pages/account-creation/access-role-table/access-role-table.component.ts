@@ -1,3 +1,5 @@
+import { UtilService } from './../../../../../../service/util/util.service';
+import { ActionResultComponent } from './../../../../../../shared/dialogs/action-result/action-result.component';
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
@@ -45,7 +47,8 @@ export class AccessRoleTableComponent implements OnInit {
   constructor(
     private api: ApiService,
     private dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private util: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -56,8 +59,8 @@ export class AccessRoleTableComponent implements OnInit {
       console.log('GALING SA DIALOGGGGGGG!!!!!!');
       this.userType = this.data.notary.userType;
       this.notaryId = this.data.notary.notaryId;
-      this.detailBrgy = this.data.notary.brgyInfo;
-      this.brgyId = this.data.notary.brgyInfo.brgyCode;
+      // this.detailBrgy = this.data.notary.brgyInfo;
+      // this.brgyId = this.data.notary.brgyInfo.brgyCode;
     }
     this.fetchData(this.page);
   }
@@ -127,6 +130,18 @@ export class AccessRoleTableComponent implements OnInit {
           .afterClosed()
           .subscribe((res: any) => {
             if (res) {
+              const loader = this.util.startLoading('Deleting...');
+              this.api.role.delete(event.obj._id).subscribe((res: any) => {
+                this.util.stopLoading(loader);
+                this.dialog.open(ActionResultComponent, {
+                  data: {
+                    msg: `${event.obj.name} deleted!`,
+                    success: true,
+                    button: 'OK',
+                  },
+                });
+                this.fetchData(this.page);
+              });
             }
           });
 

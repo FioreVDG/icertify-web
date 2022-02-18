@@ -93,6 +93,7 @@ export class DocumentReceivingComponent implements OnInit {
       query.sort =
         (event.sort.direction === 'asc' ? '' : '-') + event.sort.active;
     }
+    console.log(query);
 
     this.api.transaction.getAllFolder(query).subscribe((res: any) => {
       console.log(res);
