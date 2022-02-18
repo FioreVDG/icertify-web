@@ -75,6 +75,7 @@ export const REGISTRANT_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         breakpoint: 'sm',
         path: 'pendingTransactions',
         type: 'text',
+        isVirtual: true,
         selected: true,
       },
       {
@@ -159,6 +160,7 @@ export const REGISTRANT_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         path: 'pendingTransactions',
         type: 'text',
         selected: true,
+        isVirtual: true,
       },
       {
         title: 'Date & Time Updated',
