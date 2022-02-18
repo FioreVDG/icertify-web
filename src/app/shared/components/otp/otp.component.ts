@@ -89,7 +89,7 @@ export class OtpComponent implements OnInit {
     });
 
     console.log(this.otp);
-    const loader = this.util.startLoading('Verifying Please wait');
+    const loader = this.util.startLoading('Submitting Please wait');
     this.otpService
       .registerCheckOTP({
         mobileNumber: '+63' + this.data.mobileNumber,
