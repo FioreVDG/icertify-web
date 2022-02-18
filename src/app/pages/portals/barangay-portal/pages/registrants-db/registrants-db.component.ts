@@ -64,6 +64,7 @@ export class RegistrantsDbComponent implements OnInit {
 
       api = this.api.user.getAllIndigent(query);
     }
+    console.log(query);
 
     api.subscribe((res: any) => {
       console.log(res);

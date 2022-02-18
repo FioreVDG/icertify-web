@@ -116,6 +116,7 @@ export class AddTransactionComponent implements OnInit {
               documentType: res.result.document_type,
               sender: this.data,
               documentName: res.result.name,
+              name: res.result.name,
               fileExtension: res.result.name.split('.')[1],
               dropbox: res.result,
               documentTypeSpecific: this.others,
@@ -161,8 +162,10 @@ export class AddTransactionComponent implements OnInit {
       .subscribe(async (res: any) => {
         console.log(res);
         if (res) {
+          this.video = '';
           this.video = await this.getTempLink(res.result.path_display);
           this.videoOfSignature = res.result;
+          console.log(this.video);
         }
       });
   }
@@ -211,6 +214,13 @@ export class AddTransactionComponent implements OnInit {
           this.refCode = res.env.transaction.refCode;
           this.docs = res.env.documents;
 
+          this.dialog.open(ActionResultComponent, {
+            data: {
+              msg: `${this.refCode} successfully submitted!`,
+              success: true,
+              button: 'Okay',
+            },
+          });
           console.log(this.docs[0]);
           let smsData = {
             mobileNumber: `+63${this.data.mobileNumber}`,
