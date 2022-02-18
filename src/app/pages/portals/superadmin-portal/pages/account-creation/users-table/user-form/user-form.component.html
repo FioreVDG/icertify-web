@@ -1,0 +1,95 @@
+<div style="height: 50vh" mat-dialog-content *ngIf="loading">
+  <app-loading [label]="'Loading Form'"></app-loading>
+</div>
+<ng-container *ngIf="!loading">
+  <h1 mat-dialog-title>
+    {{ dialogTitle }}
+    <mat-icon class="close-btn" mat-dialog-close color="warn"> close </mat-icon>
+  </h1>
+  <div mat-dialog-content>
+    <mat-stepper orientation="vertical" [linear]="true" #stepper>
+      <mat-step [stepControl]="userDetails.form && brgyForm">
+        <ng-template matStepLabel>USER DETAILS</ng-template>
+        <app-form
+          #userDetails
+          [formfields]="userFormFields"
+          (formListener)="formListener($event)"
+          (formInitiated)="formInitialized()"
+          [obj]="data && data.obj ? data.obj : undefined"
+        ></app-form>
+        <form #brgyDetails [formGroup]="brgyForm" class="grid">
+          <ng-container *ngFor="let f of brgyFields">
+            <mat-form-field class="col-3" appearance="standard">
+              <mat-label>{{ f.label }}</mat-label>
+
+              <mat-select
+                [compareWith]="compareFn"
+                [formControlName]="f.fcname"
+              >
+                <mat-option *ngFor="let o of f.choices" [value]="o">{{
+                  util.deepFind(o, f.choiceLabel)
+                }}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="brgyForm.get(f.fcname)?.hasError('required')"
+                >{{ f.label }} is required</mat-error
+              >
+            </mat-form-field>
+          </ng-container>
+          <div class="col">
+            <mat-spinner
+              *ngIf="loadingContent"
+              style="margin-top: 1.8rem"
+              [diameter]="23"
+            ></mat-spinner>
+          </div>
+        </form>
+        <div
+          *ngIf="
+            (data.obj && data.obj.type !== 'QCLegal' && !this.data.initial) ||
+            (data.type && data.type !== 'QCLegal' && !this.data.initial)
+          "
+        >
+          <button mat-button matStepperNext>Next</button>
+        </div></mat-step
+      >
+      <mat-step
+        *ngIf="
+          (data.obj && data.obj.type !== 'QCLegal' && !this.data.initial) ||
+          (data.type && data.type !== 'QCLegal' && !this.data.initial)
+        "
+      >
+        <ng-template matStepLabel>Access Role </ng-template>
+        <app-form
+          #roleDetails
+          [formfields]="roleFormFields"
+          (formInitiated)="formInitialized()"
+          (formListener)="roleFormListener($event)"
+          [obj]="RoleInterface"
+        >
+        </app-form>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  </div>
+  <mat-dialog-actions>
+    <button
+      *ngIf="formInitiated"
+      mat-button
+      color="primary"
+      (click)="submit()"
+      [disabled]="
+        (!(
+          userDetails.form.valid &&
+          brgyForm.valid &&
+          roleDetails.form.valid
+        ) &&
+          !(data.obj && data.obj.type !== 'QCLegal')) ||
+        saving
+      "
+    >
+      {{ saving ? "Saving..." : "Save" }}
+    </button>
+  </mat-dialog-actions>
+</ng-container>

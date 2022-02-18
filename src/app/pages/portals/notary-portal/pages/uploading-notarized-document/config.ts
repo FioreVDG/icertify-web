@@ -7,7 +7,12 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     label: 'For Uploading',
     selected: true,
     bottomSheet: [],
-    populate: [],
+    populate: [
+      {
+        field: '_notaryId',
+        select: 'firstName,lastName,middleName',
+      },
+    ],
     column: [
       {
         title: 'Document Reference Code',
@@ -17,21 +22,31 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
       {
-        title: 'Document Name/Subject',
-        breakpoint: 'sm',
-        path: 'documentName',
-        type: 'text',
-        selected: true,
-      },
-      {
         title: 'Document Type',
         breakpoint: 'sm',
         path: 'documentType',
         type: 'text',
         selected: true,
+        useAsFilter: true,
+        choices: [
+          'Power of Attorney',
+          'Medical Records',
+          'Sworn Statements',
+          'Affidavit',
+          'Deeds',
+          'Wills and Trusts',
+          'Others',
+        ],
       },
       {
-        title: 'Owner',
+        title: 'Barangay',
+        breakpoint: 'sm',
+        path: '_transactionId._barangay.brgyDesc',
+        type: 'text',
+        selected: true,
+      },
+      {
+        title: 'QC Indigent',
         breakpoint: 'sm',
         path: 'sender',
         paths: ['sender.firstName', 'sender.lastName'],
@@ -39,10 +54,25 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
       {
-        title: 'Date and Time Received',
+        title: 'Notary',
         breakpoint: 'sm',
-        path: 'createdAt',
+        path: '_notaryId',
+        paths: ['_notaryId.firstName', '_notaryId.lastName'],
+        type: 'special',
+        selected: true,
+      },
+      {
+        title: 'Date and Time Notarized',
+        breakpoint: 'sm',
+        path: 'dateNotarized',
         type: 'date',
+        selected: true,
+      },
+      {
+        title: 'Batch Reference Code',
+        breakpoint: 'sm',
+        path: '_transactionId._folderId.folderName',
+        type: 'text',
         selected: true,
       },
     ],
@@ -52,7 +82,12 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     selected: false,
     isCheckbox: false,
     // bottomSheet: [],
-    populate: [],
+    populate: [
+      {
+        field: '_notaryId',
+        select: 'firstName,lastName,middleName',
+      },
+    ],
     column: [
       {
         title: 'Document Reference Code',
@@ -62,21 +97,31 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
       {
-        title: 'Document Name/Subject',
-        breakpoint: 'sm',
-        path: 'documentName',
-        type: 'text',
-        selected: true,
-      },
-      {
         title: 'Document Type',
         breakpoint: 'sm',
         path: 'documentType',
         type: 'text',
         selected: true,
+        useAsFilter: true,
+        choices: [
+          'Power of Attorney',
+          'Medical Records',
+          'Sworn Statements',
+          'Affidavit',
+          'Deeds',
+          'Wills and Trusts',
+          'Others',
+        ],
       },
       {
-        title: 'Owner',
+        title: 'Barangay',
+        breakpoint: 'sm',
+        path: '_transactionId._barangay.brgyDesc',
+        type: 'text',
+        selected: true,
+      },
+      {
+        title: 'QC Indigent',
         breakpoint: 'sm',
         path: 'sender',
         paths: ['sender.firstName', 'sender.lastName'],
@@ -84,10 +129,25 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
       {
-        title: 'Date and Time Received',
+        title: 'Notary',
         breakpoint: 'sm',
-        path: 'createdAt',
+        path: '_notaryId',
+        paths: ['_notaryId.firstName', '_notaryId.lastName'],
+        type: 'special',
+        selected: true,
+      },
+      {
+        title: 'Date and Time Uploaded',
+        breakpoint: 'sm',
+        path: 'notarizedDocument.dateUploaded',
         type: 'date',
+        selected: true,
+      },
+      {
+        title: 'Batch Reference Code',
+        breakpoint: 'sm',
+        path: '_transactionId._folderId.folderName',
+        type: 'text',
         selected: true,
       },
     ],
@@ -104,12 +164,22 @@ export const FIND_FOR_UPLOADING: Find[] = [
     operator: '[in]=',
     value: 'null',
   },
+  {
+    field: 'documentStatus',
+    operator: '[in]=',
+    value: 'Notarized,Unnotarized',
+  },
 ];
 export const FIND_UPLOADED: Find[] = [
   {
     field: 'status',
     operator: '=',
     value: 'Active',
+  },
+  {
+    field: 'documentStatus',
+    operator: '[in]=',
+    value: 'Notarized,Unnotarized',
   },
   {
     field: 'notarizedDocument',

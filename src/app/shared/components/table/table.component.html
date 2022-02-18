@@ -1,4 +1,5 @@
 <div class="grid">
+  <!-- FILTER BUTTONS  -->
   <div
     *ngIf="filterButtonConfig"
     class="col-12 flex justify-content-end flex-wrap mb-1"
@@ -15,6 +16,7 @@
   </div>
   <div class="col-12 main">
     <mat-toolbar>
+      <!-- SEARCHBOX -->
       <div class="search-box">
         <button class="btn-search" (click)="onTriggerSearch()">
           <mat-icon>search</mat-icon>
@@ -27,12 +29,94 @@
         />
       </div>
       <div class="flex-stretch"></div>
-    </mat-toolbar>
 
+      <!-- CHECKBOX BUTTONS -->
+      <div
+        *ngIf="buttonConfig && checkedRows.selected.length"
+        class="flex justify-content-end flex-wrap"
+      >
+        <button
+          mat-raised-button
+          class="checkbox-btn"
+          *ngFor="let btn of buttonConfig.checkBoxBtnConfig"
+          (click)="checkBoxBtnClick(btn.action)"
+        >
+          {{ btn.label }}
+        </button>
+      </div>
+      <button
+        mat-mini-fab
+        class="tbl-btn"
+        color="primary"
+        [matMenuTriggerFor]="menu"
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" xPosition="before">
+        <button (click)="dataSource = []; triggerRefresh()" mat-menu-item>
+          <mat-icon>refresh</mat-icon>
+          <span>Refresh Table</span>
+        </button>
+        <button mat-menu-item [matMenuTriggerFor]="showColumns">
+          <mat-icon>view_column</mat-icon>
+          <span>Select Column to Display</span>
+        </button>
+      </mat-menu>
+      <mat-menu #showColumns="matMenu">
+        <div class="columns" *ngFor="let col of columns">
+          <mat-checkbox
+            *ngIf="col.title !== ''"
+            [(ngModel)]="col.selected"
+            color="primary"
+            (ngModelChange)="ShowColumns($event)"
+            (click)="$event.stopPropagation()"
+          >
+            {{ col.title }}
+          </mat-checkbox>
+        </div>
+      </mat-menu>
+    </mat-toolbar>
+    <div class="grid" *ngIf="hasFilter">
+      <ng-container *ngFor="let filt of columns; let i = index">
+        <div style="font-size: 11px" class="col-2" *ngIf="filt.useAsFilter">
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>{{ filt.title }}</mat-label>
+            <mat-select matInput [(ngModel)]="filt.value">
+              <mat-option *ngFor="let opt of filt.choices" [value]="opt">{{
+                opt
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </ng-container>
+      <div class="col btns">
+        <button
+          [disabled]="checkExistingValue(columns) || loading"
+          color="primary"
+          class="filt"
+          mat-flat-button
+          (click)="filter()"
+        >
+          {{ loading ? "Filtering..." : "Filter" }}
+          <mat-icon>fast_forward</mat-icon>
+        </button>
+        <button
+          [disabled]="checkExistingValue(columns) || loading"
+          mat-stroked-button
+          color="warn"
+          (click)="clearValues()"
+        >
+          Clear
+        </button>
+      </div>
+    </div>
+
+    <!-- TABLE -->
     <div class="table-responsive">
       <table mat-table [dataSource]="dataSource" *ngIf="!loading">
         <ng-container matColumnDef="select" *ngIf="checkBox">
           <th mat-header-cell class="pr-2" *matHeaderCellDef>
+            <!-- CHECKBOX -->
             <mat-checkbox
               *ngIf="!isLimit && uniqueCheckbox === false"
               [indeterminate]="
@@ -81,7 +165,7 @@
 
         <ng-container *ngFor="let col of columns">
           <ng-container matColumnDef="{{ col.path }}">
-            <th mat-header-cell class="pr-2" *matHeaderCellDef mat-sort-header>
+            <th mat-header-cell class="pr-2" *matHeaderCellDef>
               {{ col.title }}
             </th>
             <td mat-cell *matCellDef="let element" (click)="rowClick(element)">
@@ -89,14 +173,18 @@
                 *ngIf="
                   col.type !== 'special' &&
                   col.type !== 'date' &&
-                  !col.textColor
+                  !col.textColor &&
+                  col.type !== 'count'
                 "
                 >{{ col.path === "mobileNumber" ? "(+63)" : ""
                 }}{{ util.deepFind(element, col.path) }}</span
               >
               <span
                 *ngIf="
-                  col.type !== 'special' && col.type !== 'date' && col.textColor
+                  col.type !== 'special' &&
+                  col.type !== 'date' &&
+                  col.textColor &&
+                  col.type !== 'count'
                 "
                 [ngStyle]="{
                   color: getTextColor(col, util.deepFind(element, col.path))
@@ -112,6 +200,9 @@
               >
               <span *ngIf="col.type === 'date'">{{
                 util.deepFind(element, col.path) | date: "medium"
+              }}</span>
+              <span *ngIf="col.type === 'count'">{{
+                element[col.path].length
               }}</span>
             </td>
           </ng-container>
@@ -133,6 +224,24 @@
         (page)="onClickPagination($event)"
       >
       </mat-paginator>
+
+      <!-- BOTTOM BUTTONS -->
+      <div
+        class="col-12 flex justify-content-end flex-wrap mb-1"
+        *ngIf="downloadExcelBtn"
+      >
+        <button
+          mat-button
+          style="float: right"
+          *ngIf="dataSource.length"
+          color="primary"
+          (click)="downloadExcel()"
+        >
+          Download Table as Excel(.xlsx)
+        </button>
+      </div>
+
+      <!-- LOADER -->
       <div *ngIf="!dataSource?.length && !loading" align="center">
         <p>No Records Found</p>
       </div>

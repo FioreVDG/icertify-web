@@ -12,6 +12,7 @@ export const REGISTRANT_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         label: 'Edit Registrant Details',
         action: 'editRegistrant',
         icon: 'edit',
+        showIf: 'pendingTransactions/</1',
       },
       {
         label: 'View',
@@ -22,6 +23,7 @@ export const REGISTRANT_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         label: 'Delete',
         action: 'deleteRegistrant',
         icon: 'delete',
+        showIf: 'pendingTransactions/</1',
       },
     ],
     populate: [],
@@ -66,6 +68,14 @@ export const REGISTRANT_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         breakpoint: 'sm',
         path: 'mobileNumber',
         type: 'text',
+        selected: true,
+      },
+      {
+        title: 'Pending Transaction',
+        breakpoint: 'sm',
+        path: 'pendingTransactions',
+        type: 'text',
+        isVirtual: true,
         selected: true,
       },
       {
@@ -86,6 +96,7 @@ export const REGISTRANT_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         label: 'Edit Registrant Details',
         action: 'editRegistrant',
         icon: 'edit',
+        showIf: 'pendingTransactions/</1',
       },
       {
         label: 'View',
@@ -96,6 +107,7 @@ export const REGISTRANT_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         label: 'Delete',
         action: 'deleteRegistrant',
         icon: 'delete',
+        showIf: 'pendingTransactions/</1',
       },
     ],
     populate: [],
@@ -141,6 +153,14 @@ export const REGISTRANT_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         path: 'mobileNumber',
         type: 'text',
         selected: true,
+      },
+      {
+        title: 'Pending Transaction',
+        breakpoint: 'sm',
+        path: 'pendingTransactions',
+        type: 'text',
+        selected: true,
+        isVirtual: true,
       },
       {
         title: 'Date & Time Updated',

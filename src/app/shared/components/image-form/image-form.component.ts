@@ -25,6 +25,7 @@ export class ImageFormComponent implements OnInit {
   @Input() mobileNumber: string = '';
   @Input() disable: any;
   @Input() reasonVal: string = '';
+  @Input() header: any;
   imgArray: Array<any> = [];
   me: any;
   imageForm = this.fb.group({});
@@ -39,6 +40,7 @@ export class ImageFormComponent implements OnInit {
 
   async ngOnInit() {
     await this.getImage();
+    console.log(this.header);
     if (this.reasonVal !== '') {
       this.reason = this.reasonVal;
       this.selectedChoice = 'no';
@@ -144,6 +146,11 @@ export class ImageFormComponent implements OnInit {
     } else {
       findHiddenForm.show = false;
       findHiddenForm.required = false;
+    }
+    if (this.header === 'Edit Registrant Details' && event === 'no') {
+      this.imageForm.get('cert_of_indigency')?.setValue('Empty');
+      console.log(this.imageForm);
+      delete findHiddenForm.imgLink;
     }
   }
 

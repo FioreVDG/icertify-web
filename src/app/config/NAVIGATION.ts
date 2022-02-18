@@ -31,9 +31,15 @@ export const NOTARY_NAVS: NavNode[] = [
     hasAccess: false,
   },
   {
-    label: 'Transaction',
+    label: 'Transaction History',
     icon: 'receipt_long',
-    route: 'transaction',
+    route: 'transaction-history',
+    hasAccess: false,
+  },
+  {
+    label: 'Document Tracker',
+    icon: 'account_tree',
+    route: 'document-tracker',
     hasAccess: false,
   },
 ];
@@ -52,15 +58,15 @@ export const BARANGAY_NAVS: NavNode[] = [
     hasAccess: false,
   },
   {
-    label: 'Registrants Database',
-    icon: 'contact_mail',
-    route: 'registrant-db',
-    hasAccess: false,
-  },
-  {
     label: 'New Transaction',
     icon: 'post_add',
     route: 'new-transaction',
+    hasAccess: false,
+  },
+  {
+    label: 'Registrants Database',
+    icon: 'contact_mail',
+    route: 'registrant-db',
     hasAccess: false,
   },
   {
@@ -82,19 +88,25 @@ export const BARANGAY_NAVS: NavNode[] = [
     hasAccess: false,
   },
   {
-    label: 'Notarized Document Receiving',
+    label: 'Document Receiving from Notary',
     icon: 'fact_check',
     route: 'notarized-document-receiving',
     hasAccess: false,
   },
   {
-    label: 'Notarized Document Releasing',
+    label: 'Document Releasing to Indigent',
     icon: 'verified',
     route: 'notarized-document-releasing',
     hasAccess: false,
   },
   {
-    label: 'Document Tracking',
+    label: 'Transaction History',
+    icon: 'receipt_long',
+    route: 'transaction-history',
+    hasAccess: false,
+  },
+  {
+    label: 'Document Tracker',
     icon: 'account_tree',
     route: 'document-tracker',
     hasAccess: false,
@@ -118,6 +130,18 @@ export const SUPERADMIN_NAVS: NavNode[] = [
     label: 'Clusters',
     icon: 'adjust',
     route: 'clusters',
+    hasAccess: false,
+  },
+  {
+    label: 'Riders',
+    icon: 'moped',
+    route: 'riders',
+    hasAccess: false,
+  },
+  {
+    label: 'Reports',
+    icon: 'summarize',
+    route: 'reports',
     hasAccess: false,
   },
 ];

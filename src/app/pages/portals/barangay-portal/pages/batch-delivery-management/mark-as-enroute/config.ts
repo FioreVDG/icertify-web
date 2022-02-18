@@ -13,7 +13,7 @@ export const MARK_AS_ENROUTE_FORM: Array<Section> = [
         fcname: 'rider',
         show: true,
         default: '',
-        path: 'riderNotaryToBarangay.lastName',
+        path: '_riderFromNotary.lastName',
         appearance: 'standard',
       },
     ],
@@ -30,11 +30,12 @@ export const TABLE_CONFIG = [
   },
   {
     title: 'Date and Time Received',
+    type: 'date',
     path: 'updatedAt',
   },
 ];
 
-export const MOCK_RIDER_DATA: AUTO_COMPLETE_FIELDS = {
+export const CHOICES_RIDER_DATA: AUTO_COMPLETE_FIELDS = {
   title: 'Select a Rider',
-  item: [{ value: { name: 'Leo', id: '6781gf21gf7613' } }],
+  item: [],
 };

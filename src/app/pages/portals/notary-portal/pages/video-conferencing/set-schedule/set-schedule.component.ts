@@ -1,3 +1,4 @@
+import { ApiService } from 'src/app/service/api/api.service';
 import { UtilService } from './../../../../../../service/util/util.service';
 import { ActionResultComponent } from './../../../../../../shared/dialogs/action-result/action-result.component';
 import { FolderService } from './../../../../../../service/api/folder/folder.service';
@@ -22,7 +23,8 @@ export class SetScheduleComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialog: MatDialog,
     private conference: ConferenceService,
-    private util: UtilService
+    private util: UtilService,
+    private api: ApiService
   ) {}
 
   ngOnInit(): void {
@@ -49,10 +51,18 @@ export class SetScheduleComponent implements OnInit {
   createSchedule() {
     let toSaveData: any = {};
     let idsTemp: any = [];
+    let docLogs: any = [];
     this.data.forEach((el: any) => {
       console.log(el);
       idsTemp.push(el._id);
+      el._transactions.forEach((trans: any) => {
+        docLogs.push({
+          docDetails: trans._documents[0],
+          message: 'Video Conference Scheduled by Notarial Staff',
+        });
+      });
     });
+    console.log(docLogs);
     toSaveData.schedule = new Date(this.schedule);
     toSaveData._folderIds = idsTemp;
     console.log(toSaveData);
@@ -60,6 +70,14 @@ export class SetScheduleComponent implements OnInit {
     this.conference.create(toSaveData).subscribe(
       (res: any) => {
         console.log(res);
+        this.api.documentlogs.createDocumentLogsMany(docLogs).subscribe(
+          (res: any) => {
+            console.log(res);
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
         this.util.stopLoading(loader);
         if (res) {
           this.dialog

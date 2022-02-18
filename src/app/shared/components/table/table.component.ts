@@ -13,6 +13,10 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { TableOutput } from 'src/app/models/tableemit.interface';
 import { MatPaginator } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
+import { BUTTON } from 'src/app/models/table-button.interface';
+import { MatDialog } from '@angular/material/dialog';
+import { QueryParams } from 'src/app/models/queryparams.interface';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-table',
@@ -29,36 +33,49 @@ export class TableComponent implements OnInit {
   @Input() bottomSheet: any;
   @Input() checkBoxDisableField!: any;
   @Input() pagination: any;
-  @Output() onRowClick: any = new EventEmitter<any>();
   @Input() filterButtonConfig: any = [];
-  duplicateColumns!: Array<Column>;
-  @Output() onUpdateTableEmit: any = new EventEmitter<any>();
+  @Input() buttonConfig: any = {};
   @Input() uniqueCheckbox: any = false;
-
-  @Output() onCheckBoxSelect = new EventEmitter<any>();
   @Input() loading = false;
+  @Input() downloadExcelBtn = false;
+  @Output() onDownloadExcelBtn = new EventEmitter<any>();
+  @Output() onCheckBoxBtnClick: any = new EventEmitter<any>();
+  @Output() onRowClick: any = new EventEmitter<any>();
+  @Output() onCheckBoxSelect = new EventEmitter<any>();
+  @Output() onUpdateTableEmit: any = new EventEmitter<any>();
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   displayedColumns: Array<string> = [];
   keyword: string = '';
   curPageIndex: number = 1;
-  constructor(public util: UtilService, private _bs: MatBottomSheet) {}
+  duplicateColumns!: Array<Column>;
+  find: any;
+  label: any;
+  @Input() hasFilter: boolean = false;
+
+  constructor(
+    public util: UtilService,
+    private _bs: MatBottomSheet,
+    public snackbar: MatSnackBar
+  ) {}
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
   ngOnInit(): void {
     console.log(this.dataSource);
-    this.duplicateColumns = JSON.parse(
-      JSON.stringify(this.columns ? this.columns : this.defaultColumn())
-    );
-    this.updateBreakpoint();
-
+    console.log(this.filterButtonConfig);
     if (this.filterButtonConfig) {
       this.filterButtonConfig.forEach((i: any, index: any) => {
         if (index === 0) {
+          this.label = i.label;
           this.checkBox = i.isCheckbox;
-          this.duplicateColumns = i.column;
+          this.columns = i.column;
           this.bottomSheet = i.bottomSheet;
+          this.buttonConfig.checkBoxBtnConfig = i.checkBoxBtns;
           i.selected = true;
+          let findFilterExist = i.column.find(
+            (col: any) => col.useAsFilter === true
+          );
+          if (findFilterExist) this.hasFilter = true;
           this.onUpdateTableEmit.emit(i);
         } else {
           i.selected = false;
@@ -66,6 +83,11 @@ export class TableComponent implements OnInit {
       });
       console.log(this.filterButtonConfig);
     }
+    this.duplicateColumns = JSON.parse(
+      JSON.stringify(this.columns ? this.columns : this.defaultColumn())
+    );
+    this.updateBreakpoint();
+    console.log(this.columns);
   }
   updateBreakpoint() {
     this.displayedColumns = [];
@@ -102,9 +124,9 @@ export class TableComponent implements OnInit {
       this.displayedColumns.unshift('select');
     }
 
-    setTimeout(() => {
-      this.loading = false;
-    }, 500);
+    // setTimeout(() => {
+    //   this.loading = false;
+    // }, 500);
   }
   rowClick(element: any) {
     console.log(element);
@@ -121,10 +143,14 @@ export class TableComponent implements OnInit {
               ? null
               : cond[2] == 'undefined'
               ? undefined
+              : cond[2] == '1'
+              ? 1
+              : cond[2] == '0'
+              ? 0
               : cond[2];
+          console.log(elVal, operand, value);
           switch (operand) {
             case '=':
-              console.log(elVal, value);
               if (elVal == value) {
                 filteredBS.push(bs);
               }
@@ -132,6 +158,23 @@ export class TableComponent implements OnInit {
             case '!=':
               if (elVal !== value) {
                 filteredBS.push(bs);
+              }
+
+              break;
+            case '<':
+              if (elVal < value) {
+                filteredBS.push(bs);
+              }
+              break;
+            case '>':
+              if (Array.isArray(elVal)) {
+                if (elVal.length > value) {
+                  filteredBS.push(bs);
+                }
+              } else {
+                if (elVal > value) {
+                  filteredBS.push(bs);
+                }
               }
               break;
             default:
@@ -142,7 +185,10 @@ export class TableComponent implements OnInit {
         }
       });
       this._bs
-        .open(BottomSheetComponent, { data: { config: filteredBS } })
+        .open(BottomSheetComponent, {
+          data: { config: filteredBS },
+          panelClass: 'btm-darken',
+        })
         .afterDismissed()
         .subscribe((res: any) => {
           let event = {
@@ -159,33 +205,51 @@ export class TableComponent implements OnInit {
     return this.filterButtonConfig[0].column;
   }
   onFilterButtonClick(index: any) {
+    this.loading = true;
     this.dataSource = [];
     this.keyword = '';
-    this.loading = true;
     this.duplicateColumns = [];
     this.displayedColumns = [];
     this.filterButtonConfig.forEach((i: any) => {
       if (i.label === index) {
+        this.label = i.label;
         this.checkBox = i.isCheckbox;
-        this.duplicateColumns = i.column;
+        this.columns = i.column;
         this.bottomSheet = i.bottomSheet;
+        this.buttonConfig.checkBoxBtnConfig = i.checkBoxBtns;
         i.selected = true;
+        let findFilterExist = i.column.find(
+          (col: any) => col.useAsFilter === true
+        );
+        if (findFilterExist) this.hasFilter = true;
+        else this.hasFilter = false;
         this.onUpdateTableEmit.emit(i);
       } else {
         i.selected = false;
       }
     });
+    this.duplicateColumns = JSON.parse(
+      JSON.stringify(this.columns ? this.columns : this.defaultColumn())
+    );
     this.checkedRows.clear();
     // console.log(this.duplicateColumns);
     this.updateBreakpoint();
   }
-  onTriggerSearch() {
+
+  checkBoxBtnClick(action: any) {
+    this.onCheckBoxBtnClick.emit({
+      selected: this.checkedRows.selected,
+      action,
+    });
+  }
+
+  onTriggerSearch(toFind?: any) {
     this.dataSource = [];
     var fields: Array<string> = [];
     this.duplicateColumns.forEach((c) => {
       if (
         c.path &&
-        !['date', 'special'].includes(c.type) &&
+        !['date', 'special', 'count'].includes(c.type) &&
         c.path !== '_roleId' &&
         !c.isVirtual
       )
@@ -196,14 +260,13 @@ export class TableComponent implements OnInit {
         });
       }
     });
+    this.find = toFind;
     let toEmit: TableOutput = {
       pageIndex: 0,
       pageSize: 10,
-      find: [],
+      find: toFind ? toFind : [],
     };
-    // console.log(this.keyword);
-    // console.log(this.duplicateColumns);
-    // console.log(fields);
+
     if (this.keyword)
       toEmit['filter'] = {
         value: this.keyword,
@@ -325,5 +388,104 @@ export class TableComponent implements OnInit {
       this.onCheckBoxSelect.emit(this.checkedRows.selected);
     }
     return this.checkedRows.isSelected(row);
+  }
+
+  ShowColumns(event: any) {
+    this.updateBreakpoint();
+  }
+
+  checkExistingValue(filt: any) {
+    let chk: any = filt.filter((o: any) => o.value);
+    if (chk.length) return false;
+    else return true;
+  }
+
+  clearValues() {
+    this.columns.forEach((f: any) => {
+      delete f.value;
+    });
+    this.keyword = '';
+    this.onTriggerSearch([]);
+  }
+
+  filter() {
+    this.dataSource = [];
+    let tempFilter: any = [];
+
+    let findVal: any = this.columns.filter((o: any) => o.value);
+    console.log(findVal);
+    if (findVal) {
+      findVal.forEach((val: any) => {
+        let path = val.path;
+        let operator = 'eq';
+        // GUMAGANA NA YUNG may . sa PATH ///////////////////
+        // if (path.split('.').length !== 1) {
+        //   let pathArray = path.split('.');
+        //   path = pathArray[0];
+        //   operator = pathArray[1];
+        // }
+        tempFilter.push({
+          field: path,
+          operator: `[${operator}]=`,
+          value: val.value,
+        });
+      });
+    }
+    console.log([...tempFilter]);
+    let toFind = [...tempFilter];
+    this.onTriggerSearch(toFind);
+  }
+
+  triggerRefresh() {
+    this.dataSource = [];
+    var toEmit: TableOutput = {
+      pageIndex: 0,
+      pageSize: 10,
+    };
+    var fields: Array<string> = [];
+    this.duplicateColumns.forEach((c) => {
+      if (c.path) fields.push(c.path);
+    });
+
+    this.pagination['filter'] = {
+      value: this.keyword,
+      fields,
+    };
+
+    this.onTriggerSearch(this.find);
+  }
+
+  downloadExcel() {
+    let query: QueryParams = {
+      find: this.find ? this.find : [],
+      populates: this.pagination.populate ? this.pagination.populate : [],
+    };
+    if (this.keyword) {
+      let fields: any = [];
+      this.duplicateColumns.forEach((c) => {
+        if (
+          c.path &&
+          !['date', 'special', 'count'].includes(c.type) &&
+          c.path !== '_roleId' &&
+          !c.isVirtual
+        )
+          fields.push(c.path);
+        if (c.type === 'special') {
+          c.paths?.forEach((p: any) => {
+            fields.push(p);
+          });
+        }
+      });
+      query['filter'] = {
+        value: this.keyword,
+        fields: fields,
+      };
+    }
+    let toEmit = {
+      label: this.label,
+      query,
+      columns: this.duplicateColumns,
+    };
+    this.onDownloadExcelBtn.emit(toEmit);
   }
 }

@@ -28,6 +28,7 @@ export class RegistrantsDbComponent implements OnInit {
     pageIndex: 1,
     populate: [],
     bottomSheet: this.bsConfig,
+    label: 'W/O Certificate of Indigency',
   };
   dataSource = [];
   dataLength: number = 0;
@@ -43,45 +44,45 @@ export class RegistrantsDbComponent implements OnInit {
     this.loading = true;
     console.log(event);
 
-    let query = {
+    let query: any = {
       find: event.find ? event.find : [],
       page: event.pageIndex || 1,
       limit: (event.pageSize || 10) + '',
-      filter: event.filter,
       populate: event.populate ? event.populate : [],
     };
+    if (event.filter) query.filter = event.filter;
 
     let api: any;
+
+    console.log(query);
     if (event && event.label === 'W/O Certificate of Indigency') {
       query.find = query.find.concat(FIND_WITHOUT_CERTIFICATE);
-      console.log(query);
+
       api = this.api.user.getAllIndigent(query);
     } else {
       query.find = query.find.concat(FIND_COMPLETE);
 
       api = this.api.user.getAllIndigent(query);
     }
+    console.log(query);
 
     api.subscribe((res: any) => {
       console.log(res);
       if (res.status === 'success') {
-        this.dataSource = res.env.users;
+        this.dataSource = res.env.usersFinal;
         this.dataLength = res.total;
       }
       this.loading = false;
     });
     this.currTable = event.label;
     this.bsConfig = event.bottomSheet;
+    console.log(this.bsConfig);
   }
 
   tableUpdateEmit(event: any) {
     event.label = event.label || this.currTable;
 
     this.fetchData(event);
-    setTimeout(() => {
-      this.loading = false;
-      console.log(this.loading);
-    }, 1000);
     console.log(event);
   }
 
@@ -89,6 +90,7 @@ export class RegistrantsDbComponent implements OnInit {
     console.log(event);
     if (event.obj.images.cert_of_indigency === 'Empty')
       delete event.obj.images.cert_of_indigency;
+
     switch (event.action) {
       case 'editRegistrant':
         this.dialog

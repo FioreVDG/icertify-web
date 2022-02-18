@@ -39,6 +39,7 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
       },
     ],
     bottomSheet: this.bsConfig,
+    label: 'For Receiving',
   };
   routeLength = 3;
   dataSource = [];
@@ -76,17 +77,17 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
     if (event && event.label === 'For Receiving') {
       qry.find = qry.find.concat(FIND_FOR_RECEIVING);
       qry.find.push({
-        field: '_brgyId',
+        field: '_barangay.brgyCode',
         operator: '=',
-        value: this.me._brgyId,
+        value: this.me._barangay.brgyCode,
       });
       api = this.api.folder.getAll(qry);
     } else {
       qry.find = qry.find.concat(FIND_RECEIVED);
       qry.find.push({
-        field: '_brgyId',
+        field: '_barangay.brgyCode',
         operator: '=',
-        value: this.me._brgyId,
+        value: this.me._barangay.brgyCode,
       });
       api = this.api.folder.getAll(qry);
     }
@@ -110,10 +111,6 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
     event['label'] = event.label || this.currTable;
     console.log(event.populate);
     this.fetchData(event);
-    setTimeout(() => {
-      this.loading = false;
-      console.log(this.loading);
-    }, 1000);
     console.log(event);
   }
   onCheckBoxSelect(event: any) {
@@ -123,9 +120,18 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
 
   onMark() {
     let ids: any = [];
+    let docLogs: any = [];
     this.selected.forEach((id: any) => {
       ids.push(id._id);
+      id._transactions.forEach((trans: any) => {
+        docLogs.push({
+          docDetails: trans._documents[0],
+          message: 'Document Received from Notary by Brgy Hall Staff',
+        });
+      });
     });
+    console.log(this.selected);
+    console.log(docLogs);
     this.dialog
       .open(AreYouSureComponent, {
         data: {
@@ -135,15 +141,15 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res: any) => {
-        const loader = this.util.startLoading('Saving...');
         if (res) {
+          const loader = this.util.startLoading('Saving...');
           let apiQueries = ids.map((id: any) => {
             return this.api.folder.update(
               {
-                _brgyReceivedBy: this.me._id,
+                _receivedByBrgy: this.me._id,
                 location: 'Barangay',
                 locationStatus: 'Received by Barangay',
-                dateDropToBarangay: new Date(),
+                dateReceivedByBrgy: new Date(),
               },
               id
             );
@@ -158,6 +164,16 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
               forkJoin(smsQueries).subscribe(
                 (res) => {
                   console.log(res);
+                  this.api.documentlogs
+                    .createDocumentLogsMany(docLogs)
+                    .subscribe(
+                      (res: any) => {
+                        console.log(res);
+                      },
+                      (err) => {
+                        console.log(err);
+                      }
+                    );
                   this.util.stopLoading(loader);
                   this.dialog
                     .open(ActionResultComponent, {
@@ -171,16 +187,20 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
                     .subscribe((res: any) => {
                       this.appTable?.checkedRows.clear();
                       this.selected = [];
+
                       this.fetchData(this.page);
                     });
                 },
                 (err) => {
+                  this.util.stopLoading(loader);
                   console.log(err);
                 }
               );
               console.log(res);
             },
             (err: any) => {
+              this.util.stopLoading(loader);
+
               console.log(err.error);
             }
           );
@@ -188,19 +208,31 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
       });
   }
 
-  onRowClick(event: any) {
-    console.log(event);
+  onCheckBoxButtonClick(event: any) {
     switch (event.action) {
-      case 'viewTransac':
-        this.dialog.open(ViewFolderTransactionsComponent, {
-          data: event,
-          height: 'auto',
-          width: '70%',
-        });
+      case 'receive':
+        this.onMark();
         break;
 
       default:
         break;
     }
+  }
+
+  onRowClick(event: any) {
+    console.log(event);
+    this.dialog.open(ViewFolderTransactionsComponent, {
+      data: { event, table: this.currTable },
+      height: 'auto',
+      width: '70%',
+    });
+    // console.log(event);
+    // switch (event.action) {
+    //   case 'viewTransac':
+    //     break;
+
+    //   default:
+    //     break;
+    // }
   }
 }

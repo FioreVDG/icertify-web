@@ -3,6 +3,13 @@
 .filt-btn {
   margin-left: 0.5rem;
 }
+.checkbox-btn {
+  margin-left: 0.5rem;
+}
+.checkbox-btn:hover {
+  background-color: $primary;
+  color: #f6f7fb;
+}
 mat-toolbar {
   padding-left: 0;
   padding-right: 0;
@@ -53,7 +60,7 @@ table.table-responsive.mat-table {
   padding: 1.5rem;
   background: #fff;
   // box-shadow: 1px 2px 13px 0px rgba(34, 85, 160, 0.28);
-  margin: 0.5rem;
+  margin: auto;
   //SEARCH BAR
   .search-box {
     width: fit-content;
@@ -141,4 +148,37 @@ table.table-responsive.mat-table {
 
 .flex-stretch {
   flex: 1 0 auto;
+}
+
+.tbl-btn {
+  box-shadow: none;
+  background: #ececec60;
+  color: $primary;
+  margin-left: 0.6rem;
+}
+.tbl-btn-2 {
+  box-shadow: none;
+  background: #ececec60;
+  margin-left: 0.6rem;
+}
+.tbl-btn:hover {
+  box-shadow: 1px 2px 13px 0px rgba(34, 85, 160, 0.28);
+}
+.tbl-btn-2:hover {
+  box-shadow: 1px 2px 13px 0px rgba(34, 85, 160, 0.28);
+}
+.columns {
+  padding: 0.5rem 1rem;
+  font-size: 14px;
+}
+.columns:hover {
+  background: #165fb338;
+}
+.btns {
+  margin-top: 0.3rem;
+  button {
+    letter-spacing: 0.1rem;
+    font-size: 14px;
+    margin-left: 0.4rem;
+  }
 }

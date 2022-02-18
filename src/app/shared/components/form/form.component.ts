@@ -41,8 +41,10 @@ export class FormComponent implements OnInit {
       section.items.forEach((i: Field) => {
         i.disabled = i.disabled || false || this.viewMode;
         if (this.obj && i.path) {
+          console.log(this.obj, i.path);
           i.default =
-            i.type === 'mobileNumber'
+            i.type === 'mobileNumber' &&
+            this.utilService.deepFind(this.obj, i.path).length != 10
               ? this.utilService.deepFind(this.obj, i.path).slice(3)
               : this.utilService.deepFind(this.obj, i.path);
         }
@@ -88,7 +90,7 @@ export class FormComponent implements OnInit {
     });
 
     this.form = this.fb.group(temp);
-
+    console.log(this.form);
     this.form.valueChanges.subscribe((raw) => {
       this.formfields.forEach((section: Section) => {
         section.items.forEach((i: Field) => {
@@ -183,5 +185,9 @@ export class FormComponent implements OnInit {
   copyMessage(toCopy?: any) {
     this.utilService.copyToClipboard(toCopy);
     this.sb.open('Copied', 'Okay', { duration: 3500 });
+  }
+  compareFn(op1: any, op2: any) {
+    console.log(op1, op2);
+    return op1.id === op2.id;
   }
 }

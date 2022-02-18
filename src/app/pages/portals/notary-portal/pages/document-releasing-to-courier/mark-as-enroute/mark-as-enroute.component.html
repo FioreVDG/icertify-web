@@ -3,20 +3,23 @@
 
 <div mat-dialog-conent>
   <app-form
-    #enrouteDetails
+    *ngFor="let data of obj"
     [formfields]="markAsEnrouteFormFields"
     (formInitiated)="formInitialized()"
     (formListener)="formListener($event)"
-    [obj]="obj"
+    [obj]="data"
   >
   </app-form>
 </div>
+
+<app-auto-complete #riderForm [opt]="riderList" (onSelect)="onSelect($event)">
+</app-auto-complete>
 
 <div mat-dialog-actions align="center">
   <button
     mat-flat-button
     color="primary"
-    [disabled]="!enrouteDetails.form.valid || saving"
+    [disabled]="saving || !riderObj"
     (click)="submit()"
   >
     Enroute

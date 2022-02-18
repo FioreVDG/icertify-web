@@ -1,4 +1,4 @@
-<button
+<!-- <button
   mat-raised-button
   *ngIf="selected.length && currTable !== 'Received'"
   style="position: relative; top: 9rem; left: 85%"
@@ -6,7 +6,7 @@
   (click)="onMark()"
 >
   Mark as Received
-</button>
+</button> -->
 
 <app-table
   #table
@@ -18,7 +18,7 @@
   [dataLength]="dataLength"
   [pagination]="page"
   [checkBox]="isCheckbox"
-  [bottomSheet]="bsConfig"
   (onCheckBoxSelect)="onCheckBoxSelect($event)"
+  (onCheckBoxBtnClick)="onCheckBoxButtonClick($event)"
 >
 </app-table>

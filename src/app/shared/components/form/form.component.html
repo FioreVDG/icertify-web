@@ -26,6 +26,7 @@
               "
               oninput="this.value = this.value.toUpperCase()"
             />
+            <p matPrefix>{{ field.prefix }}</p>
             <button
               *ngIf="form.controls[field.fcname].value && field.addCopyText"
               matSuffix
@@ -190,7 +191,10 @@
             [appearance]="field.appearance"
           >
             <mat-label>{{ field.label }}</mat-label>
-            <mat-select [formControlName]="field.fcname">
+            <mat-select
+              [formControlName]="field.fcname"
+              [compareWith]="compareFn"
+            >
               <mat-option
                 *ngFor="let item of field.choices"
                 [value]="

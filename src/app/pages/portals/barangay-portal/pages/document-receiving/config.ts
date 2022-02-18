@@ -4,11 +4,35 @@ import { Find } from 'src/app/models/queryparams.interface';
 
 export const DOCUMENT_RECEIVING_TABLE: Column[] = [
   {
-    title: 'Transaction Reference Code',
+    title: 'Document Reference Code',
     breakpoint: 'sm',
     path: 'refCode',
     type: 'text',
     selected: true,
+  },
+  {
+    title: 'Document Title',
+    breakpoint: 'sm',
+    path: 'documentName',
+    type: 'text',
+    selected: true,
+  },
+  {
+    title: 'Document Type',
+    breakpoint: 'sm',
+    path: 'documentType',
+    type: 'text',
+    selected: true,
+    useAsFilter: true,
+    choices: [
+      'Power of Attorney',
+      'Medical Records',
+      'Sworn Statements',
+      'Affidavit',
+      'Deeds',
+      'Wills and Trusts',
+      'Others',
+    ],
   },
   {
     title: 'QC Indigent',
@@ -21,8 +45,11 @@ export const DOCUMENT_RECEIVING_TABLE: Column[] = [
   {
     title: 'Received By',
     breakpoint: 'sm',
-    path: '_createdBy',
-    paths: ['_createdBy.firstName', '_createdBy.lastName'],
+    path: '_transactionId',
+    paths: [
+      '_transactionId._createdBy.firstName',
+      '_transactionId._createdBy.lastName',
+    ],
     type: 'special',
     selected: true,
   },
@@ -33,38 +60,32 @@ export const DOCUMENT_RECEIVING_TABLE: Column[] = [
     type: 'date',
     selected: true,
   },
-  {
-    title: 'No. Of Documents',
-    breakpoint: 'sm',
-    path: 'documentCount',
-    type: 'text', // make count type
-    selected: true,
-    isVirtual: true,
-  },
+  // {
+  //   title: 'No. Of Documents',
+  //   breakpoint: 'sm',
+  //   path: 'documentCount',
+  //   type: 'text', // make count type
+  //   selected: true,
+  //   isVirtual: true,
+  // },
   {
     title: 'Status',
     breakpoint: 'sm',
     path: 'locationStatus',
     type: 'text',
     selected: true,
-    // textColor: [
-    //   {
-    //     value: 'For Pick Up (Barangay)',
-    //     color: '#e58086' || 'red',
-    //   },
-    //   {
-    //     value: 'Enroute to Notary',
-    //     color: '#e58086' || 'red',
-    //   },
-    //   {
-    //     value: 'Received by Notary',
-    //     color: '#e58086' || 'red',
-    //   },
-    // ],
+    useAsFilter: true,
+    choices: ['For Pick Up (Barangay)', 'Enroute to Notary'],
   },
 ];
 
-export const DOC_RECEIVING_FIND: Find[] = [];
+export const DOC_RECEIVING_FIND: Find[] = [
+  {
+    field: 'locationStatus',
+    operator: '[in]=',
+    value: 'For Pick Up (Barangay),Enroute to Notary',
+  },
+];
 
 export const DOC_RECEIVING_BOTTOMSHEET: BottomSheetItem[] = [
   { label: 'View Document/s', action: 'viewDoc', icon: 'description' },

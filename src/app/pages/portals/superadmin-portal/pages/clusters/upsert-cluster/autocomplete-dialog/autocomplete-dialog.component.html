@@ -1,0 +1,19 @@
+<mat-form-field class="full-width">
+  <mat-label>Select Barangay</mat-label>
+  <input
+    type="text"
+    matInput
+    [formControl]="brgyCtrl"
+    [matAutocomplete]="auto"
+  />
+  <mat-autocomplete
+    autoActiveFirstOption
+    [displayWith]="displayWith"
+    #auto="matAutocomplete"
+    (optionSelected)="close()"
+  >
+    <mat-option *ngFor="let brgy of filteredBarangays | async" [value]="brgy">
+      {{ brgy._barangay.brgyDesc | uppercase }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

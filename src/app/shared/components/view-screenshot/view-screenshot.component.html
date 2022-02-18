@@ -1,0 +1,31 @@
+<h3 mat-dialog-title>View Screenshot/s</h3>
+<mat-icon mat-dialog-close class="close-btn" color="warn">close</mat-icon>
+
+<div mat-dialog-content class="content">
+  <div
+    class="grid"
+    style="
+      border-bottom: 2px solid #c5c5c5;
+      margin-bottom: 1rem;
+      padding: 1rem 0;
+    "
+    *ngFor="let s of screenShots; let i = index"
+  >
+    <div class="col-12 pic" [hidden]="s.loading">
+      <img [src]="s.link" (load)="checkLoader($event, i)" />
+    </div>
+    <div class="col-12 pic" *ngIf="s.loading">
+      <mat-spinner></mat-spinner>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions align="center">
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="loading"
+    (click)="downloadSS(data.document)"
+  >
+    Download as PDF
+  </button>
+</div>

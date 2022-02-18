@@ -1,3 +1,4 @@
+import { ApiService } from 'src/app/service/api/api.service';
 import { UtilService } from 'src/app/service/util/util.service';
 import { TransactionService } from './../../../../../../service/api/transaction/transaction.service';
 import { AreYouSureComponent } from './../../../../../../shared/dialogs/are-you-sure/are-you-sure.component';
@@ -41,7 +42,8 @@ export class AddTransactionComponent implements OnInit {
     private dialog: MatDialog,
     private dbx: DropboxService,
     private transaction: TransactionService,
-    private util: UtilService
+    private util: UtilService,
+    private api: ApiService
   ) {}
 
   ngOnInit(): void {
@@ -114,6 +116,7 @@ export class AddTransactionComponent implements OnInit {
               documentType: res.result.document_type,
               sender: this.data,
               documentName: res.result.name,
+              name: res.result.name,
               fileExtension: res.result.name.split('.')[1],
               dropbox: res.result,
               documentTypeSpecific: this.others,
@@ -159,8 +162,10 @@ export class AddTransactionComponent implements OnInit {
       .subscribe(async (res: any) => {
         console.log(res);
         if (res) {
+          this.video = '';
           this.video = await this.getTempLink(res.result.path_display);
           this.videoOfSignature = res.result;
+          console.log(this.video);
         }
       });
   }
@@ -196,7 +201,7 @@ export class AddTransactionComponent implements OnInit {
     toSaveData.sender._senderId = this.data._id;
     toSaveData.videoOfSignature = this.videoOfSignature;
     toSaveData.documents = this.docsArray;
-    toSaveData._brgyId = this.brgyId._id;
+    toSaveData._barangay = this.brgyId._barangay;
     toSaveData._senderId = this.data._id;
 
     console.log(toSaveData);
@@ -208,7 +213,44 @@ export class AddTransactionComponent implements OnInit {
           this.step = this.step + 1;
           this.refCode = res.env.transaction.refCode;
           this.docs = res.env.documents;
-          this.util.stopLoading(loader);
+
+          this.dialog.open(ActionResultComponent, {
+            data: {
+              msg: `${this.refCode} successfully submitted!`,
+              success: true,
+              button: 'Okay',
+            },
+          });
+          console.log(this.docs[0]);
+          let smsData = {
+            mobileNumber: `+63${this.data.mobileNumber}`,
+            message: this.messageFormat(this.docs[0]),
+          };
+
+          //FOR DOCUMENT LOGS
+          let docLogs: any = {};
+          this.docsArray[0]._documentId = res.env.documents[0]._id;
+          this.docsArray[0].refCode = res.env.transaction.refCode;
+          console.log(this.docsArray[0]);
+          docLogs.docDetails = this.docsArray[0];
+          docLogs.message = 'Received by Brgy Hall Staff';
+          this.api.documentlogs.createDocumentLogs(docLogs).subscribe(
+            (res: any) => {
+              console.log(res);
+
+              this.api.sms.send(smsData).subscribe(
+                (res) => {
+                  console.log(res);
+                  this.util.stopLoading(loader);
+                },
+                (err) => {
+                  console.log(err);
+                  this.util.stopLoading(loader);
+                }
+              );
+            },
+            (err) => console.log(err)
+          );
         }
       },
       (err) => {
@@ -223,5 +265,15 @@ export class AddTransactionComponent implements OnInit {
         });
       }
     );
+  }
+
+  messageFormat(document: any) {
+    return `Good day ${
+      document.sender.firstName
+    },\nThe document you submmitted has been succesfully received on ${new Date(
+      document.createdAt
+    ).toLocaleString()}.\n\nYour Document reference code is ${
+      document.refCode
+    }\nPlease wait for the schedule  of your videoconference with Atty. Carlo Javier as part of the RON process of the document that you have submitted.\n\nYou can track your document through this link: http://www.trackmydocument.com\n\nFor more information, contact iCertify: 09123456789 Thank you. `;
   }
 }

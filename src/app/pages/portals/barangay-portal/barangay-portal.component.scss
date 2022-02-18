@@ -1,3 +1,4 @@
+@import "../../../../assets/styles/variables.scss";
 .flex-stretch {
   flex: 1 0 auto;
 }
@@ -26,7 +27,6 @@ mat-sidenav-container {
     overflow-x: hidden;
     border: none;
     box-shadow: -4px 7px 26px 3px rgba(0, 0, 0, 0.1);
-
     // width: auto;
   }
   .chevron-button {
@@ -55,7 +55,7 @@ mat-sidenav-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 0.6rem;
+  margin-left: 0.9rem;
   .img {
     width: auto;
     height: 75%;
@@ -86,5 +86,58 @@ mat-sidenav-container {
     font-weight: 600;
     font-size: 22px;
     color: #fff;
+  }
+}
+
+.mat-nav-list .mat-list-item:hover {
+  background: linear-gradient(
+    90deg,
+    rgb(44, 14, 90) 18%,
+    rgb(95, 47, 140) 100%
+  );
+  border-radius: 5px;
+  color: #fff;
+  transition: 0.1s;
+  span {
+    color: #fefefe;
+  }
+  mat-icon {
+    color: #fefefe;
+  }
+}
+
+.mat-nav-list .mat-list-item:focus {
+  background: linear-gradient(
+    90deg,
+    rgb(44, 14, 90) 18%,
+    rgb(95, 47, 140) 100%
+  );
+  border-radius: 5px;
+  color: #fff;
+  transition: 0.1s;
+  span {
+    color: #fefefe;
+  }
+  mat-icon {
+    color: #fefefe;
+  }
+}
+.mat-nav-list .mat-list-item {
+  margin: 0.1rem 0rem;
+}
+
+.router-active-link {
+  background: linear-gradient(
+    90deg,
+    rgb(44, 14, 90) 18%,
+    rgb(95, 47, 140) 100%
+  );
+  border-radius: 5px;
+  margin: 0rem;
+  span {
+    color: #fefefe;
+  }
+  mat-icon {
+    color: #fefefe;
   }
 }

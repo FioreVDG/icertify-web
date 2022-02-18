@@ -1,0 +1,102 @@
+<div mat-dialog-content *ngIf="loading">
+  <app-loading [label]="'Loading Form'"></app-loading>
+</div>
+<ng-container>
+  <h1 mat-dialog-title>
+    {{ dialogTitle }}
+    <mat-icon class="close-btn" mat-dialog-close color="warn"> close </mat-icon>
+  </h1>
+  <div mat-dialog-content>
+    <app-form
+      #notarialDetails
+      [formfields]="notarialFields"
+      (formInitiated)="formInitialized()"
+      (formListener)="formListener($event)"
+      [obj]="data ? data.obj : undefined"
+    ></app-form>
+    <app-auto-complete
+      #ibpchapterDetails
+      [appearance]="'standard'"
+      [opt]="ibp_chapter"
+      [defaultValue]="data ? data.obj['ibp_chapter_region'] : undefined"
+      (onSelect)="initializeIbpProv($event, 'ibp_chapter_region')"
+    ></app-auto-complete>
+    <app-auto-complete
+      #ibpprovDetails
+      [appearance]="'standard'"
+      [opt]="ibp_provinces"
+      (onSelect)="initializeIbpProv($event, 'ibp_chapter_city_prov')"
+      [defaultValue]="data ? data.obj['ibp_chapter_city_prov'] : undefined"
+    ></app-auto-complete>
+    <app-form
+      #officeaddressDetails
+      [formfields]="officeAddrFields"
+      (formInitiated)="formInitialized()"
+      (formListener)="formListener($event)"
+      [obj]="data ? data.obj : undefined"
+    ></app-form>
+    <form #officebrgyDetails [formGroup]="officeBrgyForm" class="grid">
+      <ng-container *ngFor="let f of office_brgyFields">
+        <mat-form-field class="col-3" appearance="standard" *ngIf="f.show">
+          <mat-label>{{ f.label }}</mat-label>
+
+          <mat-select [formControlName]="f.fcname" [compareWith]="compareFn">
+            <mat-option *ngFor="let o of f.choices" [value]="o">{{
+              util.deepFind(o, f.choiceLabel)
+            }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="officeBrgyForm.get(f.fcname)?.hasError('required')"
+            >{{ f.label }} is required</mat-error
+          >
+        </mat-form-field></ng-container
+      >
+    </form>
+    <app-form
+      #homeaddressDetails
+      [formfields]="addrFields"
+      (formInitiated)="formInitialized()"
+      (formListener)="formListener($event)"
+      [obj]="data ? data.obj : undefined"
+    ></app-form>
+    <form #homebrgyDetails [formGroup]="homeBrgyForm" class="grid">
+      <ng-container *ngFor="let f of home_brgyFields">
+        <mat-form-field class="col-3" appearance="standard" *ngIf="f.show">
+          <mat-label>{{ f.label }}</mat-label>
+
+          <mat-select [formControlName]="f.fcname" [compareWith]="compareFn">
+            <mat-option *ngFor="let o of f.choices" [value]="o">{{
+              util.deepFind(o, f.choiceLabel)
+            }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="homeBrgyForm.get(f.fcname)?.hasError('required')"
+            >{{ f.label }} is required</mat-error
+          >
+        </mat-form-field></ng-container
+      >
+    </form>
+
+    <app-form
+      #validityDetails
+      [formfields]="period_of_validity"
+      (formInitiated)="formInitialized()"
+      (formListener)="formListener($event)"
+      [obj]="data ? data.obj : undefined"
+    ></app-form>
+  </div>
+  <mat-dialog-actions>
+    <button
+      mat-button
+      color="primary"
+      [disabled]="
+        (!ibpchapterDetails.optForm.valid &&
+          !officeBrgyForm.valid &&
+          !validityDetails.form.valid &&
+          !notarialDetails.form.valid) ||
+        saving
+      "
+      (click)="onSave()"
+    >
+      {{ saving ? "Saving..." : "Save" }}
+    </button>
+  </mat-dialog-actions>
+</ng-container>

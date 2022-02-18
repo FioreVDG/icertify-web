@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ApiService } from 'src/app/service/api/api.service';
 import {
@@ -9,6 +9,7 @@ import {
 } from './config';
 import { ModifyAgreementComponent } from './modify-agreement/modify-agreement.component';
 import { UpsertSlaComponent } from './upsert-sla/upsert-sla.component';
+import { TableComponent } from 'src/app/shared/components/table/table.component';
 
 @Component({
   selector: 'app-sla',
@@ -16,6 +17,8 @@ import { UpsertSlaComponent } from './upsert-sla/upsert-sla.component';
   styleUrls: ['./sla.component.scss'],
 })
 export class SlaComponent implements OnInit {
+  @ViewChild('table') appTable: TableComponent | undefined;
+
   selected = [];
   currTable: any;
   currPopulate: any;
@@ -84,10 +87,6 @@ export class SlaComponent implements OnInit {
     event['label'] = event.label || this.currTable;
     console.log(event.populate);
     this.fetchData(event);
-    setTimeout(() => {
-      this.loading = false;
-      console.log(this.loading);
-    }, 1000);
     console.log(event);
   }
 

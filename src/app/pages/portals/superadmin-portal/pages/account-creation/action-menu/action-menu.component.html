@@ -1,26 +1,22 @@
+<div class="header-text">
+  <h1 *ngIf="brgyDetails">{{ brgyDetails.brgyDesc | uppercase }}</h1>
+  <h2>Select your choice</h2>
+  <p>Choose between Users and Access roles</p>
+</div>
 <div class="grid">
-  <div class="col" align="center">
-    <div align="center" class="box" (click)="redirectTo(0)">
-      <div style="margin-top: 2rem">
-        <mat-icon inline="true">people</mat-icon>
+  <div
+    class="col-6"
+    *ngFor="let selection of selections; let i = index"
+    (click)="onSelectItem(selection.label)"
+  >
+    <div
+      class="cards"
+      [class]="selectedItem.value === selection.label ? 'selected' : ''"
+    >
+      <div class="img-container">
+        <mat-icon color="primary">{{ selection.icon }}</mat-icon>
       </div>
-      <p style="margin: 0">Users</p>
-    </div>
-  </div>
-  <div class="col" align="center">
-    <div align="center" class="box" (click)="redirectTo(1)">
-      <div style="margin-top: 2rem">
-        <mat-icon inline="true">manage_accounts</mat-icon>
-      </div>
-      <p style="margin: 0">Access Roles</p>
-    </div>
-  </div>
-  <div class="col" align="center" (click)="redirectTo(2)">
-    <div align="center" class="box" (click)="dialogRef.close()">
-      <div style="margin-top: 2rem">
-        <mat-icon inline="true">exit_to_app</mat-icon>
-      </div>
-      <p style="margin: 0">Back</p>
+      <p>{{ selection.label }}</p>
     </div>
   </div>
 </div>

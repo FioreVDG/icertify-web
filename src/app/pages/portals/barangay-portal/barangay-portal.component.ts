@@ -1,3 +1,5 @@
+import { setCluster } from './../../../store/cluster/cluster';
+import { ApiService } from './../../../service/api/api.service';
 import { onMainContentChange } from './../../../animations/sidebar.animation';
 import { AreYouSureComponent } from './../../../shared/dialogs/are-you-sure/are-you-sure.component';
 import {
@@ -32,7 +34,7 @@ import {
 })
 export class BarangayPortalComponent implements OnInit {
   isExpanded: boolean = false;
-  barangayNav = BARANGAY_NAVS;
+  barangayNav: any[] = [];
   me: any;
   loading: boolean = false;
   loggingOut: boolean = false;
@@ -54,7 +56,8 @@ export class BarangayPortalComponent implements OnInit {
     private dialog: MatDialog,
     private util: UtilService,
     private auth: AuthService,
-    private store: Store<{ user: User }>
+    private store: Store<{ user: User }>,
+    private api: ApiService
   ) {}
 
   ngOnInit(): void {
@@ -75,8 +78,23 @@ export class BarangayPortalComponent implements OnInit {
       (res: any) => {
         console.log(res);
         this.me = res.env.user;
+        this.api.cluster
+          .getOne(this.me._barangay.brgyCode)
+          .subscribe((res: any) => {
+            console.log(res, 'Cluster');
+            this.store.dispatch(setCluster({ cluster: res.env.cluster }));
+          });
         this.store.dispatch(setUser({ user: res.env.user }));
         localStorage.setItem('BARANGAY_INFORMATION', JSON.stringify(this.me));
+
+        if (!this.me.isMain && this.me._role && this.me._role.access.length) {
+          this.barangayNav = this.me._role.access;
+          console.log(this.barangayNav);
+        } else {
+          this.barangayNav = BARANGAY_NAVS;
+          console.log(this.barangayNav);
+        }
+
         this.loading = false;
       },
       (err) => {

@@ -4,8 +4,13 @@ import {
   MatDialogRef,
   MatDialog,
 } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
+import { forkJoin } from 'rxjs';
 import { Section } from 'src/app/models/form.interface';
+import { User } from 'src/app/models/user.interface';
+import { CHOICES_RIDER_DATA } from 'src/app/pages/portals/barangay-portal/pages/batch-delivery-management/mark-as-enroute/config';
 import { ApiService } from 'src/app/service/api/api.service';
+import { UtilService } from 'src/app/service/util/util.service';
 import { FormComponent } from 'src/app/shared/components/form/form.component';
 import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
 import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
@@ -17,24 +22,39 @@ import { MARK_AS_ENROUTE_FORM } from './mark-as-enroute';
   styleUrls: ['./mark-as-enroute.component.scss'],
 })
 export class MarkAsEnrouteComponent implements OnInit {
-  @ViewChild('enrouteDetails') enrouteDetails!: FormComponent;
+  @ViewChild('riderForm') riderForm!: FormComponent;
   loading: boolean = true;
   saving: boolean = false;
   obj: any;
+  riderList: any = CHOICES_RIDER_DATA;
+  riderObj: any;
 
+  me: any;
   toAddData: any = {};
   markAsEnrouteFormFields: Array<Section> = MARK_AS_ENROUTE_FORM;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<MarkAsEnrouteComponent>,
     private api: ApiService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private store: Store<{ user: User }>,
+    private util: UtilService
   ) {}
 
   ngOnInit(): void {
-    this.obj = { ...this.data.selected[0] };
+    this.store.select('user').subscribe((res: User) => {
+      this.me = res;
+    });
+    console.log(this.data);
+    this.obj = this.data.selected;
     console.log(this.obj);
     console.log(this.data.selected[0]._id);
+
+    this.data.setting._riders.forEach((i: any) => {
+      this.riderList.item.push({
+        value: { name: i.firstName + ' ' + i.lastName, id: i._id },
+      });
+    });
   }
 
   formInitialized() {}
@@ -42,28 +62,67 @@ export class MarkAsEnrouteComponent implements OnInit {
   formListener(event: any) {
     this.toAddData = { ...event };
   }
+
+  onSelect(event: any) {
+    console.log(event);
+    this.riderObj = event.id;
+  }
+
   submit() {
+    let docLogs: any = [];
     let toAdd = {
-      riderNotaryToBarangay: { ...this.toAddData },
-      datePickedFromNotary: new Date(),
+      _riderFromNotary: this.riderObj,
+      _enroutedByNotary: this.me._id,
+      datePickedByRiderFromNotary: new Date(),
+      dateEnroutedByNotary: new Date(),
       locationStatus: 'Enroute to Barangay',
     };
     console.log(toAdd);
+    let enrouteQueries = this.data.selected.map((el: any) => {
+      return this.api.folder.enroute(toAdd, el._id);
+    });
+
+    for (let item of this.obj) {
+      item._transactions.forEach((el: any) => {
+        docLogs.push({
+          docDetails: el._documents[0],
+          message: 'Marked as Enroute to Brgy Hall by Notarial Staff',
+        });
+      });
+    }
+
+    // this.obj._transactions.forEach((el: any) => {
+    //   docLogs.push({
+    //     docDetails: el._documents[0],
+    //     message: 'Marked as Enroute to Brgy Hall by Notarial Staff',
+    //   });
+    // });
+    console.log(docLogs);
+    console.log(enrouteQueries);
 
     this.dialog
       .open(AreYouSureComponent, {
-        data: { msg: 'Mark as received this batch?' },
+        data: { msg: 'Mark as Enroute this batch?' },
       })
       .afterClosed()
       .subscribe((res: any) => {
         if (res) {
-          this.api.folder
-            .enroute(toAdd, this.data.selected[0]._id)
-            .subscribe((res) => {
+          const loader = this.util.startLoading('Enrouting...');
+          forkJoin(enrouteQueries).subscribe(
+            (res) => {
+              this.api.documentlogs.createDocumentLogsMany(docLogs).subscribe(
+                (resp: any) => {
+                  console.log(resp);
+                },
+                (err) => {
+                  console.log(err);
+                }
+              );
+              this.util.stopLoading(loader);
               this.dialog
                 .open(ActionResultComponent, {
                   data: {
-                    msg: `${this.data.selected[0].folderName} successfully enrouted`,
+                    msg: `Batches successfully enrouted`,
                     success: true,
                     button: 'Okay',
                   },
@@ -73,7 +132,11 @@ export class MarkAsEnrouteComponent implements OnInit {
                 .subscribe((res: any) => {
                   if (res) this.dialogRef.close(true);
                 });
-            });
+            },
+            (err) => {
+              this.util.stopLoading(loader);
+            }
+          );
         }
       });
   }

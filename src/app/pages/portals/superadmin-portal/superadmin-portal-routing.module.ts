@@ -32,6 +32,16 @@ const routes: Routes = [
             (m) => m.ClustersModule
           ),
       },
+      {
+        path: 'riders',
+        loadChildren: () =>
+          import('./pages/rider/rider.module').then((m) => m.RiderModule),
+      },
+      {
+        path: 'reports',
+        loadChildren: () =>
+          import('./pages/reports/reports.module').then((m) => m.ReportsModule),
+      },
     ],
   },
 ];

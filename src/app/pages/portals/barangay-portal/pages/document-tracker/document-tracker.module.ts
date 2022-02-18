@@ -1,3 +1,4 @@
+import { DialogsModule } from './../../../../../shared/dialogs/dialogs.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -13,6 +14,7 @@ import { ComponentModule } from 'src/app/shared/components/component.module';
     DocumentTrackerRoutingModule,
     MaterialModule,
     ComponentModule,
+    DialogsModule,
   ],
 })
 export class DocumentTrackerModule {}

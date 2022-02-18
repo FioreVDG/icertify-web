@@ -3,9 +3,15 @@
   <div class="grid">
     <div class="col-12 mt-3" *ngIf="!certificateOfIndigencyExist">
       <label
+        *ngIf="
+          header !== 'View Registration Details' && header !== 'Review Details'
+        "
         ><b>{{ choices.section }}</b></label
       >
       <mat-radio-group
+        *ngIf="
+          header !== 'View Registration Details' && header !== 'Review Details'
+        "
         class="example-radio-group"
         [(ngModel)]="selectedChoice"
         (ngModelChange)="choose($event)"
@@ -16,21 +22,39 @@
           >{{ choice.label }}</mat-radio-button
         >
       </mat-radio-group>
-      <mat-form-field
-        *ngIf="selectedChoice === 'no'"
-        appearance="fill"
-        style="width: 55%"
+      <div
+        *ngIf="
+          header !== 'View Registration Details' && header !== 'Review Details'
+        "
       >
-        <mat-label>Select Reason</mat-label>
-        <mat-select [(ngModel)]="reason">
-          <mat-option
-            style="font-size: 13px"
-            *ngFor="let reason of reasons"
-            [value]="reason"
-            >{{ reason }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
+        <mat-form-field
+          *ngIf="selectedChoice === 'no'"
+          appearance="fill"
+          style="width: 55%"
+        >
+          <mat-label>Select Reason</mat-label>
+          <mat-select [(ngModel)]="reason">
+            <mat-option
+              style="font-size: 13px"
+              *ngFor="let reason of reasons"
+              [value]="reason"
+              >{{ reason }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div *ngIf="header === 'View Registration Details'">
+        <p>Uploading of the Certificate of Indigency is to follow.</p>
+        <p>
+          Reason: <b>{{ reason }}</b>
+        </p>
+      </div>
+      <div *ngIf="header === 'Review Details'">
+        <p>Uploading of the Certificate of Indigency is to follow.</p>
+        <p>
+          Reason: <b>{{ reason }}</b>
+        </p>
+      </div>
     </div>
     <mat-divider></mat-divider>
     <ng-container *ngFor="let image of imgArray; let i = index">
