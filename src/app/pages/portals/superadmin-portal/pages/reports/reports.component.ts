@@ -75,22 +75,56 @@ export class ReportsComponent implements OnInit {
   }
 
   generateReports() {
+    console.log(this.currentSLA);
     var query: Array<any> = [
       {
         $match: {
-          notaryId: {
-            $ne: this.currentUser._id,
+          _notaryId: {
+            _parseId: this.currentUser._id,
           },
         },
       },
-    ];
-    this.api.report.generateQuery(query, 'batch').subscribe(
-      (res) => {
-        console.log(res);
+      {
+        $group: {
+          _id: {
+            month: {
+              $month: {
+                date: '$' + this.currentSLA.path,
+                timezone: 'Asia/Singapore',
+              },
+            },
+            day: {
+              $dayOfMonth: {
+                date: '$' + this.currentSLA.path,
+                timezone: 'Asia/Singapore',
+              },
+            },
+            year: {
+              $year: {
+                date: '$' + this.currentSLA.path,
+                timezone: 'Asia/Singapore',
+              },
+            },
+            hour: {
+              $hour: {
+                date: '$' + this.currentSLA.path,
+                timezone: 'Asia/Singapore',
+              },
+            },
+          },
+          total: { $sum: 1 },
+        },
       },
-      (err) => {
-        console.log(err);
-      }
-    );
+    ];
+    this.api.report
+      .generateQuery(query, this.currentSLA.collectionName)
+      .subscribe(
+        (res) => {
+          console.log(res);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
   }
 }
