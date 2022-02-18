@@ -185,6 +185,7 @@ export class AccessRoleFormComponent implements OnInit {
   }
 
   private updateValues(newObj: NavNode[], oldObj: NavNode[]) {
+    console.log(oldObj, newObj);
     const cpyNewObj: NavNode[] = JSON.parse(JSON.stringify(newObj));
     const cpyOldObj: NavNode[] = JSON.parse(JSON.stringify(oldObj));
     for (let old of cpyOldObj) {
@@ -195,6 +196,7 @@ export class AccessRoleFormComponent implements OnInit {
         foundObj = { ...old, ...foundObj };
       }
     }
+    console.log(cpyNewObj, cpyOldObj);
     return cpyNewObj;
   }
   private updateChildValues(found: NavNode, old: NavNode) {
