@@ -43,6 +43,7 @@ export class NotarizedDocumentReleasingComponent implements OnInit {
       },
     ],
     bottomSheet: this.bsConfig,
+    label: 'For Releasing',
   };
   routeLength = 3;
   dataSource = [];
@@ -80,27 +81,28 @@ export class NotarizedDocumentReleasingComponent implements OnInit {
     let api: any;
     if (event && event.label === 'For Releasing') {
       qry.find = qry.find.concat(FIND_FOR_RELEASING);
-      qry.find.push({
-        field: '_barangay.brgyCode',
-        operator: '=',
-        value: this.me._barangay.brgyCode,
-      });
-      api = this.api.transaction.getAll(qry);
+      // qry.find.push({
+      //   field: '_barangay.brgyCode',
+      //   operator: '=',
+      //   value: this.me._barangay.brgyCode,
+      // });
+      console.log(qry);
+      api = this.api.document.getAll(qry);
     } else {
       qry.find = qry.find.concat(FIND_RELEASED);
-      qry.find.push({
-        field: '_barangay.brgyCode',
-        operator: '=',
-        value: this.me._barangay.brgyCode,
-      });
-      api = this.api.transaction.getAll(qry);
+      // qry.find.push({
+      //   field: '_barangay.brgyCode',
+      //   operator: '=',
+      //   value: this.me._barangay.brgyCode,
+      // });
+      api = this.api.document.getAll(qry);
     }
 
     console.log(qry);
     api.subscribe((res: any) => {
       console.log(res);
       if (res.status == 'Success') {
-        this.dataSource = res.env.transactions;
+        this.dataSource = res.env.documents;
         this.dataLength = res.total;
       }
       this.loading = false;
@@ -125,15 +127,18 @@ export class NotarizedDocumentReleasingComponent implements OnInit {
   onMark() {
     let ids: any = [];
     let docLogs: any = [];
+    console.log(this.selected);
     this.selected.forEach((id: any) => {
-      ids.push(id._id);
+      ids.push(id._transactionId._id);
       docLogs.push({
-        docDetails: id._documents[0],
+        docDetails: id,
         message: 'Document Released to Indigent by Brgy Hall Staff',
       });
     });
     console.log(this.selected);
     console.log(docLogs);
+    console.log(ids);
+
     this.dialog
       .open(AreYouSureComponent, {
         data: {
@@ -207,14 +212,16 @@ export class NotarizedDocumentReleasingComponent implements OnInit {
     console.log(event);
     switch (event.action) {
       case 'viewDoc':
-        this.viewAttachments(event.obj._documents);
+        this.viewAttachments(event.obj);
         break;
       case 'viewInfo':
         event.obj.sender;
         this.viewPersonalInfo(event.obj.sender);
         break;
       case 'viewVid':
-        this.viewVideoOfSigning(event.obj.videoOfSignature.path_display);
+        this.viewVideoOfSigning(
+          event.obj._transactionId.videoOfSignature.path_display
+        );
         break;
       default:
     }
@@ -255,7 +262,7 @@ export class NotarizedDocumentReleasingComponent implements OnInit {
     console.log(docs);
     this.dialog.open(ViewAttachmentsComponent, {
       data: {
-        documents: docs,
+        documents: [docs],
       },
       height: 'auto',
       width: '70%',

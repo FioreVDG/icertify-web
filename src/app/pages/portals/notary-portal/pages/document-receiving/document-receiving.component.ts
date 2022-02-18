@@ -75,8 +75,6 @@ export class DocumentReceivingComponent implements OnInit {
       this.me = res;
       this.api.cluster.getOneNotary(this.me._notaryId).subscribe((res: any) => {
         this.settings = res.env.cluster;
-
-        // console.log(this.settings);
       });
     });
   }
@@ -131,9 +129,9 @@ export class DocumentReceivingComponent implements OnInit {
   }
 
   tableUpdateEmit(event: any) {
+    event['label'] = event.label || this.currTable;
     this.api.cluster.getOneNotary(this.me._notaryId).subscribe((res: any) => {
       this.settings = res.env.cluster;
-      event['label'] = event.label || this.currTable;
       this.fetchData(event);
     });
   }

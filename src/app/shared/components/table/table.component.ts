@@ -72,11 +72,11 @@ export class TableComponent implements OnInit {
           this.bottomSheet = i.bottomSheet;
           this.buttonConfig.checkBoxBtnConfig = i.checkBoxBtns;
           i.selected = true;
-          this.onUpdateTableEmit.emit(i);
           let findFilterExist = i.column.find(
             (col: any) => col.useAsFilter === true
           );
           if (findFilterExist) this.hasFilter = true;
+          this.onUpdateTableEmit.emit(i);
         } else {
           i.selected = false;
         }
