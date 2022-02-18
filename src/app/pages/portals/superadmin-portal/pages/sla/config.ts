@@ -50,9 +50,9 @@ export const SLA_COLUMNS_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
       {
         title: 'Name',
         breakpoint: 'sm',
-        // change to barangay name
-        path: '_userId.address.barangay.brgyDesc',
-        type: 'text',
+        path: '_userId',
+        paths: ['_userId.firstName', '_userId.lastName'],
+        type: 'special',
         selected: true,
       },
       {
