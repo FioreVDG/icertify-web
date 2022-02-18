@@ -62,20 +62,6 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         path: 'locationStatus',
         type: 'text',
         selected: true,
-        // textColor: [
-        //   {
-        //     value: 'For Pick Up (Barangay)',
-        //     color: '#e58086' || 'red',
-        //   },
-        //   {
-        //     value: 'Enroute to Notary',
-        //     color: '#e58086' || 'red',
-        //   },
-        //   {
-        //     value: 'Received by Notary',
-        //     color: '#e58086' || 'red',
-        //   },
-        // ],
       },
     ],
     checkBoxBtns: [
@@ -144,20 +130,6 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         path: 'locationStatus',
         type: 'text',
         selected: true,
-        // textColor: [
-        //   {
-        //     value: 'For Pick Up (Barangay)',
-        //     color: '#e58086' || 'red',
-        //   },
-        //   {
-        //     value: 'Enroute to Notary',
-        //     color: '#e58086' || 'red',
-        //   },
-        //   {
-        //     value: 'Received by Notary',
-        //     color: '#e58086' || 'red',
-        //   },
-        // ],
       },
     ],
   },
