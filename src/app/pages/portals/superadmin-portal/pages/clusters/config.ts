@@ -10,6 +10,14 @@ export const CLUSTER_COLUMNS: Array<Column> = [
     selected: true,
   },
   {
+    title: 'Notary',
+    breakpoint: 'sm',
+    path: '_notaryId',
+    paths: ['_notaryId.firstName', '_notaryId.lastName'],
+    type: 'special',
+    selected: true,
+  },
+  {
     title: 'Barangays',
     breakpoint: 'sm',
     path: 'barangays',

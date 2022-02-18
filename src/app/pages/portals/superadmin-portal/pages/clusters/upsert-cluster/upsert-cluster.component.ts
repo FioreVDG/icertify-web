@@ -171,8 +171,24 @@ export class UpsertClusterComponent implements OnInit {
       .open(AutocompleteDialogComponent, { data: { barangays: selClusters } })
       .afterClosed()
       .subscribe((res) => {
-        console.log(res);
         if (res) {
+          if (this.data.barangays.length) {
+            if (
+              this.data.barangays[i]._barangay.brgyCode !==
+              res._barangay.brgyCode
+            ) {
+              (this.clusterForm.get('barangays') as FormArray)
+                .at(i)
+                .get('_barangay')
+                ?.markAsDirty();
+            } else {
+              (this.clusterForm.get('barangays') as FormArray)
+                .at(i)
+                .get('_barangay')
+                ?.markAsPristine();
+            }
+          }
+
           (this.clusterForm.get('barangays') as FormArray)
             .at(i)
             .get('_barangay')
@@ -321,8 +337,8 @@ export class UpsertClusterComponent implements OnInit {
 
     this.clusterForm.valueChanges.subscribe((res: any) => {
       // console.log(res);
-      console.log(this.filteredNotaries);
-      console.log(this.filteredRiders);
+      // console.log(this.filteredNotaries);
+      // console.log(this.filteredRiders);
     });
   }
 
