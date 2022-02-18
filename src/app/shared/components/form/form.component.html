@@ -191,7 +191,10 @@
             [appearance]="field.appearance"
           >
             <mat-label>{{ field.label }}</mat-label>
-            <mat-select [formControlName]="field.fcname">
+            <mat-select
+              [formControlName]="field.fcname"
+              [compareWith]="compareFn"
+            >
               <mat-option
                 *ngFor="let item of field.choices"
                 [value]="

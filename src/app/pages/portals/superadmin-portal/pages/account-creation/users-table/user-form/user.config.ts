@@ -191,7 +191,6 @@ export const ROLE_ACCESS: Section[] = [
         colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
         fcname: '_role',
         show: true,
-        default: '',
         path: '_id',
         appearance: 'standard',
         choices: [],
