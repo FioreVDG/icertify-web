@@ -17,6 +17,8 @@ import { ViewVideoComponent } from 'src/app/shared/components/view-video/view-vi
 import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
 import { forkJoin } from 'rxjs';
 import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachments/view-attachments.component';
+import { Store } from '@ngrx/store';
+import { User } from 'src/app/models/user.interface';
 
 @Component({
   selector: 'app-document-receiving',
@@ -24,6 +26,8 @@ import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachm
   styleUrls: ['./document-receiving.component.scss'],
 })
 export class DocumentReceivingComponent implements OnInit {
+  settings: any;
+  me: any;
   dataSource: any[] = [];
   columns: Column[] = DOCUMENT_RECEIVING_TABLE;
   bottomSheet: BottomSheetItem[] = DOC_RECEIVING_BOTTOMSHEET;
@@ -38,11 +42,25 @@ export class DocumentReceivingComponent implements OnInit {
     private api: ApiService,
     private dialog: MatDialog,
     private util: UtilService,
-    private dbx: DropboxService
+    private dbx: DropboxService,
+    private store: Store<{ user: User }>
   ) {}
 
   ngOnInit(): void {
-    this.fetchData(this.page);
+    this.getSettings();
+  }
+
+  getSettings() {
+    this.store.select('user').subscribe((res: User) => {
+      this.me = res;
+      this.api.cluster
+        .getOne(this.me._barangay.brgyCode)
+        .subscribe((res: any) => {
+          this.settings = res.env.cluster;
+          console.log(this.settings);
+          this.fetchData(this.page);
+        });
+    });
   }
 
   fetchData(event: TableOutput) {

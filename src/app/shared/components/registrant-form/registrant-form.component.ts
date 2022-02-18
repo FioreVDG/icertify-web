@@ -44,6 +44,8 @@ export class RegistrantFormComponent implements OnInit {
     console.log(this.data);
     if (this.data !== null) {
       if (this.data.obj) {
+        if (this.data.obj.images.cert_of_indigency === 'Empty')
+          delete this.data.obj.images.cert_of_indigency;
         this.toUpdataData = this.data.obj;
         this.imgObj = this.data.obj.images;
         this.addressTemp = this.data.obj.address;

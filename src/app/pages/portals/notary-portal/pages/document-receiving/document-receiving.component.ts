@@ -56,6 +56,7 @@ export class DocumentReceivingComponent implements OnInit {
   dataLength: number = 0;
   bsConfig: any;
   me: any;
+  settings: any;
 
   constructor(
     private api: ApiService,
@@ -66,16 +67,31 @@ export class DocumentReceivingComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getSettings();
+  }
+
+  getSettings() {
     this.store.select('user').subscribe((res: User) => {
       this.me = res;
-      this.fetchData(this.page);
+      this.api.cluster.getOneNotary(this.me._notaryId).subscribe((res: any) => {
+        this.settings = res.env.cluster;
+
+        // console.log(this.settings);
+      });
     });
   }
 
   fetchData(event: TableOutput) {
     this.loading = true;
     console.log(event);
+    let brgyCodes: any[] = [];
+    if (this.settings) {
+      brgyCodes = this.settings.barangays.map((el: any) => {
+        return el._barangay.brgyCode;
+      });
+    }
 
+    console.log(brgyCodes);
     let query: QueryParams = {
       find: event.find ? event.find : [],
       page: event.pageIndex || 1,
@@ -93,8 +109,14 @@ export class DocumentReceivingComponent implements OnInit {
       query.sort =
         (event.sort.direction === 'asc' ? '' : '-') + event.sort.active;
     }
+    if (brgyCodes) {
+      query.find = query.find.concat({
+        field: '_barangay.brgyCode',
+        operator: '[in]=',
+        value: brgyCodes.join(','),
+      });
+    }
     console.log(query);
-
     this.api.transaction.getAllFolder(query).subscribe((res: any) => {
       console.log(res);
       this.dataSource = res.folders;
@@ -109,10 +131,11 @@ export class DocumentReceivingComponent implements OnInit {
   }
 
   tableUpdateEmit(event: any) {
-    event['label'] = event.label || this.currTable;
-    console.log(event.populate);
-    this.fetchData(event);
-    console.log(event);
+    this.api.cluster.getOneNotary(this.me._notaryId).subscribe((res: any) => {
+      this.settings = res.env.cluster;
+      event['label'] = event.label || this.currTable;
+      this.fetchData(event);
+    });
   }
 
   onRowClick(event: any) {
