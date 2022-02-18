@@ -98,6 +98,8 @@ export const VIEW_TRANSACTION_TABLE_DOC_RELEASING: Column[] = [
         color: '#83b9a1' || 'green',
       },
     ],
+    useAsFilter: true,
+    choices: ['Notarized', 'Unnotarized'],
   },
   {
     title: 'Remark',

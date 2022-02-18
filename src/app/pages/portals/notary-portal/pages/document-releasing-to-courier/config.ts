@@ -268,4 +268,9 @@ export const DELIVERED_FIND: Find[] = [
     operator: '=',
     value: 'Barangay',
   },
+  {
+    field: 'locationStatus',
+    operator: '[nin]=',
+    value: 'Released to Indigent',
+  },
 ];

@@ -72,6 +72,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
     this.store.select('user').subscribe((me: any) => {
       console.log(me._barangay.brgyCode);
       this.api.cluster.getOne(me._barangay.brgyCode).subscribe((res: any) => {
+        console.log(res);
         this.setting = res.env.cluster;
         let resp: any = res.env.cluster.barangays.find(
           (i: any) => i._barangay.brgyCode === me._barangay.brgyCode

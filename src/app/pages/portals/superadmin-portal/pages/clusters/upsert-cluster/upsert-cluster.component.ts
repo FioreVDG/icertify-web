@@ -31,6 +31,7 @@ import {
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Observable } from 'rxjs';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
 
 @Component({
   selector: 'app-upsert-cluster',
@@ -171,8 +172,24 @@ export class UpsertClusterComponent implements OnInit {
       .open(AutocompleteDialogComponent, { data: { barangays: selClusters } })
       .afterClosed()
       .subscribe((res) => {
-        console.log(res);
         if (res) {
+          if (this.data.barangays.length) {
+            if (
+              this.data.barangays[i]._barangay.brgyCode !==
+              res._barangay.brgyCode
+            ) {
+              (this.clusterForm.get('barangays') as FormArray)
+                .at(i)
+                .get('_barangay')
+                ?.markAsDirty();
+            } else {
+              (this.clusterForm.get('barangays') as FormArray)
+                .at(i)
+                .get('_barangay')
+                ?.markAsPristine();
+            }
+          }
+
           (this.clusterForm.get('barangays') as FormArray)
             .at(i)
             .get('_barangay')
@@ -321,8 +338,8 @@ export class UpsertClusterComponent implements OnInit {
 
     this.clusterForm.valueChanges.subscribe((res: any) => {
       // console.log(res);
-      console.log(this.filteredNotaries);
-      console.log(this.filteredRiders);
+      // console.log(this.filteredNotaries);
+      // console.log(this.filteredRiders);
     });
   }
 
@@ -342,31 +359,50 @@ export class UpsertClusterComponent implements OnInit {
     });
     let api = this.api.cluster.create(cluster);
     if (this.data) api = this.api.cluster.update(cluster, this.data.id);
-    api.subscribe(
-      (res) => {
-        console.log(res);
-        this.dialog.open(ActionResultComponent, {
-          data: {
-            msg:
-              cluster.name + ' successfully ' + this.data
-                ? 'updated!'
-                : 'added!',
-            success: true,
-            button: 'Got it!',
-          },
-        });
-        this.dialogRef.close(true);
-      },
-      (err) => {
-        this.dialog.open(ActionResultComponent, {
-          data: {
-            msg: 'Error: ' + err.error.message,
-            success: false,
-            button: 'Got it!',
-          },
-        });
-      }
-    );
+
+    this.dialog
+      .open(AreYouSureComponent, {
+        data: {
+          isOthers: true,
+          msg: 'you want to save this Cluster?',
+        },
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe(
+        (res: any) => {
+          if (res) {
+            api.subscribe(
+              (res) => {
+                console.log(res);
+                this.dialog.open(ActionResultComponent, {
+                  data: {
+                    msg:
+                      cluster.name + ' successfully ' + this.data
+                        ? 'updated!'
+                        : 'added!',
+                    success: true,
+                    button: 'Got it!',
+                  },
+                });
+                this.dialogRef.close(true);
+              },
+              (err) => {
+                this.dialog.open(ActionResultComponent, {
+                  data: {
+                    msg: 'Error: ' + err.error.message,
+                    success: false,
+                    button: 'Got it!',
+                  },
+                });
+              }
+            );
+          }
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
   }
 
   setDefaultValueFormArray() {

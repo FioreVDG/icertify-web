@@ -39,6 +39,7 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
       },
     ],
     bottomSheet: this.bsConfig,
+    label: 'For Receiving',
   };
   routeLength = 3;
   dataSource = [];
@@ -140,8 +141,8 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res: any) => {
-        const loader = this.util.startLoading('Saving...');
         if (res) {
+          const loader = this.util.startLoading('Saving...');
           let apiQueries = ids.map((id: any) => {
             return this.api.folder.update(
               {
@@ -186,16 +187,20 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
                     .subscribe((res: any) => {
                       this.appTable?.checkedRows.clear();
                       this.selected = [];
+
                       this.fetchData(this.page);
                     });
                 },
                 (err) => {
+                  this.util.stopLoading(loader);
                   console.log(err);
                 }
               );
               console.log(res);
             },
             (err: any) => {
+              this.util.stopLoading(loader);
+
               console.log(err.error);
             }
           );
@@ -216,17 +221,18 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
 
   onRowClick(event: any) {
     console.log(event);
-    switch (event.action) {
-      case 'viewTransac':
-        this.dialog.open(ViewFolderTransactionsComponent, {
-          data: event,
-          height: 'auto',
-          width: '70%',
-        });
-        break;
+    this.dialog.open(ViewFolderTransactionsComponent, {
+      data: { event, table: this.currTable },
+      height: 'auto',
+      width: '70%',
+    });
+    // console.log(event);
+    // switch (event.action) {
+    //   case 'viewTransac':
+    //     break;
 
-      default:
-        break;
-    }
+    //   default:
+    //     break;
+    // }
   }
 }
