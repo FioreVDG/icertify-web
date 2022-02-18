@@ -152,9 +152,9 @@ export class AccessRoleTableComponent implements OnInit {
           action: event.action,
           form: event.obj,
           navType:
-            this.accountType == 'iCertify'
+            this.userType == 'iCertify'
               ? SUPERADMIN_NAVS
-              : this.accountType == 'Barangay'
+              : this.userType == 'Barangay'
               ? BARANGAY_NAVS
               : NOTARY_NAVS,
         };

@@ -26,7 +26,7 @@ export class ClusterService {
   getOne(brgyCode: String) {
     return this.http.start('get', `/clusters/getOne/${brgyCode}`);
   }
-  getOneNotary(_notaryId: String) {
+  getOneNotary(_notaryId: String | undefined) {
     return this.http.start('get', `/clusters/getOneNotary/${_notaryId}`);
   }
 }
