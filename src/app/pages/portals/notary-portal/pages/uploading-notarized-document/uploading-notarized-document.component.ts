@@ -31,6 +31,7 @@ export class UploadingNotarizedDocumentComponent implements OnInit {
         field: '_createdBy',
       },
     ],
+    label: 'For Uploading',
   };
   routeLength = 3;
   dataSource = [];
@@ -64,7 +65,6 @@ export class UploadingNotarizedDocumentComponent implements OnInit {
       populates: event.populate ? event.populate : [],
     };
     if (event.filter) qry.filter = event.filter;
-
     let api: any;
     if (event && event.label === 'For Uploading') {
       qry.find = qry.find.concat(FIND_FOR_UPLOADING);
@@ -97,11 +97,18 @@ export class UploadingNotarizedDocumentComponent implements OnInit {
   onRowClick(event: any) {
     console.log(event);
     if (this.currTable != 'Uploaded') {
-      this.dialog.open(UploadNotirizedDocumentComponent, {
-        height: 'auto',
-        width: '70%',
-        data: event,
-      });
+      this.dialog
+        .open(UploadNotirizedDocumentComponent, {
+          height: 'auto',
+          width: '70%',
+          data: event,
+        })
+        .afterClosed()
+        .subscribe((res) => {
+          if (res) {
+            this.fetchData(this.page);
+          }
+        });
     } else {
       this.dbx
         .getTempLink(event.notarizedDocument.dropbox.path_display)
@@ -112,9 +119,10 @@ export class UploadingNotarizedDocumentComponent implements OnInit {
           fileType = fileType[fileType.length - 1].toLowerCase();
           this.dialog.open(ViewAttachmentsComponent, {
             data: {
-              obj: event,
-              link: res.result.link,
-              isImg: fileType === 'pdf' ? false : true,
+              documents: [event],
+              // obj: event,
+              // link: res.result.link,
+              // isImg: fileType === 'pdf' ? false : true,
             },
             height: 'auto',
             width: '70%',

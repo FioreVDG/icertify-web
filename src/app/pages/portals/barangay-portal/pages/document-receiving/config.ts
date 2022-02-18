@@ -76,21 +76,6 @@ export const DOCUMENT_RECEIVING_TABLE: Column[] = [
     selected: true,
     useAsFilter: true,
     choices: ['For Pick Up (Barangay)', 'Enroute to Notary'],
-
-    // textColor: [
-    //   {
-    //     value: 'For Pick Up (Barangay)',
-    //     color: '#e58086' || 'red',
-    //   },
-    //   {
-    //     value: 'Enroute to Notary',
-    //     color: '#e58086' || 'red',
-    //   },
-    //   {
-    //     value: 'Received by Notary',
-    //     color: '#e58086' || 'red',
-    //   },
-    // ],
   },
 ];
 

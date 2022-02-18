@@ -49,6 +49,11 @@ export class AutocompleteDialogComponent implements OnInit {
           field: 'isMain',
           operator: '=',
         },
+        {
+          field: '_barangay.brgyCode',
+          operator: '[nin]=',
+          value: this.selectedBarangays.join(','),
+        },
       ],
       filter: {
         value,
@@ -71,6 +76,7 @@ export class AutocompleteDialogComponent implements OnInit {
       for (const barangay of this.data.barangays) {
         if (barangay._barangay)
           this.selectedBarangays.push(barangay._barangay.brgyCode);
+        console.log(this.selectedBarangays);
       }
     }
 

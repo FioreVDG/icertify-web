@@ -1,3 +1,4 @@
+import { PdfService } from './../../../service/pdf/pdf.service';
 import { ViewProofOfIdentityComponent } from './../view-proof-of-identity/view-proof-of-identity.component';
 import { ViewScreenshotComponent } from './../view-screenshot/view-screenshot.component';
 import { QueryParams } from './../../../models/queryparams.interface';
@@ -5,10 +6,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ApiService } from 'src/app/service/api/api.service';
 import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
-import jsPDF from 'jspdf';
 import { ViewAttachmentsComponent } from '../view-attachments/view-attachments.component';
 import {
-  CHECKBOX_DISABLER,
   FILT_BTN_CONFIG,
   FIND_ALL,
   FIND_NOTARIZED,
@@ -32,7 +31,6 @@ export class TransactionHistoryTableComponent implements OnInit {
   @Input() header: any;
   isCheckbox: boolean = true;
   filtBtnConfig: any;
-  checkBoxDisableField = CHECKBOX_DISABLER;
   selected = [];
   currTable: any;
   currPopulate: any;
@@ -53,7 +51,8 @@ export class TransactionHistoryTableComponent implements OnInit {
     private store: Store<{ user: User }>,
     public util: UtilService,
     public snackbar: MatSnackBar,
-    private excel: ExcelService
+    private excel: ExcelService,
+    private pdf: PdfService
   ) {}
 
   ngOnInit(): void {
@@ -116,7 +115,10 @@ export class TransactionHistoryTableComponent implements OnInit {
       console.log(res);
       if (res.status == 'Success') {
         this.dataSource = res.env.documents;
+        this.getImgLink();
+        this.checkCertificateOfIndigency();
         this.dataLength = res.total;
+        console.log(this.dataSource);
       }
       this.loading = false;
     });
@@ -128,6 +130,27 @@ export class TransactionHistoryTableComponent implements OnInit {
     console.log(event.populate);
     this.fetchData(event);
     console.log(event);
+  }
+
+  checkCertificateOfIndigency() {
+    this.dataSource.forEach((docObj: any) => {
+      docObj.sender.images['COIstatus'] = docObj.sender.images.reason_coi
+        ? 'To Follow'
+        : 'Uploaded';
+    });
+  }
+
+  getImgLink() {
+    this.dataSource.forEach((docObj: any) => {
+      docObj['temp'] = {};
+      for (let s of docObj.screenShots) {
+        this.dbx.getTempLink(s.path_display).subscribe((res: any) => {
+          let temp = [];
+          temp.push(res.result.link);
+          docObj.temp['screenShots'] = temp;
+        });
+      }
+    });
   }
 
   onCheckBoxClick(event: any) {
@@ -197,6 +220,7 @@ export class TransactionHistoryTableComponent implements OnInit {
     this.dialog.open(ViewProofOfIdentityComponent, {
       data: {
         document: doc,
+        header: 'View Registration Details',
       },
       height: 'auto',
       width: '70%',
@@ -232,86 +256,9 @@ export class TransactionHistoryTableComponent implements OnInit {
     });
   }
 
-  font = {
-    size: {
-      h1: 13,
-      h2: 12,
-      h3: 11,
-      h4: 10,
-      h5: 9,
-      small: 8,
-    },
-    type: {
-      bold: 'bold',
-      italic: 'italic',
-      normal: 'normal',
-      bolditalic: 'bolditalic',
-    },
-  };
   downloadSS(data: any) {
     console.log(data);
-    const doc = new jsPDF('p', 'in', [8.5, 14]);
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const borderWidth = pageWidth - 1;
-    let ySpacing = 0;
-
-    doc.setFontSize(this.font.size.h1);
-    doc.setFont('Times', this.font.type.bold);
-
-    ySpacing += 0.6;
-    doc.text('iCertify VIDEO CONFERENCE SCREENSHOT', pageWidth / 2, ySpacing, {
-      align: 'center',
-    });
-
-    doc.setFontSize(this.font.size.h2);
-    doc.setFont('Times', this.font.type.normal);
-
-    ySpacing += 0.4;
-    doc.text('QC Indigent: ', borderWidth - 6.5, ySpacing);
-    doc.text(
-      data.sender.firstName + ' ' + data.sender.lastName,
-      borderWidth - 3.6,
-      ySpacing
-    );
-    ySpacing += 0.2;
-    doc.text('Notary: ', borderWidth - 6.5, ySpacing);
-    doc.text(
-      data._notaryId.firstName + ' ' + data._notaryId.lastName,
-      borderWidth - 3.6,
-      ySpacing
-    );
-    ySpacing += 0.2;
-    doc.text(
-      'Date and Time of Video Conference: ',
-      borderWidth - 6.5,
-      ySpacing
-    );
-    doc.text(
-      new Date(data.dateNotarized).toDateString() +
-        ' - ' +
-        new Date(data.dateNotarized).toLocaleTimeString('en-US'),
-      borderWidth - 3.6,
-      ySpacing
-    );
-    ySpacing += 0.2;
-    doc.text('Barangay: ', borderWidth - 6.5, ySpacing);
-    doc.text(
-      data.sender.firstName + ' ' + data.sender.lastName,
-      borderWidth - 3.6,
-      ySpacing
-    );
-    for (let screenshot of data.screenShots) {
-      this.dbx
-        .getTempLink(screenshot.dropbox.path_display)
-        .subscribe((res: any) => {
-          console.log(res);
-          doc.addImage(res.result.link, 'PNG', 0.9, 0.3, 0.9, 0.9);
-        });
-    }
-
-    doc.save(
-      data.sender.lastName + ' ' + data.documentType.toUpperCase() + '.pdf'
-    );
+    this.pdf.generateScreenShotPDF(data);
   }
 
   onDownloadExcelBtn(event: any) {
