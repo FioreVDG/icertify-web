@@ -3,7 +3,7 @@ import { Section } from 'src/app/models/form.interface';
 
 export const NOTARIAL_FORM: Section[] = [
   {
-    section: 'Notarial Commission',
+    section: 'Personal Information',
     show: true,
     items: [
       {
@@ -36,16 +36,39 @@ export const NOTARIAL_FORM: Section[] = [
         path: 'middleName',
         appearance: 'standard',
       },
+
       {
         label: 'Suffix',
-        type: 'text',
+        type: 'select',
         colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
         fcname: 'suffix',
         show: true,
         default: '',
-        path: 'others.suffix',
+        choices: ['Jr.', 'Sr.', 'I', 'II', 'III'],
+        path: 'suffix',
         optional: true,
-        placeholder: 'Suffix(optional)',
+        appearance: 'standard',
+      },
+      {
+        label: 'Sex',
+        type: 'select',
+        colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
+        fcname: 'gender',
+        choices: ['Male', 'Female'],
+        show: true,
+        default: '',
+        path: 'gender',
+        appearance: 'standard',
+      },
+      {
+        label: 'Birth Date',
+        type: 'date',
+        colspan: { xs: 12, sm: 12, md: 6, lg: 6, xl: 6 },
+        fcname: 'birthDate',
+        show: true,
+        default: '',
+        path: 'birthDate',
+        optional: true,
         appearance: 'standard',
       },
       {

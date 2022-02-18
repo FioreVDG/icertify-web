@@ -59,6 +59,9 @@
                     : doc.documentType
                 }}
               </h3>
+              <small style="text-align: center; color: #565656">{{
+                doc.name
+              }}</small>
               <div class="img-container">
                 <img
                   *ngIf="doc.fileExtension !== 'pdf'"
@@ -123,18 +126,8 @@
       <div class="col-12">
         <h3 class="upper">STEP 3 - Video Conference Schedule</h3>
         <p>
-          Your transaction reference code is <b>{{ refCode }}</b>
+          Your Document reference code is <b>{{ refCode }}</b>
         </p>
-        <p>Reference Code:</p>
-        <ng-container *ngFor="let doc of docs; let i = index">
-          <p>
-            {{
-              doc.documentTypeSpecific
-                ? doc.documentTypeSpecific
-                : doc.documentType
-            }}: <b>{{ doc.refCode }}</b>
-          </p>
-        </ng-container>
         <p>
           Please wait for the schedule of your video conference with <br />
           Atty.Carlo Javier as part of the RON process of the document that you
@@ -160,7 +153,7 @@
     *ngIf="step === 1"
     (click)="closeDialog()"
   >
-    Close
+    Cancel
   </button>
   <button
     mat-flat-button

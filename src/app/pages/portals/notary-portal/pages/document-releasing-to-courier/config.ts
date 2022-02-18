@@ -46,7 +46,7 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
           selected: true,
         },
         {
-          title: 'Transaction Count',
+          title: 'No. of Transactions',
           breakpoint: 'sm',
           path: 'transactionCount',
           type: 'text',
@@ -90,6 +90,10 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
           field: '_enroutedByNotary',
           select: 'firstName,lastName,middleName',
         },
+        {
+          field: '_riderFromNotary',
+          select: 'firstName,lastName,middleName',
+        },
       ],
 
       column: [
@@ -124,6 +128,14 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
           selected: true,
         },
         {
+          title: 'Pick up by',
+          breakpoint: 'sm',
+          path: '_riderFromNotary',
+          paths: ['_riderFromNotary.lastName', '_riderFromNotary.firstName'],
+          type: 'special',
+          selected: true,
+        },
+        {
           title: 'Date and Time Picked Up',
           breakpoint: 'sm',
           path: 'datePickedByRiderFromNotary',
@@ -131,7 +143,7 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
           selected: true,
         },
         {
-          title: 'Transaction Count',
+          title: 'No. of Documents',
           breakpoint: 'sm',
           path: 'transactionCount',
           isVirtual: true,
@@ -150,6 +162,10 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
         },
         {
           field: '_receivedByBrgy',
+          select: 'firstName,lastName,middleName',
+        },
+        {
+          field: '_riderFromNotary',
           select: 'firstName,lastName,middleName',
         },
       ],
@@ -186,6 +202,14 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
           selected: true,
         },
         {
+          title: 'Delivered By',
+          breakpoint: 'sm',
+          path: '_riderFromNotary',
+          paths: ['_riderFromNotary.lastName', '_riderFromNotary.firstName'],
+          type: 'special',
+          selected: true,
+        },
+        {
           title: 'Date and Time Delivered',
           breakpoint: 'sm',
           path: 'dateReceivedByBrgy',
@@ -193,7 +217,7 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
           selected: true,
         },
         {
-          title: 'Transaction Count',
+          title: 'No. of Documents',
           breakpoint: 'sm',
           isVirtual: true,
           path: 'transactionCount',
@@ -243,5 +267,10 @@ export const DELIVERED_FIND: Find[] = [
     field: 'location',
     operator: '=',
     value: 'Barangay',
+  },
+  {
+    field: 'locationStatus',
+    operator: '[nin]=',
+    value: 'Released to Indigent',
   },
 ];

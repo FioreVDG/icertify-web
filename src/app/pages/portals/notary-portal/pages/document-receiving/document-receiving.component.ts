@@ -1,13 +1,11 @@
 import { UtilService } from './../../../../../service/util/util.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { QueryParams } from 'src/app/models/queryparams.interface';
 import { TableOutput } from 'src/app/models/tableemit.interface';
 import { ApiService } from 'src/app/service/api/api.service';
-import { AuthService } from 'src/app/service/auth/auth.service';
-import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
 import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
 import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
 import {
@@ -16,8 +14,10 @@ import {
   RECEIVED_FIND,
 } from './config';
 import { ViewTransactionComponent } from './view-transaction/view-transaction.component';
-import { VIEW_TRANSACTION_TABLE } from './view-transaction/config';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
+import { TRANSAC_TABLE_COLUMN } from '../../../barangay-portal/pages/batch-delivery-management/batch-folder/config';
+import { Store } from '@ngrx/store';
+import { User } from 'src/app/models/user.interface';
 
 @Component({
   selector: 'app-document-receiving',
@@ -41,6 +41,9 @@ export class DocumentReceivingComponent implements OnInit {
         field: '_batchedBy',
       },
       {
+        field: '_riderFromBarangay',
+      },
+      {
         field: '_receivedByNotary',
       },
       {
@@ -53,29 +56,40 @@ export class DocumentReceivingComponent implements OnInit {
   dataLength: number = 0;
   bsConfig: any;
   me: any;
+  settings: any;
 
   constructor(
     private api: ApiService,
     private dialog: MatDialog,
     private router: Router,
-    private auth: AuthService,
-    private route: ActivatedRoute,
-    private dbx: DropboxService,
-    private util: UtilService
+    private util: UtilService,
+    private store: Store<{ user: User }>
   ) {}
 
   ngOnInit(): void {
-    this.auth.me().subscribe((res: any) => {
-      this.me = res.env.user;
-      console.log(this.me);
+    this.getSettings();
+  }
+
+  getSettings() {
+    this.store.select('user').subscribe((res: User) => {
+      this.me = res;
+      this.api.cluster.getOneNotary(this.me._notaryId).subscribe((res: any) => {
+        this.settings = res.env.cluster;
+      });
     });
-    this.fetchData(this.page);
   }
 
   fetchData(event: TableOutput) {
     this.loading = true;
     console.log(event);
+    let brgyCodes: any[] = [];
+    if (this.settings) {
+      brgyCodes = this.settings.barangays.map((el: any) => {
+        return el._barangay.brgyCode;
+      });
+    }
 
+    console.log(brgyCodes);
     let query: QueryParams = {
       find: event.find ? event.find : [],
       page: event.pageIndex || 1,
@@ -93,11 +107,18 @@ export class DocumentReceivingComponent implements OnInit {
       query.sort =
         (event.sort.direction === 'asc' ? '' : '-') + event.sort.active;
     }
-
+    if (brgyCodes) {
+      query.find = query.find.concat({
+        field: '_barangay.brgyCode',
+        operator: '[in]=',
+        value: brgyCodes.join(','),
+      });
+    }
+    console.log(query);
     this.api.transaction.getAllFolder(query).subscribe((res: any) => {
       console.log(res);
       this.dataSource = res.folders;
-      this.dataLength = res.count;
+      this.dataLength = res.total;
       this.loading = false;
     });
     this.currTable = event.label;
@@ -109,15 +130,16 @@ export class DocumentReceivingComponent implements OnInit {
 
   tableUpdateEmit(event: any) {
     event['label'] = event.label || this.currTable;
-    console.log(event.populate);
-    this.fetchData(event);
-    console.log(event);
+    this.api.cluster.getOneNotary(this.me._notaryId).subscribe((res: any) => {
+      this.settings = res.env.cluster;
+      this.fetchData(event);
+    });
   }
 
   onRowClick(event: any) {
     console.log(event);
     this.dialog.open(ViewTransactionComponent, {
-      data: { event, column: VIEW_TRANSACTION_TABLE },
+      data: { event, column: TRANSAC_TABLE_COLUMN },
       height: 'auto',
       width: '85%',
       disableClose: true,

@@ -7,26 +7,34 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     label: 'For Receiving',
     selected: true,
     isCheckbox: true,
-    bottomSheet: [
-      {
-        label: 'View Transaction/s',
-        action: 'viewTransac',
-        icon: 'description',
-      },
-    ],
     populate: [
       {
         field: '_enroutedByNotary',
         select: 'firstName,lastName,middleName',
       },
+      {
+        field: '_notaryId',
+        select: 'firstName,lastName,middleName',
+      },
+      {
+        field: '_riderFromNotary',
+        select: 'firstName,lastName,middleName',
+      },
     ],
     column: [
       {
-        title: 'Batch Name',
+        title: 'Batch Reference Code',
         breakpoint: 'sm',
         path: 'folderName',
-
         type: 'text',
+        selected: true,
+      },
+      {
+        title: 'Notary',
+        breakpoint: 'sm',
+        path: '_notaryId',
+        paths: ['_notaryId.firstName', '_notaryId.lastName'],
+        type: 'special',
         selected: true,
       },
       {
@@ -34,7 +42,6 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         breakpoint: 'sm',
         path: '_enroutedByNotary',
         paths: ['_enroutedByNotary.firstName', '_enroutedByNotary.lastName'],
-
         type: 'special',
         selected: true,
       },
@@ -54,7 +61,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
       {
-        title: 'No. of Transaction',
+        title: 'No. of Transactions',
         breakpoint: 'sm',
         path: 'transactionCount',
         type: 'text',
@@ -73,39 +80,46 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     label: 'Recieved',
     selected: false,
     isCheckbox: false,
-    bottomSheet: [
-      {
-        label: 'View Transaction/s',
-        action: 'viewTransac',
-        icon: 'description',
-      },
-    ],
     populate: [
       {
-        field: '_enroutedByNotary',
+        field: '_notaryId',
+        select: 'firstName,lastName,middleName',
+      },
+      {
+        field: '_receivedByBrgy',
+        select: 'firstName,lastName,middleName',
+      },
+      {
+        field: '_riderFromNotary',
         select: 'firstName,lastName,middleName',
       },
     ],
     column: [
       {
-        title: 'Batch Name',
+        title: 'Batch Reference Code',
         breakpoint: 'sm',
         path: 'folderName',
-
         type: 'text',
         selected: true,
       },
       {
-        title: 'Marked as Enrouted by',
+        title: 'Notary',
         breakpoint: 'sm',
-        path: '_enroutedByNotary',
-        paths: ['_enroutedByNotary.firstName', '_enroutedByNotary.lastName'],
-
+        path: '_notaryId',
+        paths: ['_notaryId.firstName', '_notaryId.lastName'],
         type: 'special',
         selected: true,
       },
       {
-        title: 'Picked up by',
+        title: 'Received By',
+        breakpoint: 'sm',
+        path: '_receivedByBrgy',
+        paths: ['_receivedByBrgy.firstName', '_receivedByBrgy.lastName'],
+        type: 'special',
+        selected: true,
+      },
+      {
+        title: 'Delivered By',
         breakpoint: 'sm',
         path: '_riderFromNotary',
         paths: ['_riderFromNotary.firstName', '_riderFromNotary.lastName'],
@@ -113,14 +127,14 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
       {
-        title: 'Date and Time Picked up',
+        title: 'Date and Time Received',
         breakpoint: 'sm',
-        path: 'datePickedByRiderFromBrgy',
+        path: 'dateReceivedByBrgy',
         type: 'date',
         selected: true,
       },
       {
-        title: 'No. of Transaction',
+        title: 'No. of Transactions',
         breakpoint: 'sm',
         path: 'transactionCount',
         type: 'text',

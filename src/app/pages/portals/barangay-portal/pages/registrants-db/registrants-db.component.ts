@@ -44,15 +44,17 @@ export class RegistrantsDbComponent implements OnInit {
     this.loading = true;
     console.log(event);
 
-    let query = {
+    let query: any = {
       find: event.find ? event.find : [],
       page: event.pageIndex || 1,
       limit: (event.pageSize || 10) + '',
-      filter: event.filter,
       populate: event.populate ? event.populate : [],
     };
+    if (event.filter) query.filter = event.filter;
 
     let api: any;
+
+    console.log(query);
     if (event && event.label === 'W/O Certificate of Indigency') {
       query.find = query.find.concat(FIND_WITHOUT_CERTIFICATE);
 
@@ -62,6 +64,7 @@ export class RegistrantsDbComponent implements OnInit {
 
       api = this.api.user.getAllIndigent(query);
     }
+    console.log(query);
 
     api.subscribe((res: any) => {
       console.log(res);

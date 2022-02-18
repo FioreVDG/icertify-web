@@ -50,7 +50,7 @@ export class TableComponent implements OnInit {
   duplicateColumns!: Array<Column>;
   find: any;
   label: any;
-  hasFilter: boolean = false;
+  @Input() hasFilter: boolean = false;
 
   constructor(
     public util: UtilService,
@@ -72,11 +72,11 @@ export class TableComponent implements OnInit {
           this.bottomSheet = i.bottomSheet;
           this.buttonConfig.checkBoxBtnConfig = i.checkBoxBtns;
           i.selected = true;
-          this.onUpdateTableEmit.emit(i);
           let findFilterExist = i.column.find(
             (col: any) => col.useAsFilter === true
           );
           if (findFilterExist) this.hasFilter = true;
+          this.onUpdateTableEmit.emit(i);
         } else {
           i.selected = false;
         }
@@ -218,6 +218,11 @@ export class TableComponent implements OnInit {
         this.bottomSheet = i.bottomSheet;
         this.buttonConfig.checkBoxBtnConfig = i.checkBoxBtns;
         i.selected = true;
+        let findFilterExist = i.column.find(
+          (col: any) => col.useAsFilter === true
+        );
+        if (findFilterExist) this.hasFilter = true;
+        else this.hasFilter = false;
         this.onUpdateTableEmit.emit(i);
       } else {
         i.selected = false;
@@ -413,11 +418,12 @@ export class TableComponent implements OnInit {
       findVal.forEach((val: any) => {
         let path = val.path;
         let operator = 'eq';
-        if (path.split('.').length !== 1) {
-          let pathArray = path.split('.');
-          path = pathArray[0];
-          operator = pathArray[1];
-        }
+        // GUMAGANA NA YUNG may . sa PATH ///////////////////
+        // if (path.split('.').length !== 1) {
+        //   let pathArray = path.split('.');
+        //   path = pathArray[0];
+        //   operator = pathArray[1];
+        // }
         tempFilter.push({
           field: path,
           operator: `[${operator}]=`,

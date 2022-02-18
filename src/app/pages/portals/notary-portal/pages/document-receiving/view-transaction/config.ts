@@ -37,11 +37,35 @@ export const VIEW_TRANSACTION_TABLE: Column[] = [
 
 export const VIEW_TRANSACTION_TABLE_DOC_RELEASING: Column[] = [
   {
-    title: 'Transaction Reference Code',
+    title: 'Document Reference Code',
     breakpoint: 'sm',
     path: 'refCode',
     type: 'text',
     selected: true,
+  },
+  {
+    title: 'Document Title',
+    breakpoint: 'sm',
+    path: 'documentName',
+    type: 'text',
+    selected: true,
+  },
+  {
+    title: 'Document Type',
+    breakpoint: 'sm',
+    path: 'documentType',
+    type: 'text',
+    selected: true,
+    useAsFilter: true,
+    choices: [
+      'Power of Attorney',
+      'Medical Records',
+      'Sworn Statements',
+      'Affidavit',
+      'Deeds',
+      'Wills and Trusts',
+      'Others',
+    ],
   },
   {
     title: 'QC Indigent',
@@ -51,22 +75,47 @@ export const VIEW_TRANSACTION_TABLE_DOC_RELEASING: Column[] = [
     type: 'special',
     selected: true,
   },
-
   {
-    title: 'Date and Time Video Conference Ended',
+    title: 'Date and Time of Notarization',
     breakpoint: 'sm',
-    path: 'dateAssessed',
+    path: 'dateNotarized',
     type: 'date',
     selected: true,
   },
   {
-    title: 'No. Of Documents',
+    title: 'Status',
     breakpoint: 'sm',
-    isVirtual: true,
-    path: 'documentCount',
-    type: 'text', // make count type
+    path: 'documentStatus',
+    type: 'text',
+    selected: true,
+    textColor: [
+      {
+        value: 'Notarized',
+        color: '#83b9a1' || 'green',
+      },
+      {
+        value: 'Unnotarized',
+        color: '#83b9a1' || 'green',
+      },
+    ],
+    useAsFilter: true,
+    choices: ['Notarized', 'Unnotarized'],
+  },
+  {
+    title: 'Remark',
+    breakpoint: 'sm',
+    path: 'remark',
+    type: 'text',
     selected: true,
   },
+  // {
+  //   title: 'No. Of Documents',
+  //   breakpoint: 'sm',
+  //   isVirtual: true,
+  //   path: 'documentCount',
+  //   type: 'text', // make count type
+  //   selected: true,
+  // },
 ];
 
 export const VIEW_TRANSACTION_BOTTOMSHEET: BottomSheetItem[] = [

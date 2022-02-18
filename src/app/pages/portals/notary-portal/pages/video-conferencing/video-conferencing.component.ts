@@ -7,6 +7,7 @@ import { FILT_BTN } from './config';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
 import { ViewTransactionComponent } from '../document-receiving/view-transaction/view-transaction.component';
 import { VIEW_TRANSACTION_TABLE } from '../document-receiving/view-transaction/config';
+import { TRANSAC_TABLE_COLUMN } from '../../../barangay-portal/pages/batch-delivery-management/batch-folder/config';
 
 @Component({
   selector: 'app-video-conferencing',
@@ -84,7 +85,7 @@ export class VideoConferencingComponent implements OnInit {
     this.api.transaction.getAllFolder(query).subscribe((res: any) => {
       console.log(res);
       this.dataSource = res.folders;
-      this.dataLength = res.count;
+      this.dataLength = res.total;
       this.loading = false;
     });
 
@@ -101,7 +102,7 @@ export class VideoConferencingComponent implements OnInit {
 
   onRowClick(event: any) {
     this.dialog.open(ViewTransactionComponent, {
-      data: { event, column: VIEW_TRANSACTION_TABLE },
+      data: { event, column: TRANSAC_TABLE_COLUMN },
       height: 'auto',
       width: '85%',
       disableClose: true,

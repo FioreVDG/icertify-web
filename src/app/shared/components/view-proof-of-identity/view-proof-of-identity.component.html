@@ -1,1 +1,25 @@
-<p>view-proof-of-identity works!</p>
+<h3 mat-dialog-title>View Proof of Identity</h3>
+<mat-icon mat-dialog-close class="close-btn" color="warn">close</mat-icon>
+
+<div mat-dialog-content class="content">
+  <app-image-form
+    [disable]="checkImageBtnDisabler()"
+    [mobileNumber]="
+      this.data.document?.sender?.mobileNumber ||
+      this.data.document?.sender?.mobileNumber
+    "
+    [obj]="imgObj ? imgObj : {}"
+    [reasonVal]="reasonVal || ''"
+    [header]="data.header"
+  ></app-image-form>
+</div>
+<div mat-dialog-actions align="center">
+  <!-- <button
+    mat-flat-button
+    color="primary"
+    [disabled]="loading"
+    (click)="downloadSS(data.document)"
+  >
+    Download as PDF
+  </button> -->
+</div>

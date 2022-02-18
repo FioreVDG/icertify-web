@@ -31,6 +31,7 @@ import {
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Observable } from 'rxjs';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
 
 @Component({
   selector: 'app-upsert-cluster',
@@ -40,6 +41,8 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 export class UpsertClusterComponent implements OnInit {
   @ViewChild('riderInput') riderInput!: ElementRef<HTMLInputElement>;
   separatorKeysCodes: number[] = [ENTER, COMMA];
+  selectedRider: any[] = [];
+  objRider: any[] = [];
   totalDuration = 0;
   selectedCluster: any[] = [];
   clusterForm = new FormGroup({
@@ -159,6 +162,7 @@ export class UpsertClusterComponent implements OnInit {
 
   selectBarangay(i: number) {
     let selClusters: any[] = [];
+    console.log(this.clusterForm.get('barangays')?.value);
     if (this.clusterForm.get('barangays')?.value.length) {
       let selectedBarangays = this.clusterForm.get('barangays')?.value;
       for (const barangay of selectedBarangays) {
@@ -170,8 +174,24 @@ export class UpsertClusterComponent implements OnInit {
       .open(AutocompleteDialogComponent, { data: { barangays: selClusters } })
       .afterClosed()
       .subscribe((res) => {
-        console.log(res);
         if (res) {
+          if (this.data.barangays.length) {
+            if (
+              this.data.barangays[i]._barangay.brgyCode !==
+              res._barangay.brgyCode
+            ) {
+              (this.clusterForm.get('barangays') as FormArray)
+                .at(i)
+                .get('_barangay')
+                ?.markAsDirty();
+            } else {
+              (this.clusterForm.get('barangays') as FormArray)
+                .at(i)
+                .get('_barangay')
+                ?.markAsPristine();
+            }
+          }
+
           (this.clusterForm.get('barangays') as FormArray)
             .at(i)
             .get('_barangay')
@@ -239,6 +259,16 @@ export class UpsertClusterComponent implements OnInit {
         fields: ['firstName', 'lastName', 'email'],
       },
     };
+    if (type === 'Rider') {
+      if (this.selectedRider.length) {
+        query.find.push({
+          field: '_id',
+          operator: '[nin]=',
+          value: this.selectedRider.join(','),
+        });
+      }
+    }
+
     if (mobileNumbers.length) {
       query.find.push({
         field: 'mobileNumber',
@@ -269,8 +299,9 @@ export class UpsertClusterComponent implements OnInit {
 
   selected(event: MatAutocompleteSelectedEvent): void {
     // this.fruits.push(event.option.viewValue);
-    console.log(event.option.value);
+
     var rider = event.option.value;
+    this.selectedRider.push(rider._id);
     let riderFormGroup = new FormGroup({
       _id: new FormControl(rider._id),
       firstName: new FormControl(rider.firstName),
@@ -278,12 +309,25 @@ export class UpsertClusterComponent implements OnInit {
       mobileNumber: new FormControl(rider.mobileNumber),
     });
     (this.clusterForm.get('_riders') as FormArray).push(riderFormGroup);
+    (this.clusterForm.get('_riders') as FormArray).markAsDirty();
     this.riderInput.nativeElement.value = '';
     this.riderCtrl.setValue(null);
   }
 
   removeRider(i: number) {
     (this.clusterForm.get('_riders') as FormArray).removeAt(i);
+    this.selectedRider.splice(i, 1);
+
+    if (this.selectedRider.length === this.objRider.length) {
+      for (let i = 1; i < this.objRider.length; i++) {
+        if (this.selectedRider[i] !== this.objRider[i]) {
+          (this.clusterForm.get('_riders') as FormArray).markAsDirty();
+        }
+      }
+      (this.clusterForm.get('_riders') as FormArray).markAsPristine();
+    } else {
+      (this.clusterForm.get('_riders') as FormArray).markAsDirty();
+    }
   }
 
   ngOnInit(): void {
@@ -318,11 +362,12 @@ export class UpsertClusterComponent implements OnInit {
     if (this.data) this.setDefaultValueFormArray();
     console.log(this.notaryCtrl.value);
 
-    this.clusterForm.valueChanges.subscribe((res: any) => {
-      // console.log(res);
-      console.log(this.filteredNotaries);
-      console.log(this.filteredRiders);
-    });
+    if (this.data._riders.length) {
+      this.data._riders.forEach((el: any) => {
+        this.selectedRider.push(el._id);
+        this.objRider.push(el._id);
+      });
+    }
   }
 
   checkActiveDay() {
@@ -341,31 +386,50 @@ export class UpsertClusterComponent implements OnInit {
     });
     let api = this.api.cluster.create(cluster);
     if (this.data) api = this.api.cluster.update(cluster, this.data.id);
-    api.subscribe(
-      (res) => {
-        console.log(res);
-        this.dialog.open(ActionResultComponent, {
-          data: {
-            msg:
-              cluster.name + ' successfully ' + this.data
-                ? 'updated!'
-                : 'added!',
-            success: true,
-            button: 'Got it!',
-          },
-        });
-        this.dialogRef.close(true);
-      },
-      (err) => {
-        this.dialog.open(ActionResultComponent, {
-          data: {
-            msg: 'Error: ' + err.error.message,
-            success: false,
-            button: 'Got it!',
-          },
-        });
-      }
-    );
+
+    this.dialog
+      .open(AreYouSureComponent, {
+        data: {
+          isOthers: true,
+          msg: 'you want to save this Cluster?',
+        },
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe(
+        (res: any) => {
+          if (res) {
+            api.subscribe(
+              (res) => {
+                console.log(res);
+                this.dialog.open(ActionResultComponent, {
+                  data: {
+                    msg:
+                      cluster.name + ' successfully ' + this.data
+                        ? 'updated!'
+                        : 'added!',
+                    success: true,
+                    button: 'Got it!',
+                  },
+                });
+                this.dialogRef.close(true);
+              },
+              (err) => {
+                this.dialog.open(ActionResultComponent, {
+                  data: {
+                    msg: 'Error: ' + err.error.message,
+                    success: false,
+                    button: 'Got it!',
+                  },
+                });
+              }
+            );
+          }
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
   }
 
   setDefaultValueFormArray() {

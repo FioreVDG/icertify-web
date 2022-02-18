@@ -19,7 +19,7 @@
     [mobileNumber]="this.data.mobileNumber || this.data.obj.mobileNumber"
     [obj]="this.data.obj?.images ? this.data.obj.images : {}"
     (imageEmitter)="imageEmitter($event)"
-    [reasonVal]="reasonVal || ''"
+    [reasonVal]="reasonVal ? reasonVal : ''"
     [header]="data.header"
   ></app-image-form>
 </div>

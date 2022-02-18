@@ -17,6 +17,8 @@ import { ViewVideoComponent } from 'src/app/shared/components/view-video/view-vi
 import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
 import { forkJoin } from 'rxjs';
 import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachments/view-attachments.component';
+import { Store } from '@ngrx/store';
+import { User } from 'src/app/models/user.interface';
 
 @Component({
   selector: 'app-document-receiving',
@@ -24,7 +26,9 @@ import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachm
   styleUrls: ['./document-receiving.component.scss'],
 })
 export class DocumentReceivingComponent implements OnInit {
-  dataSource: Array<any> = [];
+  settings: any;
+  me: any;
+  dataSource: any[] = [];
   columns: Column[] = DOCUMENT_RECEIVING_TABLE;
   bottomSheet: BottomSheetItem[] = DOC_RECEIVING_BOTTOMSHEET;
   dataLength: number = 0;
@@ -38,11 +42,25 @@ export class DocumentReceivingComponent implements OnInit {
     private api: ApiService,
     private dialog: MatDialog,
     private util: UtilService,
-    private dbx: DropboxService
+    private dbx: DropboxService,
+    private store: Store<{ user: User }>
   ) {}
 
   ngOnInit(): void {
-    this.fetchData(this.page);
+    this.getSettings();
+  }
+
+  getSettings() {
+    this.store.select('user').subscribe((res: User) => {
+      this.me = res;
+      this.api.cluster
+        .getOne(this.me._barangay.brgyCode)
+        .subscribe((res: any) => {
+          this.settings = res.env.cluster;
+          console.log(this.settings);
+          this.fetchData(this.page);
+        });
+    });
   }
 
   fetchData(event: TableOutput) {
@@ -54,14 +72,7 @@ export class DocumentReceivingComponent implements OnInit {
       find: event.find ? event.find : [],
       page: event.pageIndex,
       limit: event.pageSize + '',
-      populates: [
-        {
-          field: '_createdBy',
-        },
-        {
-          field: '_documents',
-        },
-      ],
+      populates: [],
     };
     query.find = query.find.concat(DOC_RECEIVING_FIND);
     if (event.filter) query.filter = event.filter;
@@ -71,14 +82,14 @@ export class DocumentReceivingComponent implements OnInit {
     }
     console.log(query);
 
-    this.api.transaction.getAll(query).subscribe(
+    this.api.document.getAll(query).subscribe(
       (res: any) => {
         console.log(res);
-        this.dataSource = res.env.transactions;
+        this.dataSource = res.env.documents;
         this.dataLength = res.total;
         this.loading = false;
       },
-      (error: any) => {
+      (error) => {
         console.log(error);
         this.loading = false;
       }
@@ -88,14 +99,16 @@ export class DocumentReceivingComponent implements OnInit {
     // console.log(event);
     switch (event.action) {
       case 'viewDoc':
-        this.viewAttachments(event.obj._documents);
+        this.viewAttachments([event.obj]);
         break;
       case 'viewInfo':
         event.obj.sender;
         this.viewPersonalInfo(event.obj.sender);
         break;
       case 'viewVid':
-        this.viewVideoOfSigning(event.obj.videoOfSignature.path_display);
+        this.viewVideoOfSigning(
+          event.obj._transactionId.videoOfSignature.path_display
+        );
         break;
       default:
     }

@@ -1,3 +1,5 @@
+import { setCluster } from './../../../store/cluster/cluster';
+import { ApiService } from './../../../service/api/api.service';
 import { AuthService } from './../../../service/auth/auth.service';
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { User } from 'src/app/models/user.interface';
@@ -40,7 +42,8 @@ export class NotaryPortalComponent implements OnInit {
     public router: Router,
     public auth: AuthService,
     private dialog: MatDialog,
-    private store: Store<{ user: User }>
+    private store: Store<{ user: User }>,
+    private api: ApiService
   ) {}
 
   ngOnInit(): void {
@@ -62,6 +65,12 @@ export class NotaryPortalComponent implements OnInit {
       (res: any) => {
         console.log(res);
         this.me = res.env.user;
+        this.api.cluster
+          .getOneNotary(this.me._notaryId)
+          .subscribe((res: any) => {
+            console.log(res);
+            this.store.dispatch(setCluster({ cluster: res.env.cluster }));
+          });
         this.store.dispatch(setUser({ user: res.env.user }));
         localStorage.setItem('BARANGAY_INFORMATION', JSON.stringify(this.me));
 

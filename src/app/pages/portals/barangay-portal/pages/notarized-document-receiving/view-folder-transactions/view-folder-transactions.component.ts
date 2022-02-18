@@ -45,39 +45,82 @@ export class ViewFolderTransactionsComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     console.log(this.data);
+
     this.fetchData(this.page);
   }
 
+  filterColumn() {
+    if (this.data.table === 'For Receiving') {
+      this.columns.forEach((el: any, index) => {
+        if (el.path === '_transactionId._folderId.dateReceivedByBrgy') {
+          this.columns[index].selected = false;
+        } else {
+          this.columns[index].selected = true;
+        }
+      });
+    } else {
+      this.columns.forEach((el: any, index) => {
+        if (el.path === '_transactionId._folderId.datePickedByRiderFromBrgy') {
+          this.columns[index].selected = false;
+        } else {
+          this.columns[index].selected = true;
+        }
+      });
+    }
+  }
+
   fetchData(event: TableOutput) {
+    this.filterColumn();
     this.dataSource = [];
     this.loading = true;
     this.page.pageIndex = event.pageIndex;
     this.page.pageSize = event.pageSize;
+    let ids: any[] = this.data.event._transactions.map((el: any) => {
+      return el._id;
+    });
 
     let query: QueryParams = {
-      find: [{ field: '_folderId', operator: '=', value: this.data.obj._id }],
+      find: [
+        { field: '_transactionId', operator: '[in]=', value: ids.join(',') },
+      ],
       page: event.pageIndex,
       limit: event.pageSize + '',
-      populates: [{ field: '_folderId' }, { field: '_documents' }],
+      populates: [],
     };
+
+    if (event.find) query.find = query.find.concat(event.find);
     if (event.filter) query.filter = event.filter;
     if (event.sort) {
       query.sort =
         (event.sort.direction === 'asc' ? '' : '-') + event.sort.active;
     }
 
-    this.api.transaction.getAll(query).subscribe(
+    // console.log(query);
+    this.api.document.getAll(query).subscribe(
       (res: any) => {
         console.log(res);
-        this.dataSource = res.env.transactions;
+        this.dataSource = res.env.documents;
         this.dataLength = res.total;
         this.loading = false;
       },
-      (error: any) => {
+      (error) => {
         console.log(error);
         this.loading = false;
       }
     );
+
+    // this.api.transaction.getAll(query).subscribe(
+    //   (res: any) => {
+    //     console.log(res);
+    //     this.dataSource = res.env.transactions;
+    //     this.dataLength = res.total;
+    //     this.loading = false;
+    //   },
+    //   (error: any) => {
+    //     console.log(error);
+    //     this.loading = false;
+    //   }
+    // );
   }
 
   onRowClick(event: any) {
@@ -87,14 +130,16 @@ export class ViewFolderTransactionsComponent implements OnInit {
         this.startConference(event);
         break;
       case 'viewDoc':
-        this.viewAttachments(event.obj._documents, event.obj.refCode);
+        this.viewAttachments(event.obj, event.obj.refCode);
         break;
       case 'viewInfo':
         event.obj.sender;
         this.viewPersonalInfo(event.obj.sender);
         break;
       case 'viewVid':
-        this.viewVideoOfSigning(event.obj.videoOfSignature.path_display);
+        this.viewVideoOfSigning(
+          event.obj._transactionId.videoOfSignature.path_display
+        );
         break;
       default:
     }
@@ -145,7 +190,7 @@ export class ViewFolderTransactionsComponent implements OnInit {
     console.log(docs);
     this.dialog.open(ViewAttachmentsComponent, {
       data: {
-        documents: docs,
+        documents: [docs],
         refCode: refCode,
       },
       height: 'auto',

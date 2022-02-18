@@ -88,37 +88,41 @@ export class RtVideoComponent implements OnInit {
       if (this.me.type !== 'Notary') {
         let query = { find: [] };
         this.room.get(query).subscribe((res: any) => {
+          console.log(res);
           console.log(res.env.room[0].currentTransaction);
+          let currRoomId: any = res.env.room[0].currentTransaction._id;
+          console.log(currRoomId);
           this.conference.getScheduled(query).subscribe((resp: any) => {
             let schedules = resp.env.schedules;
-
+            console.log(schedules);
             if (!schedules.length) {
               this.leaveNow();
               clearInterval(this.flagInterval);
             }
             // console.log(resp);
             let findCurrentTransaction: any;
-            let transactions: any;
+            let transactions: any = [];
 
             schedules.forEach((sched: any) => {
               console.log(sched);
               sched._folderIds.forEach((folder: any) => {
-                // console.log(folder);
-                transactions = folder._transactions;
-                console.log(transactions);
+                console.log(folder);
+                // transactions = folder._transactions;
+                folder._transactions.forEach((trans: any) => {
+                  transactions.push(trans);
+                });
+                // console.log(transactions);
               });
             });
-
+            console.log(transactions);
             findCurrentTransaction = transactions.find(
-              (trans: any) =>
-                trans._id === res.env.room[0].currentTransaction._id
+              (trans: any) => trans._id === currRoomId
             );
-
             if (
               findCurrentTransaction &&
               findCurrentTransaction.transactionStatus === 'Done'
             ) {
-              // console.log(findCurrentTransaction);
+              console.log(findCurrentTransaction);
               console.log('TAPOS NA ITONG TRANSACTION', findCurrentTransaction);
               clearInterval(this.flagInterval);
               this.leaveNow();
@@ -361,7 +365,7 @@ export class RtVideoComponent implements OnInit {
       //     button: 'Okay',
       //   },
       // });
-      this.snackbar.open('Transaction Completed!', undefined, {
+      this.snackbar.open('Your Transaction is Completed!', undefined, {
         panelClass: ['success'],
         duration: 1500,
       });

@@ -38,15 +38,15 @@ export class UsersTableComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.data);
     this.brgyId = this.brgyDetail?.brgyCode;
     this.userType = this.header;
     if (this.data.notary) {
-      console.log(this.data);
       console.log('GALING SA DIALOGGGGGGG!!!!!!');
       this.userType = this.data.notary.userType;
       this.notaryId = this.data.notary.notaryId;
       this.brgyDetail = this.data.notary.brgyInfo;
-      this.brgyId = this.data.notary.brgyInfo.brgyCode;
+      this.brgyId = this.data.notary?.brgyInfo?.brgyCode;
     }
     this.fetchUser(this.page);
     this.getRoles();
@@ -56,7 +56,7 @@ export class UsersTableComponent implements OnInit {
   }
 
   getRoles() {
-    let query: any = { find: [] };
+    let query: QueryParams = { find: [] };
     if (this.userType === 'Barangay')
       query.find.push({
         field: '_barangay.brgyCode',
@@ -69,6 +69,7 @@ export class UsersTableComponent implements OnInit {
     if (this.userType === 'Notary')
       query.find.push(
         { field: 'type', operator: '=', value: 'Notary' },
+
         { field: '_notaryId', operator: '=', value: this.notaryId }
       );
 
@@ -98,7 +99,10 @@ export class UsersTableComponent implements OnInit {
       .open(UserFormComponent, {
         panelClass: 'custom-dialog-container',
         data: {
-          initial: this.dataSource.length <= 0 ? true : false,
+          initial:
+            this.dataSource.length <= 0 && this.userType !== 'Notary'
+              ? true
+              : false,
           _notaryId: this.notaryId,
           type: this.userType === 'iCertify' ? 'Admin' : this.userType,
           brgyDetail: this.brgyDetail,
@@ -137,32 +141,20 @@ export class UsersTableComponent implements OnInit {
 
         break;
       case 'edit':
-        let query = {
-          find: [
-            {
-              field: '_barangay.brgyCode',
-              operator: '=',
-              value: this.brgyId,
+        this.dialog
+          .open(UserFormComponent, {
+            data: {
+              obj: event.obj,
+              action: event.action,
+              accessRoles: this.accessRoles,
             },
-          ],
-        };
-        this.api.role.getAll(query).subscribe((res: any) => {
-          this.accessRoles = res.env.roles;
-          this.dialog
-            .open(UserFormComponent, {
-              data: {
-                obj: event.obj,
-                action: event.action,
-                accessRoles: this.accessRoles,
-              },
-            })
-            .afterClosed()
-            .subscribe((res: any) => {
-              if (res) {
-                this.fetchUser(this.page);
-              }
-            });
-        });
+          })
+          .afterClosed()
+          .subscribe((res: any) => {
+            if (res) {
+              this.fetchUser(this.page);
+            }
+          });
 
         break;
       default:
@@ -198,11 +190,23 @@ export class UsersTableComponent implements OnInit {
         value: this.brgyId,
       });
     if (this.notaryId !== 'undefined' && this.userType !== 'iCertify')
-      query.find.push({
-        field: '_notaryId',
-        operator: '=',
-        value: this.notaryId,
-      });
+      query.find.push(
+        {
+          field: '_notaryId',
+          operator: '=',
+          value: this.notaryId,
+        },
+        {
+          field: 'isMain',
+          operator: '=',
+          value: false,
+        }
+      );
+    query.populates = [
+      {
+        field: '_role',
+      },
+    ];
     if (event && event.filter) {
       query['filter'] = event.filter;
     }

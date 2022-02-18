@@ -18,12 +18,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
       },
       { label: 'View Video Of Signing', action: 'viewVid', icon: 'duo' },
     ],
-    populate: [
-      {
-        field: '_createdBy',
-        select: 'firstName,lastName,middleName',
-      },
-    ],
+
     sort: {
       active: 'updatedAt',
       direction: 'asc',
@@ -31,12 +26,35 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
 
     column: [
       {
-        title: 'Transaction Reference Code',
+        title: 'Document Reference Code',
         breakpoint: 'sm',
         path: 'refCode',
-
         type: 'text',
         selected: true,
+      },
+      {
+        title: 'Document Title',
+        breakpoint: 'sm',
+        path: 'documentName',
+        type: 'text',
+        selected: true,
+      },
+      {
+        title: 'Document Type',
+        breakpoint: 'sm',
+        path: 'documentType',
+        type: 'text',
+        selected: true,
+        useAsFilter: true,
+        choices: [
+          'Power of Attorney',
+          'Medical Records',
+          'Sworn Statements',
+          'Affidavit',
+          'Deeds',
+          'Wills and Trusts',
+          'Others',
+        ],
       },
       {
         title: 'QC Indigent',
@@ -49,27 +67,29 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
       {
         title: 'Received By',
         breakpoint: 'sm',
-        path: '_createdBy',
-        paths: ['_createdBy.firstName', '_createdBy.lastName'],
+        path: '_transactionId._createdBy',
+        paths: [
+          '_transactionId._createdBy.firstName',
+          '_transactionId._createdBy.lastName',
+        ],
         type: 'special',
         selected: true,
       },
       {
         title: 'Date and Time Received',
         breakpoint: 'sm',
-        path: 'updatedAt',
-
+        path: 'createdAt',
         type: 'date',
         selected: true,
       },
-      {
-        title: 'No. of Documents',
-        breakpoint: 'sm',
-        path: 'documentCount',
-        isVirtual: true,
-        type: 'text',
-        selected: true,
-      },
+      // {
+      //   title: 'No. of Documents',
+      //   breakpoint: 'sm',
+      //   path: 'documentCount',
+      //   isVirtual: true,
+      //   type: 'text',
+      //   selected: true,
+      // },
     ],
     checkBoxBtns: [
       {
@@ -101,10 +121,9 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     },
     column: [
       {
-        title: 'Batch Name',
+        title: 'Batch Reference Code',
         breakpoint: 'sm',
         path: 'folderName',
-
         type: 'text',
         selected: true,
       },
@@ -113,7 +132,14 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         breakpoint: 'sm',
         path: '_batchedBy',
         paths: ['_batchedBy.firstName', '_batchedBy.lastName'],
-
+        type: 'special',
+        selected: true,
+      },
+      {
+        title: 'Pick up by',
+        breakpoint: 'sm',
+        path: '_riderFromBarangay',
+        paths: ['_riderFromBarangay.firstName', '_riderFromBarangay.lastName'],
         type: 'special',
         selected: true,
       },
@@ -122,6 +148,13 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         breakpoint: 'sm',
         path: 'datePickedByRiderFromBrgy',
         type: 'date',
+        selected: true,
+      },
+      {
+        title: 'Transaction Count',
+        breakpoint: 'sm',
+        path: 'transactionCount',
+        type: 'text',
         selected: true,
       },
     ],
@@ -137,6 +170,13 @@ export const ENROUTE_FIND_BATCH: Find[] = [
     field: 'location',
     operator: '=',
     value: 'Road',
+  },
+];
+export const FOR_PICKUP: Find[] = [
+  {
+    field: 'locationStatus',
+    operator: '=',
+    value: 'For Pick Up (Barangay)',
   },
 ];
 

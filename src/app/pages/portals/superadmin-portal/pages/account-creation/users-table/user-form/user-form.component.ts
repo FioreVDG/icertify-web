@@ -35,7 +35,7 @@ export class UserFormComponent implements OnInit {
   selectedAccessRole: any = [];
   brgyFields = ADDRESS_SELECT;
   brgyForm = this.fb.group({});
-  RoleInterface: ROLE = <ROLE>{};
+  RoleInterface = this.data && this.data.obj ? this.data.obj._role : {};
   loading = true;
   saving = false;
   formInitiated = false;
@@ -71,7 +71,7 @@ export class UserFormComponent implements OnInit {
     this.roleFormFields[0].items[0].choices = this.data.accessRoles;
   }
   roleFormListener(raw: any) {
-    console.log(raw);
+    console.log(raw, 'OIFAHS');
     console.log(this.roleDetails.form.valid);
   }
 
@@ -79,7 +79,9 @@ export class UserFormComponent implements OnInit {
     console.log('Initialized');
     this.formInitiated = true;
   }
-  formListener(event: any) {}
+  formListener(event: any) {
+    console.log(event);
+  }
 
   initializedChoices(identifier: string, object: any) {
     this.brgyFields.forEach((item: any) => {
@@ -174,9 +176,7 @@ export class UserFormComponent implements OnInit {
     this.dialog
       .open(AreYouSureComponent, {
         data: {
-          msg: this.data.obj
-            ? 'You want to update user'
-            : 'You want to add new user',
+          msg: this.data.obj ? 'update user' : 'add new user',
           isOthers: true,
         },
       })
@@ -250,7 +250,6 @@ export class UserFormComponent implements OnInit {
     );
   }
   compareFn(op1: any, op2: any) {
-    console.log(op1, op2);
     return op1.id === op2.id;
   }
 }

@@ -2,11 +2,16 @@
   <h5>Proof of Identity</h5>
   <div class="grid">
     <div class="col-12 mt-3" *ngIf="!certificateOfIndigencyExist">
-      <label *ngIf="header !== 'View Registration Details'"
+      <label
+        *ngIf="
+          header !== 'View Registration Details' && header !== 'Review Details'
+        "
         ><b>{{ choices.section }}</b></label
       >
       <mat-radio-group
-        *ngIf="header !== 'View Registration Details'"
+        *ngIf="
+          header !== 'View Registration Details' && header !== 'Review Details'
+        "
         class="example-radio-group"
         [(ngModel)]="selectedChoice"
         (ngModelChange)="choose($event)"
@@ -17,7 +22,11 @@
           >{{ choice.label }}</mat-radio-button
         >
       </mat-radio-group>
-      <div *ngIf="header !== 'View Registration Details'">
+      <div
+        *ngIf="
+          header !== 'View Registration Details' && header !== 'Review Details'
+        "
+      >
         <mat-form-field
           *ngIf="selectedChoice === 'no'"
           appearance="fill"
@@ -35,6 +44,12 @@
         </mat-form-field>
       </div>
       <div *ngIf="header === 'View Registration Details'">
+        <p>Uploading of the Certificate of Indigency is to follow.</p>
+        <p>
+          Reason: <b>{{ reason }}</b>
+        </p>
+      </div>
+      <div *ngIf="header === 'Review Details'">
         <p>Uploading of the Certificate of Indigency is to follow.</p>
         <p>
           Reason: <b>{{ reason }}</b>
