@@ -12,6 +12,8 @@ export interface User {
   _role?: any;
   type?: string;
   isMain?: boolean;
+
+  _notaryId?: string;
 }
 export enum USER_REDUCER_ACTIONS {
   SetUser = 'SET_USER',

@@ -1,3 +1,5 @@
+import { setCluster } from './../../../store/cluster/cluster';
+import { ApiService } from './../../../service/api/api.service';
 import { onMainContentChange } from './../../../animations/sidebar.animation';
 import { AreYouSureComponent } from './../../../shared/dialogs/are-you-sure/are-you-sure.component';
 import {
@@ -54,7 +56,8 @@ export class BarangayPortalComponent implements OnInit {
     private dialog: MatDialog,
     private util: UtilService,
     private auth: AuthService,
-    private store: Store<{ user: User }>
+    private store: Store<{ user: User }>,
+    private api: ApiService
   ) {}
 
   ngOnInit(): void {
@@ -75,6 +78,12 @@ export class BarangayPortalComponent implements OnInit {
       (res: any) => {
         console.log(res);
         this.me = res.env.user;
+        this.api.cluster
+          .getOne(this.me._barangay.brgyCode)
+          .subscribe((res: any) => {
+            console.log(res, 'Cluster');
+            this.store.dispatch(setCluster({ cluster: res.env.cluster }));
+          });
         this.store.dispatch(setUser({ user: res.env.user }));
         localStorage.setItem('BARANGAY_INFORMATION', JSON.stringify(this.me));
 
