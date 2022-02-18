@@ -76,7 +76,6 @@ export class DocumentReceivingComponent implements OnInit {
       this.api.cluster.getOneNotary(this.me._notaryId).subscribe((res: any) => {
         this.settings = res.env.cluster;
 
-        this.fetchData(this.page);
         // console.log(this.settings);
       });
     });
@@ -117,7 +116,7 @@ export class DocumentReceivingComponent implements OnInit {
         value: brgyCodes.join(','),
       });
     }
-
+    console.log(query);
     this.api.transaction.getAllFolder(query).subscribe((res: any) => {
       console.log(res);
       this.dataSource = res.folders;
@@ -132,10 +131,11 @@ export class DocumentReceivingComponent implements OnInit {
   }
 
   tableUpdateEmit(event: any) {
-    event['label'] = event.label || this.currTable;
-    console.log(event.populate);
-    this.fetchData(event);
-    console.log(event);
+    this.api.cluster.getOneNotary(this.me._notaryId).subscribe((res: any) => {
+      this.settings = res.env.cluster;
+      event['label'] = event.label || this.currTable;
+      this.fetchData(event);
+    });
   }
 
   onRowClick(event: any) {
