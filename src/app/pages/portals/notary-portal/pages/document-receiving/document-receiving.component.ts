@@ -56,6 +56,7 @@ export class DocumentReceivingComponent implements OnInit {
   dataLength: number = 0;
   bsConfig: any;
   me: any;
+  settings: any;
 
   constructor(
     private api: ApiService,
@@ -66,16 +67,32 @@ export class DocumentReceivingComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getSettings();
+  }
+
+  getSettings() {
     this.store.select('user').subscribe((res: User) => {
       this.me = res;
-      this.fetchData(this.page);
+      this.api.cluster.getOneNotary(this.me._notaryId).subscribe((res: any) => {
+        this.settings = res.env.cluster;
+
+        this.fetchData(this.page);
+        // console.log(this.settings);
+      });
     });
   }
 
   fetchData(event: TableOutput) {
     this.loading = true;
     console.log(event);
+    let brgyCodes: any[] = [];
+    if (this.settings) {
+      brgyCodes = this.settings.barangays.map((el: any) => {
+        return el._barangay.brgyCode;
+      });
+    }
 
+    console.log(brgyCodes);
     let query: QueryParams = {
       find: event.find ? event.find : [],
       page: event.pageIndex || 1,
@@ -93,7 +110,13 @@ export class DocumentReceivingComponent implements OnInit {
       query.sort =
         (event.sort.direction === 'asc' ? '' : '-') + event.sort.active;
     }
-    console.log(query);
+    if (brgyCodes) {
+      query.find = query.find.concat({
+        field: '_barangay.brgyCode',
+        operator: '[in]=',
+        value: brgyCodes.join(','),
+      });
+    }
 
     this.api.transaction.getAllFolder(query).subscribe((res: any) => {
       console.log(res);
