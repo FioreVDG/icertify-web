@@ -41,6 +41,8 @@ import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you
 export class UpsertClusterComponent implements OnInit {
   @ViewChild('riderInput') riderInput!: ElementRef<HTMLInputElement>;
   separatorKeysCodes: number[] = [ENTER, COMMA];
+  selectedRider: any[] = [];
+  objRider: any[] = [];
   totalDuration = 0;
   selectedCluster: any[] = [];
   clusterForm = new FormGroup({
@@ -257,6 +259,16 @@ export class UpsertClusterComponent implements OnInit {
         fields: ['firstName', 'lastName', 'email'],
       },
     };
+    if (type === 'Rider') {
+      if (this.selectedRider.length) {
+        query.find.push({
+          field: '_id',
+          operator: '[nin]=',
+          value: this.selectedRider.join(','),
+        });
+      }
+    }
+
     if (mobileNumbers.length) {
       query.find.push({
         field: 'mobileNumber',
@@ -287,8 +299,9 @@ export class UpsertClusterComponent implements OnInit {
 
   selected(event: MatAutocompleteSelectedEvent): void {
     // this.fruits.push(event.option.viewValue);
-    console.log(event.option.value);
+
     var rider = event.option.value;
+    this.selectedRider.push(rider._id);
     let riderFormGroup = new FormGroup({
       _id: new FormControl(rider._id),
       firstName: new FormControl(rider.firstName),
@@ -296,12 +309,25 @@ export class UpsertClusterComponent implements OnInit {
       mobileNumber: new FormControl(rider.mobileNumber),
     });
     (this.clusterForm.get('_riders') as FormArray).push(riderFormGroup);
+    (this.clusterForm.get('_riders') as FormArray).markAsDirty();
     this.riderInput.nativeElement.value = '';
     this.riderCtrl.setValue(null);
   }
 
   removeRider(i: number) {
     (this.clusterForm.get('_riders') as FormArray).removeAt(i);
+    this.selectedRider.splice(i, 1);
+
+    if (this.selectedRider.length === this.objRider.length) {
+      for (let i = 1; i < this.objRider.length; i++) {
+        if (this.selectedRider[i] !== this.objRider[i]) {
+          (this.clusterForm.get('_riders') as FormArray).markAsDirty();
+        }
+      }
+      (this.clusterForm.get('_riders') as FormArray).markAsPristine();
+    } else {
+      (this.clusterForm.get('_riders') as FormArray).markAsDirty();
+    }
   }
 
   ngOnInit(): void {
@@ -336,11 +362,12 @@ export class UpsertClusterComponent implements OnInit {
     if (this.data) this.setDefaultValueFormArray();
     console.log(this.notaryCtrl.value);
 
-    this.clusterForm.valueChanges.subscribe((res: any) => {
-      // console.log(res);
-      // console.log(this.filteredNotaries);
-      // console.log(this.filteredRiders);
-    });
+    if (this.data._riders.length) {
+      this.data._riders.forEach((el: any) => {
+        this.selectedRider.push(el._id);
+        this.objRider.push(el._id);
+      });
+    }
   }
 
   checkActiveDay() {
