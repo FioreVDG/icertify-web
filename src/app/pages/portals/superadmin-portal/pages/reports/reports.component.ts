@@ -111,6 +111,12 @@ export class ReportsComponent implements OnInit {
                 timezone: 'Asia/Singapore',
               },
             },
+            minutes: {
+              $minute: {
+                date: '$' + this.currentSLA.path,
+                timezone: 'Asia/Singapore',
+              },
+            },
           },
           total: { $sum: 1 },
         },
