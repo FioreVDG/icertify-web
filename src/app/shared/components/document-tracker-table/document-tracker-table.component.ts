@@ -1,3 +1,5 @@
+import { User } from './../../../models/user.interface';
+import { Store } from '@ngrx/store';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ApiService } from 'src/app/service/api/api.service';
@@ -37,12 +39,20 @@ export class DocumentTrackerTableComponent implements OnInit {
     bottomSheet: this.bsConfig,
   };
   dataSource = [];
+  me: any;
   dataLength: number = 0;
+
+  setting: any;
   constructor(
     private api: ApiService,
     private dialog: MatDialog,
-    private util: UtilService
-  ) {}
+    private util: UtilService,
+    private store: Store<{ user: User }>
+  ) {
+    this.store.select('user').subscribe((res: any) => {
+      this.me = res;
+    });
+  }
 
   ngOnInit(): void {}
 
@@ -57,6 +67,27 @@ export class DocumentTrackerTableComponent implements OnInit {
       filter: event.filter,
       populates: event.populates ? event.populates : [],
     };
+    if (this.header === 'NOTARY') {
+      let brgyCodes: any[] = [];
+      if (this.setting) {
+        brgyCodes = this.setting.barangays.map((el: any) => {
+          return el._barangay.brgyCode;
+        });
+      }
+      if (brgyCodes) {
+        query.find = query.find.concat({
+          field: '_barangay.brgyCode',
+          operator: '[in]=',
+          value: brgyCodes.join(','),
+        });
+      }
+    } else {
+      query.find.push({
+        field: '_barangay.brgyCode',
+        operator: '=',
+        value: this.me._barangay.brgyCode,
+      });
+    }
 
     let api: any;
     if (event && event.label === 'Ongoing') {
@@ -105,9 +136,21 @@ export class DocumentTrackerTableComponent implements OnInit {
   tableUpdateEmit(event: any) {
     event.label = event.label || this.currTable;
 
-    this.fetchData(event);
+    this.getSettings(event);
     console.log(event);
   }
+  getSettings(event: any) {
+    this.store.select('user').subscribe((res: any) => {
+      let api = this.api.cluster.getOne(res._barangay.brgyCode);
+      if (this.header === 'NOTARY')
+        api = this.api.cluster.getOneNotary(res._notaryId);
+      api.subscribe((res: any) => {
+        this.setting = res.env.cluster;
+        this.fetchData(event);
+      });
+    });
+  }
+
   onRowClick(event: any) {
     console.log(event);
     switch (event.action) {

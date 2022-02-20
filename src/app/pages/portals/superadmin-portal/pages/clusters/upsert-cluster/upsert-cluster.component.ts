@@ -162,7 +162,7 @@ export class UpsertClusterComponent implements OnInit {
 
   selectBarangay(i: number) {
     let selClusters: any[] = [];
-    console.log(this.clusterForm.get('barangays')?.value);
+    console.log(i);
     if (this.clusterForm.get('barangays')?.value.length) {
       let selectedBarangays = this.clusterForm.get('barangays')?.value;
       for (const barangay of selectedBarangays) {
@@ -176,9 +176,11 @@ export class UpsertClusterComponent implements OnInit {
       .subscribe((res) => {
         if (res) {
           if (this.data.barangays.length) {
+            console.log(this.data.barangays);
             if (
+              this.data.barangays[i] &&
               this.data.barangays[i]._barangay.brgyCode !==
-              res._barangay.brgyCode
+                res._barangay.brgyCode
             ) {
               (this.clusterForm.get('barangays') as FormArray)
                 .at(i)

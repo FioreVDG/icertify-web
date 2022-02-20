@@ -37,6 +37,7 @@ export class UploadingNotarizedDocumentComponent implements OnInit {
   dataSource = [];
   dataLength: number = 0;
   me: any;
+  setting: any;
 
   constructor(
     private api: ApiService,
@@ -56,6 +57,12 @@ export class UploadingNotarizedDocumentComponent implements OnInit {
   fetchData(event: any) {
     this.loading = true;
     console.log(event);
+    let brgyCodes: any[] = [];
+    if (this.setting) {
+      brgyCodes = this.setting.barangays.map((el: any) => {
+        return el._barangay.brgyCode;
+      });
+    }
 
     let qry = {
       find: event.find ? event.find : [],
@@ -73,7 +80,13 @@ export class UploadingNotarizedDocumentComponent implements OnInit {
       qry.find = qry.find.concat(FIND_UPLOADED);
       api = this.api.document.getAll(qry);
     }
-
+    if (brgyCodes) {
+      qry.find = qry.find.concat({
+        field: '_barangay.brgyCode',
+        operator: '[in]=',
+        value: brgyCodes.join(','),
+      });
+    }
     console.log(qry);
     api.subscribe((res: any) => {
       console.log(res);
@@ -90,8 +103,16 @@ export class UploadingNotarizedDocumentComponent implements OnInit {
   tableUpdateEmit(event: any) {
     event['label'] = event.label || this.currTable;
     console.log(event.populate);
-    this.fetchData(event);
+    this.getSettings(event);
     console.log(event);
+  }
+  getSettings(event: any) {
+    this.store.select('user').subscribe((res: User) => {
+      this.api.cluster.getOneNotary(res._notaryId).subscribe((res: any) => {
+        this.setting = res.env.cluster;
+        this.fetchData(event);
+      });
+    });
   }
 
   onRowClick(event: any) {

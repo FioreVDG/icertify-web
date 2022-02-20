@@ -1,3 +1,4 @@
+import { Store } from '@ngrx/store';
 import { RoomComponent } from './room/room.component';
 import { SetScheduleComponent } from './set-schedule/set-schedule.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -8,6 +9,7 @@ import { TableComponent } from 'src/app/shared/components/table/table.component'
 import { ViewTransactionComponent } from '../document-receiving/view-transaction/view-transaction.component';
 import { VIEW_TRANSACTION_TABLE } from '../document-receiving/view-transaction/config';
 import { TRANSAC_TABLE_COLUMN } from '../../../barangay-portal/pages/batch-delivery-management/batch-folder/config';
+import { User } from 'src/app/models/user.interface';
 
 @Component({
   selector: 'app-video-conferencing',
@@ -24,6 +26,8 @@ export class VideoConferencingComponent implements OnInit {
   dataLength: number = 0;
   currFetch: string = '';
   currentTable: any;
+
+  settings: any;
   page = {
     pageSize: 10,
     pageIndex: 1,
@@ -54,15 +58,32 @@ export class VideoConferencingComponent implements OnInit {
     ],
   };
   countSelected: any;
-  constructor(private api: ApiService, private dialog: MatDialog) {}
+  constructor(
+    private api: ApiService,
+    private dialog: MatDialog,
+    private store: Store<{ user: User }>
+  ) {}
 
-  ngOnInit(): void {
-    this.fetchData(this.page);
+  ngOnInit(): void {}
+
+  getSettings(event: any) {
+    this.store.select('user').subscribe((res: User) => {
+      this.api.cluster.getOneNotary(res._notaryId).subscribe((res: any) => {
+        this.settings = res.env.cluster;
+        this.fetchData(event);
+      });
+    });
   }
 
   fetchData(event: any) {
     console.log(event);
     this.loading = true;
+    let brgyCodes: any[] = [];
+    if (this.settings) {
+      brgyCodes = this.settings.barangays.map((el: any) => {
+        return el._barangay.brgyCode;
+      });
+    }
 
     event.label = event.label === undefined ? 'For Scheduling' : event.label;
 
@@ -80,6 +101,13 @@ export class VideoConferencingComponent implements OnInit {
       filter: event.filter,
       populates: event.populate,
     };
+    if (brgyCodes) {
+      query.find = query.find.concat({
+        field: '_barangay.brgyCode',
+        operator: '[in]=',
+        value: brgyCodes.join(','),
+      });
+    }
 
     console.log(query);
     this.api.transaction.getAllFolder(query).subscribe((res: any) => {
@@ -97,7 +125,7 @@ export class VideoConferencingComponent implements OnInit {
     this.selected = [];
     console.log(event);
     event.label = event.label || this.currentTable;
-    this.fetchData(event);
+    this.getSettings(event);
   }
 
   onRowClick(event: any) {
