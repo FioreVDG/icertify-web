@@ -175,7 +175,7 @@ export class UpsertClusterComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          if (this.data.barangays.length) {
+          if (this.data && this.data.barangays.length) {
             console.log(this.data.barangays);
             if (
               this.data.barangays[i] &&
