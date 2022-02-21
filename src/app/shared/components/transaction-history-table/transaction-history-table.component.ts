@@ -150,9 +150,13 @@ export class TransactionHistoryTableComponent implements OnInit {
   }
   getSettings(event: any) {
     this.store.select('user').subscribe((res: any) => {
-      let api = this.api.cluster.getOne(res._barangay.brgyCode);
-      if (this.header === 'NOTARY')
+      console.log(res);
+      let api;
+      if (this.header === 'NOTARY') {
         api = this.api.cluster.getOneNotary(res._notaryId);
+      } else {
+        api = this.api.cluster.getOne(res._barangay.brgyCode);
+      }
       api.subscribe((res: any) => {
         this.setting = res.env.cluster;
         this.fetchData(event);

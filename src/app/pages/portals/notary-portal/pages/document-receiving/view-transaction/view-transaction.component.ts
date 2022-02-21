@@ -70,6 +70,7 @@ export class ViewTransactionComponent implements OnInit {
       query.sort =
         (event.sort.direction === 'asc' ? '' : '-') + event.sort.active;
     }
+    console.log(query);
     this.api.document.getAll(query).subscribe(
       (res: any) => {
         console.log(res);
