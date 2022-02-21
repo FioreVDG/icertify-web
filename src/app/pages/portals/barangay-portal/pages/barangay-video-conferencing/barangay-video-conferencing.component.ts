@@ -110,14 +110,24 @@ export class BarangayVideoConferencingComponent implements OnInit {
     //   height: 'auto',
     //   width: '70%',
     // });
-    this.dialog.open(ViewAttachmentsComponent, {
-      data: {
-        documents: [event],
-        refCode: event.refCode,
-      },
-      height: 'auto',
-      width: '70%',
-    });
+
+    switch (event.action) {
+      case 'join':
+        break;
+      case 'view':
+        this.dialog.open(ViewAttachmentsComponent, {
+          data: {
+            documents: [event.obj],
+            refCode: event.obj.refCode,
+          },
+          height: 'auto',
+          width: '70%',
+        });
+
+        break;
+      default:
+        break;
+    }
   }
 
   getActive = false;

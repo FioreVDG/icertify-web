@@ -88,6 +88,12 @@ export const VIDEO_CONF_BARANGAY_TABLE: Array<FILTER_BUTTON_COLUMN> = [
       //   selected: true,
       // },
     ],
+    bottomSheet: [
+      {
+        label: 'Join Video Conference',
+        action: 'join',
+      },
+    ],
   },
   {
     label: 'Finished',
@@ -192,6 +198,12 @@ export const VIDEO_CONF_BARANGAY_TABLE: Array<FILTER_BUTTON_COLUMN> = [
         ],
       },
     ],
+    bottomSheet: [
+      {
+        label: 'View Screenshot',
+        action: 'view',
+      },
+    ],
   },
 ];
 
@@ -217,5 +229,10 @@ export const FINISHED_FIND: Find[] = [
     field: 'locationStatus',
     operator: '[nin]=',
     value: 'Enroute to Barangay',
+  },
+  {
+    field: 'notarizedDocument',
+    operator: '[ne]=',
+    value: 'null',
   },
 ];
