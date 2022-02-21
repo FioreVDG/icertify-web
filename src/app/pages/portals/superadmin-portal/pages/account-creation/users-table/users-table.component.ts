@@ -190,18 +190,11 @@ export class UsersTableComponent implements OnInit {
         value: this.brgyId,
       });
     if (this.notaryId !== 'undefined' && this.userType !== 'iCertify')
-      query.find.push(
-        {
-          field: '_notaryId',
-          operator: '=',
-          value: this.notaryId,
-        },
-        {
-          field: 'isMain',
-          operator: '=',
-          value: false,
-        }
-      );
+      query.find.push({
+        field: '_notaryId',
+        operator: '=',
+        value: this.notaryId,
+      });
     query.populates = [
       {
         field: '_role',
@@ -209,6 +202,13 @@ export class UsersTableComponent implements OnInit {
     ];
     if (event && event.filter) {
       query['filter'] = event.filter;
+    }
+    if (this.userType === 'Notary') {
+      query.find.push({
+        field: 'isMain',
+        operator: '=',
+        value: false,
+      });
     }
     console.log(query);
 

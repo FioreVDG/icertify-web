@@ -252,4 +252,19 @@ export class UserFormComponent implements OnInit {
   compareFn(op1: any, op2: any) {
     return op1.id === op2.id;
   }
+  disAbler() {
+    if (this.data && this.data.initial) {
+      if (this.userDetails.form.valid && this.brgyForm.valid) {
+        return false;
+      } else return true;
+    } else {
+      if (
+        this.userDetails.form.valid &&
+        this.brgyForm.valid &&
+        this.roleDetails.form.valid
+      ) {
+        return false;
+      } else return true;
+    }
+  }
 }
