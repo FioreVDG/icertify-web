@@ -52,7 +52,7 @@ export class UserFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.data);
+    console.log(this.data.obj);
 
     this.getRegions();
     this.initializeBrgyForm();

@@ -188,6 +188,6 @@ export class FormComponent implements OnInit {
   }
   compareFn(op1: any, op2: any) {
     console.log(op1, op2);
-    return op1.id === op2.id;
+    return op1 === op2;
   }
 }

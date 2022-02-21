@@ -23,6 +23,7 @@
     ></app-auto-complete>
     <app-auto-complete
       #ibpprovDetails
+      *ngIf="ibp_provinces.item.length"
       [appearance]="'standard'"
       [opt]="ibp_provinces"
       (onSelect)="initializeIbpProv($event, 'ibp_chapter_city_prov')"
