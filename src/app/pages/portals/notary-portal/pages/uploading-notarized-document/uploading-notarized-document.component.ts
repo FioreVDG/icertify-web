@@ -63,6 +63,7 @@ export class UploadingNotarizedDocumentComponent implements OnInit {
         return el._barangay.brgyCode;
       });
     }
+    console.log(this.setting);
 
     let qry = {
       find: event.find ? event.find : [],
@@ -73,13 +74,6 @@ export class UploadingNotarizedDocumentComponent implements OnInit {
     };
     if (event.filter) qry.filter = event.filter;
     let api: any;
-    if (event && event.label === 'For Uploading') {
-      qry.find = qry.find.concat(FIND_FOR_UPLOADING);
-      api = this.api.document.getAll(qry);
-    } else {
-      qry.find = qry.find.concat(FIND_UPLOADED);
-      api = this.api.document.getAll(qry);
-    }
     if (brgyCodes) {
       qry.find = qry.find.concat({
         field: '_barangay.brgyCode',
@@ -87,6 +81,14 @@ export class UploadingNotarizedDocumentComponent implements OnInit {
         value: brgyCodes.join(','),
       });
     }
+    if (event && event.label === 'For Uploading') {
+      qry.find = qry.find.concat(FIND_FOR_UPLOADING);
+      api = this.api.document.getAll(qry);
+    } else {
+      qry.find = qry.find.concat(FIND_UPLOADED);
+      api = this.api.document.getAll(qry);
+    }
+
     console.log(qry);
     api.subscribe((res: any) => {
       console.log(res);
@@ -101,6 +103,7 @@ export class UploadingNotarizedDocumentComponent implements OnInit {
   }
 
   tableUpdateEmit(event: any) {
+    this.loading = true;
     event['label'] = event.label || this.currTable;
     console.log(event.populate);
     this.getSettings(event);
