@@ -114,20 +114,26 @@ export class DocumentTrackerTableComponent implements OnInit {
       api = this.api.transaction.getAll(query);
     }
 
-    api.subscribe((res: any) => {
-      // console.log(res);
-      if (res.status === 'Success') {
-        res.env.transactions.forEach((el: any) => {
-          el.newDocument = el._documents[0];
-          el.tempFolderId = el._folderId ? el._folderId : 'Not Batched';
-        });
-        console.log(res);
-        console.log(res.env.transactions);
-        this.dataSource = res.env.transactions;
-        this.dataLength = res.total;
+    api.subscribe(
+      (res: any) => {
+        // console.log(res);
+        if (res.status === 'Success') {
+          res.env.transactions.forEach((el: any) => {
+            el.newDocument = el._documents[0];
+            el.tempFolderId = el._folderId ? el._folderId : 'Not Batched';
+          });
+          console.log(res);
+          console.log(res.env.transactions);
+          this.dataSource = res.env.transactions;
+          this.dataLength = res.total;
+        }
+        this.loading = false;
+      },
+      (err: any) => {
+        console.log(err);
+        this.loading = false;
       }
-      this.loading = false;
-    });
+    );
     this.currTable = event.label;
     this.bsConfig = event.bottomSheet;
     console.log(this.bsConfig);
@@ -144,10 +150,15 @@ export class DocumentTrackerTableComponent implements OnInit {
       let api = this.api.cluster.getOne(res._barangay.brgyCode);
       if (this.header === 'NOTARY')
         api = this.api.cluster.getOneNotary(res._notaryId);
-      api.subscribe((res: any) => {
-        this.setting = res.env.cluster;
-        this.fetchData(event);
-      });
+      api.subscribe(
+        (res: any) => {
+          this.setting = res.env.cluster;
+          this.fetchData(event);
+        },
+        (err) => {
+          this.loading = false;
+        }
+      );
     });
   }
 

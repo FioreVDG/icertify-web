@@ -29,6 +29,7 @@ export const RIDER_COLUMNS: Column[] = [
     breakpoint: 'sm',
     path: 'pendingTransactions',
     type: 'number',
+    isVirtual: true,
     selected: true,
   },
 ];
