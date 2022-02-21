@@ -83,22 +83,6 @@ export class UtilService {
     );
   }
 
-  findAccessRoute(me: User, currRoute: any) {
-    let route: any = {};
-    if (me._roleId && me._roleId.access) {
-      me._roleId.access.forEach((o) => {
-        o.route == currRoute ? (route = o) : '';
-        if (o.children && o.children.length) {
-          o.children.forEach((c) => {
-            c.route == currRoute ? (route = c) : '';
-          });
-        }
-      });
-    }
-    console.log(route);
-    return route;
-  }
-
   stringSlugify(str: string): string {
     str = str.replace(/^\s+|\s+$/g, ''); // trim
     str = str.toLowerCase();

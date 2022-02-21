@@ -174,6 +174,11 @@ export class UsersTableComponent implements OnInit {
       page: event.pageIndex,
       limit: event.pageSize + '',
       filter: event.filter,
+      populates: [
+        {
+          field: '_role',
+        },
+      ],
     };
 
     if (this.userType) {
@@ -195,11 +200,6 @@ export class UsersTableComponent implements OnInit {
         operator: '=',
         value: this.notaryId,
       });
-    query.populates = [
-      {
-        field: '_role',
-      },
-    ];
     if (event && event.filter) {
       query['filter'] = event.filter;
     }
