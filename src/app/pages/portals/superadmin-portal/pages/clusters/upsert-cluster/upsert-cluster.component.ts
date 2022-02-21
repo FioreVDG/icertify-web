@@ -192,6 +192,11 @@ export class UpsertClusterComponent implements OnInit {
                 .get('_barangay')
                 ?.markAsPristine();
             }
+          } else {
+            (this.clusterForm.get('barangays') as FormArray)
+              .at(i)
+              .get('_barangay')
+              ?.markAsDirty();
           }
 
           (this.clusterForm.get('barangays') as FormArray)
@@ -291,6 +296,7 @@ export class UpsertClusterComponent implements OnInit {
   notarySelected(event: MatAutocompleteSelectedEvent): void {
     console.log(event.option.value);
     this.clusterForm.get('_notaryId')?.setValue(event.option.value._id);
+    (this.clusterForm.get('_notaryId') as FormArray).markAsDirty();
   }
 
   displayWith(option: any) {
@@ -374,7 +380,7 @@ export class UpsertClusterComponent implements OnInit {
     }
 
     this.clusterForm.valueChanges.subscribe((res) => {
-      console.log(this.clusterForm.valid);
+      console.log(this.clusterForm.get('barangays'));
     });
   }
 
@@ -457,7 +463,7 @@ export class UpsertClusterComponent implements OnInit {
   }
 
   onClose() {
-    if (this.clusterForm.dirty) {
+    if (!this.clusterForm.pristine) {
       this.dialog
         .open(AreYouSureComponent, {
           data: {

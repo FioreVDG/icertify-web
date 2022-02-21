@@ -147,15 +147,16 @@ export class DocumentTrackerTableComponent implements OnInit {
   }
   getSettings(event: any) {
     this.store.select('user').subscribe((res: any) => {
-      let api = this.api.cluster.getOne(res._barangay.brgyCode);
+      let api: any;
       if (this.header === 'NOTARY')
         api = this.api.cluster.getOneNotary(res._notaryId);
-      api.subscribe(
+      else this.api.cluster.getOne(res._barangay.brgyCode);
+      api?.subscribe(
         (res: any) => {
           this.setting = res.env.cluster;
           this.fetchData(event);
         },
-        (err) => {
+        (err: any) => {
           this.loading = false;
         }
       );
