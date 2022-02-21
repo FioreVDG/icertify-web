@@ -230,9 +230,9 @@ export const FINISHED_FIND: Find[] = [
     operator: '[nin]=',
     value: 'Enroute to Barangay',
   },
-  {
-    field: 'notarizedDocument',
-    operator: '[ne]=',
-    value: 'null',
-  },
+  // {
+  //   field: 'notarizedDocument',
+  //   operator: '[ne]=',
+  //   value: 'null',
+  // },
 ];
