@@ -364,12 +364,18 @@ export class UpsertClusterComponent implements OnInit {
     if (this.data) this.setDefaultValueFormArray();
     console.log(this.notaryCtrl.value);
 
-    if (this.data._riders.length) {
-      this.data._riders.forEach((el: any) => {
-        this.selectedRider.push(el._id);
-        this.objRider.push(el._id);
-      });
+    if (this.data) {
+      if (this.data._riders.length) {
+        this.data._riders.forEach((el: any) => {
+          this.selectedRider.push(el._id);
+          this.objRider.push(el._id);
+        });
+      }
     }
+
+    this.clusterForm.valueChanges.subscribe((res) => {
+      console.log(this.clusterForm.valid);
+    });
   }
 
   checkActiveDay() {
@@ -448,5 +454,24 @@ export class UpsertClusterComponent implements OnInit {
       });
       (this.clusterForm.get('_riders') as FormArray).push(riderFormGroup);
     });
+  }
+
+  onClose() {
+    if (this.clusterForm.dirty) {
+      this.dialog
+        .open(AreYouSureComponent, {
+          data: {
+            isOthers: true,
+            msg: 'you want to cancel? Clicking "Yes" will cancel adding cluster',
+          },
+          disableClose: true,
+        })
+        .afterClosed()
+        .subscribe((res) => {
+          if (res) this.dialogRef.close();
+        });
+    } else {
+      this.dialogRef.close();
+    }
   }
 }

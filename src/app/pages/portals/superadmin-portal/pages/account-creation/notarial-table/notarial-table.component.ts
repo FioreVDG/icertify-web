@@ -6,6 +6,7 @@ import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you
 import { UsersTableComponent } from '../users-table/users-table.component';
 import { NOTARIAL, NOTARIAL_BOTTOMSHEET } from './notarial-table.config';
 import { UpsertNotarialCommissionComponent } from './upsert-notarial-commission/upsert-notarial-commission.component';
+import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
 
 @Component({
   selector: 'app-notarial-table',
@@ -93,9 +94,21 @@ export class NotarialTableComponent implements OnInit {
           .afterClosed()
           .subscribe((res: any) => {
             if (res)
-              this.api.user.deleteAdmin(event.obj._id).subscribe((res: any) => {
-                this.fetchNotarial(this.page);
-              });
+              this.api.user.deleteNotaryMain(event.obj._id).subscribe(
+                (res: any) => {
+                  this.fetchNotarial(this.page);
+                },
+                (err) => {
+                  console.log(err);
+                  this.dialog.open(ActionResultComponent, {
+                    data: {
+                      msg: `${err.error.message}`,
+                      success: false,
+                      button: 'Got it!',
+                    },
+                  });
+                }
+              );
           });
         break;
       case 'users':
