@@ -250,7 +250,7 @@ export class TableComponent implements OnInit {
       if (
         c.path &&
         !['date', 'special', 'count'].includes(c.type) &&
-        c.path !== '_roleId' &&
+        c.path !== '_role' &&
         !c.isVirtual
       )
         fields.push(c.path);
@@ -466,7 +466,7 @@ export class TableComponent implements OnInit {
         if (
           c.path &&
           !['date', 'special', 'count'].includes(c.type) &&
-          c.path !== '_roleId' &&
+          c.path !== '_role' &&
           !c.isVirtual
         )
           fields.push(c.path);

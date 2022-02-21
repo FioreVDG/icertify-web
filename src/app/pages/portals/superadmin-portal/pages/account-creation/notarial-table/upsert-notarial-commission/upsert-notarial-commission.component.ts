@@ -238,10 +238,10 @@ export class UpsertNotarialCommissionComponent implements OnInit {
     );
   }
   initializeIbpProv(event: any, fcname: string) {
-    this.ibp_provinces.item = [];
+    console.log(event, fcname);
     this.ibp.get(fcname)?.setValue(event);
     if (fcname === 'ibp_chapter_region') {
-      this.ibp.controls['ibp_chapter_city_prov']?.setValue('');
+      this.ibp_provinces.item = [];
       let filter = this.ibp_chapter.item.filter((i) => i.label === event);
 
       filter.forEach((i) => {

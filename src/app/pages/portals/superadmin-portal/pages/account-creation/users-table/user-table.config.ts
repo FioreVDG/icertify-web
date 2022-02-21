@@ -25,7 +25,7 @@ export const USERS: Column[] = [
   {
     title: 'User Role',
     breakpoint: 'sm',
-    path: '_roleId',
+    path: '_role.name',
     type: 'text',
     selected: true,
   },
