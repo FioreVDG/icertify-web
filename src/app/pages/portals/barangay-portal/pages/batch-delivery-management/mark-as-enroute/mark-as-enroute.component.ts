@@ -15,6 +15,7 @@ import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you
 import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
 import { Store } from '@ngrx/store';
 import { User } from 'src/app/models/user.interface';
+import { P } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-mark-as-enroute',
@@ -43,6 +44,21 @@ export class MarkAsEnrouteComponent implements OnInit {
         value: { name: i.firstName + ' ' + i.lastName, id: i._id },
       });
     });
+
+    if (!this.riderList.item.length) {
+      this.dialog
+        .open(ActionResultComponent, {
+          data: {
+            msg: `No rider found in this cluster!`,
+            success: false,
+            button: 'Got it!',
+          },
+        })
+        .afterClosed()
+        .subscribe((_) => {
+          this.dialogRef.close();
+        });
+    }
   }
   ngOnDestroy() {
     this.riderList.item = [];
@@ -74,34 +90,39 @@ export class MarkAsEnrouteComponent implements OnInit {
         if (res) {
           this.api.transaction
             .createBatchTransaction(ids, this.riderObj)
-            .subscribe((res: any) => {
-              console.log(res);
-              //DOCUMENT LOGS HERE
-              console.log(docLogs);
-              this.api.documentlogs.createDocumentLogsMany(docLogs).subscribe(
-                (res: any) => {
-                  console.log(res);
-                },
-                (err) => {
-                  console.log(err);
-                }
-              );
-              this.dialog
-                .open(ActionResultComponent, {
-                  data: {
-                    success: true,
-                    msg: `Batch ${res.env.batched.folderName} successfully marked as enroute!`,
-                    button: 'Okay',
+            .subscribe(
+              (res: any) => {
+                console.log(res);
+                //DOCUMENT LOGS HERE
+                console.log(docLogs);
+                this.api.documentlogs.createDocumentLogsMany(docLogs).subscribe(
+                  (res: any) => {
+                    console.log(res);
                   },
-                })
-                .afterClosed()
-                .subscribe((res: any) => {
-                  console.log(res);
-                  if (res) {
-                    this.dialogRef.close(true);
+                  (err) => {
+                    console.log(err);
                   }
-                });
-            });
+                );
+                this.dialog
+                  .open(ActionResultComponent, {
+                    data: {
+                      success: true,
+                      msg: `Batch ${res.env.batched.folderName} successfully marked as enroute!`,
+                      button: 'Okay',
+                    },
+                  })
+                  .afterClosed()
+                  .subscribe((res: any) => {
+                    console.log(res);
+                    if (res) {
+                      this.dialogRef.close(true);
+                    }
+                  });
+              },
+              (err) => {
+                console.log(err);
+              }
+            );
         }
       });
   }
