@@ -53,6 +53,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
   isLimit: any;
   setting: any;
   dataLength: number = 0;
+  me: any;
   constructor(
     private api: ApiService,
     private dialog: MatDialog,
@@ -65,12 +66,13 @@ export class BatchDeliveryManagementComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.fetchData(this.page);
     this.getSetting();
+    this.fetchData(this.page);
   }
   getSetting() {
     this.store.select('user').subscribe((me: any) => {
       console.log(me._barangay.brgyCode);
+      this.me = me;
       this.api.cluster.getOne(me._barangay.brgyCode).subscribe((res: any) => {
         console.log(res);
         this.setting = res.env.cluster;
@@ -95,6 +97,12 @@ export class BatchDeliveryManagementComponent implements OnInit {
       sort: event.sort,
     };
     if (event.filter) qry.filter = event.filter;
+
+    qry.find.push({
+      field: '_barangay.brgyCode',
+      operator: '=',
+      value: this.me._barangay.brgyCode,
+    });
     console.log(qry);
 
     let api: any;

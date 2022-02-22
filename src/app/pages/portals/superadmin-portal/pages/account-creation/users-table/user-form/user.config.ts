@@ -56,7 +56,6 @@ export const USER_FORM: Section[] = [
         show: true,
         default: '',
         path: 'birthDate',
-        optional: true,
         appearance: 'standard',
       },
       {
