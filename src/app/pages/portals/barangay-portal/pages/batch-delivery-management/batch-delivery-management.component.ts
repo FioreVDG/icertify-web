@@ -67,21 +67,25 @@ export class BatchDeliveryManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.getSetting();
-    this.fetchData(this.page);
   }
   getSetting() {
     this.store.select('user').subscribe((me: any) => {
       console.log(me._barangay.brgyCode);
       this.me = me;
-      this.api.cluster.getOne(me._barangay.brgyCode).subscribe((res: any) => {
-        console.log(res);
-        this.setting = res.env.cluster;
-        let resp: any = res.env.cluster.barangays.find(
-          (i: any) => i._barangay.brgyCode === me._barangay.brgyCode
-        );
-        this.isLimit = resp.maxDoc;
-        console.log(this.isLimit);
-      });
+      if (!this.setting) {
+        this.api.cluster.getOne(me._barangay.brgyCode).subscribe((res: any) => {
+          console.log(res);
+          this.setting = res.env.cluster;
+          let resp: any = res.env.cluster.barangays.find(
+            (i: any) => i._barangay.brgyCode === me._barangay.brgyCode
+          );
+          this.isLimit = resp.maxDoc;
+          console.log(this.isLimit);
+          this.fetchData(this.page);
+        });
+      } else {
+        this.fetchData(this.page);
+      }
     });
   }
   fetchData(event: any) {
