@@ -105,7 +105,6 @@ export class DocumentTrackerTableComponent implements OnInit {
           ? query.find.concat(FIND_ALL)
           : query.find.concat(NOTARY_FIND_ALL);
       console.log(query);
-      console.log(query);
       api = this.api.transaction.getAll(query);
     } else if (event && event.label === 'Finished') {
       query.find =

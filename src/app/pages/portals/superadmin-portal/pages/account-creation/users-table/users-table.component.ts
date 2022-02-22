@@ -38,6 +38,7 @@ export class UsersTableComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.initializeColumn();
     console.log(this.data);
     this.brgyId = this.brgyDetail?.brgyCode;
     this.userType = this.header;
@@ -92,6 +93,15 @@ export class UsersTableComponent implements OnInit {
         }
       });
     } else this.btnDisabled = false;
+  }
+  initializeColumn() {
+    if (this.userType === 'QCLegal') {
+      this.column.forEach((c) => {
+        if (c.title === 'User Role') {
+          c.selected = false;
+        }
+      });
+    }
   }
 
   onAdd() {
