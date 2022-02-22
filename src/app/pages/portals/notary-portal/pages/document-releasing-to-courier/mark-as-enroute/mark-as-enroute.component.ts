@@ -55,6 +55,21 @@ export class MarkAsEnrouteComponent implements OnInit {
         value: { name: i.firstName + ' ' + i.lastName, id: i._id },
       });
     });
+
+    if (!this.riderList.item.length) {
+      this.dialog
+        .open(ActionResultComponent, {
+          data: {
+            msg: `No rider found in this cluster!`,
+            success: false,
+            button: 'Got it!',
+          },
+        })
+        .afterClosed()
+        .subscribe((_) => {
+          this.dialogRef.close();
+        });
+    }
   }
 
   formInitialized() {}

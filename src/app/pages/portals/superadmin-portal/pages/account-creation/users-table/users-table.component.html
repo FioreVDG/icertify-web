@@ -6,7 +6,7 @@
     color="primary"
   >
     <mat-icon>add</mat-icon>&nbsp;{{
-      dataSource.length <= 0 && userType !== "Notary"
+      dataSource.length <= 0 && userType !== "Notary" && userType !== "QCLegal"
         ? "Create an Admin"
         : "Add User"
     }}
