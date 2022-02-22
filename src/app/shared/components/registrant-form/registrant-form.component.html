@@ -8,6 +8,7 @@
 >
 <div mat-dialog-content>
   <app-form
+    *ngIf="formInitiated"
     #registrantDetails
     [formfields]="registrantFromFields"
     (formInitiated)="formInitialized()"

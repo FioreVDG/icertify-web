@@ -71,6 +71,7 @@ export class VideoConferencingComponent implements OnInit {
       this.api.cluster.getOneNotary(res._notaryId).subscribe((res: any) => {
         this.settings = res.env.cluster;
         this.fetchData(event);
+        console.log(res);
       });
     });
   }
