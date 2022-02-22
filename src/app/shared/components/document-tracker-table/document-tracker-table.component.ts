@@ -55,7 +55,9 @@ export class DocumentTrackerTableComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getSettings(this.page);
+  }
 
   fetchData(event: any) {
     this.loading = true;
@@ -115,8 +117,8 @@ export class DocumentTrackerTableComponent implements OnInit {
       console.log(query);
       api = this.api.document.getAll(query);
     }
-
-    api.subscribe(
+    console.log('HERE');
+    api?.subscribe(
       (res: any) => {
         // console.log(res);
         if (res.status === 'Success') {
@@ -157,11 +159,14 @@ export class DocumentTrackerTableComponent implements OnInit {
 
     this.store.select('user').subscribe(
       (res: any) => {
-        if (!this.setting) {
-          let api = this.api.cluster.getOne(res._barangay.brgyCode);
-          if (this.header === 'NOTARY')
-            api = this.api.cluster.getOneNotary(res._notaryId);
+        let api = this.api.cluster.getOne('');
+        if (this.header === 'NOTARY') {
+          api = this.api.cluster.getOneNotary(res._notaryId);
+        } else {
+          api = this.api.cluster.getOne(res._barangay.brgyCode);
+        }
 
+        if (!this.setting) {
           api.subscribe(
             (res: any) => {
               this.setting = res.env.cluster;

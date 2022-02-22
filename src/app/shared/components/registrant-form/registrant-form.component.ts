@@ -204,10 +204,10 @@ export class RegistrantFormComponent implements OnInit {
     let address = {
       address1: event.address1,
       address2: event.address2,
-      barangay: this.brgyInfo.address.barangay,
-      cityMun: this.brgyInfo.address.cityMun,
-      province: this.brgyInfo.address.province,
-      region: this.brgyInfo.address.region,
+      barangay: event.barangay,
+      cityMun: event.cityMun,
+      province: event.province,
+      region: event.region,
     };
     this.addressTemp = address;
     console.log(address);
@@ -218,10 +218,10 @@ export class RegistrantFormComponent implements OnInit {
       let address = {
         address1: event.address1,
         address2: event.address2,
-        barangay: this.brgyInfo.address.barangay,
-        cityMun: this.brgyInfo.address.cityMun,
-        province: this.brgyInfo.address.province,
-        region: this.brgyInfo.address.region,
+        barangay: event.barangay,
+        cityMun: event.cityMun,
+        province: event.province,
+        region: event.region,
       };
       this.addressTemp = address;
       console.log(address);

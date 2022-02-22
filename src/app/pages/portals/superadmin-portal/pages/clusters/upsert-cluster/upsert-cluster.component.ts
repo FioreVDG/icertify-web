@@ -405,7 +405,7 @@ export class UpsertClusterComponent implements OnInit {
       .open(AreYouSureComponent, {
         data: {
           isOthers: true,
-          msg: 'you want to save this Cluster?',
+          msg: 'save this Cluster?',
         },
         disableClose: true,
       })
