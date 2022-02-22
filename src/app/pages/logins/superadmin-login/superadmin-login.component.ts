@@ -33,12 +33,18 @@ export class SuperadminLoginComponent implements OnInit {
 
     if (csurf_token !== null && session_token !== null) {
       this.isLoggingIn = true;
-      this.auth.me().subscribe((res: any) => {
-        if (res && res.env.user.type === 'Admin') {
+      this.auth.me().subscribe(
+        (res: any) => {
+          if (res && res.env.user.type === 'Admin') {
+            this.isLoggingIn = false;
+            this.router.navigate(['/superadmin-portal/account-creation']);
+          }
+        },
+        (err) => {
+          console.log(err);
           this.isLoggingIn = false;
-          this.router.navigate(['/superadmin-portal/account-creation']);
         }
-      });
+      );
     }
   }
 
