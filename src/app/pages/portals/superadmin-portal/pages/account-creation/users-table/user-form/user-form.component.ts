@@ -253,7 +253,10 @@ export class UserFormComponent implements OnInit {
     return op1.id === op2.id;
   }
   disAbler() {
-    if (this.data && this.data.initial) {
+    if (
+      !(!this.data && !this.data.initial) ||
+      this.data.obj.type === 'QCLegal'
+    ) {
       if (this.userDetails.form.valid && this.brgyForm.valid) {
         return false;
       } else return true;
