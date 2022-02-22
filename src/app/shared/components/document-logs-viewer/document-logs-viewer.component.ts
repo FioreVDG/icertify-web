@@ -30,7 +30,7 @@ export class DocumentLogsViewerComponent implements OnInit {
         {
           field: 'docDetails.refCode',
           operator: '=',
-          value: this.data.obj._documents[0].refCode,
+          value: this.data.obj.refCode,
         },
       ],
       populates: [
@@ -44,7 +44,7 @@ export class DocumentLogsViewerComponent implements OnInit {
         {
           field: 'docDetails.refCode',
           operator: '=',
-          value: this.data.obj._documents[0].refCode,
+          value: this.data.obj.refCode,
         },
         {
           field: 'message',

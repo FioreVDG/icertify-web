@@ -100,6 +100,7 @@ export class BarangayPortalComponent implements OnInit {
       (err) => {
         console.log(err);
         if (err) this.checkSession();
+        this.loading = false;
       }
     );
   }
