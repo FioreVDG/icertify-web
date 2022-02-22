@@ -97,7 +97,13 @@ export class NotarizedDocumentReleasingComponent implements OnInit {
       // });
       api = this.api.document.getAll(qry);
     }
-
+    if (this.me) {
+      qry.find.push({
+        field: '_barangay.brgyCode',
+        operator: '=',
+        value: this.me._barangay.brgyCode,
+      });
+    }
     console.log(qry);
     api.subscribe((res: any) => {
       console.log(res);

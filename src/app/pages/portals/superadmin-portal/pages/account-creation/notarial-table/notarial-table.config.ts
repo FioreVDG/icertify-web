@@ -25,20 +25,20 @@ export const NOTARIAL: Column[] = [
     selected: true,
   },
   {
-    title: 'Home Address',
+    title: 'Email',
     breakpoint: 'sm',
-    path: 'address',
-    paths: [
-      'address.address1',
-      'address.address2',
-      'address.barangay.brgyDesc',
-      'address.cityMun.citymunDesc',
-      'address.province.provDesc',
-      'address.region.regDesc',
-    ],
-    type: 'special',
+    path: 'email',
+    type: 'text',
     selected: true,
   },
+  {
+    title: 'Mobile Number',
+    breakpoint: 'sm',
+    path: 'mobileNumber',
+    type: 'text',
+    selected: true,
+  },
+
   {
     title: 'Roll Number',
     breakpoint: 'sm',

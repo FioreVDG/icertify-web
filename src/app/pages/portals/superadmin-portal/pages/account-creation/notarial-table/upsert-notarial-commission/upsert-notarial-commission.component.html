@@ -23,7 +23,6 @@
     ></app-auto-complete>
     <app-auto-complete
       #ibpprovDetails
-      *ngIf="ibp_provinces.item.length"
       [appearance]="'standard'"
       [opt]="ibp_provinces"
       (onSelect)="initializeIbpProv($event, 'ibp_chapter_city_prov')"
@@ -89,11 +88,16 @@
       mat-button
       color="primary"
       [disabled]="
-        (!ibpchapterDetails.optForm.valid &&
-          !officeBrgyForm.valid &&
-          !validityDetails.form.valid &&
-          !notarialDetails.form.valid) ||
-        saving
+        !(
+          ibpchapterDetails.optForm.valid &&
+          officeaddressDetails.form.valid &&
+          notarialDetails.form.valid &&
+          officeBrgyForm.valid &&
+          homeaddressDetails.form.valid &&
+          homeBrgyForm.valid &&
+          validityDetails.form.valid &&
+          ibpprovDetails.optForm.valid
+        ) || saving
       "
       (click)="onSave()"
     >
