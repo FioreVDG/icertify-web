@@ -54,11 +54,13 @@ export class DocumentTrackerTableComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getSettings(this.page);
+  }
 
   fetchData(event: any) {
     this.loading = true;
-    console.log(event);
+    console.log('HERE');
 
     let query = {
       find: event.find ? event.find : [],
@@ -113,8 +115,8 @@ export class DocumentTrackerTableComponent implements OnInit {
       console.log(query);
       api = this.api.transaction.getAll(query);
     }
-
-    api.subscribe(
+    console.log('HERE');
+    api?.subscribe(
       (res: any) => {
         // console.log(res);
         if (res.status === 'Success') {
@@ -150,13 +152,16 @@ export class DocumentTrackerTableComponent implements OnInit {
       let api: any;
       if (this.header === 'NOTARY')
         api = this.api.cluster.getOneNotary(res._notaryId);
-      else this.api.cluster.getOne(res._barangay.brgyCode);
-      api?.subscribe(
+      else api = this.api.cluster.getOne(res._barangay.brgyCode);
+      api.subscribe(
         (res: any) => {
           this.setting = res.env.cluster;
+
+          console.log(this.setting);
           this.fetchData(event);
         },
         (err: any) => {
+          console.log(err);
           this.loading = false;
         }
       );

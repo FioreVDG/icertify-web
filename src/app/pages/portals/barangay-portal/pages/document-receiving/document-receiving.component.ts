@@ -80,6 +80,12 @@ export class DocumentReceivingComponent implements OnInit {
       query.sort =
         (event.sort.direction === 'asc' ? '' : '-') + event.sort.active;
     }
+    if (this.me)
+      query.find.push({
+        field: '_barangay.brgyCode',
+        operator: '=',
+        value: this.me._barangay.brgyCode,
+      });
     console.log(query);
 
     this.api.document.getAll(query).subscribe(
