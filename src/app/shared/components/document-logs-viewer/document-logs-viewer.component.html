@@ -15,19 +15,19 @@
               <div class="col-6">
                 <div class="text-wrap">
                   <p>
-                    <b>{{ data.obj._documents[0].documentName }}</b>
+                    <b>{{ data.obj.documentName }}</b>
                   </p>
                   <p>Document Name</p>
                 </div>
                 <div class="text-wrap">
                   <p>
-                    <b>{{ data.obj._documents[0].documentType }}</b>
+                    <b>{{ data.obj.documentType }}</b>
                   </p>
                   <p>Document Type</p>
                 </div>
                 <div class="text-wrap">
                   <p>
-                    <b>{{ data.obj.tempFolderId.folderName }}</b>
+                    <b>{{ data.obj._transactionId._folderId.folderName }}</b>
                   </p>
                   <p>Batch Reference Code</p>
                 </div>
@@ -36,15 +36,15 @@
                 <div class="text-wrap">
                   <p>
                     <b
-                      >{{ data.obj._folderId?._notaryId?.firstName }}
-                      {{ data.obj._folderId?._notaryId?.lastName }}</b
+                      >{{ data.obj._notaryId.firstName }}
+                      {{ data.obj._notaryId.lastName }}</b
                     >
                   </p>
                   <p>Notary</p>
                 </div>
                 <div class="text-wrap">
                   <p>
-                    <b>{{ data.obj._documents[0].documentStatus }}</b>
+                    <b>{{ data.obj.documentStatus }}</b>
                   </p>
                   <p>Notarization Status</p>
                 </div>
