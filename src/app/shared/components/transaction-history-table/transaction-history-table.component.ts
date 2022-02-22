@@ -109,13 +109,13 @@ export class TransactionHistoryTableComponent implements OnInit {
         api = this.api.document.getAll(qry);
       }
     } else {
+      qry.find.push({
+        field: '_barangay.brgyCode',
+        operator: '=',
+        value: this.me._barangay.brgyCode,
+      });
       if (event.label === 'Notarized') {
         qry.find = qry.find.concat(FIND_NOTARIZED);
-        qry.find.push({
-          field: '_barangay.brgyCode',
-          operator: '=',
-          value: this.me._barangay.brgyCode,
-        });
         api = this.api.document.getAll(qry);
       } else if (event.label === 'Unnotarized') {
         qry.find = qry.find.concat(FIND_UNNOTARIZED);
