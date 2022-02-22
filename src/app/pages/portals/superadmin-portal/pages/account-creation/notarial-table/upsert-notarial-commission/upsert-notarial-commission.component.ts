@@ -37,7 +37,10 @@ export class UpsertNotarialCommissionComponent implements OnInit {
   @ViewChild('ibpprovDetails') ibpprovDetails!: FormComponent;
   loading = false;
   saving = false;
-  dialogTitle: string = 'ADD NOTARIAL COMMISSION';
+  dialogTitle: string =
+    this.data && this.data.obj
+      ? 'EDIT NOTARIAL COMMISSION'
+      : 'ADD NOTARIAL COMMISSION';
   notarialFields: Section[] = NOTARIAL_FORM;
   period_of_validity: Section[] = PERIOD_OF_VALIDITY;
   home_brgyFields = HOME_ADDRESS_SELECT;
