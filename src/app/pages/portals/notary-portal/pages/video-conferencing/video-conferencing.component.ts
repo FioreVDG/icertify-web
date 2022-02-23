@@ -19,6 +19,7 @@ import { User } from 'src/app/models/user.interface';
 export class VideoConferencingComponent implements OnInit {
   @ViewChild('table') appTable: TableComponent | undefined;
   filterBtnConfig = FILT_BTN;
+  tableFlag = false;
   isCheckbox: boolean = true;
   selected = [];
   loading: boolean = true;
@@ -64,15 +65,41 @@ export class VideoConferencingComponent implements OnInit {
     private store: Store<{ user: User }>
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.tableUpdateEmit(this.page);
+  }
+
+  addFilterChoices() {
+    this.filterBtnConfig.forEach((el: any) => {
+      el.column.forEach((col: any) => {
+        if (col.path === '_barangay.brgyDesc') {
+          let brgyChoices: any[] = [];
+          if (this.settings) {
+            this.settings.barangays.forEach((barangay: any) => {
+              brgyChoices.push(barangay._barangay.brgyDesc);
+            });
+          }
+          console.log(this.settings);
+          col.choices = brgyChoices;
+        }
+      });
+    });
+    this.tableFlag = true;
+  }
 
   getSettings(event: any) {
     this.store.select('user').subscribe((res: User) => {
-      this.api.cluster.getOneNotary(res._notaryId).subscribe((res: any) => {
-        this.settings = res.env.cluster;
+      if (!this.settings) {
+        this.api.cluster.getOneNotary(res._notaryId).subscribe((res: any) => {
+          this.settings = res.env.cluster;
+          this.addFilterChoices();
+          this.fetchData(event);
+
+          console.log(res);
+        });
+      } else {
         this.fetchData(event);
-        console.log(res);
-      });
+      }
     });
   }
 
@@ -109,7 +136,19 @@ export class VideoConferencingComponent implements OnInit {
         value: brgyCodes.join(','),
       });
     }
-
+    if (event.find) query.find = query.find.concat(event.find);
+    if (event.label === 'Scheduled') {
+      query.populates = query.populates.concat([
+        {
+          field: '_conferenceId',
+          select: '-__v',
+        },
+        {
+          field: '_scheduledBy',
+          select: '-__v',
+        },
+      ]);
+    }
     console.log(query);
     this.api.transaction.getAllFolder(query).subscribe((res: any) => {
       console.log(res);

@@ -70,6 +70,15 @@ export const DOCUMENT_TRACKER_CONFIG: Array<any> = [
         selected: true,
       },
       {
+        title: 'Barangay',
+        breakpoint: 'sm',
+        path: '_barangay.brgyDesc',
+        type: 'text',
+        selected: true,
+        useAsFilter: true,
+        choices: [],
+      },
+      {
         title: 'Location Status',
         breakpoint: 'sm',
         path: 'locationStatus',
@@ -172,6 +181,15 @@ export const DOCUMENT_TRACKER_CONFIG: Array<any> = [
         paths: ['_notaryId.firstName', '_notaryId.lastName'],
         type: 'special',
         selected: true,
+      },
+      {
+        title: 'Barangay',
+        breakpoint: 'sm',
+        path: '_barangay.brgyDesc',
+        type: 'text',
+        selected: true,
+        useAsFilter: true,
+        choices: [],
       },
       {
         title: 'Location Status',
@@ -278,6 +296,15 @@ export const DOCUMENT_TRACKER_CONFIG: Array<any> = [
         selected: true,
       },
       {
+        title: 'Barangay',
+        breakpoint: 'sm',
+        path: '_barangay.brgyDesc',
+        type: 'text',
+        selected: true,
+        useAsFilter: true,
+        choices: [],
+      },
+      {
         title: 'Notarization Status',
         breakpoint: 'sm',
         path: 'documentStatus',
@@ -303,6 +330,13 @@ export const DOCUMENT_TRACKER_CONFIG: Array<any> = [
         breakpoint: 'sm',
         path: 'remark',
         type: 'text',
+        selected: true,
+      },
+      {
+        title: 'Date and Time Released',
+        breakpoint: 'sm',
+        path: 'dateReleased',
+        type: 'date',
         selected: true,
       },
     ],
@@ -369,11 +403,5 @@ export const NOTARY_FIND_FINISHED: Find[] = [
     field: 'locationStatus',
     operator: '[in]=',
     value: 'Released to Indigent',
-  },
-  {
-    field: 'locationStatus',
-    operator: '[in]=',
-    value:
-      'Video Conference Scheduled (Notary),Received by Notary,Enroute to Barangay,Released to Indigent',
   },
 ];
