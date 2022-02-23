@@ -46,4 +46,8 @@ export class UserService {
   updateIndigent(id: string, body: object) {
     return this.http.start('patch', `/users/indigent/${id}`, body);
   }
+
+  deleteNotaryMain(id: string) {
+    return this.http.start('delete', `/users/notaryAdmin/${id}`);
+  }
 }

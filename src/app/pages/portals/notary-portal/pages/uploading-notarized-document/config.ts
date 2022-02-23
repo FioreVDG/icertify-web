@@ -41,9 +41,11 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
       {
         title: 'Barangay',
         breakpoint: 'sm',
-        path: '_transactionId._barangay.brgyDesc',
+        path: '_barangay.brgyDesc',
         type: 'text',
         selected: true,
+        useAsFilter: true,
+        choices: [],
       },
       {
         title: 'QC Indigent',
@@ -116,9 +118,11 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
       {
         title: 'Barangay',
         breakpoint: 'sm',
-        path: '_transactionId._barangay.brgyDesc',
+        path: '_barangay.brgyDesc',
         type: 'text',
         selected: true,
+        useAsFilter: true,
+        choices: [],
       },
       {
         title: 'QC Indigent',
@@ -166,8 +170,13 @@ export const FIND_FOR_UPLOADING: Find[] = [
   },
   {
     field: 'documentStatus',
-    operator: '[in]=',
-    value: 'Notarized,Unnotarized',
+    operator: '=',
+    value: 'Notarized',
+  },
+  {
+    field: 'dateNotarized',
+    operator: '[ne]=',
+    value: 'null',
   },
 ];
 export const FIND_UPLOADED: Find[] = [
@@ -178,8 +187,8 @@ export const FIND_UPLOADED: Find[] = [
   },
   {
     field: 'documentStatus',
-    operator: '[in]=',
-    value: 'Notarized,Unnotarized',
+    operator: '=',
+    value: 'Notarized',
   },
   {
     field: 'notarizedDocument',

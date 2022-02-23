@@ -16,13 +16,17 @@
       #auto="matAutocomplete"
       autoActiveFirstOption
       (optionSelected)="onOptionSelect($event)"
-    >
-      <mat-option
-        *ngFor="let option of filteredOpt | async"
-        [value]="option.label ? option.label : option.value"
-      >
-        {{ option.label ? option.label : option.value.name }}
-      </mat-option>
+      ><mat-option *ngIf="!opt.item.length" class="is-loading"
+        ><mat-spinner diameter="25"></mat-spinner
+      ></mat-option>
+      <ng-container *ngIf="opt.item.length">
+        <mat-option
+          *ngFor="let option of filteredOpt | async"
+          [value]="option.label ? option.label : option.value"
+        >
+          {{ option.label ? option.label : option.value.name }}
+        </mat-option>
+      </ng-container>
     </mat-autocomplete>
   </mat-form-field>
 </form>

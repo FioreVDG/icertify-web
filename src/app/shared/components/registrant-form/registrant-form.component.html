@@ -8,6 +8,7 @@
 >
 <div mat-dialog-content>
   <app-form
+    *ngIf="formInitiated"
     #registrantDetails
     [formfields]="registrantFromFields"
     (formInitiated)="formInitialized()"
@@ -39,7 +40,7 @@
     mat-flat-button
     color="primary"
     (click)="updateIndigent()"
-    [disabled]="saving || (!imageFormDirty && !registrantDetails.form.dirty)"
+    [disabled]="saving || (!imageFormDirty && !registrantDetails?.form?.dirty)"
   >
     <mat-icon>save_as</mat-icon>&nbsp;Update
   </button>

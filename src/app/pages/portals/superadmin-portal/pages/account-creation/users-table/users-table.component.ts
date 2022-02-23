@@ -38,6 +38,7 @@ export class UsersTableComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.initializeColumn();
     console.log(this.data);
     this.brgyId = this.brgyDetail?.brgyCode;
     this.userType = this.header;
@@ -92,6 +93,15 @@ export class UsersTableComponent implements OnInit {
         }
       });
     } else this.btnDisabled = false;
+  }
+  initializeColumn() {
+    if (this.userType === 'QCLegal') {
+      this.column.forEach((c) => {
+        if (c.title === 'User Role') {
+          c.selected = false;
+        }
+      });
+    }
   }
 
   onAdd() {
@@ -174,6 +184,11 @@ export class UsersTableComponent implements OnInit {
       page: event.pageIndex,
       limit: event.pageSize + '',
       filter: event.filter,
+      populates: [
+        {
+          field: '_role',
+        },
+      ],
     };
 
     if (this.userType) {
@@ -190,25 +205,20 @@ export class UsersTableComponent implements OnInit {
         value: this.brgyId,
       });
     if (this.notaryId !== 'undefined' && this.userType !== 'iCertify')
-      query.find.push(
-        {
-          field: '_notaryId',
-          operator: '=',
-          value: this.notaryId,
-        },
-        {
-          field: 'isMain',
-          operator: '=',
-          value: false,
-        }
-      );
-    query.populates = [
-      {
-        field: '_role',
-      },
-    ];
+      query.find.push({
+        field: '_notaryId',
+        operator: '=',
+        value: this.notaryId,
+      });
     if (event && event.filter) {
       query['filter'] = event.filter;
+    }
+    if (this.userType === 'Notary') {
+      query.find.push({
+        field: 'isMain',
+        operator: '=',
+        value: false,
+      });
     }
     console.log(query);
 

@@ -1,12 +1,17 @@
 import { BrgyRoomComponent } from './brgy-room/brgy-room.component';
 import { ApiService } from 'src/app/service/api/api.service';
 import { Component, OnInit } from '@angular/core';
-import { CONFERENCE_TABLE } from './config';
+import {
+  FINISHED_FIND,
+  PENDING_FIND,
+  VIDEO_CONF_BARANGAY_TABLE,
+} from './config';
 import { Store } from '@ngrx/store';
 import { User } from 'src/app/models/user.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewBatchTransactionsComponent } from './view-batch-transactions/view-batch-transactions.component';
 import { QueryParams } from 'src/app/models/queryparams.interface';
+import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachments/view-attachments.component';
 
 @Component({
   selector: 'app-barangay-video-conferencing',
@@ -14,7 +19,7 @@ import { QueryParams } from 'src/app/models/queryparams.interface';
   styleUrls: ['./barangay-video-conferencing.component.scss'],
 })
 export class BarangayVideoConferencingComponent implements OnInit {
-  columns = CONFERENCE_TABLE;
+  filtBtnConfig = VIDEO_CONF_BARANGAY_TABLE;
   loading: boolean = true;
   dataSource = [];
   dataLength: number = 0;
@@ -29,6 +34,7 @@ export class BarangayVideoConferencingComponent implements OnInit {
   };
   currentTable: any;
   me: any;
+  settings: any;
   // TODO: room interface
   activeRooms: Array<any> = [];
   constructor(
@@ -41,7 +47,7 @@ export class BarangayVideoConferencingComponent implements OnInit {
     this.store.select('user').subscribe((res: User) => {
       this.me = res;
       console.log(res);
-      this.fetchData(this.page);
+      // this.fetchData(this.page);
     });
     this.getActive = true;
     this.getActiveConference();
@@ -67,14 +73,25 @@ export class BarangayVideoConferencingComponent implements OnInit {
       filter: event.filter,
       populates: event.populate,
     };
+    if (event.label === 'Pending') {
+      query.find = query.find.concat(PENDING_FIND);
+    } else {
+      query.find = query.find.concat(FINISHED_FIND);
+    }
 
     console.log(query);
-    this.api.conference.getAll(query).subscribe((res: any) => {
-      this.loading = false;
-      console.log(res);
-      this.dataSource = res.env.conferences;
-      this.dataLength = res.total;
-    });
+    this.api.document.getAll(query).subscribe(
+      (res: any) => {
+        this.loading = false;
+        console.log(res);
+        this.dataSource = res.env.documents;
+        this.dataLength = res.total;
+      },
+      (err) => {
+        this.loading = false;
+        console.log(err);
+      }
+    );
 
     this.currentTable = event.label;
   }
@@ -82,16 +99,35 @@ export class BarangayVideoConferencingComponent implements OnInit {
   tableUpdateEmit(event: any) {
     console.log(event);
     event.label = event.label || this.currentTable;
+
     this.fetchData(event);
   }
 
   onRowClick(event: any) {
     console.log(event);
-    this.dialog.open(ViewBatchTransactionsComponent, {
-      data: event,
-      height: 'auto',
-      width: '70%',
-    });
+    // this.dialog.open(ViewBatchTransactionsComponent, {
+    //   data: event,
+    //   height: 'auto',
+    //   width: '70%',
+    // });
+
+    switch (event.action) {
+      case 'join':
+        break;
+      case 'view':
+        this.dialog.open(ViewAttachmentsComponent, {
+          data: {
+            documents: [event.obj],
+            refCode: event.obj.refCode,
+          },
+          height: 'auto',
+          width: '70%',
+        });
+
+        break;
+      default:
+        break;
+    }
   }
 
   getActive = false;

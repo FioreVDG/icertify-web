@@ -5,11 +5,10 @@ export interface User {
   lastName: string;
   middleName: string;
   mobileNumber: string;
-  _roleId?: ROLE;
   email?: string;
   gender?: string;
   _barangay?: object;
-  _role?: any;
+  _role?: ROLE;
   type?: string;
   isMain?: boolean;
 

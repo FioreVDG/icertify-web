@@ -12,6 +12,7 @@
 
   <app-table
     #table
+    *ngIf="tableFlag"
     [filterButtonConfig]="filtBtnConfig"
     [loading]="loading"
     (onUpdateTableEmit)="tableUpdateEmit($event)"

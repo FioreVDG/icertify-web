@@ -1,3 +1,5 @@
+import { UtilService } from 'src/app/service/util/util.service';
+import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { QueryParams } from 'src/app/models/queryparams.interface';
@@ -22,7 +24,11 @@ export class RiderComponent implements OnInit {
   loading: boolean = false;
   clusters: any[] = [];
 
-  constructor(private dialog: MatDialog, private api: ApiService) {}
+  constructor(
+    private dialog: MatDialog,
+    private api: ApiService,
+    private util: UtilService
+  ) {}
 
   ngOnInit(): void {
     this.fetchRiders(this.page);
@@ -80,6 +86,31 @@ export class RiderComponent implements OnInit {
           .afterClosed()
           .subscribe((res) => {
             if (res) this.fetchRiders(this.page);
+          });
+
+        break;
+      case 'delete':
+        this.dialog
+          .open(AreYouSureComponent, {
+            data: {
+              msg:
+                'Delete this Rider: ' +
+                event.obj.firstName +
+                event.obj.lastName,
+              isDelete: true,
+            },
+          })
+          .afterClosed()
+          .subscribe((res) => {
+            if (res) {
+              let loader = this.util.startLoading('Deleting...');
+              this.api.user.deleteUser(event.obj._id).subscribe((res: any) => {
+                if (res) {
+                  this.fetchRiders(this.page);
+                  this.util.stopLoading(loader);
+                }
+              });
+            }
           });
 
         break;

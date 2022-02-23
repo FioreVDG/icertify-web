@@ -162,7 +162,7 @@ export class UpsertClusterComponent implements OnInit {
 
   selectBarangay(i: number) {
     let selClusters: any[] = [];
-    console.log(this.clusterForm.get('barangays')?.value);
+    console.log(i);
     if (this.clusterForm.get('barangays')?.value.length) {
       let selectedBarangays = this.clusterForm.get('barangays')?.value;
       for (const barangay of selectedBarangays) {
@@ -175,10 +175,12 @@ export class UpsertClusterComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          if (this.data.barangays.length) {
+          if (this.data && this.data.barangays.length) {
+            console.log(this.data.barangays);
             if (
+              this.data.barangays[i] &&
               this.data.barangays[i]._barangay.brgyCode !==
-              res._barangay.brgyCode
+                res._barangay.brgyCode
             ) {
               (this.clusterForm.get('barangays') as FormArray)
                 .at(i)
@@ -190,6 +192,11 @@ export class UpsertClusterComponent implements OnInit {
                 .get('_barangay')
                 ?.markAsPristine();
             }
+          } else {
+            (this.clusterForm.get('barangays') as FormArray)
+              .at(i)
+              .get('_barangay')
+              ?.markAsDirty();
           }
 
           (this.clusterForm.get('barangays') as FormArray)
@@ -289,6 +296,7 @@ export class UpsertClusterComponent implements OnInit {
   notarySelected(event: MatAutocompleteSelectedEvent): void {
     console.log(event.option.value);
     this.clusterForm.get('_notaryId')?.setValue(event.option.value._id);
+    (this.clusterForm.get('_notaryId') as FormArray).markAsDirty();
   }
 
   displayWith(option: any) {
@@ -362,12 +370,18 @@ export class UpsertClusterComponent implements OnInit {
     if (this.data) this.setDefaultValueFormArray();
     console.log(this.notaryCtrl.value);
 
-    if (this.data._riders.length) {
-      this.data._riders.forEach((el: any) => {
-        this.selectedRider.push(el._id);
-        this.objRider.push(el._id);
-      });
+    if (this.data) {
+      if (this.data._riders.length) {
+        this.data._riders.forEach((el: any) => {
+          this.selectedRider.push(el._id);
+          this.objRider.push(el._id);
+        });
+      }
     }
+
+    this.clusterForm.valueChanges.subscribe((res) => {
+      console.log(this.clusterForm.get('barangays'));
+    });
   }
 
   checkActiveDay() {
@@ -391,7 +405,7 @@ export class UpsertClusterComponent implements OnInit {
       .open(AreYouSureComponent, {
         data: {
           isOthers: true,
-          msg: 'you want to save this Cluster?',
+          msg: 'save this Cluster?',
         },
         disableClose: true,
       })
@@ -446,5 +460,24 @@ export class UpsertClusterComponent implements OnInit {
       });
       (this.clusterForm.get('_riders') as FormArray).push(riderFormGroup);
     });
+  }
+
+  onClose() {
+    if (!this.clusterForm.pristine) {
+      this.dialog
+        .open(AreYouSureComponent, {
+          data: {
+            isOthers: true,
+            msg: 'cancel? Clicking "Yes" will cancel adding cluster',
+          },
+          disableClose: true,
+        })
+        .afterClosed()
+        .subscribe((res) => {
+          if (res) this.dialogRef.close();
+        });
+    } else {
+      this.dialogRef.close();
+    }
   }
 }

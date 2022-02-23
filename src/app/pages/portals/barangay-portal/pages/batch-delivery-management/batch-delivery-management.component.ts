@@ -53,6 +53,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
   isLimit: any;
   setting: any;
   dataLength: number = 0;
+  me: any;
   constructor(
     private api: ApiService,
     private dialog: MatDialog,
@@ -65,21 +66,26 @@ export class BatchDeliveryManagementComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.fetchData(this.page);
     this.getSetting();
   }
   getSetting() {
     this.store.select('user').subscribe((me: any) => {
       console.log(me._barangay.brgyCode);
-      this.api.cluster.getOne(me._barangay.brgyCode).subscribe((res: any) => {
-        console.log(res);
-        this.setting = res.env.cluster;
-        let resp: any = res.env.cluster.barangays.find(
-          (i: any) => i._barangay.brgyCode === me._barangay.brgyCode
-        );
-        this.isLimit = resp.maxDoc;
-        console.log(this.isLimit);
-      });
+      this.me = me;
+      if (!this.setting) {
+        this.api.cluster.getOne(me._barangay.brgyCode).subscribe((res: any) => {
+          console.log(res);
+          this.setting = res.env.cluster;
+          let resp: any = res.env.cluster.barangays.find(
+            (i: any) => i._barangay.brgyCode === me._barangay.brgyCode
+          );
+          this.isLimit = resp.maxDoc;
+          console.log(this.isLimit);
+          this.fetchData(this.page);
+        });
+      } else {
+        this.fetchData(this.page);
+      }
     });
   }
   fetchData(event: any) {
@@ -95,6 +101,12 @@ export class BatchDeliveryManagementComponent implements OnInit {
       sort: event.sort,
     };
     if (event.filter) qry.filter = event.filter;
+
+    qry.find.push({
+      field: '_barangay.brgyCode',
+      operator: '=',
+      value: this.me._barangay.brgyCode,
+    });
     console.log(qry);
 
     let api: any;
@@ -149,7 +161,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
     let ids: any = [];
     console.log(this.selected);
     this.selected.forEach((id: any) => {
-      ids.push(id._transactionId);
+      ids.push({ ids: id._transactionId, docDetails: id });
     });
     // ids = ids.join(',');
     // console.log(ids);

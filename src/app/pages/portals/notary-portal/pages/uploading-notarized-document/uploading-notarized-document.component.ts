@@ -19,6 +19,7 @@ import { FILT_BTN_CONFIG, FIND_FOR_UPLOADING, FIND_UPLOADED } from './config';
 })
 export class UploadingNotarizedDocumentComponent implements OnInit {
   filtBtnConfig = FILT_BTN_CONFIG;
+  tableFlag = false;
   selected = [];
   currTable: any;
   currPopulate: any;
@@ -37,6 +38,7 @@ export class UploadingNotarizedDocumentComponent implements OnInit {
   dataSource = [];
   dataLength: number = 0;
   me: any;
+  setting: any;
 
   constructor(
     private api: ApiService,
@@ -50,12 +52,20 @@ export class UploadingNotarizedDocumentComponent implements OnInit {
     this.store.select('user').subscribe((res: User) => {
       this.me = res;
       console.log(res);
+      this.tableUpdateEmit(this.page);
     });
   }
 
   fetchData(event: any) {
     this.loading = true;
     console.log(event);
+    let brgyCodes: any[] = [];
+    if (this.setting) {
+      brgyCodes = this.setting.barangays.map((el: any) => {
+        return el._barangay.brgyCode;
+      });
+    }
+    console.log(this.setting);
 
     let qry = {
       find: event.find ? event.find : [],
@@ -66,6 +76,13 @@ export class UploadingNotarizedDocumentComponent implements OnInit {
     };
     if (event.filter) qry.filter = event.filter;
     let api: any;
+    if (brgyCodes) {
+      qry.find = qry.find.concat({
+        field: '_barangay.brgyCode',
+        operator: '[in]=',
+        value: brgyCodes.join(','),
+      });
+    }
     if (event && event.label === 'For Uploading') {
       qry.find = qry.find.concat(FIND_FOR_UPLOADING);
       api = this.api.document.getAll(qry);
@@ -88,10 +105,43 @@ export class UploadingNotarizedDocumentComponent implements OnInit {
   }
 
   tableUpdateEmit(event: any) {
+    this.loading = true;
     event['label'] = event.label || this.currTable;
     console.log(event.populate);
-    this.fetchData(event);
+    this.getSettings(event);
     console.log(event);
+  }
+  getSettings(event: any) {
+    this.store.select('user').subscribe((res: User) => {
+      if (!this.setting) {
+        this.api.cluster.getOneNotary(res._notaryId).subscribe((res: any) => {
+          this.setting = res.env.cluster;
+
+          this.addFilterChoices();
+          this.fetchData(event);
+        });
+      } else {
+        this.fetchData(event);
+      }
+    });
+  }
+
+  addFilterChoices() {
+    this.filtBtnConfig.forEach((el: any) => {
+      el.column.forEach((col: any) => {
+        if (col.path === '_barangay.brgyDesc') {
+          let brgyChoices: any[] = [];
+          if (this.setting) {
+            this.setting.barangays.forEach((barangay: any) => {
+              brgyChoices.push(barangay._barangay.brgyDesc);
+            });
+          }
+          console.log(this.setting);
+          col.choices = brgyChoices;
+        }
+      });
+    });
+    this.tableFlag = true;
   }
 
   onRowClick(event: any) {

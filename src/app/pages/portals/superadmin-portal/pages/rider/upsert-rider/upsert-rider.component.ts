@@ -36,6 +36,7 @@ export class UpsertRiderComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.data);
     // this.initCluster();
+    this.obj = this.data.obj;
   }
 
   // initCluster() {
@@ -80,11 +81,14 @@ export class UpsertRiderComponent implements OnInit {
           const loader = this.util.startLoading('Saving...');
           this.saving = true;
           let api: any;
+          let message = '';
 
           if (this.data.action === 'create') {
             api = this.api.user.createRider(toSaveData);
+            message = 'saved';
           } else {
             api = this.api.user.updateUser(this.data.obj._id, toSaveData);
+            message = 'updated';
           }
           api.subscribe(
             (res: any) => {
@@ -95,7 +99,7 @@ export class UpsertRiderComponent implements OnInit {
                 .open(ActionResultComponent, {
                   data: {
                     success: true,
-                    msg: `Rider information successfully saved!`,
+                    msg: `Rider information successfully ${message}!`,
                     button: 'Nice',
                   },
                 })
@@ -111,5 +115,23 @@ export class UpsertRiderComponent implements OnInit {
           );
         }
       });
+  }
+  onClose() {
+    if (!this.riderDetails.form.pristine) {
+      this.dialog
+        .open(AreYouSureComponent, {
+          data: {
+            isOthers: true,
+            msg: 'cancel? Clicking "Yes" will not save rider details.',
+          },
+          disableClose: true,
+        })
+        .afterClosed()
+        .subscribe((res) => {
+          if (res) this.dialogRef.close();
+        });
+    } else {
+      this.dialogRef.close();
+    }
   }
 }

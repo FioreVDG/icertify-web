@@ -61,6 +61,7 @@ export class TableComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
   }
   ngOnInit(): void {
+    console.log(this.pagination, 'INIT');
     console.log(this.dataSource);
     console.log(this.filterButtonConfig);
     if (this.filterButtonConfig) {
@@ -76,6 +77,8 @@ export class TableComponent implements OnInit {
             (col: any) => col.useAsFilter === true
           );
           if (findFilterExist) this.hasFilter = true;
+          i.page = this.pagination.pageIndex;
+          i.limit = this.pagination.pageSize;
           this.onUpdateTableEmit.emit(i);
         } else {
           i.selected = false;
@@ -89,6 +92,7 @@ export class TableComponent implements OnInit {
     this.updateBreakpoint();
     console.log(this.columns);
   }
+
   updateBreakpoint() {
     this.displayedColumns = [];
     let w = window.innerWidth;
@@ -205,6 +209,9 @@ export class TableComponent implements OnInit {
     return this.filterButtonConfig[0].column;
   }
   onFilterButtonClick(index: any) {
+    console.log(this.pagination, 'FUNCTION');
+    this.pagination.pageIndex = 1;
+    this.pagination.pageSize = 10;
     this.loading = true;
     this.dataSource = [];
     this.keyword = '';
@@ -223,6 +230,7 @@ export class TableComponent implements OnInit {
         );
         if (findFilterExist) this.hasFilter = true;
         else this.hasFilter = false;
+        console.log(i);
         this.onUpdateTableEmit.emit(i);
       } else {
         i.selected = false;
@@ -250,7 +258,7 @@ export class TableComponent implements OnInit {
       if (
         c.path &&
         !['date', 'special', 'count'].includes(c.type) &&
-        c.path !== '_roleId' &&
+        c.path !== '_role' &&
         !c.isVirtual
       )
         fields.push(c.path);
@@ -283,7 +291,7 @@ export class TableComponent implements OnInit {
     this.onUpdateTableEmit.emit(toEmit);
   }
   onClickPagination(event: TableOutput) {
-    // console.log(event);
+    console.log(event);
     event['pageIndex'] = event.pageIndex + 1;
     this.curPageIndex = event.pageIndex;
     this.dataSource = [];
@@ -299,6 +307,9 @@ export class TableComponent implements OnInit {
 
     this.pagination.pageIndex = event.pageIndex;
     this.pagination.pageSize = event.pageSize;
+    this.pagination['filter'] = event['filter'];
+    this.pagination['label'] = this.label;
+
     this.onUpdateTableEmit.emit(this.pagination);
   }
   onCheckBoxChange(row: any) {
@@ -466,7 +477,7 @@ export class TableComponent implements OnInit {
         if (
           c.path &&
           !['date', 'special', 'count'].includes(c.type) &&
-          c.path !== '_roleId' &&
+          c.path !== '_role' &&
           !c.isVirtual
         )
           fields.push(c.path);

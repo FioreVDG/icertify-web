@@ -122,6 +122,7 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
     let ids: any = [];
     let docLogs: any = [];
     this.selected.forEach((id: any) => {
+      console.log(id);
       ids.push(id._id);
       id._transactions.forEach((trans: any) => {
         docLogs.push({
@@ -144,6 +145,7 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
         if (res) {
           const loader = this.util.startLoading('Saving...');
           let apiQueries = ids.map((id: any) => {
+            console.log(id);
             return this.api.folder.update(
               {
                 _receivedByBrgy: this.me._id,

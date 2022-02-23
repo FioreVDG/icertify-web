@@ -23,7 +23,7 @@
 </div>
 <app-table
   style="position: relative"
-  [columns]="columns"
+  [filterButtonConfig]="filtBtnConfig"
   [loading]="loading"
   (onRowClick)="onRowClick($event)"
   [dataSource]="dataSource"

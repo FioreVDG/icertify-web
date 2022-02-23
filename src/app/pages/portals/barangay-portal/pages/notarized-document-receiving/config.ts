@@ -71,7 +71,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     ],
     checkBoxBtns: [
       {
-        label: 'Mark as Receive',
+        label: 'Mark as Received',
         action: 'receive',
       },
     ],

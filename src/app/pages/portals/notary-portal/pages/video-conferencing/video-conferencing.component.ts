@@ -1,3 +1,4 @@
+import { Store } from '@ngrx/store';
 import { RoomComponent } from './room/room.component';
 import { SetScheduleComponent } from './set-schedule/set-schedule.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -8,6 +9,7 @@ import { TableComponent } from 'src/app/shared/components/table/table.component'
 import { ViewTransactionComponent } from '../document-receiving/view-transaction/view-transaction.component';
 import { VIEW_TRANSACTION_TABLE } from '../document-receiving/view-transaction/config';
 import { TRANSAC_TABLE_COLUMN } from '../../../barangay-portal/pages/batch-delivery-management/batch-folder/config';
+import { User } from 'src/app/models/user.interface';
 
 @Component({
   selector: 'app-video-conferencing',
@@ -17,6 +19,7 @@ import { TRANSAC_TABLE_COLUMN } from '../../../barangay-portal/pages/batch-deliv
 export class VideoConferencingComponent implements OnInit {
   @ViewChild('table') appTable: TableComponent | undefined;
   filterBtnConfig = FILT_BTN;
+  tableFlag = false;
   isCheckbox: boolean = true;
   selected = [];
   loading: boolean = true;
@@ -24,6 +27,8 @@ export class VideoConferencingComponent implements OnInit {
   dataLength: number = 0;
   currFetch: string = '';
   currentTable: any;
+
+  settings: any;
   page = {
     pageSize: 10,
     pageIndex: 1,
@@ -54,15 +59,59 @@ export class VideoConferencingComponent implements OnInit {
     ],
   };
   countSelected: any;
-  constructor(private api: ApiService, private dialog: MatDialog) {}
+  constructor(
+    private api: ApiService,
+    private dialog: MatDialog,
+    private store: Store<{ user: User }>
+  ) {}
 
   ngOnInit(): void {
-    this.fetchData(this.page);
+    this.tableUpdateEmit(this.page);
+  }
+
+  addFilterChoices() {
+    this.filterBtnConfig.forEach((el: any) => {
+      el.column.forEach((col: any) => {
+        if (col.path === '_barangay.brgyDesc') {
+          let brgyChoices: any[] = [];
+          if (this.settings) {
+            this.settings.barangays.forEach((barangay: any) => {
+              brgyChoices.push(barangay._barangay.brgyDesc);
+            });
+          }
+          console.log(this.settings);
+          col.choices = brgyChoices;
+        }
+      });
+    });
+    this.tableFlag = true;
+  }
+
+  getSettings(event: any) {
+    this.store.select('user').subscribe((res: User) => {
+      if (!this.settings) {
+        this.api.cluster.getOneNotary(res._notaryId).subscribe((res: any) => {
+          this.settings = res.env.cluster;
+          this.addFilterChoices();
+          this.fetchData(event);
+
+          console.log(res);
+        });
+      } else {
+        this.fetchData(event);
+      }
+    });
   }
 
   fetchData(event: any) {
     console.log(event);
     this.loading = true;
+    let brgyCodes: any[] = [];
+    if (this.settings) {
+      brgyCodes = this.settings.barangays.map((el: any) => {
+        return el._barangay.brgyCode;
+      });
+    }
 
     event.label = event.label === undefined ? 'For Scheduling' : event.label;
 
@@ -80,7 +129,26 @@ export class VideoConferencingComponent implements OnInit {
       filter: event.filter,
       populates: event.populate,
     };
-
+    if (brgyCodes) {
+      query.find = query.find.concat({
+        field: '_barangay.brgyCode',
+        operator: '[in]=',
+        value: brgyCodes.join(','),
+      });
+    }
+    if (event.find) query.find = query.find.concat(event.find);
+    if (event.label === 'Scheduled') {
+      query.populates = query.populates.concat([
+        {
+          field: '_conferenceId',
+          select: '-__v',
+        },
+        {
+          field: '_scheduledBy',
+          select: '-__v',
+        },
+      ]);
+    }
     console.log(query);
     this.api.transaction.getAllFolder(query).subscribe((res: any) => {
       console.log(res);
@@ -97,7 +165,7 @@ export class VideoConferencingComponent implements OnInit {
     this.selected = [];
     console.log(event);
     event.label = event.label || this.currentTable;
-    this.fetchData(event);
+    this.getSettings(event);
   }
 
   onRowClick(event: any) {

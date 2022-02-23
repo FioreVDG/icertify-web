@@ -44,6 +44,7 @@ export class TransactionHistoryTableComponent implements OnInit {
   dataSource = [];
   dataLength: number = 0;
   me: any;
+  setting: any;
   constructor(
     private api: ApiService,
     private dialog: MatDialog,
@@ -83,6 +84,20 @@ export class TransactionHistoryTableComponent implements OnInit {
 
     let api: any;
     if (this.header == 'NOTARY') {
+      let brgyCodes: any[] = [];
+      if (this.setting) {
+        brgyCodes = this.setting.barangays.map((el: any) => {
+          return el._barangay.brgyCode;
+        });
+      }
+      if (brgyCodes) {
+        qry.find = qry.find.concat({
+          field: '_barangay.brgyCode',
+          operator: '[in]=',
+          value: brgyCodes.join(','),
+        });
+      }
+      console.log('NOTARY');
       if (event.label === 'Notarized') {
         qry.find = qry.find.concat(NOTARY_FIND_NOTARIZED);
         api = this.api.document.getAll(qry);
@@ -94,13 +109,13 @@ export class TransactionHistoryTableComponent implements OnInit {
         api = this.api.document.getAll(qry);
       }
     } else {
+      qry.find.push({
+        field: '_barangay.brgyCode',
+        operator: '=',
+        value: this.me._barangay.brgyCode,
+      });
       if (event.label === 'Notarized') {
         qry.find = qry.find.concat(FIND_NOTARIZED);
-        qry.find.push({
-          field: '_barangay.brgyCode',
-          operator: '=',
-          value: this.me._barangay.brgyCode,
-        });
         api = this.api.document.getAll(qry);
       } else if (event.label === 'Unnotarized') {
         qry.find = qry.find.concat(FIND_UNNOTARIZED);
@@ -109,6 +124,8 @@ export class TransactionHistoryTableComponent implements OnInit {
         qry.find = qry.find.concat(FIND_ALL);
         api = this.api.document.getAll(qry);
       }
+
+      console.log('BRGY');
     }
     console.log(qry);
     api.subscribe((res: any) => {
@@ -128,8 +145,23 @@ export class TransactionHistoryTableComponent implements OnInit {
   tableUpdateEmit(event: any) {
     event['label'] = event.label || this.currTable;
     console.log(event.populate);
-    this.fetchData(event);
+    this.getSettings(event);
     console.log(event);
+  }
+  getSettings(event: any) {
+    this.store.select('user').subscribe((res: any) => {
+      console.log(res);
+      let api;
+      if (this.header === 'NOTARY') {
+        api = this.api.cluster.getOneNotary(res._notaryId);
+      } else {
+        api = this.api.cluster.getOne(res._barangay.brgyCode);
+      }
+      api.subscribe((res: any) => {
+        this.setting = res.env.cluster;
+        this.fetchData(event);
+      });
+    });
   }
 
   checkCertificateOfIndigency() {

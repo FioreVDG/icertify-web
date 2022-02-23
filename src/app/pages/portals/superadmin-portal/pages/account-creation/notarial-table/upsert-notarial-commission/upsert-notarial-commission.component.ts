@@ -37,7 +37,10 @@ export class UpsertNotarialCommissionComponent implements OnInit {
   @ViewChild('ibpprovDetails') ibpprovDetails!: FormComponent;
   loading = false;
   saving = false;
-  dialogTitle: string = 'ADD NOTARIAL COMMISSION';
+  dialogTitle: string =
+    this.data && this.data.obj
+      ? 'EDIT NOTARIAL COMMISSION'
+      : 'ADD NOTARIAL COMMISSION';
   notarialFields: Section[] = NOTARIAL_FORM;
   period_of_validity: Section[] = PERIOD_OF_VALIDITY;
   home_brgyFields = HOME_ADDRESS_SELECT;
@@ -238,10 +241,10 @@ export class UpsertNotarialCommissionComponent implements OnInit {
     );
   }
   initializeIbpProv(event: any, fcname: string) {
-    this.ibp_provinces.item = [];
+    console.log(event, fcname);
     this.ibp.get(fcname)?.setValue(event);
     if (fcname === 'ibp_chapter_region') {
-      this.ibp.controls['ibp_chapter_city_prov']?.setValue('');
+      this.ibp_provinces.item = [];
       let filter = this.ibp_chapter.item.filter((i) => i.label === event);
 
       filter.forEach((i) => {

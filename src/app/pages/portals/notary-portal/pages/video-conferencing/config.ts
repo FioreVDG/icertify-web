@@ -25,6 +25,8 @@ export const FILT_BTN: Array<FILTER_BUTTON_COLUMN> = [
         type: 'text',
         selected: true,
         path: '_barangay.brgyDesc',
+        useAsFilter: true,
+        choices: [],
       },
       {
         title: 'Received by',
@@ -84,6 +86,8 @@ export const FILT_BTN: Array<FILTER_BUTTON_COLUMN> = [
         type: 'text',
         selected: true,
         path: '_barangay.brgyDesc',
+        useAsFilter: true,
+        choices: [],
       },
       {
         title: 'Schedule by',

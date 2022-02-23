@@ -31,6 +31,8 @@ export class RegistrantFormComponent implements OnInit {
   toUpdataData: any = {};
   addressTemp: any = {};
   reasonVal: any;
+  formInitiated = false;
+  fetchingDefaultData: boolean = false;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<RegistrantFormComponent>,
@@ -60,6 +62,8 @@ export class RegistrantFormComponent implements OnInit {
     let tempInfo: any = localStorage.getItem('BARANGAY_INFORMATION');
     this.brgyInfo = JSON.parse(tempInfo);
     console.log(this.brgyInfo);
+    console.log(this.brgyInfo._barangay.regCode);
+
     this.findDefaultValue('barangay');
     this.findDefaultValue('cityMun');
     this.findDefaultValue('province');
@@ -121,28 +125,64 @@ export class RegistrantFormComponent implements OnInit {
           let findBrgy: any = findAddress.items.find(
             (o: any) => o.fcname === fcname
           );
-          findBrgy.default = this.brgyInfo.address.barangay.brgyDesc;
+
+          findBrgy.default = this.brgyInfo._barangay.brgyDesc;
           result = findBrgy.default;
           break;
         case 'cityMun':
           let findCity: any = findAddress.items.find(
             (o: any) => o.fcname === fcname
           );
-          findCity.default = this.brgyInfo.address.cityMun.citymunDesc;
+
+          this.util
+            .getRPC('citymuns', {
+              group: {
+                field: 'citymunCode',
+                id: this.brgyInfo._barangay.citymunCode,
+              },
+            })
+            .subscribe((res: any) => {
+              console.log(res);
+              findCity.default = res.data[0].citymunDesc;
+            });
+
           result = findCity.default;
           break;
         case 'province':
           let findProv: any = findAddress.items.find(
             (o: any) => o.fcname === fcname
           );
-          findProv.default = this.brgyInfo.address.province.provDesc;
+          this.util
+            .getRPC('provinces', {
+              group: {
+                field: 'provCode',
+                id: this.brgyInfo._barangay.provCode,
+              },
+            })
+            .subscribe((res: any) => {
+              console.log(res);
+              findProv.default = res.data[0].provDesc;
+            });
           result = findProv.default;
           break;
         case 'region':
           let findReg: any = findAddress.items.find(
             (o: any) => o.fcname === fcname
           );
-          findReg.default = this.brgyInfo.address.region.regDesc;
+          this.util
+            .getRPC('regions', {
+              group: {
+                field: 'regCode',
+                id: this.brgyInfo._barangay.regCode,
+              },
+            })
+            .subscribe((res: any) => {
+              if (res) {
+                console.log(res);
+                findReg.default = res.data[0].regDesc;
+                this.formInitiated = true;
+              }
+            });
           result = findReg.default;
           break;
       }
@@ -164,10 +204,10 @@ export class RegistrantFormComponent implements OnInit {
     let address = {
       address1: event.address1,
       address2: event.address2,
-      barangay: this.brgyInfo.address.barangay,
-      cityMun: this.brgyInfo.address.cityMun,
-      province: this.brgyInfo.address.province,
-      region: this.brgyInfo.address.region,
+      barangay: event.barangay,
+      cityMun: event.cityMun,
+      province: event.province,
+      region: event.region,
     };
     this.addressTemp = address;
     console.log(address);
@@ -178,10 +218,10 @@ export class RegistrantFormComponent implements OnInit {
       let address = {
         address1: event.address1,
         address2: event.address2,
-        barangay: this.brgyInfo.address.barangay,
-        cityMun: this.brgyInfo.address.cityMun,
-        province: this.brgyInfo.address.province,
-        region: this.brgyInfo.address.region,
+        barangay: event.barangay,
+        cityMun: event.cityMun,
+        province: event.province,
+        region: event.region,
       };
       this.addressTemp = address;
       console.log(address);

@@ -88,11 +88,16 @@
       mat-button
       color="primary"
       [disabled]="
-        (!ibpchapterDetails.optForm.valid &&
-          !officeBrgyForm.valid &&
-          !validityDetails.form.valid &&
-          !notarialDetails.form.valid) ||
-        saving
+        !(
+          ibpchapterDetails.optForm.valid &&
+          officeaddressDetails.form.valid &&
+          notarialDetails.form.valid &&
+          officeBrgyForm.valid &&
+          homeaddressDetails.form.valid &&
+          homeBrgyForm.valid &&
+          validityDetails.form.valid &&
+          ibpprovDetails.optForm.valid
+        ) || saving
       "
       (click)="onSave()"
     >
