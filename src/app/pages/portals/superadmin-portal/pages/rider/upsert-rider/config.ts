@@ -56,13 +56,14 @@ export const RIDER_FORM: Section[] = [
     items: [
       {
         label: 'Mobile Number',
-        type: 'text',
+        type: 'mobileNumber',
         colspan: { xs: 12, sm: 12, md: 12, lg: 6, xl: 6 },
         fcname: 'mobileNumber',
         show: true,
         default: '',
         path: 'mobileNumber',
         max: 10,
+        min: 10,
         appearance: 'standard',
         prefix: '(+63)',
       },
