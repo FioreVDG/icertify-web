@@ -468,7 +468,7 @@ export class UpsertClusterComponent implements OnInit {
         .open(AreYouSureComponent, {
           data: {
             isOthers: true,
-            msg: 'you want to cancel? Clicking "Yes" will cancel adding cluster',
+            msg: 'cancel? Clicking "Yes" will cancel adding cluster',
           },
           disableClose: true,
         })
