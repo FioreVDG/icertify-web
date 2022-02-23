@@ -10,6 +10,7 @@ import { ViewTransactionComponent } from '../document-receiving/view-transaction
 import { VIEW_TRANSACTION_TABLE } from '../document-receiving/view-transaction/config';
 import { TRANSAC_TABLE_COLUMN } from '../../../barangay-portal/pages/batch-delivery-management/batch-folder/config';
 import { User } from 'src/app/models/user.interface';
+import _ from 'lodash';
 
 @Component({
   selector: 'app-video-conferencing',
@@ -20,12 +21,15 @@ export class VideoConferencingComponent implements OnInit {
   @ViewChild('table') appTable: TableComponent | undefined;
   filterBtnConfig = FILT_BTN;
   isCheckbox: boolean = true;
-  selected = [];
+  selected: any = [];
   loading: boolean = true;
   dataSource = [];
   dataLength: number = 0;
   currFetch: string = '';
   currentTable: any;
+  limit: any;
+  disabler: boolean = false;
+  notaryName: string = '';
 
   settings: any;
   page = {
@@ -64,14 +68,19 @@ export class VideoConferencingComponent implements OnInit {
     private store: Store<{ user: User }>
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getSettings();
+  }
 
-  getSettings(event: any) {
+  getSettings() {
     this.store.select('user').subscribe((res: User) => {
       this.api.cluster.getOneNotary(res._notaryId).subscribe((res: any) => {
+        console.log(res);
         this.settings = res.env.cluster;
+        this.limit = res.env.cluster.totals.maxDoc;
         this.fetchData(event);
         console.log(res);
+        this.notaryName = `${res.env.cluster._notaryId.firstName} ${res.env.cluster._notaryId.middleName} ${res.env.cluster._notaryId.lastName}`;
       });
     });
   }
@@ -115,7 +124,23 @@ export class VideoConferencingComponent implements OnInit {
       console.log(res);
       this.dataSource = res.folders;
       this.dataLength = res.total;
+      this.limit = res.total;
       this.loading = false;
+      let countArr: any = [];
+      this.dataSource.forEach((data: any) => {
+        countArr.push(data.transactionCount);
+      });
+      console.log(countArr);
+      this.countSelected = countArr.reduce((a: any, b: any) => {
+        return a + b;
+      }, 0);
+      if (this.limit > this.countSelected) {
+        this.disabler = true;
+        console.log(this.disabler);
+      }
+      console.log(this.countSelected);
+      console.log(this.disabler);
+      console.log(this.limit);
     });
 
     this.currentTable = event.label;
@@ -126,7 +151,7 @@ export class VideoConferencingComponent implements OnInit {
     this.selected = [];
     console.log(event);
     event.label = event.label || this.currentTable;
-    this.getSettings(event);
+    this.getSettings();
   }
 
   onRowClick(event: any) {
@@ -149,18 +174,24 @@ export class VideoConferencingComponent implements OnInit {
   }
 
   onCheckBoxSelect(event: any) {
-    console.log(event);
-    this.selected = event;
-    this.countSelected = event.length;
+    // console.log(event);
+    event.forEach((i: any) => {
+      if (!_.some(this.selected, { _id: i._id })) {
+        this.selected.push(i);
+      }
+    });
+    // console.log(this.selected);
+    // this.selected = event;
+    // this.countSelected = event.length;
   }
 
   onSetSchedule() {
     console.log(this.selected);
     this.dialog
       .open(SetScheduleComponent, {
-        data: this.selected,
+        data: { selected: this.selected, notary: this.notaryName },
         height: 'auto',
-        width: '30vw',
+        minWidth: '50vw',
         disableClose: true,
       })
       .afterClosed()

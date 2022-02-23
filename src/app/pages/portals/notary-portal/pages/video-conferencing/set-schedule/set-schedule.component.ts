@@ -52,7 +52,7 @@ export class SetScheduleComponent implements OnInit {
     let toSaveData: any = {};
     let idsTemp: any = [];
     let docLogs: any = [];
-    this.data.forEach((el: any) => {
+    this.data.selected.forEach((el: any) => {
       console.log(el);
       idsTemp.push(el._id);
       el._transactions.forEach((trans: any) => {
@@ -63,6 +63,7 @@ export class SetScheduleComponent implements OnInit {
       });
     });
     console.log(docLogs);
+    console.log(idsTemp);
     toSaveData.schedule = new Date(this.schedule);
     toSaveData._folderIds = idsTemp;
     console.log(toSaveData);

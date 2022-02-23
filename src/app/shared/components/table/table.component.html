@@ -40,8 +40,12 @@
           class="checkbox-btn"
           *ngFor="let btn of buttonConfig.checkBoxBtnConfig"
           (click)="checkBoxBtnClick(btn.action)"
+          [disabled]="isDisabled"
         >
           {{ btn.label }}
+          <span *ngIf="countSelected">
+            <b>({{ countSelected }})</b></span
+          >
         </button>
       </div>
       <button
