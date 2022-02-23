@@ -24,7 +24,7 @@ import { E } from '@angular/cdk/keycodes';
 })
 export class DocumentTrackerTableComponent implements OnInit {
   @Input() header: any;
-  filtBtnConfig = DOCUMENT_TRACKER_CONFIG;
+  filtBtnConfig: any = DOCUMENT_TRACKER_CONFIG;
   selected: Array<any> = [];
   currTable: any;
   loading: boolean = false;
@@ -57,6 +57,19 @@ export class DocumentTrackerTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.getSettings(this.page);
+    this.filterColumn();
+  }
+
+  filterColumn() {
+    if (this.header === 'BARANGAY') {
+      this.filtBtnConfig.forEach((el: any) => {
+        el.column.forEach((col: any) => {
+          if (col.path === '_barangay.brgyDesc') {
+            col.selected = false;
+          }
+        });
+      });
+    }
   }
 
   fetchData(event: any) {
@@ -127,7 +140,7 @@ export class DocumentTrackerTableComponent implements OnInit {
               ? el._transactionId._folderId.folderName
               : 'Not Batched';
 
-            el.remark = el.remark ? el.remark : 'No remark/s.';
+            el.remark = el.remark ? el.remark : '-';
             el._notaryId = el._notaryId ? el._notaryId : this.setting._notaryId;
           });
           this.dataSource = res.env.documents;
