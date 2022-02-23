@@ -33,9 +33,9 @@ export class DocumentTrackerTableComponent implements OnInit {
     pageSize: 10,
     pageIndex: 1,
     populates: [
-      {
-        field: '_documents',
-      },
+      // {
+      //   field: '_documents',
+      // },
     ],
     bottomSheet: this.bsConfig,
   };
@@ -120,12 +120,20 @@ export class DocumentTrackerTableComponent implements OnInit {
     console.log('HERE');
     api?.subscribe(
       (res: any) => {
-        // console.log(res);
+        console.log(res);
         if (res.status === 'Success') {
           res.env.documents.forEach((el: any) => {
-            el._transactionId._folderId.folderName = el._transactionId._folderId
-              ? el._transactionId._folderId.folderName
-              : 'Not Batched';
+            // el._transactionId._folderId
+            //   ? el._transactionId._folderId.folderName
+            //   : 'Not Batched';
+
+            el._transactionId['_folderId'] = {
+              folderName:
+                el._transactionId._folderId &&
+                el._transactionId._folderId.folderName
+                  ? el._transactionId._folderId.folderName
+                  : 'Not Batched',
+            };
 
             el.remark = el.remark ? el.remark : 'No remark/s.';
             el._notaryId = el._notaryId ? el._notaryId : this.setting._notaryId;
