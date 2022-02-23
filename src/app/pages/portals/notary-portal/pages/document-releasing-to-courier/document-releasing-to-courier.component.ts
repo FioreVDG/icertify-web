@@ -30,6 +30,7 @@ import { MarkAsEnrouteComponent } from './mark-as-enroute/mark-as-enroute.compon
 })
 export class DocumentReleasingToCourierComponent implements OnInit {
   @ViewChild('table') appTable: TableComponent | undefined;
+  tableFlag = false;
   filtBtnConfig = NOTARY_DOC_RELEASING_TO_COURIER_CONFIG;
   isCheckbox: boolean = true;
   checkBoxDisableField = DOC_RELEASING_DISABLE_CHECKBOX;
@@ -72,7 +73,8 @@ export class DocumentReleasingToCourierComponent implements OnInit {
     this.store.select('user').subscribe((res: User) => {
       this.me = res;
       console.log(res);
-      this.fetchData(this.page);
+      // this.fetchData(this.page);
+      this.tableUpdateEmit(this.page);
     });
   }
 
@@ -135,11 +137,34 @@ export class DocumentReleasingToCourierComponent implements OnInit {
   }
   getSettings(event: any) {
     this.store.select('user').subscribe((res: User) => {
-      this.api.cluster.getOneNotary(res._notaryId).subscribe((res: any) => {
-        this.setting = res.env.cluster;
+      if (!this.setting) {
+        this.api.cluster.getOneNotary(res._notaryId).subscribe((res: any) => {
+          this.setting = res.env.cluster;
+          this.addFilterChoices();
+          this.fetchData(event);
+        });
+      } else {
         this.fetchData(event);
+      }
+    });
+  }
+
+  addFilterChoices() {
+    this.filtBtnConfig.forEach((el: any) => {
+      el.column.forEach((col: any) => {
+        if (col.path === '_barangay.brgyDesc') {
+          let brgyChoices: any[] = [];
+          if (this.setting) {
+            this.setting.barangays.forEach((barangay: any) => {
+              brgyChoices.push(barangay._barangay.brgyDesc);
+            });
+          }
+          console.log(this.setting);
+          col.choices = brgyChoices;
+        }
       });
     });
+    this.tableFlag = true;
   }
 
   tableUpdateEmit(event: any) {

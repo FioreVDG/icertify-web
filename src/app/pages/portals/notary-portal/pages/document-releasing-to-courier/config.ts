@@ -29,6 +29,8 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
           path: '_barangay.brgyDesc',
           type: 'text',
           selected: true,
+          useAsFilter: true,
+          choices: [],
         },
         {
           title: 'Notary',
@@ -69,6 +71,8 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
               color: '#6d6d6d',
             },
           ],
+          useAsFilter: true,
+          choices: ['Done', 'Incomplete'],
         },
       ],
       checkBoxBtns: [
@@ -110,6 +114,8 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
           path: '_barangay.brgyDesc',
           type: 'text',
           selected: true,
+          useAsFilter: true,
+          choices: [],
         },
         {
           title: 'Notary',
@@ -184,6 +190,8 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
           path: '_barangay.brgyDesc',
           type: 'text',
           selected: true,
+          useAsFilter: true,
+          choices: [],
         },
         {
           title: 'Notary',

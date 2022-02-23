@@ -26,7 +26,7 @@ import { User } from 'src/app/models/user.interface';
 })
 export class DocumentReceivingComponent implements OnInit {
   @ViewChild('table') appTable: TableComponent | undefined;
-
+  tableFlag = false;
   filtBtnConfig = NOTARY_DOC_RECEIVING_FILT_CONFIG;
   isCheckbox: boolean = true;
   selected = [];
@@ -50,6 +50,7 @@ export class DocumentReceivingComponent implements OnInit {
         field: '_notaryId',
       },
     ],
+    label: 'For Receiving',
   };
   routeLength = 3;
   dataSource = [];
@@ -67,15 +68,40 @@ export class DocumentReceivingComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getSettings();
+    this.tableUpdateEmit(this.page);
+  }
+  addFilterChoices() {
+    this.filtBtnConfig.forEach((el: any) => {
+      el.column.forEach((col: any) => {
+        if (col.path === '_barangay.brgyDesc') {
+          let brgyChoices: any[] = [];
+          if (this.settings) {
+            this.settings.barangays.forEach((barangay: any) => {
+              brgyChoices.push(barangay._barangay.brgyDesc);
+            });
+          }
+          console.log(this.settings);
+          col.choices = brgyChoices;
+        }
+      });
+    });
+    this.tableFlag = true;
   }
 
-  getSettings() {
+  getSettings(event: any) {
     this.store.select('user').subscribe((res: User) => {
       this.me = res;
-      this.api.cluster.getOneNotary(this.me._notaryId).subscribe((res: any) => {
-        this.settings = res.env.cluster;
-      });
+      if (!this.settings) {
+        this.api.cluster
+          .getOneNotary(this.me._notaryId)
+          .subscribe((res: any) => {
+            this.settings = res.env.cluster;
+            this.addFilterChoices();
+            this.fetchData(event);
+          });
+      } else {
+        this.fetchData(event);
+      }
     });
   }
 
@@ -130,10 +156,7 @@ export class DocumentReceivingComponent implements OnInit {
 
   tableUpdateEmit(event: any) {
     event['label'] = event.label || this.currTable;
-    this.api.cluster.getOneNotary(this.me._notaryId).subscribe((res: any) => {
-      this.settings = res.env.cluster;
-      this.fetchData(event);
-    });
+    this.getSettings(event);
   }
 
   onRowClick(event: any) {

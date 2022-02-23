@@ -19,6 +19,7 @@ import { FILT_BTN_CONFIG, FIND_FOR_UPLOADING, FIND_UPLOADED } from './config';
 })
 export class UploadingNotarizedDocumentComponent implements OnInit {
   filtBtnConfig = FILT_BTN_CONFIG;
+  tableFlag = false;
   selected = [];
   currTable: any;
   currPopulate: any;
@@ -51,6 +52,7 @@ export class UploadingNotarizedDocumentComponent implements OnInit {
     this.store.select('user').subscribe((res: User) => {
       this.me = res;
       console.log(res);
+      this.tableUpdateEmit(this.page);
     });
   }
 
@@ -111,11 +113,35 @@ export class UploadingNotarizedDocumentComponent implements OnInit {
   }
   getSettings(event: any) {
     this.store.select('user').subscribe((res: User) => {
-      this.api.cluster.getOneNotary(res._notaryId).subscribe((res: any) => {
-        this.setting = res.env.cluster;
+      if (!this.setting) {
+        this.api.cluster.getOneNotary(res._notaryId).subscribe((res: any) => {
+          this.setting = res.env.cluster;
+
+          this.addFilterChoices();
+          this.fetchData(event);
+        });
+      } else {
         this.fetchData(event);
+      }
+    });
+  }
+
+  addFilterChoices() {
+    this.filtBtnConfig.forEach((el: any) => {
+      el.column.forEach((col: any) => {
+        if (col.path === '_barangay.brgyDesc') {
+          let brgyChoices: any[] = [];
+          if (this.setting) {
+            this.setting.barangays.forEach((barangay: any) => {
+              brgyChoices.push(barangay._barangay.brgyDesc);
+            });
+          }
+          console.log(this.setting);
+          col.choices = brgyChoices;
+        }
       });
     });
+    this.tableFlag = true;
   }
 
   onRowClick(event: any) {
