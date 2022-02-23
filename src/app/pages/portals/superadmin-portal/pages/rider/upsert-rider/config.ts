@@ -92,7 +92,6 @@ export const RIDER_FORM: Section[] = [
         show: true,
         path: 'gender',
         appearance: 'standard',
-        optional: true,
       },
       {
         label: 'Birth Date',
