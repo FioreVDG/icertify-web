@@ -16,6 +16,7 @@ import {
   NOTARY_FIND_ALL,
 } from './doc-tracker.config';
 import { E } from '@angular/cdk/keycodes';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-document-tracker-table',
@@ -24,10 +25,11 @@ import { E } from '@angular/cdk/keycodes';
 })
 export class DocumentTrackerTableComponent implements OnInit {
   @Input() header: any;
+  tableFlag = false;
   filtBtnConfig: any = DOCUMENT_TRACKER_CONFIG;
   selected: Array<any> = [];
   currTable: any;
-  loading: boolean = false;
+  loading: boolean = true;
   bsConfig = TRACKER_BOTTOMSHEET;
   page = {
     pageSize: 10,
@@ -37,6 +39,7 @@ export class DocumentTrackerTableComponent implements OnInit {
         field: '_documents',
       },
     ],
+    label: 'Ongoing',
     bottomSheet: this.bsConfig,
   };
   dataSource = [];
@@ -56,8 +59,7 @@ export class DocumentTrackerTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getSettings(this.page);
-    this.filterColumn();
+    this.tableUpdateEmit(this.page);
   }
 
   filterColumn() {
@@ -66,10 +68,28 @@ export class DocumentTrackerTableComponent implements OnInit {
         el.column.forEach((col: any) => {
           if (col.path === '_barangay.brgyDesc') {
             col.selected = false;
+            col.useAsFilter = false;
+          }
+        });
+      });
+    } else if (this.header === 'NOTARY') {
+      this.filtBtnConfig.forEach((el: any) => {
+        el.column.forEach((col: any) => {
+          if (col.path === '_barangay.brgyDesc') {
+            let brgyChoices: any[] = [];
+            if (this.setting) {
+              this.setting.barangays.forEach((barangay: any) => {
+                brgyChoices.push(barangay._barangay.brgyDesc);
+              });
+            }
+            console.log(this.setting);
+            col.choices = brgyChoices;
           }
         });
       });
     }
+    this.tableFlag = true;
+    console.log(this.filtBtnConfig);
   }
 
   fetchData(event: any) {
@@ -131,9 +151,10 @@ export class DocumentTrackerTableComponent implements OnInit {
       api = this.api.document.getAll(query);
     }
     console.log('HERE');
+    console.log(api);
     api?.subscribe(
       (res: any) => {
-        // console.log(res);
+        console.log(res);
         if (res.status === 'Success') {
           res.env.documents.forEach((el: any) => {
             el._transactionId._folderId.folderName = el._transactionId._folderId
@@ -148,6 +169,7 @@ export class DocumentTrackerTableComponent implements OnInit {
         }
         console.log(this.dataSource);
         this.loading = false;
+        console.log(this.loading);
       },
       (err: any) => {
         console.log(err);
@@ -163,13 +185,8 @@ export class DocumentTrackerTableComponent implements OnInit {
     event.label = event.label || this.currTable;
 
     this.getSettings(event);
-    console.log(event);
   }
   getSettings(event: any) {
-    console.log('asdasdsd');
-
-    this.loading = true;
-
     this.store.select('user').subscribe(
       (res: any) => {
         let api = this.api.cluster.getOne('');
@@ -183,6 +200,8 @@ export class DocumentTrackerTableComponent implements OnInit {
           api.subscribe(
             (res: any) => {
               this.setting = res.env.cluster;
+
+              this.filterColumn();
               this.fetchData(event);
             },
             (err: any) => {

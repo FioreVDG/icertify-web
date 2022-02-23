@@ -75,6 +75,8 @@ export const DOCUMENT_TRACKER_CONFIG: Array<any> = [
         path: '_barangay.brgyDesc',
         type: 'text',
         selected: true,
+        useAsFilter: true,
+        choices: [],
       },
       {
         title: 'Location Status',
@@ -186,6 +188,8 @@ export const DOCUMENT_TRACKER_CONFIG: Array<any> = [
         path: '_barangay.brgyDesc',
         type: 'text',
         selected: true,
+        useAsFilter: true,
+        choices: [],
       },
       {
         title: 'Location Status',
@@ -297,6 +301,8 @@ export const DOCUMENT_TRACKER_CONFIG: Array<any> = [
         path: '_barangay.brgyDesc',
         type: 'text',
         selected: true,
+        useAsFilter: true,
+        choices: [],
       },
       {
         title: 'Notarization Status',

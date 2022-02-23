@@ -89,6 +89,7 @@ export class TableComponent implements OnInit {
     this.updateBreakpoint();
     console.log(this.columns);
   }
+
   updateBreakpoint() {
     this.displayedColumns = [];
     let w = window.innerWidth;
