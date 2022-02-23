@@ -109,6 +109,13 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
           },
         ],
       },
+      {
+        title: 'Notarization Status',
+        breakpoint: 'sm',
+        path: 'documentStatus',
+        type: 'text',
+        selected: true,
+      },
     ],
   },
   {
@@ -216,6 +223,13 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
           },
         ],
       },
+      {
+        title: 'Notarization Status',
+        breakpoint: 'sm',
+        path: 'documentStatus',
+        type: 'text',
+        selected: true,
+      },
     ],
   },
   {
@@ -321,6 +335,13 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         title: 'Remarks',
         breakpoint: 'sm',
         path: 'remark',
+        type: 'text',
+        selected: true,
+      },
+      {
+        title: 'Notarization Status',
+        breakpoint: 'sm',
+        path: 'documentStatus',
         type: 'text',
         selected: true,
       },
@@ -434,6 +455,13 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
             color: '#83b9a1' || 'green',
           },
         ],
+      },
+      {
+        title: 'Notarization Status',
+        breakpoint: 'sm',
+        path: 'documentStatus',
+        type: 'text',
+        selected: true,
       },
     ],
   },
@@ -555,6 +583,13 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
           },
         ],
       },
+      {
+        title: 'Notarization Status',
+        breakpoint: 'sm',
+        path: 'documentStatus',
+        type: 'text',
+        selected: true,
+      },
     ],
     checkBoxBtns: [
       {
@@ -671,6 +706,13 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         title: 'Remarks',
         breakpoint: 'sm',
         path: 'remark',
+        type: 'text',
+        selected: true,
+      },
+      {
+        title: 'Notarization Status',
+        breakpoint: 'sm',
+        path: 'documentStatus',
         type: 'text',
         selected: true,
       },
