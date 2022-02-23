@@ -166,8 +166,13 @@ export const FIND_FOR_UPLOADING: Find[] = [
   },
   {
     field: 'documentStatus',
-    operator: '[in]=',
-    value: 'Notarized,Unnotarized',
+    operator: '=',
+    value: 'Notarized',
+  },
+  {
+    field: 'dateNotarized',
+    operator: '[ne]=',
+    value: 'null',
   },
 ];
 export const FIND_UPLOADED: Find[] = [
@@ -178,8 +183,8 @@ export const FIND_UPLOADED: Find[] = [
   },
   {
     field: 'documentStatus',
-    operator: '[in]=',
-    value: 'Notarized,Unnotarized',
+    operator: '=',
+    value: 'Notarized',
   },
   {
     field: 'notarizedDocument',
