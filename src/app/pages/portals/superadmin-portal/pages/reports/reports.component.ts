@@ -84,44 +84,50 @@ export class ReportsComponent implements OnInit {
           },
         },
       },
-      {
-        $group: {
-          _id: {
-            month: {
-              $month: {
-                date: '$' + this.currentSLA.path,
-                timezone: 'Asia/Singapore',
-              },
-            },
-            day: {
-              $dayOfMonth: {
-                date: '$' + this.currentSLA.path,
-                timezone: 'Asia/Singapore',
-              },
-            },
-            year: {
-              $year: {
-                date: '$' + this.currentSLA.path,
-                timezone: 'Asia/Singapore',
-              },
-            },
-            hour: {
-              $hour: {
-                date: '$' + this.currentSLA.path,
-                timezone: 'Asia/Singapore',
-              },
-            },
-            minutes: {
-              $minute: {
-                date: '$' + this.currentSLA.path,
-                timezone: 'Asia/Singapore',
-              },
-            },
-          },
-          total: { $sum: 1 },
-        },
-      },
+      // {
+      //   $group: {
+      //     _id: {
+      //       month: {
+      //         $month: {
+      //           date: '$' + this.currentSLA.path,
+      //           timezone: 'Asia/Singapore',
+      //         },
+      //       },
+      //       day: {
+      //         $dayOfMonth: {
+      //           date: '$' + this.currentSLA.path,
+      //           timezone: 'Asia/Singapore',
+      //         },
+      //       },
+      //       year: {
+      //         $year: {
+      //           date: '$' + this.currentSLA.path,
+      //           timezone: 'Asia/Singapore',
+      //         },
+      //       },
+      //       hour: {
+      //         $hour: {
+      //           date: '$' + this.currentSLA.path,
+      //           timezone: 'Asia/Singapore',
+      //         },
+      //       },
+      //       minutes: {
+      //         $minute: {
+      //           date: '$' + this.currentSLA.path,
+      //           timezone: 'Asia/Singapore',
+      //         },
+      //       },
+      //     },
+      //     total: { $sum: 1 },
+      //   },
+      // },
     ];
+
+    query[0].$match[this.currentSLA.path] = {
+      $lte: new Date(),
+      $gte: new Date(),
+    };
+
     this.api.report
       .generateQuery(query, this.currentSLA.collectionName)
       .subscribe(
