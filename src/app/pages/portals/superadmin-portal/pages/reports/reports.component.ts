@@ -1,6 +1,8 @@
 import { QueryParams } from './../../../../../models/queryparams.interface';
 import { ApiService } from './../../../../../service/api/api.service';
 import { Component, OnInit } from '@angular/core';
+import { REPORT_TABLE_FORMATS } from './config';
+import { Column } from 'src/app/models/column.interface';
 
 @Component({
   selector: 'app-reports',
@@ -71,11 +73,26 @@ export class ReportsComponent implements OnInit {
       console.log(res.env);
       this.slas = res.env.slas.length ? res.env.slas[0].agreements : [];
       console.log(this.slas);
+      this.slas.forEach((sla) => {
+        this.generateReports(sla);
+      });
     });
+
+    setTimeout(() => {
+      console.log(this.slas);
+    }, 5000);
   }
 
-  generateReports() {
-    console.log(this.currentSLA);
+  generateReports(sla: any) {
+    console.log(sla);
+    // ts alias for timestart
+    // te alias for timeend
+    var tsSplitted = sla.time.start.split(':');
+    var teSplitted = sla.time.end.split(':');
+
+    var timestart = parseFloat(tsSplitted[0]) + tsSplitted[1] / 60;
+    var timeend = parseFloat(teSplitted[0]) + teSplitted[1] / 60;
+
     var query: Array<any> = [
       {
         $match: {
@@ -84,59 +101,68 @@ export class ReportsComponent implements OnInit {
           },
         },
       },
-      // {
-      //   $group: {
-      //     _id: {
-      //       month: {
-      //         $month: {
-      //           date: '$' + this.currentSLA.path,
-      //           timezone: 'Asia/Singapore',
-      //         },
-      //       },
-      //       day: {
-      //         $dayOfMonth: {
-      //           date: '$' + this.currentSLA.path,
-      //           timezone: 'Asia/Singapore',
-      //         },
-      //       },
-      //       year: {
-      //         $year: {
-      //           date: '$' + this.currentSLA.path,
-      //           timezone: 'Asia/Singapore',
-      //         },
-      //       },
-      //       hour: {
-      //         $hour: {
-      //           date: '$' + this.currentSLA.path,
-      //           timezone: 'Asia/Singapore',
-      //         },
-      //       },
-      //       minutes: {
-      //         $minute: {
-      //           date: '$' + this.currentSLA.path,
-      //           timezone: 'Asia/Singapore',
-      //         },
-      //       },
-      //     },
-      //     total: { $sum: 1 },
-      //   },
-      // },
-    ];
-
-    query[0].$match[this.currentSLA.path] = {
-      $lte: new Date(),
-      $gte: new Date(),
-    };
-
-    this.api.report
-      .generateQuery(query, this.currentSLA.collectionName)
-      .subscribe(
-        (res) => {
-          console.log(res);
+      {
+        $project: {
+          hour: {
+            $add: [
+              {
+                $hour: {
+                  date: '$' + sla.path,
+                  timezone: 'Asia/Singapore',
+                },
+              },
+              {
+                $divide: [
+                  {
+                    $minute: {
+                      date: '$' + sla.path,
+                      timezone: 'Asia/Singapore',
+                    },
+                  },
+                  60,
+                ],
+              },
+            ],
+          },
         },
-        (err) => {
-          console.log(err);
-        }
-      );
+      },
+      {
+        $match: {
+          $or: [
+            {
+              hour: {
+                $lt: timestart,
+              },
+            },
+            {
+              hour: {
+                $gt: timeend,
+              },
+            },
+          ],
+        },
+      },
+    ];
+    sla['columns'] = REPORT_TABLE_FORMATS.find(
+      (o) => o.collection === sla.collectionName
+    )?.columns;
+    sla.columns.forEach((c: Column) => {
+      query[1].$project[c.path] = 1;
+    });
+
+    sla['loading'] = true;
+    this.api.report.generateQuery(query, sla.collectionName).subscribe(
+      (res: any) => {
+        console.log(res);
+        sla['penalties'] = res.result;
+        sla['loading'] = false;
+      },
+      (err) => {
+        console.log(err);
+        sla['penalties'] = [];
+        sla['error'] = err.error.message;
+        sla['loading'] = false;
+      }
+    );
   }
 }
