@@ -122,7 +122,7 @@ export class UpsertRiderComponent implements OnInit {
         .open(AreYouSureComponent, {
           data: {
             isOthers: true,
-            msg: 'you want to cancel? Clicking "Yes" will not save rider details.',
+            msg: 'cancel? Clicking "Yes" will not save rider details.',
           },
           disableClose: true,
         })

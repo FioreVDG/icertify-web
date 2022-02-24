@@ -12,7 +12,7 @@
 
 <div class="mat-elevation-z1 mt-5 bg-white p-3">
   <div class="grid">
-    <mat-form-field class="col-5" appearance="outline">
+    <mat-form-field class="col-12" appearance="outline">
       <mat-label>Select {{ currentTab }}</mat-label>
       <mat-select [(ngModel)]="currentUser" (selectionChange)="getSLA()">
         <mat-option *ngFor="let user of users" [value]="user">
@@ -25,20 +25,26 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-
-    <mat-form-field class="col-5" appearance="outline" *ngIf="slas.length">
-      <mat-label>Select SLA</mat-label>
-      <mat-select [(ngModel)]="currentSLA">
-        <mat-option *ngFor="let sla of slas" [value]="sla">
-          {{ sla.label }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <div class="col-2 text-right pt-3" *ngIf="slas.length && currentSLA">
-      <button mat-flat-button color="primary" (click)="generateReports()">
-        Generate
-      </button>
-    </div>
+  </div>
+  <div class="mat-elevation-z1 slas p-3" *ngIf="slas.length">
+    <section class="grid" *ngFor="let sla of slas; let i = index">
+      <div class="col-4">
+        <h2>{{ i + 1 }}. {{ sla.label }}</h2>
+        <small>
+          <b>{{ sla.time.start }}</b> to <b>{{ sla.time.end }}</b></small
+        >
+        <p>{{ sla.description }}</p>
+      </div>
+      <div class="col-8">
+        <app-table
+          *ngIf="!sla.error"
+          #table
+          [columns]="sla.columns"
+          [loading]="sla.loading"
+          [dataSource]="sla.penalties"
+        ></app-table>
+        <small *ngIf="sla.error">{{ sla.error }}</small>
+      </div>
+    </section>
   </div>
 </div>
