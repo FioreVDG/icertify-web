@@ -54,6 +54,11 @@ export class AutocompleteDialogComponent implements OnInit {
           operator: '[nin]=',
           value: this.selectedBarangays.join(','),
         },
+        {
+          value: 'null',
+          field: '_clusterId',
+          operator: '[eq]=',
+        },
       ],
       filter: {
         value,
@@ -66,12 +71,25 @@ export class AutocompleteDialogComponent implements OnInit {
     return this.api.user.getAllUser(query).pipe(
       map((res: any) => {
         console.log(res);
-        return res.env.users;
+        let users = res.env.users;
+        if (this.data) {
+          if (this.data.objBarangay.length) {
+            this.data.objBarangay.forEach((el: any, index: number) => {
+              if (!this.selectedBarangays.includes(el._barangay.brgyCode)) {
+                console.log('test: ' + el._barangay);
+                users.push(el);
+              }
+            });
+          }
+        }
+        console.log(users);
+        return users;
       })
     );
   }
 
   ngOnInit(): void {
+    console.log(this.data);
     if (this.data.barangays.length) {
       for (const barangay of this.data.barangays) {
         if (barangay._barangay)

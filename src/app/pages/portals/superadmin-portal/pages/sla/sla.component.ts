@@ -75,6 +75,7 @@ export class SlaComponent implements OnInit {
 
     console.log(qry);
     api.subscribe((res: any) => {
+      console.log(res.env);
       this.dataSource = res.env.slas;
       this.dataLength = res.count;
       this.loading = false;
