@@ -27,6 +27,7 @@ export class MarkAsEnrouteComponent implements OnInit {
   riderList: any = CHOICES_RIDER_DATA;
   tableConfig = TABLE_CONFIG;
   riderObj: any;
+  saving = false;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public util: UtilService,
@@ -89,10 +90,12 @@ export class MarkAsEnrouteComponent implements OnInit {
       .afterClosed()
       .subscribe((res: any) => {
         if (res) {
+          this.saving = true;
           this.api.transaction
             .createBatchTransaction(ids, this.riderObj)
             .subscribe(
               (res: any) => {
+                this.saving = false;
                 console.log(res);
                 //DOCUMENT LOGS HERE
                 console.log(docLogs);
@@ -121,6 +124,7 @@ export class MarkAsEnrouteComponent implements OnInit {
                   });
               },
               (err) => {
+                this.saving = false;
                 console.log(err);
               }
             );
