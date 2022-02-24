@@ -77,7 +77,13 @@ export class NotarizedDocumentReleasingComponent implements OnInit {
       populates: event.populate ? event.populate : [],
     };
     if (event.filter) qry.filter = event.filter;
-
+    if (this.me) {
+      qry.find.push({
+        field: '_barangay.brgyCode',
+        operator: '=',
+        value: this.me._barangay.brgyCode,
+      });
+    }
     let api: any;
     if (event && event.label === 'For Releasing') {
       qry.find = qry.find.concat(FIND_FOR_RELEASING);
@@ -97,13 +103,7 @@ export class NotarizedDocumentReleasingComponent implements OnInit {
       // });
       api = this.api.document.getAll(qry);
     }
-    if (this.me) {
-      qry.find.push({
-        field: '_barangay.brgyCode',
-        operator: '=',
-        value: this.me._barangay.brgyCode,
-      });
-    }
+
     console.log(qry);
     api.subscribe((res: any) => {
       console.log(res);
