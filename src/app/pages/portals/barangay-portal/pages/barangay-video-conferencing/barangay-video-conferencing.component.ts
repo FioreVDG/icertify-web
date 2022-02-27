@@ -154,8 +154,10 @@ export class BarangayVideoConferencingComponent implements OnInit {
         console.log(res);
         console.log(res.env.room);
         if (
+          res &&
+          res.env.room[0] &&
           res.env.room[0].currentTransaction._barangay.brgyCode ===
-          this.me._barangay.brgyCode
+            this.me._barangay.brgyCode
         )
           this.isDisabled = false;
         this.activeRooms = res.env.room || [];

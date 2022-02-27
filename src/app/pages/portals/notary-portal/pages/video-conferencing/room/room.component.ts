@@ -432,7 +432,7 @@ export class RoomComponent implements OnInit {
     console.log(event);
     console.log(this.me.type);
     const loader = this.util.startLoading('Leaving...');
-
+    console.log(this.currentRoom);
     this.room.delete(this.currentRoom).subscribe(
       (res: any) => {
         console.log(res);
