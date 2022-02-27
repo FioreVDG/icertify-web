@@ -101,7 +101,16 @@ export class RoomComponent implements OnInit {
   }
 
   getExpectedParticipants() {
-    this.conference.getScheduled(this.query).subscribe((res: any) => {
+    let query: any = {
+      find: [
+        {
+          field: '_notaryId',
+          operator: '=',
+          value: this.me._notaryId,
+        },
+      ],
+    };
+    this.conference.getScheduled(query).subscribe((res: any) => {
       console.log(res);
       this.data = res.env.schedules;
       this.data.forEach((schedule: any) => {
