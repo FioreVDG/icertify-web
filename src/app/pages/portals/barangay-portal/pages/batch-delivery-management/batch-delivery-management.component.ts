@@ -161,7 +161,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
     let ids: any = [];
     console.log(this.selected);
     this.selected.forEach((id: any) => {
-      ids.push(id._transactionId);
+      ids.push({ ids: id._transactionId, docDetails: id });
     });
     // ids = ids.join(',');
     // console.log(ids);

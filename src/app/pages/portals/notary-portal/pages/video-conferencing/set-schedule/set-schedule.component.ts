@@ -10,6 +10,7 @@ import {
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-set-schedule',
@@ -29,6 +30,59 @@ export class SetScheduleComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.data);
+    this.data.settings.barangays.forEach((doc: any) => {
+      console.log(doc);
+      let que: number = 1;
+      this.data.selected.forEach((el: any) => {
+        el._transactions.forEach((trans: any) => {
+          trans.queue = que++;
+        });
+      });
+      let findTemp: any = this.data.selected.find(
+        (o: any) => o._barangay.brgyCode === doc._barangay.brgyCode
+      );
+      if (findTemp) {
+        findTemp.duration = doc.duration;
+        console.log(findTemp);
+        console.log(this.data);
+      }
+    });
+  }
+  modelChanged(event: any) {
+    console.log(event);
+    let tempTime: any = this.formatAMPM(new Date(event));
+    let tempDate: any = new Date(event).getTime();
+    // let milliSecond: any = tempDate.getMilliseconds();
+    console.log(tempDate);
+    // console.log(milliSecond);
+    console.log(tempTime);
+    this.data.settings.barangays.forEach((doc: any) => {
+      console.log(doc);
+      let findTemp: any = this.data.selected.find(
+        (o: any) => o._barangay.brgyCode === doc._barangay.brgyCode
+      );
+      if (findTemp) {
+        findTemp._transactions.forEach((el: any) => {
+          el._documents[0].startTime;
+        });
+        console.log(findTemp);
+        console.log(this.data);
+      }
+    });
+  }
+  convertMinuteToSecs(value: any) {
+    return Math.floor(value / 60) + ':' + (value % 60 ? value % 60 : '00');
+  }
+
+  formatAMPM(date: any) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return strTime;
   }
 
   setSchedule() {
@@ -52,6 +106,7 @@ export class SetScheduleComponent implements OnInit {
     let toSaveData: any = {};
     let idsTemp: any = [];
     let docLogs: any = [];
+    let docIds: any = [];
     this.data.selected.forEach((el: any) => {
       console.log(el);
       idsTemp.push(el._id);
@@ -60,17 +115,37 @@ export class SetScheduleComponent implements OnInit {
           docDetails: trans._documents[0],
           message: 'Video Conference Scheduled by Notarial Staff',
         });
+        docIds.push(trans._documents[0]._id);
       });
     });
     console.log(docLogs);
     console.log(idsTemp);
+    console.log(docIds);
     toSaveData.schedule = new Date(this.schedule);
     toSaveData._folderIds = idsTemp;
     console.log(toSaveData);
     const loader = this.util.startLoading('Saving schedule');
+
     this.conference.create(toSaveData).subscribe(
       (res: any) => {
         console.log(res);
+        let que: number = 1;
+        let apiQueries = docIds.map((id: any) => {
+          return this.api.document.update(
+            {
+              queue: que++,
+            },
+            id
+          );
+        });
+        forkJoin(apiQueries).subscribe(
+          (res: any) => {
+            console.log(res);
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
         this.api.documentlogs.createDocumentLogsMany(docLogs).subscribe(
           (res: any) => {
             console.log(res);

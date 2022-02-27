@@ -20,6 +20,7 @@ import _ from 'lodash';
 export class VideoConferencingComponent implements OnInit {
   @ViewChild('table') appTable: TableComponent | undefined;
   filterBtnConfig = FILT_BTN;
+  tableFlag = false;
   isCheckbox: boolean = true;
   selected: any = [];
   loading: boolean = true;
@@ -45,6 +46,10 @@ export class VideoConferencingComponent implements OnInit {
         select: '-__v',
       },
     ],
+    sort: {
+      active: 'dateCreated',
+      direction: 'asc',
+    },
   };
   pageLeave = {
     pageSize: 10,
@@ -60,6 +65,10 @@ export class VideoConferencingComponent implements OnInit {
         select: '-__v',
       },
     ],
+    sort: {
+      active: 'dateCreated',
+      direction: 'asc',
+    },
   };
   countSelected: any;
   constructor(
@@ -70,6 +79,25 @@ export class VideoConferencingComponent implements OnInit {
 
   ngOnInit(): void {
     this.getSettings();
+    this.tableUpdateEmit(this.page);
+  }
+
+  addFilterChoices() {
+    this.filterBtnConfig.forEach((el: any) => {
+      el.column.forEach((col: any) => {
+        if (col.path === '_barangay.brgyDesc') {
+          let brgyChoices: any[] = [];
+          if (this.settings) {
+            this.settings.barangays.forEach((barangay: any) => {
+              brgyChoices.push(barangay._barangay.brgyDesc);
+            });
+          }
+          console.log(this.settings);
+          col.choices = brgyChoices;
+        }
+      });
+    });
+    this.tableFlag = true;
   }
 
   getSettings() {
@@ -82,6 +110,17 @@ export class VideoConferencingComponent implements OnInit {
         console.log(res);
         this.notaryName = `${res.env.cluster._notaryId.firstName} ${res.env.cluster._notaryId.middleName} ${res.env.cluster._notaryId.lastName}`;
       });
+      if (!this.settings) {
+        this.api.cluster.getOneNotary(res._notaryId).subscribe((res: any) => {
+          this.settings = res.env.cluster;
+          this.addFilterChoices();
+          this.fetchData(event);
+
+          console.log(res);
+        });
+      } else {
+        this.fetchData(event);
+      }
     });
   }
 
@@ -98,7 +137,7 @@ export class VideoConferencingComponent implements OnInit {
     event.label = event.label === undefined ? 'For Scheduling' : event.label;
 
     console.log(event);
-    let query = {
+    let query: any = {
       find: [
         {
           field: 'folderStatus',
@@ -110,6 +149,10 @@ export class VideoConferencingComponent implements OnInit {
       limit: (event.pageSize || 10) + '',
       filter: event.filter,
       populates: event.populate,
+      sort: {
+        active: 'dateCreated',
+        direction: 'asc',
+      },
     };
     if (brgyCodes) {
       query.find = query.find.concat({
@@ -118,7 +161,19 @@ export class VideoConferencingComponent implements OnInit {
         value: brgyCodes.join(','),
       });
     }
-
+    if (event.find) query.find = query.find.concat(event.find);
+    if (event.label === 'Scheduled') {
+      query.populates = query.populates.concat([
+        {
+          field: '_conferenceId',
+          select: '-__v',
+        },
+        {
+          field: '_scheduledBy',
+          select: '-__v',
+        },
+      ]);
+    }
     console.log(query);
     this.api.transaction.getAllFolder(query).subscribe((res: any) => {
       console.log(res);
@@ -151,7 +206,7 @@ export class VideoConferencingComponent implements OnInit {
     this.selected = [];
     console.log(event);
     event.label = event.label || this.currentTable;
-    this.getSettings();
+    this.fetchData(event);
   }
 
   onRowClick(event: any) {
@@ -187,11 +242,17 @@ export class VideoConferencingComponent implements OnInit {
 
   onSetSchedule() {
     console.log(this.selected);
+    this.selected.sort((a: any, b: any) => a.dateCreated - b.dateCreated);
+    console.log(this.selected);
     this.dialog
       .open(SetScheduleComponent, {
-        data: { selected: this.selected, notary: this.notaryName },
+        data: {
+          selected: this.selected,
+          notary: this.notaryName,
+          settings: this.settings,
+        },
         height: 'auto',
-        minWidth: '50vw',
+        minWidth: '60vw',
         disableClose: true,
       })
       .afterClosed()

@@ -11,6 +11,7 @@
   </button> -->
 
   <app-table
+    *ngIf="tableFlag"
     #table
     [checkBoxDisableField]="checkBoxDisableField"
     [filterButtonConfig]="filtBtnConfig"

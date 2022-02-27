@@ -33,6 +33,8 @@ export const NOTARY_DOC_RECEIVING_FILT_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         path: '_barangay.brgyDesc',
         type: 'text',
         selected: true,
+        useAsFilter: true,
+        choices: [],
       },
       {
         title: 'Batched By',
@@ -102,6 +104,8 @@ export const NOTARY_DOC_RECEIVING_FILT_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         path: '_barangay.brgyDesc',
         type: 'text',
         selected: true,
+        useAsFilter: true,
+        choices: [],
       },
       {
         title: 'Received By',

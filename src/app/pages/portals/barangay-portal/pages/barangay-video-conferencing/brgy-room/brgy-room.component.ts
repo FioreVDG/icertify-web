@@ -11,9 +11,7 @@ import {
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Store } from '@ngrx/store';
 import { WebcamInitError } from 'ngx-webcam';
-import { User } from 'src/app/models/user.interface';
 
 @Component({
   selector: 'app-brgy-room',

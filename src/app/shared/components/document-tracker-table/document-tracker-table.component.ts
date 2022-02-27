@@ -34,12 +34,11 @@ export class DocumentTrackerTableComponent implements OnInit {
   page = {
     pageSize: 10,
     pageIndex: 1,
-    populates: [
-      {
-        field: '_documents',
-      },
+    populate: [
+      // {
+      //   field: '_documents',
+      // },
     ],
-    label: 'Ongoing',
     bottomSheet: this.bsConfig,
   };
   dataSource = [];
@@ -59,7 +58,7 @@ export class DocumentTrackerTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.tableUpdateEmit(this.page);
+    this.getSettings(this.page);
   }
 
   filterColumn() {
@@ -149,6 +148,12 @@ export class DocumentTrackerTableComponent implements OnInit {
           : query.find.concat(NOTARY_FIND_FINISHED);
       console.log(query);
       api = this.api.document.getAll(query);
+    } else {
+      query.find =
+        this.header === 'BARANGAY'
+          ? query.find.concat(FIND_ALL)
+          : query.find.concat(NOTARY_FIND_ALL);
+      api = this.api.document.getAll(query);
     }
     console.log('HERE');
     console.log(api);
@@ -157,9 +162,17 @@ export class DocumentTrackerTableComponent implements OnInit {
         console.log(res);
         if (res.status === 'Success') {
           res.env.documents.forEach((el: any) => {
-            el._transactionId._folderId.folderName = el._transactionId._folderId
-              ? el._transactionId._folderId.folderName
-              : 'Not Batched';
+            // el._transactionId._folderId
+            //   ? el._transactionId._folderId.folderName
+            //   : 'Not Batched';
+
+            el._transactionId['_folderId'] = {
+              folderName:
+                el._transactionId._folderId &&
+                el._transactionId._folderId.folderName
+                  ? el._transactionId._folderId.folderName
+                  : 'Not Batched',
+            };
 
             el.remark = el.remark ? el.remark : '-';
             el._notaryId = el._notaryId ? el._notaryId : this.setting._notaryId;
@@ -178,12 +191,13 @@ export class DocumentTrackerTableComponent implements OnInit {
     );
     this.currTable = event.label;
     this.bsConfig = event.bottomSheet;
-    console.log(this.bsConfig);
+
+    this.page.populate = event.populate;
   }
 
   tableUpdateEmit(event: any) {
-    event.label = event.label || this.currTable;
-
+    console.log(event.label);
+    event['label'] = event.label || this.currTable;
     this.getSettings(event);
   }
   getSettings(event: any) {

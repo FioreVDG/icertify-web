@@ -28,7 +28,6 @@ export class RegistrantsDbComponent implements OnInit {
     pageIndex: 1,
     populate: [],
     bottomSheet: this.bsConfig,
-    label: 'W/O Certificate of Indigency',
   };
   dataSource = [];
   dataLength: number = 0;
@@ -80,10 +79,10 @@ export class RegistrantsDbComponent implements OnInit {
   }
 
   tableUpdateEmit(event: any) {
+    console.log(event);
     event.label = event.label || this.currTable;
 
     this.fetchData(event);
-    console.log(event);
   }
 
   onRowClick(event: any) {

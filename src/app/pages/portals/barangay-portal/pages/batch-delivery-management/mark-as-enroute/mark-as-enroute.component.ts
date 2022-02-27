@@ -70,10 +70,11 @@ export class MarkAsEnrouteComponent implements OnInit {
   onMark() {
     let ids: any = [];
     let docLogs: any = [];
-    this.data.obj.forEach((id: any) => {
-      ids.push(id._id);
+    this.data.obj.forEach((data: any) => {
+      console.log(data);
+      ids.push(data.ids._id);
       docLogs.push({
-        docDetails: id._documents[0],
+        docDetails: data.docDetails,
         message: 'Batched and Marked as Enroute to Notary by Brgy Hall Staff',
       });
     });

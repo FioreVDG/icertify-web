@@ -55,19 +55,19 @@
         <div class="col-4">
           <mat-card>
             <div class="text-wrap">
+              <p>Date and Time Released</p>
               <p>
                 <b>{{ filteredFinal?.createdAt | date: "medium" }}</b>
               </p>
-              <p>Date and Time Released</p>
             </div>
             <div class="text-wrap">
+              <p>Released by</p>
               <p>
                 <b
                   >{{ filteredFinal?._createdBy.firstName }}
                   {{ filteredFinal?._createdBy.firstName }}</b
                 >
               </p>
-              <p>Released by</p>
             </div>
           </mat-card>
         </div>

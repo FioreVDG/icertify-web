@@ -1,9 +1,19 @@
-<div class="mat-elevation-z1 vc-card" *ngFor="let room of activeRooms">
+<small
+  style="color: red; margin-bottom: 1rem"
+  *ngIf="isDisabled && activeRooms.length"
+  >Wait for your Barangay's turn to join!</small
+>
+<div class="vc-card" *ngFor="let room of activeRooms">
   <div class="grid">
     <div class="col-1 text-center queue-card">
       <h1 class="queue">{{ room.que }}</h1>
+      <p>Que number</p>
     </div>
     <div class="col-6">
+      <p>
+        Current Barangay:
+        <b>{{ room.currentTransaction._barangay.brgyDesc }}</b>
+      </p>
       <small>
         {{ room.currentTransaction.refCode }}
       </small>
@@ -17,7 +27,13 @@
       <p>No. of Documents: {{ room.currentTransaction.documentCount }}</p>
     </div>
     <div class="col-5" align="end">
-      <button mat-raised-button (click)="enterNow(room)">Enter Now</button>
+      <button
+        mat-raised-button
+        [disabled]="isDisabled"
+        (click)="enterNow(room)"
+      >
+        Enter Now
+      </button>
     </div>
   </div>
 </div>
