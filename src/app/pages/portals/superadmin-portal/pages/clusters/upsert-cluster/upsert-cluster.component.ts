@@ -32,6 +32,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Observable } from 'rxjs';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
+import { TOUCH_BUFFER_MS } from '@angular/cdk/a11y/input-modality/input-modality-detector';
 
 @Component({
   selector: 'app-upsert-cluster',
@@ -113,7 +114,9 @@ export class UpsertClusterComponent implements OnInit {
         ),
       }),
     }),
-    _notaryId: new FormControl('', [Validators.required]),
+    _notaryId: new FormControl(this.data ? this.data._notaryId : '', [
+      Validators.required,
+    ]),
     _riders: new FormArray([]),
     barangays: new FormArray([]),
   });
@@ -171,7 +174,12 @@ export class UpsertClusterComponent implements OnInit {
     }
 
     this.dialog
-      .open(AutocompleteDialogComponent, { data: { barangays: selClusters } })
+      .open(AutocompleteDialogComponent, {
+        data: {
+          barangays: selClusters,
+          objBarangay: this.data ? this.data.barangays : {},
+        },
+      })
       .afterClosed()
       .subscribe((res) => {
         if (res) {
@@ -260,6 +268,11 @@ export class UpsertClusterComponent implements OnInit {
           field: 'isMain',
           operator: '=',
         },
+        {
+          value: 'null',
+          field: '_clusterId',
+          operator: '[eq]=',
+        },
       ],
       filter: {
         value,
@@ -288,7 +301,25 @@ export class UpsertClusterComponent implements OnInit {
     return this.api.user.getAllUser(query).pipe(
       map((res: any) => {
         console.log(res);
-        return res.env.users;
+        let dataUser = [];
+        let users = res.env.users;
+        if (this.data) {
+          if (type === 'Rider') {
+            if (this.data._riders.length) {
+              this.data._riders.forEach((el: any) => {
+                if (!this.selectedRider.includes(el._id)) {
+                  dataUser.push(el);
+                }
+              });
+            }
+          } else {
+            dataUser = this.data._notaryId;
+          }
+
+          users = users.concat(dataUser);
+        }
+
+        return users;
       })
     );
   }
@@ -309,6 +340,12 @@ export class UpsertClusterComponent implements OnInit {
     // this.fruits.push(event.option.viewValue);
 
     var rider = event.option.value;
+    if (this.selectedRider.length) {
+      for (const selRider of this.selectedRider) {
+        if (selRider === rider._id) return;
+      }
+    }
+
     this.selectedRider.push(rider._id);
     let riderFormGroup = new FormGroup({
       _id: new FormControl(rider._id),
@@ -339,6 +376,7 @@ export class UpsertClusterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.data);
     this.days.forEach((d) => {
       this.clusterForm
         .get('day')
@@ -380,7 +418,9 @@ export class UpsertClusterComponent implements OnInit {
     }
 
     this.clusterForm.valueChanges.subscribe((res) => {
-      console.log(this.clusterForm.get('barangays'));
+      console.log(this.clusterForm.dirty);
+      console.log(this.clusterForm.valid);
+      console.log(this.clusterForm);
     });
   }
 
@@ -419,9 +459,9 @@ export class UpsertClusterComponent implements OnInit {
                 this.dialog.open(ActionResultComponent, {
                   data: {
                     msg:
-                      cluster.name + ' successfully ' + this.data
-                        ? 'updated!'
-                        : 'added!',
+                      cluster.name +
+                      ' successfully ' +
+                      (this.data ? 'updated!' : 'added!'),
                     success: true,
                     button: 'Got it!',
                   },

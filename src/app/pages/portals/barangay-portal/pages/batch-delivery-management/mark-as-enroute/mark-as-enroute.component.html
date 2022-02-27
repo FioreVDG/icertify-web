@@ -39,7 +39,7 @@
   <button
     mat-button
     (click)="onMark()"
-    [disabled]="!riderDetails.optForm.valid"
+    [disabled]="!riderDetails.optForm.valid || saving"
   >
     Confirm
   </button>
