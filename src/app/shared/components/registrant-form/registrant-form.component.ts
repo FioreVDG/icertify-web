@@ -62,7 +62,8 @@ export class RegistrantFormComponent implements OnInit {
     let tempInfo: any = localStorage.getItem('BARANGAY_INFORMATION');
     this.brgyInfo = JSON.parse(tempInfo);
     console.log(this.brgyInfo);
-    console.log(this.brgyInfo._barangay.regCode);
+
+    // console.log(this.brgyInfo._barangay.regCode);
 
     this.findDefaultValue('barangay');
     this.findDefaultValue('cityMun');
@@ -118,7 +119,8 @@ export class RegistrantFormComponent implements OnInit {
     let findAddress: any = this.registrantFromFields.find(
       (el: any) => el.section === 'Address Information'
     );
-
+    console.log(fcname);
+    console.log(findAddress);
     if (findAddress) {
       switch (fcname) {
         case 'barangay':
@@ -126,7 +128,7 @@ export class RegistrantFormComponent implements OnInit {
             (o: any) => o.fcname === fcname
           );
 
-          findBrgy.default = this.brgyInfo._barangay.brgyDesc;
+          findBrgy.default = this.brgyInfo.address.barangay.brgyDesc;
           result = findBrgy.default;
           break;
         case 'cityMun':
@@ -138,7 +140,7 @@ export class RegistrantFormComponent implements OnInit {
             .getRPC('citymuns', {
               group: {
                 field: 'citymunCode',
-                id: this.brgyInfo._barangay.citymunCode,
+                id: this.brgyInfo.address.barangay.citymunCode,
               },
             })
             .subscribe((res: any) => {
@@ -156,7 +158,7 @@ export class RegistrantFormComponent implements OnInit {
             .getRPC('provinces', {
               group: {
                 field: 'provCode',
-                id: this.brgyInfo._barangay.provCode,
+                id: this.brgyInfo.address.barangay.provCode,
               },
             })
             .subscribe((res: any) => {
@@ -173,7 +175,7 @@ export class RegistrantFormComponent implements OnInit {
             .getRPC('regions', {
               group: {
                 field: 'regCode',
-                id: this.brgyInfo._barangay.regCode,
+                id: this.brgyInfo.address.barangay.regCode,
               },
             })
             .subscribe((res: any) => {
@@ -184,6 +186,10 @@ export class RegistrantFormComponent implements OnInit {
               }
             });
           result = findReg.default;
+          break;
+        default:
+          this.formInitiated = true;
+
           break;
       }
     }
