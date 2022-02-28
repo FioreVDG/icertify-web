@@ -37,6 +37,7 @@ export class RtVideoComponent implements OnInit {
   @Input() remoteDetails: any;
   @Input() removeArr: Array<any> = [];
   @Input() showCounter: any;
+  @Input() indigentDetails: any;
 
   private client!: AgoraClient;
   private localStream!: Stream;
@@ -70,6 +71,7 @@ export class RtVideoComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.channelName);
+    console.log(this.remoteDetails);
     this.startConference();
     this.flagInterval = setInterval(() => {
       this.detailChecker();
@@ -84,15 +86,31 @@ export class RtVideoComponent implements OnInit {
   detailChecker() {
     this.store.select('user').subscribe((res: User) => {
       this.me = res;
-      // console.log(this.me);
+      console.log(this.me);
       if (this.me.type !== 'Notary') {
+        let settings: any;
+        this.api.cluster
+          .getOne(this.me._barangay.brgyCode)
+          .subscribe((res: any) => {
+            settings = res.env.cluster;
+            console.log(settings);
+          });
         let query = { find: [] };
         this.room.get(query).subscribe((res: any) => {
           console.log(res);
           console.log(res.env.room[0].currentTransaction);
           let currRoomId: any = res.env.room[0].currentTransaction._id;
           console.log(currRoomId);
-          this.conference.getScheduled(query).subscribe((resp: any) => {
+          let querys: any = {
+            find: [
+              {
+                field: '_notaryId',
+                operator: '=',
+                value: settings?._notaryId?._notaryId,
+              },
+            ],
+          };
+          this.conference.getScheduled(querys).subscribe((resp: any) => {
             let schedules = resp.env.schedules;
             console.log(schedules);
             if (!schedules.length) {
@@ -111,7 +129,7 @@ export class RtVideoComponent implements OnInit {
                 folder._transactions.forEach((trans: any) => {
                   transactions.push(trans);
                 });
-                // console.log(transactions);
+                console.log(transactions);
               });
             });
             console.log(transactions);

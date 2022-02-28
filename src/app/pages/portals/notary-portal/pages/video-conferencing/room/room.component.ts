@@ -101,6 +101,9 @@ export class RoomComponent implements OnInit {
     this.socketEventHandler();
     this.getExpectedParticipants();
     this.checkDocument();
+    setInterval(() => {
+      this.checkRemainingDocuments();
+    }, 1000);
   }
 
   getExpectedParticipants() {
@@ -219,6 +222,19 @@ export class RoomComponent implements OnInit {
     this.socket.fromEvent('createdMeeting').subscribe((res: any) => {
       console.log(res);
     });
+  }
+
+  checkRemainingDocuments() {
+    //TODO EXCLUDE FINISHED NOTARY
+    // this.transactions = this.transactions.filter(
+    //   (o: any) =>
+    //     o._documents[0].documentStatus === 'Pending for Notary' ||
+    //     o._documents[0].documentStatus === 'Skipped'
+    // );
+    // this.transactions = this.transactions.forEach((el:any)=>{
+    //   el.
+    // })
+    console.log(this.transactions);
   }
 
   nextTransaction() {
@@ -479,6 +495,25 @@ export class RoomComponent implements OnInit {
       (o: any) => o.documentStatus === 'Pending for Notary'
     );
     if (filtPending?.length) return true;
+    else return false;
+  }
+
+  checkDocumentStatus2() {
+    let filtPending: any = this.currentTransaction?._documents.filter(
+      (o: any) => o.documentStatus === 'Pending for Notary'
+    );
+    let filtSkip: any = this.currentTransaction?._documents.filter(
+      (o: any) => o.documentStatus === 'Skipped'
+    );
+    if (filtPending?.length || filtSkip?.length) return true;
+    else return false;
+  }
+
+  showSkipBtn() {
+    let filtSkip: any = this.currentTransaction?._documents.filter(
+      (o: any) => o.documentStatus === 'Skipped'
+    );
+    if (filtSkip?.length) return true;
     else return false;
   }
 

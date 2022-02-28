@@ -58,7 +58,7 @@ export class BrgyRoomComponent implements OnInit {
   ngOnInit(): void {
     this.sender = this.data.obj.sender;
     this.currDetails = this.data.obj;
-    console.log(this.data.obj);
+    console.log(this.data);
     this.getExpectedParticipants();
     this.getRoomDetails();
   }
@@ -170,6 +170,7 @@ export class BrgyRoomComponent implements OnInit {
   }
 
   kickMe(event: any) {
+    console.log(event);
     this.joinRoom = false;
     this.dialogRef.close(true);
   }

@@ -1,10 +1,18 @@
 <div class="grid">
   <div class="col-6">
     <div id="agora_local" class="local">
-      <p *ngIf="me">
+      <p *ngIf="me && me.type === 'Notary'">
         <b
           >(ME) {{ me.firstName }} {{ me.middleName }} {{ me.lastName }}
           {{ me.suffix }}</b
+        >
+      </p>
+      <p *ngIf="me && me.type !== 'Notary'">
+        <b
+          >(ME) {{ indigentDetails.sender.firstName }}
+          {{ indigentDetails.sender.middleName }}
+          {{ indigentDetails.sender.lastName }}
+          {{ indigentDetails.sender.suffix }}</b
         >
       </p>
     </div>
