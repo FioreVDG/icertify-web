@@ -29,4 +29,7 @@ export class DocumentService {
   unnotarize(body: Object, id: String) {
     return this.http.start('put', `/documents/unnotarize/${id}`, body);
   }
+  skip(body: Object, id: String) {
+    return this.http.start('put', `/documents/skip/${id}`, body);
+  }
 }

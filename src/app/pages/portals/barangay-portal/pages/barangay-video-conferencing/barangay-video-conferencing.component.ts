@@ -35,6 +35,7 @@ export class BarangayVideoConferencingComponent implements OnInit {
   currentTable: any;
   me: any;
   settings: any;
+  isDisabled: boolean = true;
   // TODO: room interface
   activeRooms: Array<any> = [];
   constructor(
@@ -49,8 +50,14 @@ export class BarangayVideoConferencingComponent implements OnInit {
       console.log(res);
       // this.fetchData(this.page);
     });
-    this.getActive = true;
-    this.getActiveConference();
+    this.api.cluster
+      .getOne(this.me._barangay.brgyCode)
+      .subscribe((res: any) => {
+        this.settings = res.env.cluster;
+        console.log(this.settings);
+        this.getActive = true;
+        this.getActiveConference();
+      });
   }
 
   fetchData(event: any) {
@@ -134,11 +141,25 @@ export class BarangayVideoConferencingComponent implements OnInit {
   getActiveConference() {
     console.log('check here');
     let query: QueryParams = {
-      find: [],
+      find: [
+        {
+          field: '_notaryId',
+          operator: '=',
+          value: this.settings._notaryId,
+        },
+      ],
     };
     this.api.room.get(query).subscribe(
       (res: any) => {
+        console.log(res);
         console.log(res.env.room);
+        if (
+          res &&
+          res.env.room[0] &&
+          res.env.room[0].currentTransaction._barangay.brgyCode ===
+            this.me._barangay.brgyCode
+        )
+          this.isDisabled = false;
         this.activeRooms = res.env.room || [];
         if (this.getActive)
           setTimeout(() => {

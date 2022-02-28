@@ -84,7 +84,7 @@ export class RtVideoComponent implements OnInit {
   detailChecker() {
     this.store.select('user').subscribe((res: User) => {
       this.me = res;
-      console.log(this.me);
+      // console.log(this.me);
       if (this.me.type !== 'Notary') {
         let query = { find: [] };
         this.room.get(query).subscribe((res: any) => {

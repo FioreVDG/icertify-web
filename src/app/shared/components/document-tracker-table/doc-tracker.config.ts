@@ -382,7 +382,7 @@ export const NOTARY_FIND_ALL: Find[] = [
     field: 'locationStatus',
     operator: '[in]=',
     value:
-      'Video Conference Scheduled (Notary),Received by Notary,Enroute to Barangay,Released to Indigent,For Pick Up (Notary),Received by Barangay',
+      'Video Conference Scheduled (Notary),Received by Notary,Enroute to Barangay,Received by Barangay,Released to Indigent',
   },
 ];
 export const NOTARY_FIND_ONGOING: Find[] = [

@@ -253,17 +253,39 @@ export class UserFormComponent implements OnInit {
     return op1.id === op2.id;
   }
   disAbler() {
-    if (this.data && this.data.initial && this.data.type === 'QCLegal') {
+    console.log(this.data);
+    if (
+      (this.data &&
+        this.data.initial &&
+        this.data.type &&
+        this.data.type === 'QCLegal') ||
+      (this.data &&
+        this.data.initial &&
+        this.data.obj &&
+        this.data.obj.type === 'QCLegal')
+    ) {
       console.log('WITHOUT ROLES');
       if (this.userDetails.form.valid && this.brgyForm.valid) {
         return false;
       } else return true;
-    } else if (this.data && this.data.initial && this.data.type !== 'QCLegal') {
+    } else if (
+      (this.data &&
+        this.data.initial &&
+        this.data.type &&
+        this.data.type !== 'QCLegal') ||
+      (this.data &&
+        this.data.initial &&
+        this.data.obj &&
+        this.data.obj.type !== 'QCLegal')
+    ) {
       if (this.userDetails.form.valid && this.brgyForm.valid) {
         return false;
       } else return true;
     } else {
-      if (this.data.type !== 'QCLegal') {
+      if (
+        (this.data && this.data.type && this.data.type !== 'QCLegal') ||
+        (this.data && this.data.obj && this.data.obj.type !== 'QCLegal')
+      ) {
         if (
           this.userDetails.form.valid &&
           this.brgyForm.valid &&

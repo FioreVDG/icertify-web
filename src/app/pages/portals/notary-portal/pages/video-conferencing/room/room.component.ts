@@ -101,7 +101,16 @@ export class RoomComponent implements OnInit {
   }
 
   getExpectedParticipants() {
-    this.conference.getScheduled(this.query).subscribe((res: any) => {
+    let query: any = {
+      find: [
+        {
+          field: '_notaryId',
+          operator: '=',
+          value: this.me._notaryId,
+        },
+      ],
+    };
+    this.conference.getScheduled(query).subscribe((res: any) => {
       console.log(res);
       this.data = res.env.schedules;
       this.data.forEach((schedule: any) => {
@@ -176,7 +185,11 @@ export class RoomComponent implements OnInit {
   getCurrentTransactionQueue(transactions: Array<any> = []) {
     console.log(transactions);
     let tempRoom: any;
-    this.room.get(this.query).subscribe(async (res: any) => {
+    let notaryQuery: QueryParams = {
+      find: [{ field: '_notaryId', operator: '=', value: this.me._id }],
+    };
+    console.log(notaryQuery);
+    this.room.get(notaryQuery).subscribe(async (res: any) => {
       console.log(res);
       if (res.env.room.length) {
         tempRoom = res.env.room[0];
@@ -228,7 +241,10 @@ export class RoomComponent implements OnInit {
             this.transactions[this.currentTransactionIndex];
 
           //DELETE CURRENT ROOM beofre proceeding to the NEXT TRANSACTION
-          this.room.get(this.query).subscribe((res: any) => {
+          let notaryQuery: QueryParams = {
+            find: [{ field: '_notaryId', operator: '=', value: this.me._id }],
+          };
+          this.room.get(notaryQuery).subscribe((res: any) => {
             console.log(res);
 
             this.util.stopLoading(loader);
@@ -268,7 +284,11 @@ export class RoomComponent implements OnInit {
     this.getImages();
 
     // FOR ROOM HERE
-    this.room.get(this.query).subscribe(
+    let notaryQuery: QueryParams = {
+      find: [{ field: '_notaryId', operator: '=', value: this.me._id }],
+    };
+    console.log(notaryQuery);
+    this.room.get(notaryQuery).subscribe(
       (res: any) => {
         console.log(res);
         if (res) {
@@ -398,10 +418,10 @@ export class RoomComponent implements OnInit {
   }
 
   checkDocumentStatus() {
-    let filtPending: any = this.currentTransaction._documents.filter(
+    let filtPending: any = this.currentTransaction?._documents.filter(
       (o: any) => o.documentStatus === 'Pending for Notary'
     );
-    if (filtPending.length) return true;
+    if (filtPending?.length) return true;
     else return false;
   }
 
@@ -421,7 +441,7 @@ export class RoomComponent implements OnInit {
     console.log(event);
     console.log(this.me.type);
     const loader = this.util.startLoading('Leaving...');
-
+    console.log(this.currentRoom);
     this.room.delete(this.currentRoom).subscribe(
       (res: any) => {
         console.log(res);
