@@ -24,9 +24,6 @@
         ></webcam>
       </div>
       <div class="right">
-        <!-- <button mat-flat-button (click)="joinMeeting()" class="btn-join">
-          JOIN NOW
-        </button> -->
         <button
           mat-stroked-button
           *ngFor="let schedule of data"
@@ -171,9 +168,8 @@
         </button>
         <button
           mat-icon-button
-          (click)="openUserDetails()"
           [disabled]="checkDocumentStatus()"
-          *ngIf="currentTransactionIndex + 1 < transactions.length"
+          (click)="openUserDetails()"
         >
           <mat-icon>arrow_forward_ios</mat-icon>
         </button>
@@ -191,8 +187,7 @@
               color="primary"
               (click)="initiateCounter()"
             >
-              <mat-icon>photo_camera</mat-icon>&nbsp;Screenshot and Mark as
-              Notarized
+              <mat-icon>photo_camera</mat-icon>&nbsp;Mark as Notarized
             </button>
             <button
               mat-raised-button

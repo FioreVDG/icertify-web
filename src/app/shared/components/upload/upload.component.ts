@@ -85,6 +85,24 @@ export class UploadComponent implements OnInit {
   public fileLeave(event: any) {
     // console.log(event);
   }
+  formatName() {
+    let formattedName = '';
+    let fullName =
+      this.data.formatData.firstName + '_' + this.data.formatData.lastName;
+    let date = new Date().toISOString().replace(/T.*/, '').split('-').join('-');
+    let time = Date.now();
+
+    formattedName =
+      fullName +
+      '_' +
+      this.data.formatData.curDocType +
+      '_' +
+      date +
+      '_' +
+      time;
+    return formattedName;
+  }
+
   save(file: any) {
     console.log(file);
     this.uploading = true;
@@ -94,6 +112,12 @@ export class UploadComponent implements OnInit {
     let filename: any = this.data.name ? this.data.name : fileNameArray[0];
     console.log(fileNameArray);
     console.log(filename);
+
+    if (this.data) {
+      if (this.data.formatName && this.data.formatData) {
+        filename = this.formatName();
+      }
+    }
 
     this.dbx
       .uploadFile(
