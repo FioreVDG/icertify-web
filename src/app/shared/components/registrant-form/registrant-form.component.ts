@@ -68,7 +68,8 @@ export class RegistrantFormComponent implements OnInit {
     let tempInfo: any = localStorage.getItem('BARANGAY_INFORMATION');
     this.brgyInfo = JSON.parse(tempInfo);
     console.log(this.brgyInfo);
-    console.log(this.brgyInfo._barangay.regCode);
+
+    // console.log(this.brgyInfo._barangay.regCode);
 
     this.initializeBrgyForm();
 
