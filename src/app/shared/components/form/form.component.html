@@ -210,9 +210,21 @@
                 }}
               </mat-option>
             </mat-select>
+
             <mat-error *ngIf="form.get(field.fcname)?.hasError('required')">
               You must select one.
             </mat-error>
+            <button
+              *ngIf="form.get(field.fcname)?.value"
+              mat-button
+              matSuffix
+              mat-icon-button
+              (click)="
+                $event.stopPropagation(); form.get(field.fcname)?.setValue('')
+              "
+            >
+              <mat-icon>close</mat-icon>
+            </button>
           </mat-form-field>
 
           <!-- Checkbox -->
