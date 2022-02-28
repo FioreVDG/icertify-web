@@ -1,3 +1,5 @@
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { ADDRESS_SELECT } from './../../../pages/portals/superadmin-portal/pages/account-creation/users-table/user-form/user.config';
 import { OtpComponent } from 'src/app/shared/components/otp/otp.component';
 import { ApiService } from 'src/app/service/api/api.service';
 import { UtilService } from 'src/app/service/util/util.service';
@@ -7,6 +9,7 @@ import { FormComponent } from './../form/form.component';
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { REGISTRATION_FORM } from './registrant-form';
 import { Section } from 'src/app/models/form.interface';
+import * as _ from 'lodash';
 import {
   MatDialog,
   MatDialogRef,
@@ -32,14 +35,17 @@ export class RegistrantFormComponent implements OnInit {
   addressTemp: any = {};
   reasonVal: any;
   formInitiated = false;
+  brgyFields = ADDRESS_SELECT;
+  brgyForm = this.fb.group({});
   fetchingDefaultData: boolean = false;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<RegistrantFormComponent>,
     private auth: AuthService,
     private dialog: MatDialog,
-    private util: UtilService,
-    private api: ApiService
+    public util: UtilService,
+    private api: ApiService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -64,10 +70,7 @@ export class RegistrantFormComponent implements OnInit {
     console.log(this.brgyInfo);
     console.log(this.brgyInfo._barangay.regCode);
 
-    this.findDefaultValue('barangay');
-    this.findDefaultValue('cityMun');
-    this.findDefaultValue('province');
-    this.findDefaultValue('region');
+    this.initializeBrgyForm();
 
     let findMobileNum: any;
     this.registrantFromFields.forEach((el: any) => {
@@ -111,84 +114,6 @@ export class RegistrantFormComponent implements OnInit {
     ];
     if (disabler.includes(this.data.header)) return true;
     else return false;
-  }
-
-  findDefaultValue(fcname: any) {
-    let result: any;
-    let findAddress: any = this.registrantFromFields.find(
-      (el: any) => el.section === 'Address Information'
-    );
-
-    if (findAddress) {
-      switch (fcname) {
-        case 'barangay':
-          let findBrgy: any = findAddress.items.find(
-            (o: any) => o.fcname === fcname
-          );
-
-          findBrgy.default = this.brgyInfo._barangay.brgyDesc;
-          result = findBrgy.default;
-          break;
-        case 'cityMun':
-          let findCity: any = findAddress.items.find(
-            (o: any) => o.fcname === fcname
-          );
-
-          this.util
-            .getRPC('citymuns', {
-              group: {
-                field: 'citymunCode',
-                id: this.brgyInfo._barangay.citymunCode,
-              },
-            })
-            .subscribe((res: any) => {
-              console.log(res);
-              findCity.default = res.data[0].citymunDesc;
-            });
-
-          result = findCity.default;
-          break;
-        case 'province':
-          let findProv: any = findAddress.items.find(
-            (o: any) => o.fcname === fcname
-          );
-          this.util
-            .getRPC('provinces', {
-              group: {
-                field: 'provCode',
-                id: this.brgyInfo._barangay.provCode,
-              },
-            })
-            .subscribe((res: any) => {
-              console.log(res);
-              findProv.default = res.data[0].provDesc;
-            });
-          result = findProv.default;
-          break;
-        case 'region':
-          let findReg: any = findAddress.items.find(
-            (o: any) => o.fcname === fcname
-          );
-          this.util
-            .getRPC('regions', {
-              group: {
-                field: 'regCode',
-                id: this.brgyInfo._barangay.regCode,
-              },
-            })
-            .subscribe((res: any) => {
-              if (res) {
-                console.log(res);
-                findReg.default = res.data[0].regDesc;
-                this.formInitiated = true;
-              }
-            });
-          result = findReg.default;
-          break;
-      }
-    }
-    console.log(result);
-    return result;
   }
 
   formInitialized() {
@@ -250,11 +175,16 @@ export class RegistrantFormComponent implements OnInit {
   }
 
   submit() {
+    let omitField = ['address1', 'address2'];
     const loader = this.util.startLoading('Saving');
     this.saving = true;
-    delete this.toAddData.address1;
-    delete this.toAddData.address2;
-    this.toAddData.address = this.addressTemp;
+    // delete this.toAddData.address1;
+    // delete this.toAddData.address2;
+    this.toAddData.address = {
+      ...this.brgyForm.value,
+      address1: this.toAddData.address1,
+      address2: this.toAddData.address2,
+    };
     this.toAddData.images = this.imgObj;
     this.toAddData.birthDate = new Date(
       this.toAddData.birthDate
@@ -262,6 +192,7 @@ export class RegistrantFormComponent implements OnInit {
     this.toAddData.mobileNumber = this.data.mobileNumber;
     this.toAddData.type = 'Consumer';
     this.toAddData._barangay = this.brgyInfo._barangay;
+    this.toAddData = _.omit(this.toAddData, omitField);
     console.log(this.toAddData);
 
     this.auth.registerUser(this.toAddData).subscribe(
@@ -328,8 +259,8 @@ export class RegistrantFormComponent implements OnInit {
 
   proceedUpdating() {
     const loader = this.util.startLoading('Saving');
-    delete this.toUpdataData.address1;
-    delete this.toUpdataData.address2;
+    // delete this.toUpdataData.address1;
+    // delete this.toUpdataData.address2;
     console.log(typeof this.imgObj.cert_of_indigency);
     if (typeof this.imgObj.cert_of_indigency === 'undefined') {
       this.imgObj.cert_of_indigency = 'Empty';
@@ -377,5 +308,100 @@ export class RegistrantFormComponent implements OnInit {
           });
         }
       );
+  }
+  compareFn(op1: any, op2: any) {
+    console.log(op1, op2);
+    return op1.id === op2.id;
+  }
+  initializeBrgyForm() {
+    let temp: any = {};
+    this.brgyFields.forEach((field: any) => {
+      let required = [];
+      if (field.required) {
+        required.push(Validators.required);
+      }
+      temp[field.fcname] = new FormControl('', required);
+    });
+    this.brgyForm = this.fb.group(temp);
+
+    console.log(this.brgyForm);
+    this.getRegions();
+  }
+
+  getProvinces(res: any) {
+    this.util
+      .getRPC('provinces', {
+        group: {
+          field: 'provCode',
+          id: res,
+        },
+      })
+      .subscribe((prov: any) => {
+        console.log(prov);
+        this.brgyForm.get('province')?.setValue(prov.data[0]);
+        console.log(this.brgyForm);
+        this.initializedChoices('province', prov.data);
+        this.getCities(this.brgyInfo._barangay.citymunCode);
+      });
+  }
+  getCities(res: any) {
+    this.util
+      .getRPC('citymuns', {
+        group: {
+          field: 'citymunCode',
+          id: res,
+        },
+      })
+      .subscribe((cityMun: any) => {
+        console.log(cityMun);
+        this.brgyForm.get('cityMun')?.setValue(cityMun.data[0]);
+        console.log(this.brgyForm);
+        this.initializedChoices('cityMun', cityMun.data);
+        this.getBarangay(this.brgyInfo._barangay.brgyCode);
+      });
+  }
+  getBarangay(res: any) {
+    this.util
+      .getRPC('barangay', {
+        group: {
+          field: 'brgyCode',
+          id: res,
+        },
+      })
+      .subscribe((brgy: any) => {
+        this.brgyForm.get('barangay')?.setValue(brgy.data[0]);
+        console.log(this.brgyForm);
+        this.initializedChoices('barangay', brgy.data);
+        this.formInitiated = true;
+      });
+  }
+
+  getRegions() {
+    this.util
+      .getRPC('regions', {
+        group: {
+          field: 'regCode',
+          id: this.brgyInfo._barangay.regCode,
+        },
+      })
+      .subscribe((regions: any) => {
+        this.brgyForm.get('region')?.setValue(regions.data[0]);
+        console.log(this.brgyForm);
+        this.initializedChoices('region', regions.data);
+        this.getProvinces(this.brgyInfo._barangay.provCode);
+      });
+  }
+  initializedChoices(identifier: string, object: any) {
+    this.brgyFields.forEach((item: any) => {
+      console.log(item);
+
+      if (item.fcname === identifier) {
+        item.choices = [];
+        item.show = true;
+        object.forEach((r: any) => {
+          item.choices.push(r);
+        });
+      }
+    });
   }
 }
