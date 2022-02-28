@@ -25,6 +25,7 @@ import { User } from 'src/app/models/user.interface';
 // import * as htmlToImage from 'html-to-image';
 import html2canvas from 'html2canvas';
 import { DocumentImageViewerComponent } from 'src/app/shared/dialogs/document-image-viewer/document-image-viewer.component';
+import { AnyFn } from '@ngrx/store/src/selector';
 
 @Component({
   selector: 'app-room',
@@ -77,6 +78,7 @@ export class RoomComponent implements OnInit {
   leaveArr: any = [];
 
   query: QueryParams = { find: [] };
+  remainingDocsChecker: any;
 
   constructor(
     public dialogRef: MatDialogRef<RoomComponent>,
@@ -101,7 +103,7 @@ export class RoomComponent implements OnInit {
     this.socketEventHandler();
     this.getExpectedParticipants();
     this.checkDocument();
-    setInterval(() => {
+    this.remainingDocsChecker = setInterval(() => {
       this.checkRemainingDocuments();
     }, 1000);
   }
@@ -225,16 +227,34 @@ export class RoomComponent implements OnInit {
   }
 
   checkRemainingDocuments() {
-    //TODO EXCLUDE FINISHED NOTARY
-    // this.transactions = this.transactions.filter(
-    //   (o: any) =>
-    //     o._documents[0].documentStatus === 'Pending for Notary' ||
-    //     o._documents[0].documentStatus === 'Skipped'
-    // );
-    // this.transactions = this.transactions.forEach((el:any)=>{
-    //   el.
-    // })
-    console.log(this.transactions);
+    if (this.joinRoom) {
+      this.transactions = this.transactions.filter(
+        (o: any) =>
+          o._documents[0].documentStatus === 'Pending for Notary' ||
+          o._documents[0].documentStatus === 'Skipped'
+      );
+      if (!this.transactions.length) {
+        clearInterval(this.remainingDocsChecker);
+        this.dialog
+          .open(ActionResultComponent, {
+            disableClose: true,
+            data: {
+              msg: 'You have been successfully finished notarizing/unnotarizing documents. Click Leave Now button to end this meeting',
+              success: true,
+              isOthers: true,
+              button: 'Leave Now',
+            },
+          })
+          .afterClosed()
+          .subscribe((res: any) => {
+            console.log(res);
+            if (res) {
+              this.leaveMeeting('');
+            }
+          });
+      }
+      console.log(this.transactions);
+    }
   }
 
   nextTransaction() {
@@ -247,7 +267,9 @@ export class RoomComponent implements OnInit {
     console.log(this.currentTransactionIndex);
     if (this.currentTransactionIndex === this.transactions.length - 1) {
       this.currentTransactionIndex = -1;
+      console.log(this.transactions);
     }
+
     this.dialog
       .open(RegistrantFormComponent, {
         data: {
@@ -417,42 +439,40 @@ export class RoomComponent implements OnInit {
       .afterClosed()
       .subscribe((resp: any) => {
         if (resp) {
-          this.api.document
-            .skip(this.currentDocument, this.currentDocument._id)
-            .subscribe(
-              (response: any) => {
-                console.log(response);
-                if (response) {
-                  this.dialog
-                    .open(ActionResultComponent, {
-                      data: {
-                        msg: `Document ${this.currentDocument.refCode}  has been skipped!`,
-                        success: true,
-                        button: 'Okay',
-                      },
-                    })
-                    .afterClosed()
-                    .subscribe((res: any) => {
-                      if (res) {
-                        this.currentDocument.documentStatus =
-                          response.env.document.documentStatus;
-                        console.log(this.currentDocument);
-                        console.log(this.currentTransaction);
-                      }
-                    });
-                }
-              },
-              (err) => {
-                console.log(err);
-                this.dialog.open(ActionResultComponent, {
-                  data: {
-                    msg: err.error.message || 'Server Error! Please try again',
-                    success: true,
-                    button: 'Okay',
-                  },
-                });
+          this.api.document.skip({}, this.currentDocument._id).subscribe(
+            (response: any) => {
+              console.log(response);
+              if (response) {
+                this.dialog
+                  .open(ActionResultComponent, {
+                    data: {
+                      msg: `Document ${this.currentDocument.refCode}  has been skipped!`,
+                      success: true,
+                      button: 'Okay',
+                    },
+                  })
+                  .afterClosed()
+                  .subscribe((res: any) => {
+                    if (res) {
+                      this.currentDocument.documentStatus =
+                        response.env.document.documentStatus;
+                      console.log(this.currentDocument);
+                      console.log(this.currentTransaction);
+                    }
+                  });
               }
-            );
+            },
+            (err) => {
+              console.log(err);
+              this.dialog.open(ActionResultComponent, {
+                data: {
+                  msg: err.error.message || 'Server Error! Please try again',
+                  success: true,
+                  button: 'Okay',
+                },
+              });
+            }
+          );
         }
       });
   }
