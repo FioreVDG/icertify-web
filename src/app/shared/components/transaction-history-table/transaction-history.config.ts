@@ -9,7 +9,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     selected: true,
     bottomSheet: [
       {
-        label: 'View Document/s & Screenshot/s',
+        label: 'View Document/Notarized Document',
         action: 'viewDoc',
         icon: 'description',
       },
@@ -144,7 +144,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     selected: true,
     bottomSheet: [
       {
-        label: 'View Document/s & Screenshot/s',
+        label: 'View Document/Notarized Document',
         action: 'viewDoc',
         icon: 'description',
       },
@@ -272,7 +272,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     selected: false,
     bottomSheet: [
       {
-        label: 'View Document/s & Screenshot/s',
+        label: 'View Document/Notarized Document',
         action: 'viewDoc',
         icon: 'description',
       },
@@ -405,7 +405,7 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     selected: true,
     bottomSheet: [
       {
-        label: 'View Document/s & Screenshot/s',
+        label: 'View Document/Notarized Document',
         action: 'viewDoc',
         icon: 'description',
       },
@@ -541,7 +541,7 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     isCheckbox: true,
     bottomSheet: [
       {
-        label: 'View Document/s & Screenshot/s',
+        label: 'View Document/Notarized Document',
         action: 'viewDoc',
         icon: 'description',
       },
@@ -692,7 +692,7 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     isCheckbox: false,
     bottomSheet: [
       {
-        label: 'View Document/s & Screenshot/s',
+        label: 'View Document/Notarized Document',
         action: 'viewDoc',
         icon: 'description',
       },
