@@ -155,7 +155,7 @@ export class BarangayVideoConferencingComponent implements OnInit {
       (res: any) => {
         console.log(res);
         console.log(res.env.room);
-        this.indigentDetails = res.env.room[0].currentTransaction;
+        this.indigentDetails = res.env.room[0]?.currentTransaction;
         if (
           res &&
           res.env.room[0] &&

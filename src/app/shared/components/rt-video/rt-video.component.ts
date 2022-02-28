@@ -92,61 +92,75 @@ export class RtVideoComponent implements OnInit {
         this.api.cluster
           .getOne(this.me._barangay.brgyCode)
           .subscribe((res: any) => {
-            settings = res.env.cluster;
-            console.log(settings);
-          });
-        let query = { find: [] };
-        this.room.get(query).subscribe((res: any) => {
-          console.log(res);
-          console.log(res.env.room[0].currentTransaction);
-          let currRoomId: any = res.env.room[0].currentTransaction._id;
-          console.log(currRoomId);
-          let querys: any = {
-            find: [
-              {
-                field: '_notaryId',
-                operator: '=',
-                value: settings?._notaryId?._notaryId,
-              },
-            ],
-          };
-          this.conference.getScheduled(querys).subscribe((resp: any) => {
-            let schedules = resp.env.schedules;
-            console.log(schedules);
-            if (!schedules.length) {
-              this.leaveNow();
-              clearInterval(this.flagInterval);
-            }
-            // console.log(resp);
-            let findCurrentTransaction: any;
-            let transactions: any = [];
+            if (res) {
+              settings = res.env.cluster;
+              console.log(settings);
+              let query = {
+                find: [
+                  {
+                    field: '_notaryId',
+                    operator: '=',
+                    value: settings._notaryId._notaryId,
+                  },
+                ],
+              };
+              console.log(query);
+              this.room.get(query).subscribe((res: any) => {
+                console.log(res);
+                console.log(res.env.room[0].currentTransaction);
+                let currRoomId: any = res.env.room[0].currentTransaction._id;
+                console.log(currRoomId);
+                let querys: any = {
+                  find: [
+                    {
+                      field: '_notaryId',
+                      operator: '=',
+                      value: settings?._notaryId?._notaryId,
+                    },
+                  ],
+                };
+                this.conference.getScheduled(querys).subscribe((resp: any) => {
+                  let schedules = resp.env.schedules;
+                  console.log(schedules);
+                  if (!schedules.length) {
+                    this.leaveNow();
+                    clearInterval(this.flagInterval);
+                  }
+                  // console.log(resp);
+                  let findCurrentTransaction: any;
+                  let transactions: any = [];
 
-            schedules.forEach((sched: any) => {
-              console.log(sched);
-              sched._folderIds.forEach((folder: any) => {
-                console.log(folder);
-                // transactions = folder._transactions;
-                folder._transactions.forEach((trans: any) => {
-                  transactions.push(trans);
+                  schedules.forEach((sched: any) => {
+                    console.log(sched);
+                    sched._folderIds.forEach((folder: any) => {
+                      console.log(folder);
+                      // transactions = folder._transactions;
+                      folder._transactions.forEach((trans: any) => {
+                        transactions.push(trans);
+                      });
+                      console.log(transactions);
+                    });
+                  });
+                  console.log(transactions);
+                  findCurrentTransaction = transactions.find(
+                    (trans: any) => trans._id === currRoomId
+                  );
+                  if (
+                    findCurrentTransaction &&
+                    findCurrentTransaction.transactionStatus === 'Done'
+                  ) {
+                    console.log(findCurrentTransaction);
+                    console.log(
+                      'TAPOS NA ITONG TRANSACTION',
+                      findCurrentTransaction
+                    );
+                    clearInterval(this.flagInterval);
+                    this.leaveNow();
+                  }
                 });
-                console.log(transactions);
               });
-            });
-            console.log(transactions);
-            findCurrentTransaction = transactions.find(
-              (trans: any) => trans._id === currRoomId
-            );
-            if (
-              findCurrentTransaction &&
-              findCurrentTransaction.transactionStatus === 'Done'
-            ) {
-              console.log(findCurrentTransaction);
-              console.log('TAPOS NA ITONG TRANSACTION', findCurrentTransaction);
-              clearInterval(this.flagInterval);
-              this.leaveNow();
             }
           });
-        });
       }
     });
   }
