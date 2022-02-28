@@ -50,7 +50,7 @@ export class DocumentLogsViewerComponent implements OnInit {
           field: 'message',
           operator: '[in]=',
           value:
-            'Received by Notarial Staff,Video Conference Scheduled by Notarial Staff,Marked as Notarized,Marked as Unnotarized,Marked as Enroute to Brgy Hall by Notarial Staff,Document Received from Notary by Brgy Hall Staff,Document Released to Indigent by Brgy Hall Staf',
+            'Received by Notarial Staff,Video Conference Scheduled by Notarial Staff,Marked as Notarized,Marked as Unnotarized,Marked as Enroute to Brgy Hall by Notarial Staff,Document Received from Notary by Brgy Hall Staff,Document Released to Indigent by Brgy Hall Staff',
         },
       ],
       populates: [
