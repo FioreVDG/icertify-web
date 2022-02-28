@@ -145,10 +145,11 @@ export class BarangayVideoConferencingComponent implements OnInit {
         {
           field: '_notaryId',
           operator: '=',
-          value: this.settings._notaryId,
+          value: this.settings._notaryId._notaryId,
         },
       ],
     };
+    console.log(query);
     this.api.room.get(query).subscribe(
       (res: any) => {
         console.log(res);
@@ -160,7 +161,11 @@ export class BarangayVideoConferencingComponent implements OnInit {
             this.me._barangay.brgyCode
         )
           this.isDisabled = false;
+        else {
+          this.isDisabled = true;
+        }
         this.activeRooms = res.env.room || [];
+
         if (this.getActive)
           setTimeout(() => {
             this.getActiveConference();

@@ -1,3 +1,5 @@
+import { AreYouSureComponent } from './../../../../../../shared/dialogs/are-you-sure/are-you-sure.component';
+import { ApiService } from './../../../../../../service/api/api.service';
 import { CounterComponent } from './../../../../../../shared/dialogs/counter/counter.component';
 import { ActionResultComponent } from './../../../../../../shared/dialogs/action-result/action-result.component';
 import { QueryParams } from './../../../../../../models/queryparams.interface';
@@ -87,7 +89,8 @@ export class RoomComponent implements OnInit {
     private socket: Socket,
     private store: Store<{ user: User }>,
     private dialog: MatDialog,
-    private room: RoomService
+    private room: RoomService,
+    private api: ApiService
   ) {}
 
   ngOnInit(): void {
@@ -224,6 +227,11 @@ export class RoomComponent implements OnInit {
   }
 
   openUserDetails() {
+    console.log(this.transactions);
+    console.log(this.currentTransactionIndex);
+    if (this.currentTransactionIndex === this.transactions.length - 1) {
+      this.currentTransactionIndex = -1;
+    }
     this.dialog
       .open(RegistrantFormComponent, {
         data: {
@@ -380,6 +388,55 @@ export class RoomComponent implements OnInit {
       .subscribe((res: any) => {
         if (res) {
           this.takeScreenshot();
+        }
+      });
+  }
+
+  skipDocument() {
+    console.log(this.currentDocument);
+    this.dialog
+      .open(AreYouSureComponent, {
+        data: { msg: 'skip this document', isOthers: true },
+      })
+      .afterClosed()
+      .subscribe((resp: any) => {
+        if (resp) {
+          this.api.document
+            .skip(this.currentDocument, this.currentDocument._id)
+            .subscribe(
+              (response: any) => {
+                console.log(response);
+                if (response) {
+                  this.dialog
+                    .open(ActionResultComponent, {
+                      data: {
+                        msg: `Document ${this.currentDocument.refCode}  has been skipped!`,
+                        success: true,
+                        button: 'Okay',
+                      },
+                    })
+                    .afterClosed()
+                    .subscribe((res: any) => {
+                      if (res) {
+                        this.currentDocument.documentStatus =
+                          response.env.document.documentStatus;
+                        console.log(this.currentDocument);
+                        console.log(this.currentTransaction);
+                      }
+                    });
+                }
+              },
+              (err) => {
+                console.log(err);
+                this.dialog.open(ActionResultComponent, {
+                  data: {
+                    msg: err.error.message || 'Server Error! Please try again',
+                    success: true,
+                    button: 'Okay',
+                  },
+                });
+              }
+            );
         }
       });
   }

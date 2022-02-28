@@ -19,6 +19,7 @@ import {
 })
 export class AddTransactionComponent implements OnInit {
   step: number = 1;
+  curDocType: string = '';
   documentType: string = '';
   others: string = '';
   docTypes: Array<string> = [
@@ -56,7 +57,8 @@ export class AddTransactionComponent implements OnInit {
   }
 
   eventSelection(event: any) {
-    console.log(event);
+    this.data.curDocType = event;
+    console.log(this.data);
   }
 
   closeDialog() {
@@ -87,6 +89,8 @@ export class AddTransactionComponent implements OnInit {
         .open(UploadComponent, {
           data: {
             mobileNumber: this.data.mobileNumber,
+            formatName: true,
+            formatData: this.data,
           },
           panelClass: 'dialog-darken',
         })
