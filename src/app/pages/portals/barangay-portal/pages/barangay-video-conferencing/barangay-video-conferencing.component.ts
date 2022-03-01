@@ -36,6 +36,7 @@ export class BarangayVideoConferencingComponent implements OnInit {
   me: any;
   settings: any;
   isDisabled: boolean = true;
+  indigentDetails: any;
   // TODO: room interface
   activeRooms: Array<any> = [];
   constructor(
@@ -145,7 +146,7 @@ export class BarangayVideoConferencingComponent implements OnInit {
         {
           field: '_notaryId',
           operator: '=',
-          value: this.settings._notaryId._notaryId,
+          value: this.settings?._notaryId?._notaryId,
         },
       ],
     };
@@ -154,6 +155,7 @@ export class BarangayVideoConferencingComponent implements OnInit {
       (res: any) => {
         console.log(res);
         console.log(res.env.room);
+        this.indigentDetails = res.env.room[0]?.currentTransaction;
         if (
           res &&
           res.env.room[0] &&
@@ -165,6 +167,7 @@ export class BarangayVideoConferencingComponent implements OnInit {
           this.isDisabled = true;
         }
         this.activeRooms = res.env.room || [];
+        console.log(this.activeRooms);
 
         if (this.getActive)
           setTimeout(() => {
@@ -197,7 +200,10 @@ export class BarangayVideoConferencingComponent implements OnInit {
           res.env.transaction.que = room.que;
           this.dialog
             .open(BrgyRoomComponent, {
-              data: { obj: res.env.transaction },
+              data: {
+                obj: res.env.transaction,
+                indigentDetails: this.indigentDetails,
+              },
               minHeight: '100vh',
               minWidth: '100vw',
               panelClass: 'dialog-no-padding',

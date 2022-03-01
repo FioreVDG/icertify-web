@@ -58,7 +58,6 @@ export class AddTransactionComponent implements OnInit {
 
   eventSelection(event: any) {
     this.data.curDocType = event;
-    console.log(this.data);
   }
 
   closeDialog() {
@@ -72,6 +71,25 @@ export class AddTransactionComponent implements OnInit {
           if (res) this.dialogRef.close();
         });
     } else this.dialogRef.close();
+  }
+
+  formatName() {
+    let formattedName = '';
+    let fullName = this.data.firstName + '_' + this.data.lastName;
+    let date = new Date().toISOString().replace(/T.*/, '').split('-').join('-');
+    let time = Date.now();
+    let docTypeSpecific = this.others !== '' ? `(${this.others})` : '';
+
+    formattedName =
+      fullName +
+      '_' +
+      this.data.curDocType +
+      docTypeSpecific +
+      '_' +
+      date +
+      '_' +
+      time;
+    return formattedName;
   }
 
   upload() {
@@ -89,8 +107,7 @@ export class AddTransactionComponent implements OnInit {
         .open(UploadComponent, {
           data: {
             mobileNumber: this.data.mobileNumber,
-            formatName: true,
-            formatData: this.data,
+            name: this.formatName(),
           },
           panelClass: 'dialog-darken',
         })

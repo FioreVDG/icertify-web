@@ -54,8 +54,8 @@
           >
         </p>
         <p style="text-align: center; color: #fff; margin-top: 0">
-          QUEUE NO. <b>{{ currentTransactionIndex + 1 }}</b> of
-          {{ transactions.length }}
+          QUEUE NO. <b>{{ currentDocument.queue }}</b> of
+          {{ transactionCount }}
         </p>
         <div class="separator"></div>
       </div>
@@ -181,7 +181,7 @@
           [remoteDetails]="remoteCallDetails"
         ></app-rt-video>
         <div class="grid mt-3">
-          <div class="col-12 opt-btn" *ngIf="checkDocumentStatus()">
+          <div class="col-12 opt-btn" *ngIf="checkDocumentStatus2()">
             <button
               mat-raised-button
               color="primary"
@@ -195,6 +195,14 @@
               (click)="openNotarizeDialog('Unnotarized')"
             >
               Mark as unnotarized
+            </button>
+            <button
+              mat-raised-button
+              color=""
+              [disabled]="showSkipBtn()"
+              (click)="skipDocument()"
+            >
+              Skip document
             </button>
           </div>
         </div>

@@ -187,7 +187,6 @@ export class FormComponent implements OnInit {
     this.sb.open('Copied', 'Okay', { duration: 3500 });
   }
   compareFn(op1: any, op2: any) {
-    console.log(op1, op2);
     return op1 === op2;
   }
 }
