@@ -231,12 +231,12 @@ export class RoomComponent implements OnInit {
 
   checkRemainingDocuments() {
     if (this.joinRoom) {
-      this.transactions = this.transactions.filter(
+      let transactionsTemp: any = this.transactions.filter(
         (o: any) =>
           o._documents[0].documentStatus === 'Pending for Notary' ||
           o._documents[0].documentStatus === 'Skipped'
       );
-      if (!this.transactions.length) {
+      if (!transactionsTemp.length) {
         clearInterval(this.remainingDocsChecker);
         this.dialog
           .open(ActionResultComponent, {
