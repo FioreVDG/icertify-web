@@ -84,6 +84,17 @@ export const DOCUMENT_TRACKER_CONFIG: Array<any> = [
         path: 'locationStatus',
         type: 'text',
         selected: true,
+        useAsFilter: true,
+        choices: [
+          'For Pick Up (Barangay)',
+          'For Pick Up (Notary)',
+          'Enroute to Notary',
+          'Enroute to Barangay',
+          'Received by Notary',
+          'Received by Barangay',
+          'Video Conference Scheduled (Notary)',
+          'Released to Indigent',
+        ],
       },
       {
         title: 'Notarization Status',
@@ -105,6 +116,8 @@ export const DOCUMENT_TRACKER_CONFIG: Array<any> = [
             color: '#fbcb51' || 'Yellow',
           },
         ],
+        useAsFilter: true,
+        choices: ['Notarized', 'Unnotarized', 'Pending for Notary', 'Skipped'],
       },
       {
         title: 'Remark',
@@ -197,6 +210,17 @@ export const DOCUMENT_TRACKER_CONFIG: Array<any> = [
         path: 'locationStatus',
         type: 'text',
         selected: true,
+        useAsFilter: true,
+        choices: [
+          'For Pick Up (Barangay)',
+          'For Pick Up (Notary)',
+          'Enroute to Notary',
+          'Enroute to Barangay',
+          'Received by Notary',
+          'Received by Barangay',
+          'Video Conference Scheduled (Notary)',
+          'Released to Indigent',
+        ],
       },
       {
         title: 'Notarization Status',
@@ -218,6 +242,8 @@ export const DOCUMENT_TRACKER_CONFIG: Array<any> = [
             color: '#fbcb51' || 'Yellow',
           },
         ],
+        useAsFilter: true,
+        choices: ['Notarized', 'Unnotarized', 'Pending for Notary', 'Skipped'],
       },
       {
         title: 'Remark',
@@ -324,6 +350,8 @@ export const DOCUMENT_TRACKER_CONFIG: Array<any> = [
             color: '#fbcb51' || 'Yellow',
           },
         ],
+        useAsFilter: true,
+        choices: ['Notarized', 'Unnotarized', 'Pending for Notary', 'Skipped'],
       },
       {
         title: 'Remark',
