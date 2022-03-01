@@ -197,3 +197,24 @@ mat-sidenav-container {
   font-size: 12px;
   margin: 0rem 0rem;
 }
+
+.overlay {
+  height: 90%;
+  width: 100%;
+  background: #413e3ed0;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  h1 {
+    font-size: 205px;
+    color: #fff;
+    margin: 0;
+    opacity: 0.5;
+    // transform: rotate(-40deg);
+    letter-spacing: 0.4rem;
+  }
+}
