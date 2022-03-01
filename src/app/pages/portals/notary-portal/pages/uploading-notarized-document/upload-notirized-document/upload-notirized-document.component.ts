@@ -42,6 +42,7 @@ export class UploadNotirizedDocumentComponent implements OnInit {
     this.dialog
       .open(UploadComponent, {
         data: {
+          name: `${this.data.refCode}_${this.data.sender.lastName}_Notarized`,
           path: `INDIGENT/${this.data.sender.mobileNumber}/Notarized_Document`,
         },
         panelClass: 'dialog-darken',
