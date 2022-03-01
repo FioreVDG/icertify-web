@@ -167,6 +167,7 @@ export class BarangayVideoConferencingComponent implements OnInit {
           this.isDisabled = true;
         }
         this.activeRooms = res.env.room || [];
+        console.log(this.activeRooms);
 
         if (this.getActive)
           setTimeout(() => {
