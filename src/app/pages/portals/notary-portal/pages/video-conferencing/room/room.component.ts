@@ -25,6 +25,7 @@ import { User } from 'src/app/models/user.interface';
 // import * as htmlToImage from 'html-to-image';
 import html2canvas from 'html2canvas';
 import { DocumentImageViewerComponent } from 'src/app/shared/dialogs/document-image-viewer/document-image-viewer.component';
+import { AnyFn } from '@ngrx/store/src/selector';
 
 @Component({
   selector: 'app-room',
@@ -53,6 +54,7 @@ export class RoomComponent implements OnInit {
   currentSchedule: any;
   currentTransactionIndex = -1;
   transactions: any = [];
+  transactionCount: any;
   currentTransaction: any;
   _images: any = [
     {
@@ -77,6 +79,7 @@ export class RoomComponent implements OnInit {
   leaveArr: any = [];
 
   query: QueryParams = { find: [] };
+  remainingDocsChecker: any;
 
   constructor(
     public dialogRef: MatDialogRef<RoomComponent>,
@@ -101,6 +104,9 @@ export class RoomComponent implements OnInit {
     this.socketEventHandler();
     this.getExpectedParticipants();
     this.checkDocument();
+    this.remainingDocsChecker = setInterval(() => {
+      this.checkRemainingDocuments();
+    }, 1000);
   }
 
   getExpectedParticipants() {
@@ -162,6 +168,8 @@ export class RoomComponent implements OnInit {
         });
       });
     });
+    this.transactionCount = this.transactions.length;
+    console.log(this.transactionCount);
     const loader = this.util.startLoading('Joining please wait...');
 
     this.agora.getToken(schedule._id).subscribe(
@@ -221,6 +229,37 @@ export class RoomComponent implements OnInit {
     });
   }
 
+  checkRemainingDocuments() {
+    if (this.joinRoom) {
+      this.transactions = this.transactions.filter(
+        (o: any) =>
+          o._documents[0].documentStatus === 'Pending for Notary' ||
+          o._documents[0].documentStatus === 'Skipped'
+      );
+      if (!this.transactions.length) {
+        clearInterval(this.remainingDocsChecker);
+        this.dialog
+          .open(ActionResultComponent, {
+            disableClose: true,
+            data: {
+              msg: 'You have been successfully finished notarizing/unnotarizing documents. Click Leave Now button to end this meeting',
+              success: true,
+              isOthers: true,
+              button: 'Leave Now',
+            },
+          })
+          .afterClosed()
+          .subscribe((res: any) => {
+            console.log(res);
+            if (res) {
+              this.leaveMeeting('');
+            }
+          });
+      }
+      console.log(this.transactions);
+    }
+  }
+
   nextTransaction() {
     this.currentTransactionIndex++;
     this.initiateTransaction();
@@ -231,7 +270,9 @@ export class RoomComponent implements OnInit {
     console.log(this.currentTransactionIndex);
     if (this.currentTransactionIndex === this.transactions.length - 1) {
       this.currentTransactionIndex = -1;
+      console.log(this.transactions);
     }
+
     this.dialog
       .open(RegistrantFormComponent, {
         data: {
@@ -401,42 +442,40 @@ export class RoomComponent implements OnInit {
       .afterClosed()
       .subscribe((resp: any) => {
         if (resp) {
-          this.api.document
-            .skip(this.currentDocument, this.currentDocument._id)
-            .subscribe(
-              (response: any) => {
-                console.log(response);
-                if (response) {
-                  this.dialog
-                    .open(ActionResultComponent, {
-                      data: {
-                        msg: `Document ${this.currentDocument.refCode}  has been skipped!`,
-                        success: true,
-                        button: 'Okay',
-                      },
-                    })
-                    .afterClosed()
-                    .subscribe((res: any) => {
-                      if (res) {
-                        this.currentDocument.documentStatus =
-                          response.env.document.documentStatus;
-                        console.log(this.currentDocument);
-                        console.log(this.currentTransaction);
-                      }
-                    });
-                }
-              },
-              (err) => {
-                console.log(err);
-                this.dialog.open(ActionResultComponent, {
-                  data: {
-                    msg: err.error.message || 'Server Error! Please try again',
-                    success: true,
-                    button: 'Okay',
-                  },
-                });
+          this.api.document.skip({}, this.currentDocument._id).subscribe(
+            (response: any) => {
+              console.log(response);
+              if (response) {
+                this.dialog
+                  .open(ActionResultComponent, {
+                    data: {
+                      msg: `Document ${this.currentDocument.refCode}  has been skipped!`,
+                      success: true,
+                      button: 'Okay',
+                    },
+                  })
+                  .afterClosed()
+                  .subscribe((res: any) => {
+                    if (res) {
+                      this.currentDocument.documentStatus =
+                        response.env.document.documentStatus;
+                      console.log(this.currentDocument);
+                      console.log(this.currentTransaction);
+                    }
+                  });
               }
-            );
+            },
+            (err) => {
+              console.log(err);
+              this.dialog.open(ActionResultComponent, {
+                data: {
+                  msg: err.error.message || 'Server Error! Please try again',
+                  success: true,
+                  button: 'Okay',
+                },
+              });
+            }
+          );
         }
       });
   }
@@ -479,6 +518,25 @@ export class RoomComponent implements OnInit {
       (o: any) => o.documentStatus === 'Pending for Notary'
     );
     if (filtPending?.length) return true;
+    else return false;
+  }
+
+  checkDocumentStatus2() {
+    let filtPending: any = this.currentTransaction?._documents.filter(
+      (o: any) => o.documentStatus === 'Pending for Notary'
+    );
+    let filtSkip: any = this.currentTransaction?._documents.filter(
+      (o: any) => o.documentStatus === 'Skipped'
+    );
+    if (filtPending?.length || filtSkip?.length) return true;
+    else return false;
+  }
+
+  showSkipBtn() {
+    let filtSkip: any = this.currentTransaction?._documents.filter(
+      (o: any) => o.documentStatus === 'Skipped'
+    );
+    if (filtSkip?.length) return true;
     else return false;
   }
 

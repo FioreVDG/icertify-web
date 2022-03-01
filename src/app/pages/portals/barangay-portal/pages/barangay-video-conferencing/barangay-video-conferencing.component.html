@@ -6,7 +6,7 @@
 <div class="vc-card" *ngFor="let room of activeRooms">
   <div class="grid">
     <div class="col-1 text-center queue-card">
-      <h1 class="queue">{{ room.que }}</h1>
+      <h1 class="queue">{{ room.currentTransaction._documents[0].queue }}</h1>
       <p>Queue number</p>
     </div>
     <div class="col-6">
