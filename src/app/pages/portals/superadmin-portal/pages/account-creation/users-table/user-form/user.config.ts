@@ -47,6 +47,7 @@ export const USER_FORM: Section[] = [
         path: 'suffix',
         optional: true,
         appearance: 'standard',
+        clearBtn: true,
       },
       {
         label: 'Birth Date',

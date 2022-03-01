@@ -46,6 +46,7 @@ export const REGISTRATION_FORM: Array<Section> = [
         path: 'suffix',
         optional: true,
         appearance: 'standard',
+        clearBtn: true,
       },
       {
         label: 'Birth Date',
