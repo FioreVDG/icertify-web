@@ -54,6 +54,7 @@ export class RoomComponent implements OnInit {
   currentSchedule: any;
   currentTransactionIndex = -1;
   transactions: any = [];
+  transactionCount: any;
   currentTransaction: any;
   _images: any = [
     {
@@ -167,6 +168,8 @@ export class RoomComponent implements OnInit {
         });
       });
     });
+    this.transactionCount = this.transactions.length;
+    console.log(this.transactionCount);
     const loader = this.util.startLoading('Joining please wait...');
 
     this.agora.getToken(schedule._id).subscribe(
