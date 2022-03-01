@@ -49,6 +49,7 @@ export interface Field {
   collection?: Collection;
   isPercentage?: boolean;
   appearance: Appearance;
+  clearBtn?: boolean;
 }
 
 export interface Section {

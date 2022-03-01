@@ -215,8 +215,13 @@
               You must select one.
             </mat-error>
             <button
-              *ngIf="form.get(field.fcname)?.value"
+              *ngIf="
+                form.get(field.fcname)?.value &&
+                field.clearBtn &&
+                !form.get(field.fcname)?.disabled
+              "
               mat-button
+              color="warn"
               matSuffix
               mat-icon-button
               (click)="
