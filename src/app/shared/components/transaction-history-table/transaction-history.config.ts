@@ -108,6 +108,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
             color: '#83b9a1' || 'green',
           },
         ],
+        isVirtual: true,
       },
       {
         title: 'Remarks',
@@ -243,6 +244,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
             color: '#83b9a1' || 'green',
           },
         ],
+        isVirtual: true,
       },
       {
         title: 'Notarization Status',
@@ -365,6 +367,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
             color: '#83b9a1' || 'green',
           },
         ],
+        isVirtual: true,
       },
       {
         title: 'Remarks',
@@ -504,6 +507,7 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
             color: '#83b9a1' || 'green',
           },
         ],
+        isVirtual: true,
       },
       {
         title: 'Remarks',
@@ -652,6 +656,7 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
             color: '#83b9a1' || 'green',
           },
         ],
+        isVirtual: true,
       },
       {
         title: 'Notarization Status',
@@ -785,6 +790,7 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
             color: '#83b9a1' || 'green',
           },
         ],
+        isVirtual: true,
       },
       {
         title: 'Remarks',
