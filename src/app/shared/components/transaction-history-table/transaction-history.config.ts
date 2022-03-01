@@ -109,13 +109,13 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
           },
         ],
       },
-      {
-        title: 'Remarks',
-        breakpoint: 'sm',
-        path: 'remark',
-        type: 'text',
-        selected: true,
-      },
+      // {
+      //   title: 'Remarks',
+      //   breakpoint: 'sm',
+      //   path: 'remark',
+      //   type: 'text',
+      //   selected: true,
+      // },
       {
         title: 'Notarization Status',
         breakpoint: 'sm',
@@ -245,6 +245,23 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         ],
       },
       {
+        title: 'Notarized Document Status',
+        breakpoint: 'sm',
+        path: 'notarizedDocumentStatus',
+        type: 'text',
+        selected: true,
+        textColor: [
+          {
+            value: 'For Uploading',
+            color: '#fbcb51' || 'yellow',
+          },
+          {
+            value: 'Uploaded',
+            color: '#83b9a1' || 'green',
+          },
+        ],
+      },
+      {
         title: 'Notarization Status',
         breakpoint: 'sm',
         path: 'documentStatus',
@@ -272,7 +289,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     selected: false,
     bottomSheet: [
       {
-        label: 'View Document/Notarized Document',
+        label: 'View Document',
         action: 'viewDoc',
         icon: 'description',
       },
@@ -505,13 +522,13 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
           },
         ],
       },
-      {
-        title: 'Remarks',
-        breakpoint: 'sm',
-        path: 'remark',
-        type: 'text',
-        selected: true,
-      },
+      // {
+      //   title: 'Remarks',
+      //   breakpoint: 'sm',
+      //   path: 'remark',
+      //   type: 'text',
+      //   selected: true,
+      // },
       {
         title: 'Notarization Status',
         breakpoint: 'sm',
@@ -654,6 +671,23 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         ],
       },
       {
+        title: 'Notarized Document Status',
+        breakpoint: 'sm',
+        path: 'notarizedDocumentStatus',
+        type: 'text',
+        selected: true,
+        textColor: [
+          {
+            value: 'For Uploading',
+            color: '#fbcb51' || 'yellow',
+          },
+          {
+            value: 'Uploaded',
+            color: '#83b9a1' || 'green',
+          },
+        ],
+      },
+      {
         title: 'Notarization Status',
         breakpoint: 'sm',
         path: 'documentStatus',
@@ -692,7 +726,7 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     isCheckbox: false,
     bottomSheet: [
       {
-        label: 'View Document/Notarized Document',
+        label: 'View Document',
         action: 'viewDoc',
         icon: 'description',
       },
