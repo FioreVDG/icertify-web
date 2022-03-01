@@ -212,7 +212,7 @@ export const FIND_FOR_RELEASING: Find[] = [
   {
     field: 'locationStatus',
     operator: '=',
-    value: 'Received by Barangay',
+    value: 'For Pick Up (Notary)',
   },
 ];
 export const FIND_RELEASED: Find[] = [
