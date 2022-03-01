@@ -89,7 +89,7 @@ export class ViewAttachmentsComponent implements OnInit {
                 data: doc[index],
                 name: fileName,
                 link: fileLink,
-                isImage: notarizedFileType === 'pdf' ? false : true,
+                isImage: fileType === 'pdf' ? false : true,
                 loaded: false,
                 screenshot,
                 notarizedFile,
