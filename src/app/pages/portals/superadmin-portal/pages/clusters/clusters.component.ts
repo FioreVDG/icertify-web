@@ -60,6 +60,7 @@ export class ClustersComponent implements OnInit {
       limit: event.pageSize + '',
       filter: event.filter,
     };
+    console.log(qry);
     this.api.cluster.getAll(qry).subscribe(
       (res: any) => {
         console.log(res);
