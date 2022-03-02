@@ -32,6 +32,21 @@ export const CLUSTER_COLUMNS: Array<Column> = [
     type: 'count',
     selected: true,
   },
+  {
+    title: 'Pending Transaction',
+    breakpoint: 'sm',
+    path: 'pendingTransactions',
+    type: 'text',
+    isVirtual: true,
+    selected: true,
+  },
+  {
+    title: 'Mobile Number',
+    breakpoint: 'sm',
+    path: 'mobileNumber',
+    type: 'text',
+    selected: true,
+  },
 ];
 
 export const BOTTOM_SHEET_CONFIG: Array<BottomSheetItem> = [
@@ -44,5 +59,6 @@ export const BOTTOM_SHEET_CONFIG: Array<BottomSheetItem> = [
     label: 'Delete Cluster',
     action: 'delete',
     icon: 'delete',
+    showIf: 'pendingTransactions/</1',
   },
 ];
