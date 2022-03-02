@@ -33,7 +33,7 @@
           style="width: 55%"
         >
           <mat-label>Select Reason</mat-label>
-          <mat-select [(ngModel)]="reason">
+          <mat-select [(ngModel)]="reason" (ngModelChange)="imageFormEmitter()">
             <mat-option
               style="font-size: 13px"
               *ngFor="let reason of reasons"
