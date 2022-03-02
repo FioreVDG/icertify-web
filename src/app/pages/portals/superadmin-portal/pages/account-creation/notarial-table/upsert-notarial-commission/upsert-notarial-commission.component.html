@@ -97,7 +97,18 @@
           homeBrgyForm.valid &&
           validityDetails.form.valid &&
           ibpprovDetails.optForm.valid
-        ) || saving
+        ) ||
+        !(
+          ibpchapterDetails.optForm.dirty ||
+          officeaddressDetails.form.dirty ||
+          notarialDetails.form.dirty ||
+          officeBrgyForm.dirty ||
+          homeaddressDetails.form.dirty ||
+          homeBrgyForm.dirty ||
+          validityDetails.form.dirty ||
+          ibpprovDetails.optForm.dirty
+        ) ||
+        saving
       "
       (click)="onSave()"
     >
