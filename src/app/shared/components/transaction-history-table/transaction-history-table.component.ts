@@ -135,6 +135,7 @@ export class TransactionHistoryTableComponent implements OnInit {
         this.dataSource = res.env.documents;
         this.getImgLink();
         this.checkCertificateOfIndigency();
+        this.checkNotarizedDocument();
         this.dataLength = res.total;
         console.log(this.dataSource);
       }
@@ -174,6 +175,13 @@ export class TransactionHistoryTableComponent implements OnInit {
     this.dataSource.forEach((docObj: any) => {
       docObj.sender.images['COIstatus'] = docObj.sender.images.reason_coi
         ? 'To Follow'
+        : 'Uploaded';
+    });
+  }
+  checkNotarizedDocument() {
+    this.dataSource.forEach((docObj: any) => {
+      docObj['notarizedDocumentStatus'] = docObj.sender.images.reason_coi
+        ? 'For Uploading'
         : 'Uploaded';
     });
   }

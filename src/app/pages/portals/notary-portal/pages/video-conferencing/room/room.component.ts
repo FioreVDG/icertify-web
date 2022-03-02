@@ -80,6 +80,7 @@ export class RoomComponent implements OnInit {
 
   query: QueryParams = { find: [] };
   remainingDocsChecker: any;
+  showOverlay: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<RoomComponent>,
@@ -236,7 +237,8 @@ export class RoomComponent implements OnInit {
           o._documents[0].documentStatus === 'Pending for Notary' ||
           o._documents[0].documentStatus === 'Skipped'
       );
-      console.log(this.currentTransaction);
+      // console.log(this.currentTransaction);
+
       if (!transactionsTemp.length) {
         clearInterval(this.remainingDocsChecker);
         this.dialog
@@ -257,7 +259,7 @@ export class RoomComponent implements OnInit {
             }
           });
       }
-      console.log(this.transactions);
+      // console.log(this.transactions);
     }
   }
 
@@ -287,9 +289,6 @@ export class RoomComponent implements OnInit {
           const loader = this.util.startLoading('Loading details...');
 
           this.currentTransactionIndex++;
-          this.currentTransaction =
-            this.transactions[this.currentTransactionIndex];
-
           //DELETE CURRENT ROOM beofre proceeding to the NEXT TRANSACTION
           let notaryQuery: QueryParams = {
             find: [{ field: '_notaryId', operator: '=', value: this.me._id }],
@@ -329,7 +328,8 @@ export class RoomComponent implements OnInit {
   async initiateTransaction() {
     const loader = this.util.startLoading('Initiating room details...');
     this.currentTransaction = this.transactions[this.currentTransactionIndex];
-
+    //CURRENT TRANSACTION HEREEEEEEEEEEEE
+    console.log(this.currentTransaction);
     this.selectDocumentToView(this.currentTransaction._documents[0]);
     this.getImages();
 
