@@ -77,7 +77,15 @@ export class BrgyRoomComponent implements OnInit {
 
   getRoomDetails() {
     const loader = this.util.startLoading('Getting room details...');
-    let query: QueryParams = { find: [] };
+    let query: QueryParams = {
+      find: [
+        {
+          field: '_notaryId',
+          operator: '=',
+          value: this.data.settings?._notaryId?._notaryId,
+        },
+      ],
+    };
     this.room.get(query).subscribe(
       (res: any) => {
         console.log(res);

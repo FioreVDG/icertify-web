@@ -62,8 +62,9 @@ export class ClustersComponent implements OnInit {
     };
     this.api.cluster.getAll(qry).subscribe(
       (res: any) => {
+        console.log(res);
         this.loading = false;
-        this.dataSource = res.env.clusters;
+        this.dataSource = res.env.clustersFinal;
         this.dataLength = res.count;
       },
       (err) => {
