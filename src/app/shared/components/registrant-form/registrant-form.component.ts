@@ -28,6 +28,8 @@ export class RegistrantFormComponent implements OnInit {
   brgyInfo: any;
   imageFormValid: boolean = false;
   imageFormDirty: boolean = false;
+  imageCOIstatus = '';
+  imageReason = '';
   saving: boolean = false;
   imgObj: any = {};
   toAddData: any = {};
@@ -159,6 +161,8 @@ export class RegistrantFormComponent implements OnInit {
     console.log(event);
     this.imageFormValid = event.formValid;
     this.imageFormDirty = event.formDirty;
+    this.imageCOIstatus = event?.COIstatus;
+    this.imageReason = event?.reason;
     if (event.formDirty) this.imgObj = event.images;
     if (event.reason && event.reason !== '')
       this.imgObj.reason_coi = event.reason;

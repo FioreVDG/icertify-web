@@ -54,6 +54,8 @@
       !imageFormValid ||
       !registrantDetails.form.valid ||
       !brgyForm.valid ||
+      imageCOIstatus == '' ||
+      (imageCOIstatus == 'no' && imageReason == '') ||
       saving
     "
   >
