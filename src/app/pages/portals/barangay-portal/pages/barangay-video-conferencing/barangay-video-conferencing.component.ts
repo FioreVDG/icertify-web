@@ -207,6 +207,7 @@ export class BarangayVideoConferencingComponent implements OnInit {
               data: {
                 obj: res.env.transaction,
                 indigentDetails: this.indigentDetails,
+                settings: this.settings,
               },
               minHeight: '100vh',
               minWidth: '100vw',
