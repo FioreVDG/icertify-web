@@ -96,7 +96,18 @@ export class NotarialTableComponent implements OnInit {
             if (res)
               this.api.user.deleteNotaryMain(event.obj._id).subscribe(
                 (res: any) => {
-                  this.fetchNotarial(this.page);
+                  this.dialog
+                    .open(ActionResultComponent, {
+                      data: {
+                        msg: `Deleted Successfully!`,
+                        success: true,
+                        button: 'Got it!',
+                      },
+                    })
+                    .afterClosed()
+                    .subscribe((res: any) => {
+                      this.fetchNotarial(this.page);
+                    });
                 },
                 (err) => {
                   console.log(err);

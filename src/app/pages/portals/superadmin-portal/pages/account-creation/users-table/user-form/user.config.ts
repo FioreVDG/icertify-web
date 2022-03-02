@@ -155,7 +155,7 @@ export const ADDRESS_SELECT = [
   {
     label: 'City',
     type: 'select',
-    required: false,
+    required: true,
     colspan: { xs: 3, sm: 3, md: 3, lg: 3, xl: 3 },
     fcname: 'cityMun',
     show: false,

@@ -144,6 +144,20 @@ export class UsersTableComponent implements OnInit {
               const loader = this.util.startLoading('Deleting...');
               this.api.user.deleteUser(event.obj._id).subscribe((res: any) => {
                 console.log(res);
+                if (res) {
+                  this.dialog
+                    .open(ActionResultComponent, {
+                      data: {
+                        msg: `Deleted Successfully!`,
+                        success: true,
+                        button: 'Got it!',
+                      },
+                    })
+                    .afterClosed()
+                    .subscribe((res: any) => {
+                      this.fetchUser(this.page);
+                    });
+                }
                 this.util.stopLoading(loader);
               });
             }
