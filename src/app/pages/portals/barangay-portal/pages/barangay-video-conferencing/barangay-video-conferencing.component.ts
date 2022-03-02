@@ -31,6 +31,10 @@ export class BarangayVideoConferencingComponent implements OnInit {
         field: '_notaryId',
       },
     ],
+    sort: {
+      active: 'dateCreated',
+      direction: 'asc',
+    },
   };
   currentTable: any;
   me: any;

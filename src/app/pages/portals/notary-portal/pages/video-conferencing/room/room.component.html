@@ -159,13 +159,13 @@
           <b>{{ currentDocument.refCode }}</b>
         </p>
         <div class="flex-stretch"></div>
-        <button
+        <!-- <button
           mat-icon-button
           (click)="prevTransaction()"
           *ngIf="currentTransactionIndex > 0"
         >
           <mat-icon>arrow_back_ios</mat-icon>
-        </button>
+        </button> -->
         <button
           mat-icon-button
           [disabled]="checkDocumentStatus()"
@@ -174,7 +174,10 @@
           <mat-icon>arrow_forward_ios</mat-icon>
         </button>
       </mat-toolbar>
-      <div class="col-12">
+      <div *ngIf="!checkDocumentStatus2()" class="overlay">
+        <h1>DONE</h1>
+      </div>
+      <div class="col-12" style="position: relative">
         <app-rt-video
           [channelName]="currentSchedule._id"
           (onLeaveMeeting)="leaveMeeting($event)"

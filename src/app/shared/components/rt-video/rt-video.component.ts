@@ -86,7 +86,7 @@ export class RtVideoComponent implements OnInit {
   detailChecker() {
     this.store.select('user').subscribe((res: User) => {
       this.me = res;
-      console.log(this.me);
+      // console.log(this.me);
       if (this.me.type !== 'Notary') {
         let settings: any;
         this.api.cluster
