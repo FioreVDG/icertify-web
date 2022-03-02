@@ -10,7 +10,7 @@
 <button
   mat-stroked-button
   color="primary"
-  *ngIf="currentTable !== 'For Scheduling'"
+  *ngIf="currentTable !== 'For Scheduling' && me.isMain"
   style="position: absolute; z-index: 99"
   (click)="onCreateMeeting()"
 >

@@ -31,6 +31,7 @@ export class VideoConferencingComponent implements OnInit {
   limit: any;
   disabler: boolean = false;
   notaryName: string = '';
+  me: any;
 
   settings: any;
   page = {
@@ -102,6 +103,8 @@ export class VideoConferencingComponent implements OnInit {
 
   getSettings() {
     this.store.select('user').subscribe((res: User) => {
+      this.me = res;
+      console.log(res);
       this.api.cluster.getOneNotary(res._notaryId).subscribe((res: any) => {
         console.log(res);
         this.settings = res.env.cluster;

@@ -77,18 +77,26 @@ export class BrgyRoomComponent implements OnInit {
 
   getRoomDetails() {
     const loader = this.util.startLoading('Getting room details...');
-    let query: QueryParams = { find: [] };
+    let query: QueryParams = {
+      find: [
+        {
+          field: '_notaryId',
+          operator: '=',
+          value: this.data.settings._notaryId._notaryId,
+        },
+      ],
+    };
+    console.log(query);
     this.room.get(query).subscribe(
       (res: any) => {
         console.log(res);
 
         if (res.env.room.length) {
           this.util.stopLoading(loader);
-          res.env.room.forEach((room: any) => {
-            this.currentRoomDetails = room;
-            this.remoteCallDetails = room._notaryId;
-            this.currentRoom = room._id;
-          });
+          this.currentRoomDetails = res.env.room[0];
+          this.remoteCallDetails = res.env.room[0]._notaryId;
+          this.currentRoom = res.env.room[0]._id;
+          console.log(this.currentRoomDetails);
 
           this.checkAvailability(this.currentRoomDetails, this.currDetails);
         } else {

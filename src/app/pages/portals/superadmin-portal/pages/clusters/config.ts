@@ -40,13 +40,13 @@ export const CLUSTER_COLUMNS: Array<Column> = [
     isVirtual: true,
     selected: true,
   },
-  {
-    title: 'Mobile Number',
-    breakpoint: 'sm',
-    path: 'mobileNumber',
-    type: 'text',
-    selected: true,
-  },
+  // {
+  //   title: 'Mobile Number',
+  //   breakpoint: 'sm',
+  //   path: 'mobileNumber',
+  //   type: 'text',
+  //   selected: true,
+  // },
 ];
 
 export const BOTTOM_SHEET_CONFIG: Array<BottomSheetItem> = [
