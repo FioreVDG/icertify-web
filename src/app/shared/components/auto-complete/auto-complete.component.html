@@ -1,5 +1,6 @@
 <form [formGroup]="form">
   <mat-form-field
+    *ngIf="opt.item.length"
     [appearance]="appearance ? appearance : 'outline'"
     floatLabel="always"
   >
@@ -16,10 +17,8 @@
       #auto="matAutocomplete"
       autoActiveFirstOption
       (optionSelected)="onOptionSelect($event)"
-      ><mat-option *ngIf="!opt.item.length" class="is-loading"
-        ><mat-spinner diameter="25"></mat-spinner
-      ></mat-option>
-      <ng-container *ngIf="opt.item.length">
+    >
+      <ng-container>
         <mat-option
           *ngFor="let option of filteredOpt | async"
           [value]="option.label ? option.label : option.value"
