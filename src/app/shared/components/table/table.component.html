@@ -15,7 +15,7 @@
     </button>
   </div>
   <div class="col-12 main">
-    <mat-toolbar>
+    <mat-toolbar *ngIf="!hideSearch">
       <!-- SEARCHBOX -->
       <div class="search-box">
         <button class="btn-search" (click)="onTriggerSearch()">

@@ -36,12 +36,14 @@
         <p>{{ sla.description }}</p>
       </div>
       <div class="col-8">
+        <p style="color: rgb(221, 114, 114); margin-bottom: 0">Violations</p>
         <app-table
           *ngIf="!sla.error"
           #table
           [columns]="sla.columns"
           [loading]="sla.loading"
           [dataSource]="sla.penalties"
+          [hideSearch]="true"
         ></app-table>
         <small *ngIf="sla.error">{{ sla.error }}</small>
       </div>
