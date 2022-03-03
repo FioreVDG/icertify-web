@@ -28,7 +28,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { A, COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Observable } from 'rxjs';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
@@ -139,6 +139,22 @@ export class UpsertClusterComponent implements OnInit {
     'sunday',
   ];
 
+  computeDuration() {
+    console.log(this.totalDuration);
+    var arr = this.clusterForm.get('barangays') as FormArray;
+    var totalDocs = 0;
+    for (let i = 0; i < arr.length; i++) {
+      var raw = (arr.at(i) as FormGroup).getRawValue();
+      totalDocs += raw.maxDoc;
+    }
+    console.log(this.totalDuration / totalDocs);
+
+    var perDoc = Math.floor(this.totalDuration / totalDocs);
+    for (let i = 0; i < arr.length; i++) {
+      arr.at(i).get('duration')?.setValue(perDoc);
+    }
+  }
+
   addBarangayForm(def?: any) {
     (this.clusterForm.get('barangays') as FormArray).push(
       new FormGroup({
@@ -156,6 +172,14 @@ export class UpsertClusterComponent implements OnInit {
     this.barangayControls = (
       this.clusterForm.get('barangays') as FormArray
     ).controls;
+
+    var arr = this.clusterForm.get('barangays') as FormArray;
+    arr
+      .at(arr.length - 1)
+      .get('maxDoc')
+      ?.valueChanges.subscribe((res) => {
+        this.computeDuration();
+      });
   }
 
   deleteBarangayForm(i: number) {

@@ -48,6 +48,7 @@ export class SetScheduleComponent implements OnInit {
       }
     });
   }
+
   modelChanged(event: any) {
     console.log(event);
     let tempTime: any = this.formatAMPM(new Date(event));
