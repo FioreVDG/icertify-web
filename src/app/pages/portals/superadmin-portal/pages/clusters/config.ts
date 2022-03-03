@@ -54,6 +54,7 @@ export const BOTTOM_SHEET_CONFIG: Array<BottomSheetItem> = [
     label: 'Edit Cluster',
     action: 'edit',
     icon: 'edit',
+    showIf: 'pendingTransactions/</1',
   },
   {
     label: 'Delete Cluster',
