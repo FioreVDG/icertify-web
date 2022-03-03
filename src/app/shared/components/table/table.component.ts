@@ -188,19 +188,24 @@ export class TableComponent implements OnInit {
           filteredBS.push(bs);
         }
       });
-      this._bs
-        .open(BottomSheetComponent, {
-          data: { config: filteredBS },
-          panelClass: 'btm-darken',
-        })
-        .afterDismissed()
-        .subscribe((res: any) => {
-          let event = {
-            obj: element,
-            action: res,
-          };
-          this.onRowClick.emit(event);
-        });
+      if (filteredBS.length) {
+        this._bs
+          .open(BottomSheetComponent, {
+            data: { config: filteredBS },
+            panelClass: 'btm-darken',
+          })
+          .afterDismissed()
+          .subscribe((res: any) => {
+            let event = {
+              obj: element,
+              action: res,
+            };
+            this.onRowClick.emit(event);
+          });
+      } else {
+        let event = { obj: element, action: 'no_action_avail' };
+        this.onRowClick.emit(event);
+      }
     } else {
       this.onRowClick.emit(element);
     }
