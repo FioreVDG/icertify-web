@@ -44,7 +44,6 @@ export class UpsertClusterComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   selectedRider: any[] = [];
   objRider: any[] = [];
-  totalDuration = 0;
   selectedCluster: any[] = [];
   clusterForm = new FormGroup({
     name: new FormControl(this.data ? this.data.name : '', [
@@ -119,6 +118,10 @@ export class UpsertClusterComponent implements OnInit {
     ]),
     _riders: new FormArray([]),
     barangays: new FormArray([]),
+    totalDuration: new FormControl(
+      this.data ? this.data.totals.maxDuration : 0,
+      [Validators.required]
+    ),
   });
 
   riderCtrl = new FormControl();
@@ -140,19 +143,20 @@ export class UpsertClusterComponent implements OnInit {
   ];
 
   computeDuration() {
-    console.log(this.totalDuration);
     var arr = this.clusterForm.get('barangays') as FormArray;
     var totalDocs = 0;
     for (let i = 0; i < arr.length; i++) {
       var raw = (arr.at(i) as FormGroup).getRawValue();
       totalDocs += raw.maxDoc;
     }
-    console.log(this.totalDuration / totalDocs);
-
-    var perDoc = Math.floor(this.totalDuration / totalDocs);
+    var perDoc = Math.floor(
+      this.clusterForm.get('totalDuration')?.value / totalDocs
+    );
     for (let i = 0; i < arr.length; i++) {
       arr.at(i).get('duration')?.setValue(perDoc);
     }
+
+    console.log(this.clusterForm.getRawValue());
   }
 
   addBarangayForm(def?: any) {
@@ -237,15 +241,6 @@ export class UpsertClusterComponent implements OnInit {
             ?.setValue(res._barangay);
         }
       });
-  }
-
-  getTotalDuration() {
-    var totalDuration = 0;
-    this.clusterForm.value.barangays.forEach((brgy: any) => {
-      totalDuration += brgy.duration * brgy.maxDoc;
-    });
-    this.totalDuration = totalDuration;
-    return totalDuration;
   }
 
   constructor(
@@ -441,10 +436,8 @@ export class UpsertClusterComponent implements OnInit {
       }
     }
 
-    this.clusterForm.valueChanges.subscribe((res) => {
-      console.log(this.clusterForm.dirty);
-      console.log(this.clusterForm.valid);
-      console.log(this.clusterForm);
+    this.clusterForm.get('totalDuration')?.valueChanges.subscribe((res) => {
+      this.computeDuration();
     });
   }
 
