@@ -82,7 +82,7 @@ export class ViewAttachmentsComponent implements OnInit {
 
               notarizedFile = {
                 link,
-                isImage: notarizedFile === 'pdf' ? false : true,
+                isImage: notarizedFileType === 'pdf' ? false : true,
               };
 
               this.files.push({

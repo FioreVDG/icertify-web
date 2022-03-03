@@ -1,7 +1,8 @@
 .vc-card {
-  padding: 16px;
+  padding: 1rem;
   background-color: #26184a;
   color: white;
+  margin-bottom: 1rem;
   h1,
   p {
     margin: 0;
@@ -11,10 +12,20 @@
   }
   .queue {
     font-size: 4rem;
+    margin-bottom: 0;
   }
 
   .queue-card {
     background-color: white;
     color: #26184a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    p {
+      margin: 0;
+      font-size: 13px;
+    }
+    // height: 100%;
   }
 }

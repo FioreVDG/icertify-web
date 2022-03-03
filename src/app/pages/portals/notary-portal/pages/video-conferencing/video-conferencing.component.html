@@ -10,7 +10,7 @@
 <button
   mat-stroked-button
   color="primary"
-  *ngIf="currentTable !== 'For Scheduling'"
+  *ngIf="currentTable !== 'For Scheduling' && me.isMain"
   style="position: absolute; z-index: 99"
   (click)="onCreateMeeting()"
 >
@@ -28,10 +28,13 @@
   [pagination]="page"
   (onRowClick)="onRowClick($event)"
   [dataLength]="dataLength"
+  [isLimit]="limit"
   (onCheckBoxSelect)="onCheckBoxSelect($event)"
   (onCheckBoxBtnClick)="onCheckBoxBtnClick($event)"
+  [countSelected]="countSelected"
+  [isDisabled]="disabler"
 ></app-table>
-<small *ngIf="countSelected > 0 && currentTable === 'For Scheduling'">
+<!-- <small *ngIf="countSelected > 0 && currentTable === 'For Scheduling'">
   <b>{{ countSelected }}</b> {{ countSelected > 1 ? "batches" : "batch" }} has
   been selected
-</small>
+</small> -->

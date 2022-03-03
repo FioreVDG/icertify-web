@@ -8,6 +8,7 @@ import { UpsertClusterComponent } from './upsert-cluster/upsert-cluster.componen
 
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-clusters',
@@ -24,7 +25,11 @@ export class ClustersComponent implements OnInit {
     pageIndex: 1,
   };
   loading: boolean = false;
-  constructor(private dialog: MatDialog, private api: ApiService) {}
+  constructor(
+    private dialog: MatDialog,
+    private api: ApiService,
+    private sb: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.fetchCluster(this.page);
@@ -60,10 +65,12 @@ export class ClustersComponent implements OnInit {
       limit: event.pageSize + '',
       filter: event.filter,
     };
+    console.log(qry);
     this.api.cluster.getAll(qry).subscribe(
       (res: any) => {
+        console.log(res);
         this.loading = false;
-        this.dataSource = res.env.clusters;
+        this.dataSource = res.env.clustersFinal;
         this.dataLength = res.count;
       },
       (err) => {
@@ -73,8 +80,10 @@ export class ClustersComponent implements OnInit {
   }
   onRowClick(event: any) {
     console.log(event);
+
     switch (event.action) {
       case 'edit':
+        event.obj.header = 'Edit';
         this.dialog
           .open(UpsertClusterComponent, {
             width: '100%',
@@ -108,6 +117,18 @@ export class ClustersComponent implements OnInit {
               });
             }
           });
+
+        break;
+
+      case 'no_action_avail':
+        this.sb.open(
+          `This cluster currently has pending transaction/s!`,
+          `Okay`,
+          {
+            duration: 1500,
+            panelClass: ['failed'],
+          }
+        );
 
         break;
 

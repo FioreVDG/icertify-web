@@ -10,6 +10,7 @@ import { ViewTransactionComponent } from '../document-receiving/view-transaction
 import { VIEW_TRANSACTION_TABLE } from '../document-receiving/view-transaction/config';
 import { TRANSAC_TABLE_COLUMN } from '../../../barangay-portal/pages/batch-delivery-management/batch-folder/config';
 import { User } from 'src/app/models/user.interface';
+import _ from 'lodash';
 
 @Component({
   selector: 'app-video-conferencing',
@@ -21,12 +22,16 @@ export class VideoConferencingComponent implements OnInit {
   filterBtnConfig = FILT_BTN;
   tableFlag = false;
   isCheckbox: boolean = true;
-  selected = [];
+  selected: any = [];
   loading: boolean = true;
   dataSource = [];
   dataLength: number = 0;
   currFetch: string = '';
   currentTable: any;
+  limit: any;
+  disabler: boolean = false;
+  notaryName: string = '';
+  me: any;
 
   settings: any;
   page = {
@@ -42,6 +47,10 @@ export class VideoConferencingComponent implements OnInit {
         select: '-__v',
       },
     ],
+    sort: {
+      active: 'dateCreated',
+      direction: 'asc',
+    },
   };
   pageLeave = {
     pageSize: 10,
@@ -57,6 +66,10 @@ export class VideoConferencingComponent implements OnInit {
         select: '-__v',
       },
     ],
+    sort: {
+      active: 'dateCreated',
+      direction: 'asc',
+    },
   };
   countSelected: any;
   constructor(
@@ -66,6 +79,7 @@ export class VideoConferencingComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getSettings();
     this.tableUpdateEmit(this.page);
   }
 
@@ -87,8 +101,18 @@ export class VideoConferencingComponent implements OnInit {
     this.tableFlag = true;
   }
 
-  getSettings(event: any) {
+  getSettings() {
     this.store.select('user').subscribe((res: User) => {
+      this.me = res;
+      console.log(res);
+      this.api.cluster.getOneNotary(res._notaryId).subscribe((res: any) => {
+        console.log(res);
+        this.settings = res.env.cluster;
+        this.limit = res.env.cluster.totals.maxDoc;
+        this.fetchData(event);
+        console.log(res);
+        this.notaryName = `${res.env.cluster._notaryId.firstName} ${res.env.cluster._notaryId.middleName} ${res.env.cluster._notaryId.lastName}`;
+      });
       if (!this.settings) {
         this.api.cluster.getOneNotary(res._notaryId).subscribe((res: any) => {
           this.settings = res.env.cluster;
@@ -116,7 +140,7 @@ export class VideoConferencingComponent implements OnInit {
     event.label = event.label === undefined ? 'For Scheduling' : event.label;
 
     console.log(event);
-    let query = {
+    let query: any = {
       find: [
         {
           field: 'folderStatus',
@@ -128,6 +152,10 @@ export class VideoConferencingComponent implements OnInit {
       limit: (event.pageSize || 10) + '',
       filter: event.filter,
       populates: event.populate,
+      sort: {
+        active: 'dateCreated',
+        direction: 'asc',
+      },
     };
     if (brgyCodes) {
       query.find = query.find.concat({
@@ -154,7 +182,23 @@ export class VideoConferencingComponent implements OnInit {
       console.log(res);
       this.dataSource = res.folders;
       this.dataLength = res.total;
+      this.limit = res.total;
       this.loading = false;
+      let countArr: any = [];
+      this.dataSource.forEach((data: any) => {
+        countArr.push(data.transactionCount);
+      });
+      console.log(countArr);
+      this.countSelected = countArr.reduce((a: any, b: any) => {
+        return a + b;
+      }, 0);
+      if (this.limit > this.countSelected) {
+        this.disabler = true;
+        console.log(this.disabler);
+      }
+      console.log(this.countSelected);
+      console.log(this.disabler);
+      console.log(this.limit);
     });
 
     this.currentTable = event.label;
@@ -165,7 +209,7 @@ export class VideoConferencingComponent implements OnInit {
     this.selected = [];
     console.log(event);
     event.label = event.label || this.currentTable;
-    this.getSettings(event);
+    this.fetchData(event);
   }
 
   onRowClick(event: any) {
@@ -188,18 +232,30 @@ export class VideoConferencingComponent implements OnInit {
   }
 
   onCheckBoxSelect(event: any) {
-    console.log(event);
-    this.selected = event;
-    this.countSelected = event.length;
+    // console.log(event);
+    event.forEach((i: any) => {
+      if (!_.some(this.selected, { _id: i._id })) {
+        this.selected.push(i);
+      }
+    });
+    // console.log(this.selected);
+    // this.selected = event;
+    // this.countSelected = event.length;
   }
 
   onSetSchedule() {
     console.log(this.selected);
+    this.selected.sort((a: any, b: any) => a.dateCreated - b.dateCreated);
+    console.log(this.selected);
     this.dialog
       .open(SetScheduleComponent, {
-        data: this.selected,
+        data: {
+          selected: this.selected,
+          notary: this.notaryName,
+          settings: this.settings,
+        },
         height: 'auto',
-        width: '30vw',
+        minWidth: '60vw',
         disableClose: true,
       })
       .afterClosed()

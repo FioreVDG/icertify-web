@@ -1,10 +1,75 @@
 <h3 mat-dialog-title>Set Schedule</h3>
 <div mat-dialog-content>
   <div class="grid">
-    <mat-form-field class="col-12" appearance="fill">
-      <mat-label>Start time</mat-label>
-      <input [(ngModel)]="schedule" matInput type="datetime-local" />
-    </mat-form-field>
+    <div class="col-12">
+      <mat-form-field class="col-12" appearance="fill">
+        <mat-label>Start time</mat-label>
+        <input
+          [(ngModel)]="schedule"
+          (ngModelChange)="modelChanged($event)"
+          matInput
+          type="datetime-local"
+        />
+      </mat-form-field>
+      <div class="grid">
+        <div class="col-12">
+          <p class="mt-0">
+            Notary name: <b>{{ data.notary }}</b>
+          </p>
+          <ng-container *ngFor="let data of data.selected">
+            <div class="grid">
+              <div class="col-12">
+                <div class="grid">
+                  <div class="col-12">
+                    <h3 style="color: #565656" class="mb-0">
+                      {{ data.folderName }}
+                    </h3>
+                  </div>
+                </div>
+                <div class="grid">
+                  <div class="col-4">
+                    <b>Document Ref Code</b>
+                  </div>
+                  <div class="col-4">
+                    <b>QC Indigent</b>
+                  </div>
+                  <div class="col-2" style="text-align: center">
+                    <b>Start time</b>
+                  </div>
+                  <div class="col-2" style="text-align: center">
+                    <b>Queue No.</b>
+                  </div>
+                </div>
+                <ng-container *ngFor="let doc of data._transactions">
+                  <div class="grid">
+                    <div class="col-4">
+                      <p class="mb-0 mt-0">
+                        {{ doc.refCode }}
+                      </p>
+                    </div>
+                    <div class="col-4">
+                      <p class="mb-0 mt-0">
+                        {{ doc.sender.firstName }} {{ doc.sender.lastName }}
+                      </p>
+                    </div>
+                    <div class="col-2">
+                      <p style="text-align: center" *ngIf="doc.startTime">
+                        {{ doc.startTime }}
+                      </p>
+                    </div>
+                    <div class="col-2">
+                      <p class="mb-0 mt-0" style="text-align: center">
+                        {{ doc.queue }}
+                      </p>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div></ng-container
+          >
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <div mat-dialog-actions align="center">

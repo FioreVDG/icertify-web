@@ -8,13 +8,32 @@
 >
 <div mat-dialog-content>
   <app-form
-    *ngIf="formInitiated"
     #registrantDetails
     [formfields]="registrantFromFields"
     (formInitiated)="formInitialized()"
     (formListener)="formListener($event)"
     [obj]="this.data.obj"
   ></app-form>
+  <form #brgyDetails [formGroup]="brgyForm" class="grid">
+    <ng-container *ngFor="let f of brgyFields">
+      <mat-form-field class="col-3" appearance="standard">
+        <mat-label>{{ f.label }}</mat-label>
+
+        <mat-select
+          [disabled]="true"
+          [compareWith]="compareFn"
+          [formControlName]="f.fcname"
+        >
+          <mat-option *ngFor="let o of f.choices" [value]="o">{{
+            util.deepFind(o, f.choiceLabel)
+          }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="brgyForm.get(f.fcname)?.hasError('required')"
+          >{{ f.label }} is required</mat-error
+        >
+      </mat-form-field>
+    </ng-container>
+  </form>
   <app-image-form
     [disable]="checkImageBtnDisabler()"
     [mobileNumber]="this.data.mobileNumber || this.data.obj.mobileNumber"
@@ -31,7 +50,14 @@
     mat-flat-button
     color="primary"
     (click)="submit()"
-    [disabled]="!imageFormValid || !registrantDetails.form.valid || saving"
+    [disabled]="
+      !imageFormValid ||
+      !registrantDetails.form.valid ||
+      !brgyForm.valid ||
+      imageCOIstatus == '' ||
+      (imageCOIstatus == 'no' && imageReason == '') ||
+      saving
+    "
   >
     <mat-icon>save_as</mat-icon>&nbsp;Save
   </button>
@@ -40,7 +66,10 @@
     mat-flat-button
     color="primary"
     (click)="updateIndigent()"
-    [disabled]="saving || (!imageFormDirty && !registrantDetails?.form?.dirty)"
+    [disabled]="
+      saving ||
+      (!brgyForm.dirty && !imageFormDirty && !registrantDetails?.form?.dirty)
+    "
   >
     <mat-icon>save_as</mat-icon>&nbsp;Update
   </button>

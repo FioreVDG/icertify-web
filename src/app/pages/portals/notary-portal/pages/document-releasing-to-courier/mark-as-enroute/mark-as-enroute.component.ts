@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogRef,
@@ -40,7 +40,9 @@ export class MarkAsEnrouteComponent implements OnInit {
     private store: Store<{ user: User }>,
     private util: UtilService
   ) {}
-
+  ngOnDestroy() {
+    this.riderList.item = [];
+  }
   ngOnInit(): void {
     this.store.select('user').subscribe((res: User) => {
       this.me = res;

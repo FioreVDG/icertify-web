@@ -224,6 +224,7 @@ export class DocumentTrackerTableComponent implements OnInit {
             }
           );
         } else {
+          this.filterColumn();
           this.fetchData(event);
         }
       },

@@ -80,9 +80,9 @@ export class TransactionHistoryTableComponent implements OnInit {
       filter: event.filter,
       populates: event.populate ? event.populate : [],
     };
-    if (event.filter) qry.filter = event.filter;
 
     let api: any;
+    console.log(qry);
     if (this.header == 'NOTARY') {
       let brgyCodes: any[] = [];
       if (this.setting) {
@@ -97,6 +97,7 @@ export class TransactionHistoryTableComponent implements OnInit {
           value: brgyCodes.join(','),
         });
       }
+
       console.log('NOTARY');
       if (event.label === 'Notarized') {
         qry.find = qry.find.concat(NOTARY_FIND_NOTARIZED);
@@ -127,13 +128,14 @@ export class TransactionHistoryTableComponent implements OnInit {
 
       console.log('BRGY');
     }
-    console.log(qry);
+
     api.subscribe((res: any) => {
       console.log(res);
       if (res.status == 'Success') {
         this.dataSource = res.env.documents;
         this.getImgLink();
         this.checkCertificateOfIndigency();
+        this.checkNotarizedDocument();
         this.dataLength = res.total;
         console.log(this.dataSource);
       }
@@ -144,9 +146,9 @@ export class TransactionHistoryTableComponent implements OnInit {
   }
   tableUpdateEmit(event: any) {
     event['label'] = event.label || this.currTable;
-    console.log(event.populate);
+
+    this.loading = true;
     this.getSettings(event);
-    console.log(event);
   }
   getSettings(event: any) {
     this.store.select('user').subscribe((res: any) => {
@@ -157,10 +159,15 @@ export class TransactionHistoryTableComponent implements OnInit {
       } else {
         api = this.api.cluster.getOne(res._barangay.brgyCode);
       }
-      api.subscribe((res: any) => {
-        this.setting = res.env.cluster;
+
+      if (!this.setting) {
+        api.subscribe((res: any) => {
+          this.setting = res.env.cluster;
+          this.fetchData(event);
+        });
+      } else {
         this.fetchData(event);
-      });
+      }
     });
   }
 
@@ -168,6 +175,13 @@ export class TransactionHistoryTableComponent implements OnInit {
     this.dataSource.forEach((docObj: any) => {
       docObj.sender.images['COIstatus'] = docObj.sender.images.reason_coi
         ? 'To Follow'
+        : 'Uploaded';
+    });
+  }
+  checkNotarizedDocument() {
+    this.dataSource.forEach((docObj: any) => {
+      docObj['notarizedDocumentStatus'] = docObj.sender.images.reason_coi
+        ? 'For Uploading'
         : 'Uploaded';
     });
   }

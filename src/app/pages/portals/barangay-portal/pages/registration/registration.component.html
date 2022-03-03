@@ -11,7 +11,9 @@
       ><span matPrefix>+63&nbsp;</span>
       <mat-icon matSuffix>phone_iphone</mat-icon>
       <mat-label>Mobile Number</mat-label>
+      <!-- change onpaste return false after testing -->
       <input
+        onpaste="return true"
         #noDtls
         type="text"
         matInput

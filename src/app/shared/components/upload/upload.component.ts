@@ -85,6 +85,7 @@ export class UploadComponent implements OnInit {
   public fileLeave(event: any) {
     // console.log(event);
   }
+
   save(file: any) {
     console.log(file);
     this.uploading = true;

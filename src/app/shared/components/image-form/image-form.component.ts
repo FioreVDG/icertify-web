@@ -123,35 +123,51 @@ export class ImageFormComponent implements OnInit {
 
           this.imageForm.get(fcname)?.setValue(res.result || 'Empty');
           this.imageForm.markAsDirty();
-          this.imageEmitter.emit({
-            images: this.imageForm.getRawValue(),
-            formValid: this.imageForm.valid,
-            formDirty: this.imageForm.dirty,
-            reason: this.reason,
-          });
+          this.imageFormEmitter();
           console.log(this.imageForm);
         }
       });
   }
 
+  imageFormEmitter() {
+    console.log(this.selectedChoice);
+    console.log(this.imageForm.get('cert_of_indigency')?.value);
+    this.imageEmitter.emit({
+      images: this.imageForm.getRawValue(),
+      formValid:
+        this.selectedChoice == 'yes' &&
+        !this.imageForm.get('cert_of_indigency')?.value
+          ? false
+          : this.imageForm.valid,
+      formDirty: this.imageForm.dirty,
+      COIstatus: this.selectedChoice,
+      reason: this.reason,
+    });
+  }
+
   choose(event: any) {
     console.log(event);
     console.log(this.imgArray);
+    console.log(this.imageForm);
     let findHiddenForm: any = this.imgArray.find(
       (f: any) => f.fcname === 'cert_of_indigency'
     );
     if (findHiddenForm && event === 'yes') {
       findHiddenForm.show = true;
       findHiddenForm.required = true;
+      this.reason = '';
     } else {
       findHiddenForm.show = false;
       findHiddenForm.required = false;
+      this.imageForm.get('cert_of_indigency')?.setValue('');
+      findHiddenForm.imgLink = '';
     }
     if (this.header === 'Edit Registrant Details' && event === 'no') {
       this.imageForm.get('cert_of_indigency')?.setValue('Empty');
       console.log(this.imageForm);
-      delete findHiddenForm.imgLink;
+      findHiddenForm.imgLink = '';
     }
+    this.imageFormEmitter();
   }
 
   imageLoaded(index: number) {

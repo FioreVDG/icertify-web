@@ -24,9 +24,6 @@
         ></webcam>
       </div>
       <div class="right">
-        <!-- <button mat-flat-button (click)="joinMeeting()" class="btn-join">
-          JOIN NOW
-        </button> -->
         <button
           mat-stroked-button
           *ngFor="let schedule of data"
@@ -57,18 +54,18 @@
           >
         </p>
         <p style="text-align: center; color: #fff; margin-top: 0">
-          QUEUE NO. <b>{{ currentTransactionIndex + 1 }}</b> of
-          {{ transactions.length }}
+          QUEUE NO. <b>{{ currentDocument?.queue }}</b> of
+          {{ transactionCount }}
         </p>
         <div class="separator"></div>
       </div>
       <p>
-        Transac Ref Code: <b>{{ currentTransaction.refCode }}</b>
+        Transac Ref Code: <b>{{ currentTransaction?.refCode }}</b>
       </p>
       <div class="separator"></div>
       <p style="margin-bottom: 0"><b>Document Ref Code</b></p>
       <ng-container
-        *ngFor="let doc of currentTransaction._documents; let i = index"
+        *ngFor="let doc of currentTransaction?._documents; let i = index"
       >
         <p
           class="clickable"
@@ -120,32 +117,32 @@
           <span>{{ item.label }}</span
           >: &nbsp;
           <b>{{
-            util.deepFind(currentTransaction.sender, item.path) || "N/A"
+            util.deepFind(currentTransaction?.sender, item.path) || "N/A"
           }}</b>
         </p>
         <p *ngIf="item.type === 'date'">
           <span>{{ item.label }}</span
           >: &nbsp;
           <b>{{
-            util.deepFind(currentTransaction.sender, item.path) | date
+            util.deepFind(currentTransaction?.sender, item.path) | date
           }}</b>
         </p>
         <p *ngIf="item.type === 'special'">
           <span>{{ item.label }}</span
           >: &nbsp;
           <b *ngFor="let c of item.paths">{{
-            util.deepFind(currentTransaction.sender, c) + " "
+            util.deepFind(currentTransaction?.sender, c) + " "
           }}</b>
         </p>
       </ng-container>
       <h3>Video of Signing</h3>
       <div class="img-wrap">
         <video
-          *ngIf="currentTransaction.vidURL !== undefined"
+          *ngIf="currentTransaction?.vidURL !== undefined"
           style="max-width: 100%; max-height: 100%"
           controls
         >
-          <source [src]="currentTransaction.vidURL" type="video/mp4" />
+          <source [src]="currentTransaction?.vidURL" type="video/mp4" />
         </video>
       </div>
     </mat-sidenav>
@@ -162,37 +159,38 @@
           <b>{{ currentDocument.refCode }}</b>
         </p>
         <div class="flex-stretch"></div>
-        <button
+        <!-- <button
           mat-icon-button
           (click)="prevTransaction()"
           *ngIf="currentTransactionIndex > 0"
         >
           <mat-icon>arrow_back_ios</mat-icon>
-        </button>
+        </button> -->
         <button
           mat-icon-button
-          (click)="openUserDetails()"
           [disabled]="checkDocumentStatus()"
-          *ngIf="currentTransactionIndex + 1 < transactions.length"
+          (click)="openUserDetails()"
         >
           <mat-icon>arrow_forward_ios</mat-icon>
         </button>
       </mat-toolbar>
-      <div class="col-12">
+      <div *ngIf="!checkDocumentStatus2()" class="overlay">
+        <h1>DONE</h1>
+      </div>
+      <div class="col-12" style="position: relative">
         <app-rt-video
           [channelName]="currentSchedule._id"
           (onLeaveMeeting)="leaveMeeting($event)"
           [remoteDetails]="remoteCallDetails"
         ></app-rt-video>
         <div class="grid mt-3">
-          <div class="col-12 opt-btn" *ngIf="checkDocumentStatus()">
+          <div class="col-12 opt-btn" *ngIf="checkDocumentStatus2()">
             <button
               mat-raised-button
               color="primary"
               (click)="initiateCounter()"
             >
-              <mat-icon>photo_camera</mat-icon>&nbsp;Screenshot and Mark as
-              Notarized
+              <mat-icon>photo_camera</mat-icon>&nbsp;Mark as Notarized
             </button>
             <button
               mat-raised-button
@@ -200,6 +198,14 @@
               (click)="openNotarizeDialog('Unnotarized')"
             >
               Mark as unnotarized
+            </button>
+            <button
+              mat-raised-button
+              color=""
+              [disabled]="showSkipBtn()"
+              (click)="skipDocument()"
+            >
+              Skip document
             </button>
           </div>
         </div>

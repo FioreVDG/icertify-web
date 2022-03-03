@@ -9,7 +9,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     selected: true,
     bottomSheet: [
       {
-        label: 'View Document/s & Screenshot/s',
+        label: 'View Document/Notarized Document',
         action: 'viewDoc',
         icon: 'description',
       },
@@ -108,14 +108,15 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
             color: '#83b9a1' || 'green',
           },
         ],
+        isVirtual: true,
       },
-      {
-        title: 'Remarks',
-        breakpoint: 'sm',
-        path: 'remark',
-        type: 'text',
-        selected: true,
-      },
+      // {
+      //   title: 'Remarks',
+      //   breakpoint: 'sm',
+      //   path: 'remark',
+      //   type: 'text',
+      //   selected: true,
+      // },
       {
         title: 'Notarization Status',
         breakpoint: 'sm',
@@ -144,7 +145,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     selected: true,
     bottomSheet: [
       {
-        label: 'View Document/s & Screenshot/s',
+        label: 'View Document/Notarized Document',
         action: 'viewDoc',
         icon: 'description',
       },
@@ -243,6 +244,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
             color: '#83b9a1' || 'green',
           },
         ],
+        isVirtual: true,
       },
       {
         title: 'Notarization Status',
@@ -272,7 +274,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     selected: false,
     bottomSheet: [
       {
-        label: 'View Document/s & Screenshot/s',
+        label: 'View Document',
         action: 'viewDoc',
         icon: 'description',
       },
@@ -365,6 +367,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
             color: '#83b9a1' || 'green',
           },
         ],
+        isVirtual: true,
       },
       {
         title: 'Remarks',
@@ -405,7 +408,7 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     selected: true,
     bottomSheet: [
       {
-        label: 'View Document/s & Screenshot/s',
+        label: 'View Document/Notarized Document',
         action: 'viewDoc',
         icon: 'description',
       },
@@ -504,14 +507,15 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
             color: '#83b9a1' || 'green',
           },
         ],
+        isVirtual: true,
       },
-      {
-        title: 'Remarks',
-        breakpoint: 'sm',
-        path: 'remark',
-        type: 'text',
-        selected: true,
-      },
+      // {
+      //   title: 'Remarks',
+      //   breakpoint: 'sm',
+      //   path: 'remark',
+      //   type: 'text',
+      //   selected: true,
+      // },
       {
         title: 'Notarization Status',
         breakpoint: 'sm',
@@ -541,7 +545,7 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     isCheckbox: true,
     bottomSheet: [
       {
-        label: 'View Document/s & Screenshot/s',
+        label: 'View Document/Notarized Document',
         action: 'viewDoc',
         icon: 'description',
       },
@@ -652,6 +656,24 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
             color: '#83b9a1' || 'green',
           },
         ],
+        isVirtual: true,
+      },
+      {
+        title: 'Notarized Document Status',
+        breakpoint: 'sm',
+        path: 'notarizedDocumentStatus',
+        type: 'text',
+        selected: true,
+        textColor: [
+          {
+            value: 'For Uploading',
+            color: '#fbcb51' || 'yellow',
+          },
+          {
+            value: 'Uploaded',
+            color: '#83b9a1' || 'green',
+          },
+        ],
       },
       {
         title: 'Notarization Status',
@@ -692,7 +714,7 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     isCheckbox: false,
     bottomSheet: [
       {
-        label: 'View Document/s & Screenshot/s',
+        label: 'View Document',
         action: 'viewDoc',
         icon: 'description',
       },
@@ -785,6 +807,7 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
             color: '#83b9a1' || 'green',
           },
         ],
+        isVirtual: true,
       },
       {
         title: 'Remarks',

@@ -1,3 +1,5 @@
+import { AreYouSureComponent } from './../../../../../../shared/dialogs/are-you-sure/are-you-sure.component';
+import { ApiService } from './../../../../../../service/api/api.service';
 import { CounterComponent } from './../../../../../../shared/dialogs/counter/counter.component';
 import { ActionResultComponent } from './../../../../../../shared/dialogs/action-result/action-result.component';
 import { QueryParams } from './../../../../../../models/queryparams.interface';
@@ -23,6 +25,7 @@ import { User } from 'src/app/models/user.interface';
 // import * as htmlToImage from 'html-to-image';
 import html2canvas from 'html2canvas';
 import { DocumentImageViewerComponent } from 'src/app/shared/dialogs/document-image-viewer/document-image-viewer.component';
+import { AnyFn } from '@ngrx/store/src/selector';
 
 @Component({
   selector: 'app-room',
@@ -51,6 +54,7 @@ export class RoomComponent implements OnInit {
   currentSchedule: any;
   currentTransactionIndex = -1;
   transactions: any = [];
+  transactionCount: any;
   currentTransaction: any;
   _images: any = [
     {
@@ -75,6 +79,8 @@ export class RoomComponent implements OnInit {
   leaveArr: any = [];
 
   query: QueryParams = { find: [] };
+  remainingDocsChecker: any;
+  showOverlay: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<RoomComponent>,
@@ -87,7 +93,8 @@ export class RoomComponent implements OnInit {
     private socket: Socket,
     private store: Store<{ user: User }>,
     private dialog: MatDialog,
-    private room: RoomService
+    private room: RoomService,
+    private api: ApiService
   ) {}
 
   ngOnInit(): void {
@@ -98,10 +105,22 @@ export class RoomComponent implements OnInit {
     this.socketEventHandler();
     this.getExpectedParticipants();
     this.checkDocument();
+    this.remainingDocsChecker = setInterval(() => {
+      this.checkRemainingDocuments();
+    }, 1000);
   }
 
   getExpectedParticipants() {
-    this.conference.getScheduled(this.query).subscribe((res: any) => {
+    let query: any = {
+      find: [
+        {
+          field: '_notaryId',
+          operator: '=',
+          value: this.me._notaryId,
+        },
+      ],
+    };
+    this.conference.getScheduled(query).subscribe((res: any) => {
       console.log(res);
       this.data = res.env.schedules;
       this.data.forEach((schedule: any) => {
@@ -150,6 +169,8 @@ export class RoomComponent implements OnInit {
         });
       });
     });
+    this.transactionCount = this.transactions.length;
+    console.log(this.transactionCount);
     const loader = this.util.startLoading('Joining please wait...');
 
     this.agora.getToken(schedule._id).subscribe(
@@ -176,18 +197,29 @@ export class RoomComponent implements OnInit {
   getCurrentTransactionQueue(transactions: Array<any> = []) {
     console.log(transactions);
     let tempRoom: any;
-    this.room.get(this.query).subscribe(async (res: any) => {
+    let notaryQuery: QueryParams = {
+      find: [{ field: '_notaryId', operator: '=', value: this.me._id }],
+    };
+    console.log(notaryQuery);
+    this.room.get(notaryQuery).subscribe(async (res: any) => {
       console.log(res);
       if (res.env.room.length) {
         tempRoom = res.env.room[0];
+        console.log(tempRoom);
         this.remoteCallDetails = res.env.room[0].currentTransaction.sender;
         this.currentRoom = res.env.room[0]._id;
+        console.log(this.currentRoom);
         let currentExistingTransaction: any = transactions.find(
-          (transaction: any) => transaction.que === tempRoom.que
+          (transaction: any) =>
+            transaction._documents[0].queue ===
+            tempRoom.currentTransaction._documents[0].queue
         );
         if (currentExistingTransaction) {
+          console.log(currentExistingTransaction);
           this.currentTransaction = currentExistingTransaction;
-          this.currentTransactionIndex = currentExistingTransaction.que - 1;
+          this.currentTransactionIndex =
+            parseInt(currentExistingTransaction._documents[0].queue) - 1;
+          console.log(this.currentTransactionIndex);
           this.selectDocumentToView(this.currentTransaction._documents[0]);
           this.getImages();
         }
@@ -205,54 +237,106 @@ export class RoomComponent implements OnInit {
     });
   }
 
+  checkRemainingDocuments() {
+    if (this.joinRoom) {
+      let transactionsTemp: any = this.transactions.filter(
+        (o: any) =>
+          o._documents[0].documentStatus === 'Pending for Notary' ||
+          o._documents[0].documentStatus === 'Skipped'
+      );
+      // console.log(this.currentTransaction);
+
+      if (!transactionsTemp.length) {
+        clearInterval(this.remainingDocsChecker);
+        this.dialog
+          .open(ActionResultComponent, {
+            disableClose: true,
+            data: {
+              msg: 'You have been successfully finished notarizing/unnotarizing documents. Click Leave Now button to end this meeting',
+              success: true,
+              isOthers: true,
+              button: 'Leave Now',
+            },
+          })
+          .afterClosed()
+          .subscribe((res: any) => {
+            console.log(res);
+            if (res) {
+              this.leaveMeeting('');
+            }
+          });
+      }
+      // console.log(this.transactions);
+    }
+  }
+
   nextTransaction() {
     this.currentTransactionIndex++;
     this.initiateTransaction();
   }
 
   openUserDetails() {
-    this.dialog
-      .open(RegistrantFormComponent, {
-        data: {
-          header: 'Review Details',
-          obj: this.transactions[this.currentTransactionIndex + 1].sender,
-        },
-      })
-      .afterClosed()
-      .subscribe((res: any) => {
-        if (res) {
-          const loader = this.util.startLoading('Loading details...');
+    let transactionAdvance: any;
+    if (this.currentTransactionIndex !== this.transactions.length - 1)
+      transactionAdvance = this.transactions[this.currentTransactionIndex + 1];
+    console.log(transactionAdvance);
+    console.log(transactionAdvance?._documents[0]?.documentStatus);
+    console.log(this.transactions);
+    console.log(this.currentTransactionIndex);
+    console.log(this.currentTransaction);
+    if (this.currentTransactionIndex === this.transactions.length - 1) {
+      this.currentTransactionIndex = -1;
+      console.log(this.transactions);
+    }
+    let tempStatus: any = ['Notarized', 'Unnotarized'];
+    if (
+      tempStatus.includes(transactionAdvance?._documents[0]?.documentStatus)
+    ) {
+      console.log('tapos na to poooooootang inaaaaaaaaaaaaa');
+      this.nextTransaction();
+    } else
+      this.dialog
+        .open(RegistrantFormComponent, {
+          data: {
+            header: 'Review Details',
+            obj: this.transactions[this.currentTransactionIndex + 1].sender,
+          },
+        })
+        .afterClosed()
+        .subscribe((res: any) => {
+          if (res) {
+            const loader = this.util.startLoading('Loading details...');
 
-          this.currentTransactionIndex++;
-          this.currentTransaction =
-            this.transactions[this.currentTransactionIndex];
+            this.currentTransactionIndex++;
+            //DELETE CURRENT ROOM beofre proceeding to the NEXT TRANSACTION
+            let notaryQuery: QueryParams = {
+              find: [{ field: '_notaryId', operator: '=', value: this.me._id }],
+            };
+            this.room.get(notaryQuery).subscribe((res: any) => {
+              console.log(res);
 
-          //DELETE CURRENT ROOM beofre proceeding to the NEXT TRANSACTION
-          this.room.get(this.query).subscribe((res: any) => {
-            console.log(res);
-
-            this.util.stopLoading(loader);
-            if (res && res.env.room.length) {
-              this.currentRoom = res.env.room[0]._id;
-              const loader2 = this.util.startLoading(
-                'Checking room details...'
-              );
-              this.room.delete(this.currentRoom).subscribe(
-                (res: any) => {
-                  console.log(res);
-                  delete this.remoteCallDetails;
-                  this.initiateTransaction();
-                  this.util.stopLoading(loader2);
-                },
-                (err) => {
-                  console.log(err);
-                  this.util.stopLoading(loader2);
-                }
-              );
-            }
-          });
-        }
-      });
+              this.util.stopLoading(loader);
+              if (res && res.env.room.length) {
+                this.currentRoom = res.env.room[0]._id;
+                const loader2 = this.util.startLoading(
+                  'Checking room details...'
+                );
+                this.room.delete(this.currentRoom).subscribe(
+                  (res: any) => {
+                    console.log(res);
+                    delete this.remoteCallDetails;
+                    this.initiateTransaction();
+                    this.util.stopLoading(loader2);
+                  },
+                  (err) => {
+                    console.log(err);
+                    this.util.stopLoading(loader2);
+                  }
+                );
+              }
+            });
+          }
+        });
   }
 
   prevTransaction() {
@@ -263,12 +347,17 @@ export class RoomComponent implements OnInit {
   async initiateTransaction() {
     const loader = this.util.startLoading('Initiating room details...');
     this.currentTransaction = this.transactions[this.currentTransactionIndex];
-
+    //CURRENT TRANSACTION HEREEEEEEEEEEEE
+    console.log(this.currentTransaction);
     this.selectDocumentToView(this.currentTransaction._documents[0]);
     this.getImages();
 
     // FOR ROOM HERE
-    this.room.get(this.query).subscribe(
+    let notaryQuery: QueryParams = {
+      find: [{ field: '_notaryId', operator: '=', value: this.me._id }],
+    };
+    console.log(notaryQuery);
+    this.room.get(notaryQuery).subscribe(
       (res: any) => {
         console.log(res);
         if (res) {
@@ -364,6 +453,53 @@ export class RoomComponent implements OnInit {
       });
   }
 
+  skipDocument() {
+    console.log(this.currentDocument);
+    this.dialog
+      .open(AreYouSureComponent, {
+        data: { msg: 'skip this document', isOthers: true },
+      })
+      .afterClosed()
+      .subscribe((resp: any) => {
+        if (resp) {
+          this.api.document.skip({}, this.currentDocument._id).subscribe(
+            (response: any) => {
+              console.log(response);
+              if (response) {
+                this.dialog
+                  .open(ActionResultComponent, {
+                    data: {
+                      msg: `Document ${this.currentDocument.refCode}  has been skipped!`,
+                      success: true,
+                      button: 'Okay',
+                    },
+                  })
+                  .afterClosed()
+                  .subscribe((res: any) => {
+                    if (res) {
+                      this.currentDocument.documentStatus =
+                        response.env.document.documentStatus;
+                      console.log(this.currentDocument);
+                      console.log(this.currentTransaction);
+                    }
+                  });
+              }
+            },
+            (err) => {
+              console.log(err);
+              this.dialog.open(ActionResultComponent, {
+                data: {
+                  msg: err.error.message || 'Server Error! Please try again',
+                  success: true,
+                  button: 'Okay',
+                },
+              });
+            }
+          );
+        }
+      });
+  }
+
   takeScreenshot() {
     const loader = this.util.startLoading('Getting image ready...');
     html2canvas(document.getElementById('screen') || document.body).then(
@@ -398,10 +534,29 @@ export class RoomComponent implements OnInit {
   }
 
   checkDocumentStatus() {
-    let filtPending: any = this.currentTransaction._documents.filter(
+    let filtPending: any = this.currentTransaction?._documents.filter(
       (o: any) => o.documentStatus === 'Pending for Notary'
     );
-    if (filtPending.length) return true;
+    if (filtPending?.length) return true;
+    else return false;
+  }
+
+  checkDocumentStatus2() {
+    let filtPending: any = this.currentTransaction?._documents.filter(
+      (o: any) => o.documentStatus === 'Pending for Notary'
+    );
+    let filtSkip: any = this.currentTransaction?._documents.filter(
+      (o: any) => o.documentStatus === 'Skipped'
+    );
+    if (filtPending?.length || filtSkip?.length) return true;
+    else return false;
+  }
+
+  showSkipBtn() {
+    let filtSkip: any = this.currentTransaction?._documents.filter(
+      (o: any) => o.documentStatus === 'Skipped'
+    );
+    if (filtSkip?.length) return true;
     else return false;
   }
 
@@ -421,7 +576,7 @@ export class RoomComponent implements OnInit {
     console.log(event);
     console.log(this.me.type);
     const loader = this.util.startLoading('Leaving...');
-
+    console.log(this.currentRoom);
     this.room.delete(this.currentRoom).subscribe(
       (res: any) => {
         console.log(res);

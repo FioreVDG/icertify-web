@@ -61,13 +61,13 @@ export const VIDEO_CONF_BARANGAY_TABLE: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
       // PAGAWA :)
-      // {
-      //   title: 'Queue No.',
-      //   breakpoint: 'sm',
-      //   path: '',
-      //   type: 'text',
-      //   selected: true,
-      // },
+      {
+        title: 'Queue No.',
+        breakpoint: 'sm',
+        path: 'queue',
+        type: 'text',
+        selected: true,
+      },
       {
         title: 'Scheduled By',
         breakpoint: 'sm',
@@ -154,13 +154,13 @@ export const VIDEO_CONF_BARANGAY_TABLE: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
       // PAGAWA :)
-      // {
-      //   title: 'Queue No.',
-      //   breakpoint: 'sm',
-      //   path: '',
-      //   type: 'text',
-      //   selected: true,
-      // },
+      {
+        title: 'Queue No.',
+        breakpoint: 'sm',
+        path: 'queue',
+        type: 'text',
+        selected: true,
+      },
       {
         title: 'Scheduled By',
         breakpoint: 'sm',

@@ -13,8 +13,6 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { TableOutput } from 'src/app/models/tableemit.interface';
 import { MatPaginator } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
-import { BUTTON } from 'src/app/models/table-button.interface';
-import { MatDialog } from '@angular/material/dialog';
 import { QueryParams } from 'src/app/models/queryparams.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -27,6 +25,8 @@ export class TableComponent implements OnInit {
   checkedRows = new SelectionModel<any>(true, []);
   @Input() dataSource: any = [];
   @Input() isLimit: any;
+  @Input() countSelected: any;
+  @Input() isDisabled: boolean = false;
   @Input() checkBox: any;
   @Input() dataLength: number = 0;
   @Input() columns!: Array<Column>;
@@ -189,19 +189,24 @@ export class TableComponent implements OnInit {
           filteredBS.push(bs);
         }
       });
-      this._bs
-        .open(BottomSheetComponent, {
-          data: { config: filteredBS },
-          panelClass: 'btm-darken',
-        })
-        .afterDismissed()
-        .subscribe((res: any) => {
-          let event = {
-            obj: element,
-            action: res,
-          };
-          this.onRowClick.emit(event);
-        });
+      if (filteredBS.length) {
+        this._bs
+          .open(BottomSheetComponent, {
+            data: { config: filteredBS },
+            panelClass: 'btm-darken',
+          })
+          .afterDismissed()
+          .subscribe((res: any) => {
+            let event = {
+              obj: element,
+              action: res,
+            };
+            this.onRowClick.emit(event);
+          });
+      } else {
+        let event = { obj: element, action: 'no_action_avail' };
+        this.onRowClick.emit(event);
+      }
     } else {
       this.onRowClick.emit(element);
     }
