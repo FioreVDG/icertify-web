@@ -142,6 +142,15 @@ export const DOCUMENT_TRACKER_CONFIG: Array<any> = [
     populates: [{ field: '_notaryId', select: '-__v' }],
     column: [
       {
+        title: 'Barangay',
+        breakpoint: 'sm',
+        path: '_barangay.brgyDesc',
+        type: 'text',
+        selected: true,
+        useAsFilter: true,
+        choices: [],
+      },
+      {
         title: 'Document Ref Code',
         breakpoint: 'sm',
         path: 'refCode',
@@ -195,15 +204,7 @@ export const DOCUMENT_TRACKER_CONFIG: Array<any> = [
         type: 'special',
         selected: true,
       },
-      {
-        title: 'Barangay',
-        breakpoint: 'sm',
-        path: '_barangay.brgyDesc',
-        type: 'text',
-        selected: true,
-        useAsFilter: true,
-        choices: [],
-      },
+
       {
         title: 'Location Status',
         breakpoint: 'sm',
@@ -288,6 +289,7 @@ export const DOCUMENT_TRACKER_CONFIG: Array<any> = [
         type: 'text',
         selected: true,
       },
+
       {
         title: 'Document Type',
         breakpoint: 'sm',
