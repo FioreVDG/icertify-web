@@ -25,6 +25,7 @@ import {
   animateText,
   onSideNavChange,
 } from 'src/app/animations/sidebar.animation';
+import { NavNode } from 'src/app/models/treesidenav.interface';
 
 @Component({
   selector: 'app-barangay-portal',
@@ -34,7 +35,7 @@ import {
 })
 export class BarangayPortalComponent implements OnInit {
   isExpanded: boolean = false;
-  barangayNav: any[] = [];
+  barangayNav: NavNode[] = [];
   me: any;
   loading: boolean = false;
   loggingOut: boolean = false;
@@ -48,8 +49,8 @@ export class BarangayPortalComponent implements OnInit {
   public main: boolean = false;
 
   //For Menu
-  barangayMenu = BARANGAY_MENU;
-  menuColors = BARANGAY_MENU_COLORS;
+  barangayMenu = JSON.parse(JSON.stringify(BARANGAY_MENU));
+  menuColors = JSON.parse(JSON.stringify(BARANGAY_MENU_COLORS));
 
   constructor(
     public router: Router,
@@ -78,24 +79,23 @@ export class BarangayPortalComponent implements OnInit {
       (res: any) => {
         console.log(res);
         this.me = res.env.user;
-        this.api.cluster
-          .getOne(this.me._barangay.brgyCode)
-          .subscribe((res: any) => {
+        this.store.dispatch(setUser({ user: res.env.user }));
+        this.api.cluster.getOne(this.me._barangay.brgyCode).subscribe(
+          (res: any) => {
             console.log(res, 'Cluster');
             this.store.dispatch(setCluster({ cluster: res.env.cluster }));
-          });
-        this.store.dispatch(setUser({ user: res.env.user }));
-        localStorage.setItem('BARANGAY_INFORMATION', JSON.stringify(this.me));
-
-        if (!this.me.isMain && this.me._role && this.me._role.access.length) {
-          this.barangayNav = this.me._role.access;
-          console.log(this.barangayNav);
-        } else {
-          this.barangayNav = BARANGAY_NAVS;
-          console.log(this.barangayNav);
-        }
-
-        this.loading = false;
+            localStorage.setItem(
+              'BARANGAY_INFORMATION',
+              JSON.stringify(this.me)
+            );
+            this.setNavs('');
+            this.loading = false;
+          },
+          (err) => {
+            this.setNavs(err.error.message);
+            this.loading = false;
+          }
+        );
       },
       (err) => {
         console.log(err);
@@ -105,6 +105,28 @@ export class BarangayPortalComponent implements OnInit {
     );
   }
 
+  setNavs(error: string) {
+    this.barangayNav = [];
+    const routes = ['batch-delivery-management', 'new-transaction'];
+    if (error === 'Cluster not found!') {
+      if (!this.me.isMain && this.me._role && this.me._role.access.length) {
+        this.barangayNav = this.me._role.access;
+      } else {
+        this.barangayNav = JSON.parse(JSON.stringify(BARANGAY_NAVS));
+      }
+      this.barangayNav.forEach((el: any) => {
+        if (routes.includes(el.route)) el.disabled = true;
+      });
+      console.log(this.barangayNav);
+    } else {
+      if (!this.me.isMain && this.me._role && this.me._role.access.length) {
+        this.barangayNav = this.me._role.access;
+      } else {
+        this.barangayNav = JSON.parse(JSON.stringify(BARANGAY_NAVS));
+      }
+      console.log(this.barangayNav);
+    }
+  }
   checkSession() {
     let csurf_token = localStorage.getItem('SESSION_CSURF_TOKEN');
     let session_token = localStorage.getItem('SESSION_AUTH');

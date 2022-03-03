@@ -50,6 +50,14 @@ export const REGISTRANT_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
       {
+        title: 'Pending Transaction',
+        breakpoint: 'sm',
+        path: 'pendingTransactions',
+        type: 'text',
+        selected: true,
+        isVirtual: true,
+      },
+      {
         title: 'Address',
         breakpoint: 'sm',
         path: 'address',
@@ -70,14 +78,7 @@ export const REGISTRANT_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         type: 'text',
         selected: true,
       },
-      {
-        title: 'Pending Transaction',
-        breakpoint: 'sm',
-        path: 'pendingTransactions',
-        type: 'text',
-        isVirtual: true,
-        selected: true,
-      },
+
       {
         title: 'Date & Time Updated',
         breakpoint: 'sm',
@@ -134,6 +135,14 @@ export const REGISTRANT_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
       {
+        title: 'Pending Transaction',
+        breakpoint: 'sm',
+        path: 'pendingTransactions',
+        type: 'text',
+        selected: true,
+        isVirtual: true,
+      },
+      {
         title: 'Address',
         breakpoint: 'sm',
         path: 'address',
@@ -154,14 +163,7 @@ export const REGISTRANT_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         type: 'text',
         selected: true,
       },
-      {
-        title: 'Pending Transaction',
-        breakpoint: 'sm',
-        path: 'pendingTransactions',
-        type: 'text',
-        selected: true,
-        isVirtual: true,
-      },
+
       {
         title: 'Date & Time Updated',
         breakpoint: 'sm',
