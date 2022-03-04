@@ -1,7 +1,6 @@
 import { ApiService } from 'src/app/service/api/api.service';
 import { UtilService } from './../../../../../../service/util/util.service';
 import { ActionResultComponent } from './../../../../../../shared/dialogs/action-result/action-result.component';
-import { FolderService } from './../../../../../../service/api/folder/folder.service';
 import { ConferenceService } from './../../../../../../service/api/conference/conference.service';
 import { AreYouSureComponent } from './../../../../../../shared/dialogs/are-you-sure/are-you-sure.component';
 import {

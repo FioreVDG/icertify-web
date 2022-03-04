@@ -23,7 +23,9 @@ import {
 })
 export class RegistrantFormComponent implements OnInit {
   @ViewChild('registrantDetails') registrantDetails!: FormComponent;
-  registrantFromFields: Array<Section> = REGISTRATION_FORM;
+  registrantFromFields: Array<Section> = JSON.parse(
+    JSON.stringify(REGISTRATION_FORM)
+  );
   loading: boolean = true;
   brgyInfo: any;
   imageFormValid: boolean = false;

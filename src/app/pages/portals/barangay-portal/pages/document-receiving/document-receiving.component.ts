@@ -47,25 +47,31 @@ export class DocumentReceivingComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getSettings();
+    this.getSettings(this.page);
   }
 
-  getSettings() {
+  getSettings(event: any) {
+    this.loading = true;
     this.store.select('user').subscribe((res: User) => {
       this.me = res;
-      this.api.cluster
-        .getOne(this.me._barangay.brgyCode)
-        .subscribe((res: any) => {
-          this.settings = res.env.cluster;
-          console.log(this.settings);
-          this.fetchData(this.page);
-        });
+      if (!this.settings) {
+        this.api.cluster
+          .getOne(this.me._barangay.brgyCode)
+          .subscribe((res: any) => {
+            this.settings = res.env.cluster;
+            console.log(this.settings);
+            this.fetchData(event);
+          });
+      } else {
+        this.fetchData(event);
+      }
     });
   }
+  //ssadasdsadsadsadsadsad
 
   fetchData(event: TableOutput) {
     this.dataSource = [];
-    this.loading = true;
+    // this.loading = true;
     this.page.pageIndex = event.pageIndex;
     this.page.pageSize = event.pageSize;
     let query: QueryParams = {
