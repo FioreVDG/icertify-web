@@ -67,6 +67,7 @@ export class DocumentReceivingComponent implements OnInit {
       }
     });
   }
+  //ssadasdsadsadsadsadsad
 
   fetchData(event: TableOutput) {
     this.dataSource = [];
