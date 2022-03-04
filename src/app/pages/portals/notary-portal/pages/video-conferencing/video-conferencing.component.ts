@@ -11,6 +11,7 @@ import { VIEW_TRANSACTION_TABLE } from '../document-receiving/view-transaction/c
 import { TRANSAC_TABLE_COLUMN } from '../../../barangay-portal/pages/batch-delivery-management/batch-folder/config';
 import { User } from 'src/app/models/user.interface';
 import _ from 'lodash';
+import { UtilService } from 'src/app/service/util/util.service';
 
 @Component({
   selector: 'app-video-conferencing',
@@ -27,7 +28,7 @@ export class VideoConferencingComponent implements OnInit {
   dataSource = [];
   dataLength: number = 0;
   currFetch: string = '';
-  currentTable: any;
+  currentTable = 'For Scheduling';
   limit: any;
   disabler: boolean = false;
   notaryName: string = '';
@@ -75,12 +76,12 @@ export class VideoConferencingComponent implements OnInit {
   constructor(
     private api: ApiService,
     private dialog: MatDialog,
-    private store: Store<{ user: User }>
+    private store: Store<{ user: User }>,
+    private util: UtilService
   ) {}
 
   ngOnInit(): void {
-    this.getSettings();
-    this.tableUpdateEmit(this.page);
+    this.getSettings(this.page);
   }
 
   addFilterChoices() {
@@ -101,25 +102,28 @@ export class VideoConferencingComponent implements OnInit {
     this.tableFlag = true;
   }
 
-  getSettings() {
+  tableUpdateEmit(event: any) {
+    this.loading = true;
+    this.selected = [];
+    console.log(event);
+    event.label = event.label || this.currentTable;
+    this.getSettings(event);
+  }
+
+  getSettings(event: any) {
     this.store.select('user').subscribe((res: User) => {
       this.me = res;
       console.log(res);
-      this.api.cluster.getOneNotary(res._notaryId).subscribe((res: any) => {
-        console.log(res);
-        this.settings = res.env.cluster;
-        this.limit = res.env.cluster.totals.maxDoc;
-        this.fetchData(event);
-        console.log(res);
-        this.notaryName = `${res.env.cluster._notaryId.firstName} ${res.env.cluster._notaryId.middleName} ${res.env.cluster._notaryId.lastName}`;
-      });
+
       if (!this.settings) {
         this.api.cluster.getOneNotary(res._notaryId).subscribe((res: any) => {
           this.settings = res.env.cluster;
           this.addFilterChoices();
-          this.fetchData(event);
 
-          console.log(res);
+          this.settings = res.env.cluster;
+          this.limit = res.env.cluster.totals.maxDoc;
+          this.fetchData(event);
+          this.notaryName = `${res.env.cluster._notaryId.firstName} ${res.env.cluster._notaryId.middleName} ${res.env.cluster._notaryId.lastName}`;
         });
       } else {
         this.fetchData(event);
@@ -129,7 +133,7 @@ export class VideoConferencingComponent implements OnInit {
 
   fetchData(event: any) {
     console.log(event);
-    this.loading = true;
+    // this.loading = true;
     let brgyCodes: any[] = [];
     if (this.settings) {
       brgyCodes = this.settings.barangays.map((el: any) => {
@@ -203,13 +207,6 @@ export class VideoConferencingComponent implements OnInit {
 
     this.currentTable = event.label;
     this.isCheckbox = event.isCheckbox || true;
-  }
-
-  tableUpdateEmit(event: any) {
-    this.selected = [];
-    console.log(event);
-    event.label = event.label || this.currentTable;
-    this.fetchData(event);
   }
 
   onRowClick(event: any) {

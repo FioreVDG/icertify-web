@@ -97,6 +97,7 @@ export class RegistrantFormComponent implements OnInit {
         findMobileNum.disabled = true;
       }
     });
+    console.log(this.registrantFromFields);
   }
 
   checkHeaderDisabler() {
@@ -332,6 +333,7 @@ export class RegistrantFormComponent implements OnInit {
     this.brgyForm = this.fb.group(temp);
 
     console.log(this.brgyForm);
+
     this.getRegions();
   }
 
@@ -348,7 +350,11 @@ export class RegistrantFormComponent implements OnInit {
         this.brgyForm.get('province')?.setValue(prov.data[0]);
         console.log(this.brgyForm);
         this.initializedChoices('province', prov.data);
-        this.getCities(this.brgyInfo._barangay.citymunCode);
+        this.getCities(
+          this.checkHeaderDisabler()
+            ? this.data.obj.address.cityMun.citymunCode
+            : this.brgyInfo._barangay.citymunCode
+        );
       });
   }
   getCities(res: any) {
@@ -364,7 +370,11 @@ export class RegistrantFormComponent implements OnInit {
         this.brgyForm.get('cityMun')?.setValue(cityMun.data[0]);
         console.log(this.brgyForm);
         this.initializedChoices('cityMun', cityMun.data);
-        this.getBarangay(this.brgyInfo._barangay.brgyCode);
+        this.getBarangay(
+          this.checkHeaderDisabler()
+            ? this.data.obj.address.barangay.brgyCode
+            : this.brgyInfo._barangay.brgyCode
+        );
       });
   }
   getBarangay(res: any) {
@@ -388,14 +398,20 @@ export class RegistrantFormComponent implements OnInit {
       .getRPC('regions', {
         group: {
           field: 'regCode',
-          id: this.brgyInfo._barangay.regCode,
+          id: this.checkHeaderDisabler()
+            ? this.data.obj.address.region.regCode
+            : this.brgyInfo._barangay.regCode,
         },
       })
       .subscribe((regions: any) => {
         this.brgyForm.get('region')?.setValue(regions.data[0]);
         console.log(this.brgyForm);
         this.initializedChoices('region', regions.data);
-        this.getProvinces(this.brgyInfo._barangay.provCode);
+        this.getProvinces(
+          this.checkHeaderDisabler()
+            ? this.data.obj.address.province.provCode
+            : this.brgyInfo._barangay.provCode
+        );
       });
   }
   initializedChoices(identifier: string, object: any) {
