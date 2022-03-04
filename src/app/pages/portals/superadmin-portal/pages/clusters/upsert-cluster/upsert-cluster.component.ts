@@ -28,7 +28,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { A, COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Observable } from 'rxjs';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
@@ -44,7 +44,6 @@ export class UpsertClusterComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   selectedRider: any[] = [];
   objRider: any[] = [];
-  totalDuration = 0;
   selectedCluster: any[] = [];
   clusterForm = new FormGroup({
     name: new FormControl(this.data ? this.data.name : '', [
@@ -119,6 +118,10 @@ export class UpsertClusterComponent implements OnInit {
     ]),
     _riders: new FormArray([]),
     barangays: new FormArray([]),
+    totalDuration: new FormControl(
+      this.data ? this.data.totals.maxDuration : 0,
+      [Validators.required]
+    ),
   });
 
   riderCtrl = new FormControl();
@@ -139,6 +142,23 @@ export class UpsertClusterComponent implements OnInit {
     'sunday',
   ];
 
+  computeDuration() {
+    var arr = this.clusterForm.get('barangays') as FormArray;
+    var totalDocs = 0;
+    for (let i = 0; i < arr.length; i++) {
+      var raw = (arr.at(i) as FormGroup).getRawValue();
+      totalDocs += raw.maxDoc;
+    }
+    var perDoc = Math.floor(
+      this.clusterForm.get('totalDuration')?.value / totalDocs
+    );
+    for (let i = 0; i < arr.length; i++) {
+      arr.at(i).get('duration')?.setValue(perDoc);
+    }
+
+    console.log(this.clusterForm.getRawValue());
+  }
+
   addBarangayForm(def?: any) {
     (this.clusterForm.get('barangays') as FormArray).push(
       new FormGroup({
@@ -156,6 +176,14 @@ export class UpsertClusterComponent implements OnInit {
     this.barangayControls = (
       this.clusterForm.get('barangays') as FormArray
     ).controls;
+
+    var arr = this.clusterForm.get('barangays') as FormArray;
+    arr
+      .at(arr.length - 1)
+      .get('maxDoc')
+      ?.valueChanges.subscribe((res) => {
+        this.computeDuration();
+      });
   }
 
   deleteBarangayForm(i: number) {
@@ -213,15 +241,6 @@ export class UpsertClusterComponent implements OnInit {
             ?.setValue(res._barangay);
         }
       });
-  }
-
-  getTotalDuration() {
-    var totalDuration = 0;
-    this.clusterForm.value.barangays.forEach((brgy: any) => {
-      totalDuration += brgy.duration * brgy.maxDoc;
-    });
-    this.totalDuration = totalDuration;
-    return totalDuration;
   }
 
   constructor(
@@ -417,10 +436,8 @@ export class UpsertClusterComponent implements OnInit {
       }
     }
 
-    this.clusterForm.valueChanges.subscribe((res) => {
-      console.log(this.clusterForm.dirty);
-      console.log(this.clusterForm.valid);
-      console.log(this.clusterForm);
+    this.clusterForm.get('totalDuration')?.valueChanges.subscribe((res) => {
+      this.computeDuration();
     });
   }
 
