@@ -35,17 +35,22 @@ export class SetScheduleComponent implements OnInit {
       this.data.selected.forEach((el: any) => {
         el._transactions.forEach((trans: any) => {
           trans.queue = que++;
+          trans.duration = doc.duration;
         });
       });
       let findTemp: any = this.data.selected.find(
         (o: any) => o._barangay.brgyCode === doc._barangay.brgyCode
       );
-      if (findTemp) {
-        findTemp.duration = doc.duration;
-        console.log(findTemp);
-        console.log(this.data);
-      }
+      if (findTemp) findTemp.duration = doc.duration;
     });
+  }
+
+  computeStartTime(doc: any) {
+    var date = new Date(this.schedule);
+    var totalDurationToAdd = (doc.queue - 1) * doc.duration;
+    date.setMinutes(date.getMinutes() + totalDurationToAdd);
+    doc.estimatedStart = date;
+    return date;
   }
 
   modelChanged(event: any) {
