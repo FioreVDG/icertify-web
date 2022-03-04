@@ -58,7 +58,7 @@ export class DocumentTrackerTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getSettings(this.page);
+    // this.getSettings(this.page);
   }
 
   filterColumn() {
