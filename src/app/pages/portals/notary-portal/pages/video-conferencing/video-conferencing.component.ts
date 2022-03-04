@@ -240,7 +240,6 @@ export class VideoConferencingComponent implements OnInit {
     });
     // console.log(this.selected);
     // this.selected = event;
-    // this.countSelected = event.length;
   }
 
   onSetSchedule() {
