@@ -7,4 +7,5 @@ export interface NavNode {
   action?: string;
   css?: string;
   hidden?: boolean;
+  disabled?: boolean;
 }

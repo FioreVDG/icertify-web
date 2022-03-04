@@ -205,14 +205,21 @@ export class RoomComponent implements OnInit {
       console.log(res);
       if (res.env.room.length) {
         tempRoom = res.env.room[0];
+        console.log(tempRoom);
         this.remoteCallDetails = res.env.room[0].currentTransaction.sender;
         this.currentRoom = res.env.room[0]._id;
+        console.log(this.currentRoom);
         let currentExistingTransaction: any = transactions.find(
-          (transaction: any) => transaction.que === tempRoom.que
+          (transaction: any) =>
+            transaction._documents[0].queue ===
+            tempRoom.currentTransaction._documents[0].queue
         );
         if (currentExistingTransaction) {
+          console.log(currentExistingTransaction);
           this.currentTransaction = currentExistingTransaction;
-          this.currentTransactionIndex = currentExistingTransaction.que - 1;
+          this.currentTransactionIndex =
+            parseInt(currentExistingTransaction._documents[0].queue) - 1;
+          console.log(this.currentTransactionIndex);
           this.selectDocumentToView(this.currentTransaction._documents[0]);
           this.getImages();
         }
@@ -269,55 +276,67 @@ export class RoomComponent implements OnInit {
   }
 
   openUserDetails() {
+    let transactionAdvance: any;
+    if (this.currentTransactionIndex !== this.transactions.length - 1)
+      transactionAdvance = this.transactions[this.currentTransactionIndex + 1];
+    console.log(transactionAdvance);
+    console.log(transactionAdvance?._documents[0]?.documentStatus);
     console.log(this.transactions);
     console.log(this.currentTransactionIndex);
+    console.log(this.currentTransaction);
     if (this.currentTransactionIndex === this.transactions.length - 1) {
       this.currentTransactionIndex = -1;
       console.log(this.transactions);
     }
+    let tempStatus: any = ['Notarized', 'Unnotarized'];
+    if (
+      tempStatus.includes(transactionAdvance?._documents[0]?.documentStatus)
+    ) {
+      console.log('tapos na to poooooootang inaaaaaaaaaaaaa');
+      this.nextTransaction();
+    } else
+      this.dialog
+        .open(RegistrantFormComponent, {
+          data: {
+            header: 'Review Details',
+            obj: this.transactions[this.currentTransactionIndex + 1].sender,
+          },
+        })
+        .afterClosed()
+        .subscribe((res: any) => {
+          if (res) {
+            const loader = this.util.startLoading('Loading details...');
 
-    this.dialog
-      .open(RegistrantFormComponent, {
-        data: {
-          header: 'Review Details',
-          obj: this.transactions[this.currentTransactionIndex + 1].sender,
-        },
-      })
-      .afterClosed()
-      .subscribe((res: any) => {
-        if (res) {
-          const loader = this.util.startLoading('Loading details...');
+            this.currentTransactionIndex++;
+            //DELETE CURRENT ROOM beofre proceeding to the NEXT TRANSACTION
+            let notaryQuery: QueryParams = {
+              find: [{ field: '_notaryId', operator: '=', value: this.me._id }],
+            };
+            this.room.get(notaryQuery).subscribe((res: any) => {
+              console.log(res);
 
-          this.currentTransactionIndex++;
-          //DELETE CURRENT ROOM beofre proceeding to the NEXT TRANSACTION
-          let notaryQuery: QueryParams = {
-            find: [{ field: '_notaryId', operator: '=', value: this.me._id }],
-          };
-          this.room.get(notaryQuery).subscribe((res: any) => {
-            console.log(res);
-
-            this.util.stopLoading(loader);
-            if (res && res.env.room.length) {
-              this.currentRoom = res.env.room[0]._id;
-              const loader2 = this.util.startLoading(
-                'Checking room details...'
-              );
-              this.room.delete(this.currentRoom).subscribe(
-                (res: any) => {
-                  console.log(res);
-                  delete this.remoteCallDetails;
-                  this.initiateTransaction();
-                  this.util.stopLoading(loader2);
-                },
-                (err) => {
-                  console.log(err);
-                  this.util.stopLoading(loader2);
-                }
-              );
-            }
-          });
-        }
-      });
+              this.util.stopLoading(loader);
+              if (res && res.env.room.length) {
+                this.currentRoom = res.env.room[0]._id;
+                const loader2 = this.util.startLoading(
+                  'Checking room details...'
+                );
+                this.room.delete(this.currentRoom).subscribe(
+                  (res: any) => {
+                    console.log(res);
+                    delete this.remoteCallDetails;
+                    this.initiateTransaction();
+                    this.util.stopLoading(loader2);
+                  },
+                  (err) => {
+                    console.log(err);
+                    this.util.stopLoading(loader2);
+                  }
+                );
+              }
+            });
+          }
+        });
   }
 
   prevTransaction() {

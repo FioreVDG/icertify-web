@@ -1,27 +1,36 @@
 <h3 mat-dialog-title>Notarized Document</h3>
 <div mat-dialog-content>
   <section class="grid">
-    <div class="col-6" *ngIf="data.type === 'Notarized'">
+    <div class="col-12" *ngIf="data.type === 'Notarized'">
       <img [src]="data.screenshot" style="width: 100%" />
     </div>
     <div [class]="data.type === 'Notarized' ? 'col-6' : 'col-12'">
       <p>
-        Transac Ref Code: <b>{{ data.transaction.refCode }}</b>
+        QC Indigent:
+        <b
+          >{{ data.document.sender.firstName }}
+          {{ data.document.sender.middleName }}
+          {{ data.document.sender.lastName }}
+          {{ data.document.sender.suffix }}</b
+        >
+      </p>
+      <p>
+        Document Ref Code: <b>{{ data.document.refCode }}</b>
       </p>
       <div class="grid">
-        <div class="col-6">
+        <!-- <div class="col-12">
           <p>Document Ref Code:</p>
           <p>
             <b>{{ data.document.refCode }}</b>
           </p>
-        </div>
-        <div class="col-6">
+        </div> -->
+        <div class="col-12">
           <!-- FOR NOTARIZED -->
-          <section *ngIf="data.type === 'Notarized'">
+          <!-- <section *ngIf="data.type === 'Notarized'">
             <p>Mark as notarized</p>
             <mat-radio-group [(ngModel)]="status"></mat-radio-group>
             <mat-radio-button value="Notarized"></mat-radio-button>
-          </section>
+          </section> -->
 
           <!-- FOR UNNOTARIZED -->
           <section *ngIf="data.type === 'Unnotarized'">
@@ -60,6 +69,8 @@
 <div mat-dialog-actions align="center">
   <button mat-flat-button mat-dialog-close color="warn">Cancel</button>
   <button mat-flat-button color="primary" (click)="markDocument(data.document)">
-    Confirm
+    {{
+      data.type === "Notarized" ? "Mark as notarized" : "Mark as unnotarized"
+    }}
   </button>
 </div>
