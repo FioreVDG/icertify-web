@@ -241,7 +241,7 @@ export class VideoConferencingComponent implements OnInit {
     // console.log(this.selected);
     // this.selected = event;
   }
-
+  //
   onSetSchedule() {
     console.log(this.selected);
     this.selected.sort((a: any, b: any) => a.dateCreated - b.dateCreated);
