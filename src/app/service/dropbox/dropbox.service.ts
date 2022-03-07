@@ -64,6 +64,21 @@ export class DropboxService {
     });
   }
 
+  downloadFile(path: string): Observable<any> {
+    return Observable.create((observer: any) => {
+      this.dbx
+        .downloadFile({ path })
+        .then((response: any) => {
+          observer.next(response);
+          observer.complete();
+        })
+        .catch((error: any) => {
+          console.log(error);
+          console.log(observer.error(error));
+        });
+    });
+  }
+
   getThumbnail(path: String): Observable<any> {
     let format = 'jpeg';
     return Observable.create((observer: any) => {
