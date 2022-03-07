@@ -134,7 +134,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
           },
           {
             value: 'Unnotarized',
-            color: '#83b9a1' || 'green',
+            color: '#e58086' || 'red',
           },
         ],
       },
@@ -246,27 +246,6 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         ],
         isVirtual: true,
       },
-      {
-        title: 'Notarization Status',
-        breakpoint: 'sm',
-        path: 'documentStatus',
-        type: 'text',
-        selected: true,
-        textColor: [
-          {
-            value: 'Pending for Notary',
-            color: '#fbcb51' || 'yellow',
-          },
-          {
-            value: 'Notarized',
-            color: '#83b9a1' || 'green',
-          },
-          {
-            value: 'Unnotarized',
-            color: '#83b9a1' || 'green',
-          },
-        ],
-      },
     ],
   },
   {
@@ -375,27 +354,6 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         path: 'remark',
         type: 'text',
         selected: true,
-      },
-      {
-        title: 'Notarization Status',
-        breakpoint: 'sm',
-        path: 'documentStatus',
-        type: 'text',
-        selected: true,
-        textColor: [
-          {
-            value: 'Pending for Notary',
-            color: '#fbcb51' || 'yellow',
-          },
-          {
-            value: 'Notarized',
-            color: '#83b9a1' || 'green',
-          },
-          {
-            value: 'Unnotarized',
-            color: '#83b9a1' || 'green',
-          },
-        ],
       },
     ],
   },
@@ -533,7 +491,7 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
           },
           {
             value: 'Unnotarized',
-            color: '#83b9a1' || 'green',
+            color: '#e58086' || 'red',
           },
         ],
       },
@@ -675,27 +633,6 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
           },
         ],
       },
-      {
-        title: 'Notarization Status',
-        breakpoint: 'sm',
-        path: 'documentStatus',
-        type: 'text',
-        selected: true,
-        textColor: [
-          {
-            value: 'Pending for Notary',
-            color: '#fbcb51' || 'yellow',
-          },
-          {
-            value: 'Notarized',
-            color: '#83b9a1' || 'green',
-          },
-          {
-            value: 'Unnotarized',
-            color: '#83b9a1' || 'green',
-          },
-        ],
-      },
     ],
     checkBoxBtns: [
       {
@@ -815,27 +752,6 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         path: 'remark',
         type: 'text',
         selected: true,
-      },
-      {
-        title: 'Notarization Status',
-        breakpoint: 'sm',
-        path: 'documentStatus',
-        type: 'text',
-        selected: true,
-        textColor: [
-          {
-            value: 'Pending for Notary',
-            color: '#fbcb51' || 'yellow',
-          },
-          {
-            value: 'Notarized',
-            color: '#83b9a1' || 'green',
-          },
-          {
-            value: 'Unnotarized',
-            color: '#83b9a1' || 'green',
-          },
-        ],
       },
     ],
   },

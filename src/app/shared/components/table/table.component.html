@@ -18,8 +18,15 @@
     <mat-toolbar *ngIf="!hideSearch">
       <!-- SEARCHBOX -->
       <div class="search-box">
-        <button class="btn-search" (click)="onTriggerSearch()">
+        <button *ngIf="!keyword" class="btn-search" (click)="onTriggerSearch()">
           <mat-icon>search</mat-icon>
+        </button>
+        <button
+          *ngIf="keyword"
+          class="btn-search"
+          (click)="keyword = ''; onTriggerSearch()"
+        >
+          <mat-icon>close</mat-icon>
         </button>
         <input
           type="text"

@@ -23,12 +23,10 @@ export class AddTransactionComponent implements OnInit {
   documentType: string = '';
   others: string = '';
   docTypes: Array<string> = [
-    'Power of Attorney',
-    'Medical Records',
-    'Sworn Statements',
+    'Special Power of Attorney (SPA)',
     'Affidavit',
-    'Deeds',
-    'Wills and Trusts',
+    'Brgy. Compromise Agreement',
+    'Quitclaim',
     'Others',
   ];
   docsArray: Array<any> = [];

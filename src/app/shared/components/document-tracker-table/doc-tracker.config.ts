@@ -113,7 +113,7 @@ export const DOCUMENT_TRACKER_CONFIG: Array<any> = [
           },
           {
             value: 'Pending for Notary',
-            color: '#fbcb51' || 'Yellow',
+            color: '#fbcb51' || 'yellow',
           },
         ],
         useAsFilter: true,
@@ -240,7 +240,7 @@ export const DOCUMENT_TRACKER_CONFIG: Array<any> = [
           },
           {
             value: 'Pending for Notary',
-            color: '#fbcb51' || 'Yellow',
+            color: '#fbcb51' || 'yellow',
           },
         ],
         useAsFilter: true,
@@ -349,7 +349,7 @@ export const DOCUMENT_TRACKER_CONFIG: Array<any> = [
           },
           {
             value: 'Pending for Notary',
-            color: '#fbcb51' || 'Yellow',
+            color: '#fbcb51' || 'yellow',
           },
         ],
         useAsFilter: true,
