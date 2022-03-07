@@ -1,6 +1,7 @@
 import { ApiService } from 'src/app/service/api/api.service';
 import { UtilService } from './../../../../../../service/util/util.service';
 import { ActionResultComponent } from './../../../../../../shared/dialogs/action-result/action-result.component';
+import { FolderService } from './../../../../../../service/api/folder/folder.service';
 import { ConferenceService } from './../../../../../../service/api/conference/conference.service';
 import { AreYouSureComponent } from './../../../../../../shared/dialogs/are-you-sure/are-you-sure.component';
 import {
@@ -41,7 +42,11 @@ export class SetScheduleComponent implements OnInit {
       let findTemp: any = this.data.selected.find(
         (o: any) => o._barangay.brgyCode === doc._barangay.brgyCode
       );
-      if (findTemp) findTemp.duration = doc.duration;
+      if (findTemp) {
+        findTemp.duration = doc.duration;
+        console.log(findTemp);
+        console.log(this.data);
+      }
     });
   }
 
@@ -50,9 +55,9 @@ export class SetScheduleComponent implements OnInit {
     var totalDurationToAdd = (doc.queue - 1) * doc.duration;
     date.setMinutes(date.getMinutes() + totalDurationToAdd);
     doc.estimatedStart = date;
+    console.log(date);
     return date;
   }
-
   modelChanged(event: any) {
     console.log(event);
     let tempTime: any = this.formatAMPM(new Date(event));
@@ -112,20 +117,24 @@ export class SetScheduleComponent implements OnInit {
     let idsTemp: any = [];
     let docLogs: any = [];
     let docIds: any = [];
+    let tempDocIds: any = [];
+    console.log(this.data.selected);
     this.data.selected.forEach((el: any) => {
       console.log(el);
       idsTemp.push(el._id);
       el._transactions.forEach((trans: any) => {
+        console.log(trans);
+        docIds.push(trans._documents[0]._id);
         docLogs.push({
           docDetails: trans._documents[0],
           message: 'Video Conference Scheduled by Notarial Staff',
         });
-        docIds.push(trans._documents[0]._id);
       });
     });
     console.log(docLogs);
     console.log(idsTemp);
     console.log(docIds);
+    tempDocIds = [...docIds];
     toSaveData.schedule = new Date(this.schedule);
     toSaveData._folderIds = idsTemp;
     console.log(toSaveData);
@@ -135,7 +144,7 @@ export class SetScheduleComponent implements OnInit {
       (res: any) => {
         console.log(res);
         let que: number = 1;
-        let apiQueries = docIds.map((id: any) => {
+        let apiQueries = tempDocIds.map((id: any) => {
           return this.api.document.update(
             {
               queue: que++,
