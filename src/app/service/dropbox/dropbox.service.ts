@@ -67,8 +67,14 @@ export class DropboxService {
   downloadFile(path: string): Observable<any> {
     return Observable.create((observer: any) => {
       this.dbx
-        .downloadFile({ path })
+        .filesGetTemporaryLink({ path })
         .then((response: any) => {
+          var link = document.createElement('a');
+          link.href = response.result.link;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+
           observer.next(response);
           observer.complete();
         })

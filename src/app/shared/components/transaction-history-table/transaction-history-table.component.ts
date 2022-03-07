@@ -21,6 +21,8 @@ import { User } from 'src/app/models/user.interface';
 import { UtilService } from 'src/app/service/util/util.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExcelService } from 'src/app/service/excel/excel.service';
+import { L } from '@angular/cdk/keycodes';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-transaction-history-table',
@@ -278,14 +280,47 @@ export class TransactionHistoryTableComponent implements OnInit {
     this.selected = event;
   }
 
-  downloadNotarizedDocuments() {
+  async downloadNotarizedDocuments() {
     let docs: any = [];
-    this.selected.forEach((doc: any) => {
-      docs.push(doc);
-      if (doc.notarizedDocument) this.downloadDocu(doc.notarizedDocument);
-    });
-    console.log(docs);
+    let getLink: any = [];
+
+    let toDownloads = await this.downloadFiles();
+    console.log(toDownloads);
+
+    if (toDownloads) {
+      toDownloads.forEach((res, index) => {
+        setTimeout(() => {
+          var a = document.createElement('a');
+          a.href = toDownloads[index].result.link;
+          a.target = '_parent';
+          (document.body || document.documentElement).appendChild(a);
+          a.click();
+          (document.body || document.documentElement).removeChild(a);
+          console.log(res);
+        }, 500 * index + 1);
+      });
+    }
+
+    // forkJoin(getLink).subscribe((res) => {
+    //   console.log(res);
+    //   let links = res.map((el: any) => {
+    //     return el.result.link;
+    //   });
+    // });
   }
+  async downloadFiles() {
+    let toDownloadFile = [];
+    for (const doc of this.selected) {
+      try {
+        let res = await this.dbx
+          .getTempLink(doc['notarizedDocument']['dropbox']['path_display'])
+          .toPromise();
+        toDownloadFile.push(res);
+      } catch (error) {}
+    }
+    return toDownloadFile;
+  }
+
   downloadScreenshots() {
     let docs: any = [];
     this.selected.forEach((doc: any) => {
