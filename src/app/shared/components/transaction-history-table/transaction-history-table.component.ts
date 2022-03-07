@@ -180,9 +180,9 @@ export class TransactionHistoryTableComponent implements OnInit {
   }
   checkNotarizedDocument() {
     this.dataSource.forEach((docObj: any) => {
-      docObj['notarizedDocumentStatus'] = docObj.sender.images.reason_coi
-        ? 'For Uploading'
-        : 'Uploaded';
+      docObj['notarizedDocumentStatus'] = docObj.notarizedDocument
+        ? 'Uploaded'
+        : 'For Uploading';
     });
   }
 
@@ -282,7 +282,7 @@ export class TransactionHistoryTableComponent implements OnInit {
     let docs: any = [];
     this.selected.forEach((doc: any) => {
       docs.push(doc);
-      this.downloadDocu(doc.notarizedDocument);
+      if (doc.notarizedDocument) this.downloadDocu(doc.notarizedDocument);
     });
     console.log(docs);
   }
@@ -290,16 +290,21 @@ export class TransactionHistoryTableComponent implements OnInit {
     let docs: any = [];
     this.selected.forEach((doc: any) => {
       docs.push(doc);
-      this.downloadSS(doc);
+      if (doc) this.downloadSS(doc);
     });
     console.log(docs);
   }
 
   downloadDocu(doc: any) {
-    this.dbx.getTempLink(doc.dropbox.path_display).subscribe((res: any) => {
-      console.log(res);
-      window.open(res.result.link, '_blank');
-    });
+    this.dbx.getTempLink(doc.dropbox.path_display).subscribe(
+      (res: any) => {
+        console.log(res);
+        window.open(res.result.link, '_blank');
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   downloadSS(data: any) {
