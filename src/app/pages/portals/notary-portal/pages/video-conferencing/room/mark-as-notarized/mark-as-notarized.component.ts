@@ -11,6 +11,7 @@ import {
   MatDialog,
 } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-mark-as-notarized',
@@ -82,13 +83,32 @@ export class MarkAsNotarizedComponent implements OnInit {
               console.log(res);
               if (res) {
                 let docLogs: any = {};
+                let docIds: any = [];
                 docLogs.docDetails = this.data.document;
                 docLogs.message = 'Marked as Notarized';
+                docLogs._barangay = this.data.document._barangay;
+                docIds.push(this.data.document._id);
                 this.api.documentlogs.createDocumentLogs(docLogs).subscribe(
                   (res: any) => {
                     console.log(res);
                   },
                   (err) => {
+                    console.log(err);
+                  }
+                );
+                let apiQueries = docIds.map((id: any) => {
+                  return this.api.document.update(
+                    {
+                      documentLogStatus: 'Marked as Notarized',
+                    },
+                    id
+                  );
+                });
+                forkJoin(apiQueries).subscribe(
+                  (res: any) => {
+                    console.log(res);
+                  },
+                  (err: any) => {
                     console.log(err);
                   }
                 );
@@ -141,13 +161,32 @@ export class MarkAsNotarizedComponent implements OnInit {
           console.log(res);
           if (res) {
             let docLogs: any = {};
+            let docIds: any = [];
             docLogs.docDetails = this.data.document;
             docLogs.message = 'Marked as Unnotarized';
+            docLogs._barangay = this.data.document._barangay;
+            docIds.push(this.data.document._id);
             this.api.documentlogs.createDocumentLogs(docLogs).subscribe(
               (res: any) => {
                 console.log(res);
               },
               (err) => {
+                console.log(err);
+              }
+            );
+            let apiQueries = docIds.map((id: any) => {
+              return this.api.document.update(
+                {
+                  documentLogStatus: 'Marked as Unnotarized',
+                },
+                id
+              );
+            });
+            forkJoin(apiQueries).subscribe(
+              (res: any) => {
+                console.log(res);
+              },
+              (err: any) => {
                 console.log(err);
               }
             );

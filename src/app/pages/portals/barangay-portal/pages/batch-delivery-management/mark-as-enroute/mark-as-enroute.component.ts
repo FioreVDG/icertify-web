@@ -16,6 +16,7 @@ import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/acti
 import { Store } from '@ngrx/store';
 import { User } from 'src/app/models/user.interface';
 import { P } from '@angular/cdk/keycodes';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-mark-as-enroute',
@@ -71,16 +72,20 @@ export class MarkAsEnrouteComponent implements OnInit {
   onMark() {
     let ids: any = [];
     let docLogs: any = [];
+    let docIds: any = [];
     this.data.obj.forEach((data: any) => {
       console.log(data);
       ids.push(data.ids._id);
+      docIds.push(data.docDetails._id);
       docLogs.push({
         docDetails: data.docDetails,
         message: 'Batched and Marked as Enroute to Notary by Brgy Hall Staff',
+        _barangay: data.docDetails._barangay,
       });
     });
     ids = ids.join(',');
     console.log(ids);
+    console.log(docIds);
     this.dialog
       .open(AreYouSureComponent, {
         data: {
@@ -99,6 +104,23 @@ export class MarkAsEnrouteComponent implements OnInit {
                 console.log(res);
                 //DOCUMENT LOGS HERE
                 console.log(docLogs);
+                let apiQueries = docIds.map((id: any) => {
+                  return this.api.document.update(
+                    {
+                      documentLogStatus:
+                        'Batched and Marked as Enroute to Notary by Brgy Hall Staff',
+                    },
+                    id
+                  );
+                });
+                forkJoin(apiQueries).subscribe(
+                  (res: any) => {
+                    console.log(res);
+                  },
+                  (err: any) => {
+                    console.log(err);
+                  }
+                );
                 this.api.documentlogs.createDocumentLogsMany(docLogs).subscribe(
                   (res: any) => {
                     console.log(res);

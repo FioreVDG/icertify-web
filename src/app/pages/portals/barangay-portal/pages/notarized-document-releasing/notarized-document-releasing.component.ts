@@ -133,12 +133,15 @@ export class NotarizedDocumentReleasingComponent implements OnInit {
   onMark() {
     let ids: any = [];
     let docLogs: any = [];
+    let docIds: any = [];
     console.log(this.selected);
     this.selected.forEach((id: any) => {
       ids.push(id._transactionId._id);
+      docIds.push(id._id);
       docLogs.push({
         docDetails: id,
         message: 'Document Released to Indigent by Brgy Hall Staff',
+        _barangay: id._barangay,
       });
     });
     console.log(this.selected);
@@ -169,6 +172,22 @@ export class NotarizedDocumentReleasingComponent implements OnInit {
 
           forkJoin(apiQueries).subscribe(
             (res: any) => {
+              let apiQueries = docIds.map((id: any) => {
+                return this.api.document.update(
+                  {
+                    documentLogStatus: 'Document Released to Indigent',
+                  },
+                  id
+                );
+              });
+              forkJoin(apiQueries).subscribe(
+                (res: any) => {
+                  console.log(res);
+                },
+                (err: any) => {
+                  console.log(err);
+                }
+              );
               this.api.documentlogs.createDocumentLogsMany(docLogs).subscribe(
                 (res: any) => {
                   console.log(res);

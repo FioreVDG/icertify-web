@@ -87,6 +87,7 @@ export class MarkAsEnrouteComponent implements OnInit {
 
   submit() {
     let docLogs: any = [];
+    let docIds: any = [];
     let toAdd = {
       _riderFromNotary: this.riderObj,
       _enroutedByNotary: this.me._id,
@@ -101,9 +102,11 @@ export class MarkAsEnrouteComponent implements OnInit {
 
     for (let item of this.obj) {
       item._transactions.forEach((el: any) => {
+        docIds.push(el._documents[0]._id);
         docLogs.push({
           docDetails: el._documents[0],
           message: 'Marked as Enroute to Brgy Hall by Notarial Staff',
+          _barangay: el._documents[0]._barangay,
         });
       });
     }
@@ -127,6 +130,23 @@ export class MarkAsEnrouteComponent implements OnInit {
           const loader = this.util.startLoading('Enrouting...');
           forkJoin(enrouteQueries).subscribe(
             (res) => {
+              let apiQueries = docIds.map((id: any) => {
+                return this.api.document.update(
+                  {
+                    documentLogStatus:
+                      'Marked as Enroute to Brgy Hall by Notary',
+                  },
+                  id
+                );
+              });
+              forkJoin(apiQueries).subscribe(
+                (res: any) => {
+                  console.log(res);
+                },
+                (err: any) => {
+                  console.log(err);
+                }
+              );
               this.api.documentlogs.createDocumentLogsMany(docLogs).subscribe(
                 (resp: any) => {
                   console.log(resp);
