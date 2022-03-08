@@ -98,7 +98,14 @@ export class RegistrantsDbComponent implements OnInit {
           })
           .afterClosed()
           .subscribe((res: any) => {
-            if (res) this.fetchData(this.page);
+            if (res)
+              this.fetchData({
+                pageSize: 10,
+                pageIndex: 1,
+                populate: [],
+                bottomSheet: this.bsConfig,
+                label: this.currTable,
+              });
           });
         break;
 
