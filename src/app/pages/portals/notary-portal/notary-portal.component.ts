@@ -15,7 +15,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { AreYouSureComponent } from 'src/app/shared/dialogs/are-you-sure/are-you-sure.component';
 import { NOTARY_MENU, NOTARY_MENU_COLORS } from 'src/app/config/USER_MENU';
 import { Store } from '@ngrx/store';
-import { setUser } from 'src/app/store/user/user.action';
+import { resetUser, setUser } from 'src/app/store/user/user.action';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-notary-portal',
@@ -43,7 +44,8 @@ export class NotaryPortalComponent implements OnInit {
     public auth: AuthService,
     private dialog: MatDialog,
     private store: Store<{ user: User }>,
-    private api: ApiService
+    private api: ApiService,
+    private sb: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -64,23 +66,41 @@ export class NotaryPortalComponent implements OnInit {
     this.auth.me().subscribe(
       (res: any) => {
         console.log(res);
-        this.me = res.env.user;
-        this.api.cluster
-          .getOneNotary(this.me._notaryId)
-          .subscribe((res: any) => {
-            console.log(res);
-            this.store.dispatch(setCluster({ cluster: res.env.cluster }));
-          });
-        this.store.dispatch(setUser({ user: res.env.user }));
-        localStorage.setItem('BARANGAY_INFORMATION', JSON.stringify(this.me));
+        if (res.env.user.type) {
+          this.me = res.env.user;
+          this.api.cluster
+            .getOneNotary(this.me._notaryId)
+            .subscribe((res: any) => {
+              console.log(res);
+              this.store.dispatch(setCluster({ cluster: res.env.cluster }));
+            });
+          this.store.dispatch(setUser({ user: res.env.user }));
+          localStorage.setItem('BARANGAY_INFORMATION', JSON.stringify(this.me));
 
-        if (!this.me.isMain && this.me._role && this.me._role.access.length) {
-          this.notaryNav = this.me._role.access;
+          if (!this.me.isMain && this.me._role && this.me._role.access.length) {
+            this.notaryNav = this.me._role.access;
+          } else {
+            this.notaryNav = NOTARY_NAVS;
+          }
+
+          this.loading = false;
         } else {
-          this.notaryNav = NOTARY_NAVS;
+          this.sb.open(
+            'This is not a Notary Account or not recorded to our Database. Redirecting to Login Page...',
+            undefined,
+            {
+              panelClass: ['fail'],
+              duration: 5000,
+            }
+          );
+          localStorage.removeItem('SESSION_CSURF_TOKEN');
+          localStorage.removeItem('SESSION_AUTH');
+          this.store.dispatch(resetUser());
+          this.loggingOut = true;
+          setTimeout(() => {
+            this.router.navigate(['/login']);
+          }, 5000);
         }
-
-        this.loading = false;
       },
       (err) => {
         console.log(err);
@@ -161,6 +181,7 @@ export class NotaryPortalComponent implements OnInit {
         if (res) {
           localStorage.removeItem('SESSION_CSURF_TOKEN');
           localStorage.removeItem('SESSION_AUTH');
+          this.store.dispatch(resetUser());
           this.loggingOut = true;
           setTimeout(() => {
             this.router.navigate(['/login']);
