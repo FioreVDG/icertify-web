@@ -1,3 +1,4 @@
+import { DashboardService } from './dashboard/dashboard.service';
 import { ReportService } from './report/report.service';
 import { DocumentLogsService } from './document-logs/document-logs.service';
 import { ClusterService } from './cluster/cluster.service';
@@ -37,6 +38,7 @@ export class ApiService {
     public sms: SmsService,
     public documentlogs: DocumentLogsService,
     public cluster: ClusterService,
-    public report: ReportService
+    public report: ReportService,
+    public dashboard: DashboardService
   ) {}
 }
