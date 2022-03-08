@@ -66,7 +66,7 @@ export class NotaryPortalComponent implements OnInit {
     this.auth.me().subscribe(
       (res: any) => {
         console.log(res);
-        if (res.env.user.type) {
+        if (res.env.user.type == 'Notary') {
           this.me = res.env.user;
           this.api.cluster
             .getOneNotary(this.me._notaryId)
