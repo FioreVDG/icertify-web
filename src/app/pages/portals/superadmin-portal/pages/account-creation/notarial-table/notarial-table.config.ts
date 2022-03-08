@@ -70,9 +70,10 @@ export const NOTARIAL: Column[] = [
   {
     title: 'Status',
     breakpoint: 'sm',
-    path: 'status',
+    path: 'periodStatus',
     type: 'text',
     selected: true,
+    isVirtual: true,
   },
 ];
 

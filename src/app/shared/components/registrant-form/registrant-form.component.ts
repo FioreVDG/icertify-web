@@ -153,6 +153,7 @@ export class RegistrantFormComponent implements OnInit {
         cityMun: event.cityMun,
         province: event.province,
         region: event.region,
+        ...this.brgyForm.value,
       };
       this.addressTemp = address;
       console.log(address);

@@ -20,12 +20,13 @@ import { UtilService } from 'src/app/service/util/util.service';
 import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
 import { Store } from '@ngrx/store';
 import { User } from 'src/app/models/user.interface';
-import { setUser } from 'src/app/store/user/user.action';
+import { resetUser, setUser } from 'src/app/store/user/user.action';
 import {
   animateText,
   onSideNavChange,
 } from 'src/app/animations/sidebar.animation';
 import { NavNode } from 'src/app/models/treesidenav.interface';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-barangay-portal',
@@ -58,7 +59,8 @@ export class BarangayPortalComponent implements OnInit {
     private util: UtilService,
     private auth: AuthService,
     private store: Store<{ user: User }>,
-    private api: ApiService
+    private api: ApiService,
+    private sb: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -78,24 +80,42 @@ export class BarangayPortalComponent implements OnInit {
     this.auth.me().subscribe(
       (res: any) => {
         console.log(res);
-        this.me = res.env.user;
-        this.store.dispatch(setUser({ user: res.env.user }));
-        this.api.cluster.getOne(this.me._barangay.brgyCode).subscribe(
-          (res: any) => {
-            console.log(res, 'Cluster');
-            this.store.dispatch(setCluster({ cluster: res.env.cluster }));
-            localStorage.setItem(
-              'BARANGAY_INFORMATION',
-              JSON.stringify(this.me)
-            );
-            this.setNavs('');
-            this.loading = false;
-          },
-          (err) => {
-            this.setNavs(err.error.message);
-            this.loading = false;
-          }
-        );
+        if (res.env.user.type == 'Barangay') {
+          this.me = res.env.user;
+          this.store.dispatch(setUser({ user: res.env.user }));
+          this.api.cluster.getOne(this.me._barangay.brgyCode).subscribe(
+            (res: any) => {
+              console.log(res, 'Cluster');
+              this.store.dispatch(setCluster({ cluster: res.env.cluster }));
+              localStorage.setItem(
+                'BARANGAY_INFORMATION',
+                JSON.stringify(this.me)
+              );
+              this.setNavs('');
+              this.loading = false;
+            },
+            (err) => {
+              this.setNavs(err.error.message);
+              this.loading = false;
+            }
+          );
+        } else {
+          this.sb.open(
+            'This is not a Barangay Account or not recorded to our Database. Redirecting to Login Page...',
+            undefined,
+            {
+              panelClass: ['fail'],
+              duration: 5000,
+            }
+          );
+          localStorage.removeItem('SESSION_CSURF_TOKEN');
+          localStorage.removeItem('SESSION_AUTH');
+          this.store.dispatch(resetUser());
+          this.loggingOut = true;
+          setTimeout(() => {
+            this.router.navigate(['/login']);
+          }, 5000);
+        }
       },
       (err) => {
         console.log(err);
@@ -210,6 +230,7 @@ export class BarangayPortalComponent implements OnInit {
         if (res) {
           localStorage.removeItem('SESSION_CSURF_TOKEN');
           localStorage.removeItem('SESSION_AUTH');
+          this.store.dispatch(resetUser());
           this.loggingOut = true;
           setTimeout(() => {
             this.router.navigate(['/login']);

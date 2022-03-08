@@ -16,6 +16,7 @@ import { SUPERADMIN_MENU } from 'src/app/config/USER_MENU';
 import { Store } from '@ngrx/store';
 import { User } from 'src/app/models/user.interface';
 import { resetUser, setUser } from 'src/app/store/user/user.action';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-superadmin-portal',
@@ -42,7 +43,8 @@ export class SuperadminPortalComponent implements OnInit {
     private dialog: MatDialog,
     private util: UtilService,
     private auth: AuthService,
-    private store: Store<{ user: User }>
+    private store: Store<{ user: User }>,
+    private sb: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -62,16 +64,35 @@ export class SuperadminPortalComponent implements OnInit {
     this.auth.me().subscribe(
       (res: any) => {
         console.log(res);
-        this.me = res.env.user;
-        this.store.dispatch(setUser({ user: res.env.user }));
+        if (res.env.user.type == 'Admin') {
+          this.me = res.env.user;
+          this.store.dispatch(setUser({ user: res.env.user }));
 
-        if (!this.me.isMain && this.me._role && this.me._role.access.length) {
-          this.superadminNav = this.me._role.access;
-          console.log(this.superadminNav);
+          if (!this.me.isMain && this.me._role && this.me._role.access.length) {
+            this.superadminNav = this.me._role.access;
+            console.log(this.superadminNav);
+            this.loading = false;
+          } else {
+            this.superadminNav = SUPERADMIN_NAVS;
+            console.log(this.superadminNav);
+            this.loading = false;
+          }
         } else {
-          this.superadminNav = SUPERADMIN_NAVS;
-          console.log(this.superadminNav);
-          this.loading = false;
+          this.sb.open(
+            'This Account is not an Admin or not recorded to our Database. Redirecting to Login Page...',
+            undefined,
+            {
+              panelClass: ['fail'],
+              duration: 5000,
+            }
+          );
+          localStorage.removeItem('SESSION_CSURF_TOKEN');
+          localStorage.removeItem('SESSION_AUTH');
+          this.store.dispatch(resetUser());
+          this.loggingOut = true;
+          setTimeout(() => {
+            this.router.navigate(['/login']);
+          }, 5000);
         }
       },
       (err) => {

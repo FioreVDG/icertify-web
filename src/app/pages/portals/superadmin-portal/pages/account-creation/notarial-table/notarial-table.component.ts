@@ -68,8 +68,20 @@ export class NotarialTableComponent implements OnInit {
     this.loading = true;
     this.api.user.getAllUser(qry).subscribe((res: any) => {
       console.log(res);
+
       this.loading = false;
       this.dataSource = res.env.users;
+      this.dataSource.forEach((el: any) => {
+        const currDate = new Date();
+        if (
+          currDate > new Date(el.period_startDate) &&
+          currDate < new Date(el.period_endDate)
+        ) {
+          el.periodStatus = 'Valid';
+        } else {
+          el.periodStatus = 'Expired';
+        }
+      });
       this.dataLength = res.count;
     });
   }

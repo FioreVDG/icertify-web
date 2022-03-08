@@ -115,6 +115,12 @@ export const BARANGAY_NAVS: NavNode[] = [
 
 export const SUPERADMIN_NAVS: NavNode[] = [
   {
+    label: 'Dashboard',
+    icon: 'dashboard',
+    route: 'admin-dashboard',
+    hasAccess: false,
+  },
+  {
     label: 'Account Creation',
     icon: 'person_add',
     route: 'account-creation',

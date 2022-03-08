@@ -9,7 +9,7 @@
     </div>
     <div class="right">
       <h2>Login your account</h2>
-      <form [formGroup]="credential" style="width: 100%">
+      <form [formGroup]="credential" style="width: 100%" (ngSubmit)="login()">
         <mat-form-field class="full-width" appearance="fill">
           <mat-label>Email</mat-label>
           <input type="text" matInput formControlName="email" />
@@ -38,22 +38,24 @@
             formFieldErrMessage("password")
           }}</mat-error>
         </mat-form-field>
-      </form>
-      <button
-        [disabled]="!credential.valid || isLoggingIn"
-        mat-flat-button
-        color="primary"
-        class="full-width login-btn"
-        (click)="login()"
-      >
-        <mat-spinner
-          style="margin-left: 46%"
+        <button
+          type="submit"
+          [disabled]="!credential.valid || isLoggingIn"
+          mat-flat-button
           color="primary"
-          *ngIf="isLoggingIn"
-          [diameter]="30"
-        ></mat-spinner>
-        <span *ngIf="!isLoggingIn">Login</span>
-      </button>
+          class="full-width login-btn"
+          (click)="login()"
+        >
+          <mat-spinner
+            style="margin-left: 46%"
+            color="primary"
+            *ngIf="isLoggingIn"
+            [diameter]="30"
+          ></mat-spinner>
+          <span *ngIf="!isLoggingIn">Login</span>
+        </button>
+      </form>
+
       <p class="forgot">Forgot password?</p>
     </div>
   </div>
