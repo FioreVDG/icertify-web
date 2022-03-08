@@ -56,17 +56,24 @@
           <mat-card>
             <div class="text-wrap">
               <p>Date and Time Released</p>
-              <p>
+              <p *ngIf="data.obj.locationStatus === 'Released to Indigent'">
                 <b>{{ filteredFinal?.createdAt | date: "medium" }}</b>
+              </p>
+              <p *ngIf="data.obj.locationStatus !== 'Released to Indigent'">
+                <b>Not Released </b>
               </p>
             </div>
             <div class="text-wrap">
               <p>Released by</p>
-              <p>
+              <p *ngIf="data.obj.locationStatus === 'Released to Indigent'">
                 <b
-                  >{{ filteredFinal?._createdBy.lastName }},
+                  >{{ filteredFinal?._createdBy.lastName
+                  }}{{ filteredFinal ? ", " : "" }}
                   {{ filteredFinal?._createdBy.firstName }}</b
                 >
+              </p>
+              <p *ngIf="data.obj.locationStatus !== 'Released to Indigent'">
+                <b>Not Released </b>
               </p>
             </div>
           </mat-card>

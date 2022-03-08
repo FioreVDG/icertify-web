@@ -35,9 +35,9 @@ export class DocumentTrackerTableComponent implements OnInit {
     pageSize: 10,
     pageIndex: 1,
     populate: [
-      // {
-      //   field: '_documents',
-      // },
+      {
+        field: '_documents',
+      },
     ],
     bottomSheet: this.bsConfig,
   };
