@@ -37,7 +37,7 @@ export class SuperadminLoginComponent implements OnInit {
         (res: any) => {
           if (res && res.env.user.type === 'Admin') {
             this.isLoggingIn = false;
-            this.router.navigate(['/superadmin-portal/account-creation']);
+            this.router.navigate(['/superadmin-portal']);
           }
         },
         (err) => {
@@ -72,7 +72,7 @@ export class SuperadminLoginComponent implements OnInit {
           localStorage.setItem('SESSION_AUTH', res.token);
 
           if (res && res.env.user.type === 'Admin') {
-            this.router.navigate(['/superadmin-portal/account-creation']);
+            this.router.navigate(['/superadmin-portal']);
             this.isLoggedIn = true;
           } else {
             this.dialog

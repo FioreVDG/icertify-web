@@ -128,6 +128,7 @@ export class SetScheduleComponent implements OnInit {
         docLogs.push({
           docDetails: trans._documents[0],
           message: 'Video Conference Scheduled by Notarial Staff',
+          _barangay: trans._documents[0]._barangay,
         });
       });
     });
@@ -148,6 +149,7 @@ export class SetScheduleComponent implements OnInit {
           return this.api.document.update(
             {
               queue: que++,
+              documentLogStatus: 'Video Conference Scheduled by Notarial Staff',
             },
             id
           );

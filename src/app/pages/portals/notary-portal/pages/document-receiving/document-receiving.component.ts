@@ -195,15 +195,18 @@ export class DocumentReceivingComponent implements OnInit {
   onMark() {
     let ids: any = [];
     let docLogs: any = [];
+    let docIds: any = [];
     console.log(this.selected);
     this.selected.forEach((id: any) => {
       ids.push(id._id);
       console.log(id);
       id._transactions.forEach((el: any) => {
         console.log(el);
+        docIds.push(el._documents[0]._id);
         docLogs.push({
           docDetails: el._documents[0],
           message: 'Received by Notarial Staff',
+          _barangay: el._barangay,
         });
       });
       console.log(docLogs);
@@ -236,6 +239,22 @@ export class DocumentReceivingComponent implements OnInit {
           forkJoin(apiQueries).subscribe(
             (res: any) => {
               console.log(docLogs);
+              let apiQueries = docIds.map((id: any) => {
+                return this.api.document.update(
+                  {
+                    documentLogStatus: 'Received by Notarial Staff',
+                  },
+                  id
+                );
+              });
+              forkJoin(apiQueries).subscribe(
+                (res: any) => {
+                  console.log(res);
+                },
+                (err: any) => {
+                  console.log(err);
+                }
+              );
               this.api.documentlogs.createDocumentLogsMany(docLogs).subscribe(
                 (res: any) => {
                   console.log(res);
