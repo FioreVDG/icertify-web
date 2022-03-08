@@ -11,7 +11,14 @@ const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'account-creation',
+        redirectTo: 'admin-dashboard',
+      },
+      {
+        path: 'admin-dashboard',
+        loadChildren: () =>
+          import('./pages/dashboard/dashboard.module').then(
+            (m) => m.DashboardModule
+          ),
       },
       {
         path: 'account-creation',
