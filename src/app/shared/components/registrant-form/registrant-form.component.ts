@@ -292,18 +292,22 @@ export class RegistrantFormComponent implements OnInit {
         (res: any) => {
           console.log(res);
           this.util.stopLoading(loader);
-          this.dialog
-            .open(ActionResultComponent, {
-              data: {
-                msg: 'Registrant details successfully updated!',
-                success: true,
-                button: 'Okay',
-              },
-            })
-            .afterClosed()
-            .subscribe((res: any) => {
-              if (res) this.dialogRef.close(true);
-            });
+          const id = res.env.user._id;
+          this.api.document.updateSenderImages(id).subscribe((res) => {
+            this.util.stopLoading(loader);
+            this.dialog
+              .open(ActionResultComponent, {
+                data: {
+                  msg: 'Registrant details successfully updated!',
+                  success: true,
+                  button: 'Okay',
+                },
+              })
+              .afterClosed()
+              .subscribe((res: any) => {
+                if (res) this.dialogRef.close(true);
+              });
+          });
         },
         (err) => {
           this.util.stopLoading(loader);
