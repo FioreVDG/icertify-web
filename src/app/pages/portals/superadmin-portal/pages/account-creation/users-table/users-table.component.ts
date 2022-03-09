@@ -240,6 +240,11 @@ export class UsersTableComponent implements OnInit {
       console.log(res);
       this.loading = false;
       this.dataSource = res.env.users;
+      this.dataSource.forEach((el: any) => {
+        if (!el._role) {
+          el._role = { name: 'ADMIN' };
+        }
+      });
       this.dataLength = res.count;
     });
   }
