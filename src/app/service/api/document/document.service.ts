@@ -32,4 +32,7 @@ export class DocumentService {
   skip(body: Object, id: String) {
     return this.http.start('put', `/documents/skip/${id}`, body);
   }
+  updateSenderImages(id: String) {
+    return this.http.start('put', `/documents/updateImages/${id}`, {});
+  }
 }

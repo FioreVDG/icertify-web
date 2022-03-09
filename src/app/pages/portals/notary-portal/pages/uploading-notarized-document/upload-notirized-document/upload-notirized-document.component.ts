@@ -31,7 +31,6 @@ export class UploadNotirizedDocumentComponent implements OnInit {
   me: any;
 
   ngOnInit(): void {
-    console.log(this.data);
     this.store.select('user').subscribe((res: User) => {
       this.me = res;
       console.log(res);

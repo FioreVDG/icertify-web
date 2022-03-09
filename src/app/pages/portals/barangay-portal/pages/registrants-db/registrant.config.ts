@@ -20,6 +20,11 @@ export const REGISTRANT_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         icon: 'visibility',
       },
       {
+        label: 'Upload Certificate of Indigency',
+        action: 'uploadCOI',
+        icon: 'upload_file',
+      },
+      {
         label: 'Delete',
         action: 'deleteRegistrant',
         icon: 'delete',
