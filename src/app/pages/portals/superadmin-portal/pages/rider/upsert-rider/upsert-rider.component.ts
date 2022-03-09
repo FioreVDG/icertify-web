@@ -100,7 +100,7 @@ export class UpsertRiderComponent implements OnInit {
                   data: {
                     success: true,
                     msg: `Rider information successfully ${message}!`,
-                    button: 'Nice',
+                    button: 'Okay',
                   },
                 })
                 .afterClosed()
