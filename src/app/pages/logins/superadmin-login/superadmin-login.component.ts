@@ -95,7 +95,7 @@ export class SuperadminLoginComponent implements OnInit {
               data: {
                 msg: `${err.error.message} / Login Failed`,
                 success: false,
-                button: 'Got it!',
+                button: 'Okay',
               },
             })
             .afterClosed()

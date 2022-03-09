@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
                 data: {
                   msg: 'Unauthorized / Login Failed',
                   success: false,
-                  button: 'Got it!',
+                  button: 'Okay',
                 },
               })
               .afterClosed()
@@ -118,7 +118,7 @@ export class LoginComponent implements OnInit {
               data: {
                 msg: 'Unauthorized / Login Failed',
                 success: false,
-                button: 'Got it!',
+                button: 'Okay',
               },
             })
             .afterClosed()
@@ -138,7 +138,7 @@ export class LoginComponent implements OnInit {
             data: {
               msg: `${err.error.message} / Login Failed`,
               success: false,
-              button: 'Got it!',
+              button: 'Okay',
             },
           })
           .afterClosed()

@@ -53,7 +53,7 @@ export class MarkAsEnrouteComponent implements OnInit {
           data: {
             msg: `No rider found in this cluster!`,
             success: false,
-            button: 'Got it!',
+            button: 'Okay!',
           },
         })
         .afterClosed()

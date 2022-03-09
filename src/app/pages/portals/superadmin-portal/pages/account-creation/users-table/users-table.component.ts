@@ -150,7 +150,7 @@ export class UsersTableComponent implements OnInit {
                       data: {
                         msg: `Deleted Successfully!`,
                         success: true,
-                        button: 'Got it!',
+                        button: 'Okay!',
                       },
                     })
                     .afterClosed()

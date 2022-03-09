@@ -480,7 +480,7 @@ export class UpsertClusterComponent implements OnInit {
                       ' successfully ' +
                       (this.data ? 'updated!' : 'added!'),
                     success: true,
-                    button: 'Got it!',
+                    button: 'Okay!',
                   },
                 });
                 this.dialogRef.close(true);
@@ -490,7 +490,7 @@ export class UpsertClusterComponent implements OnInit {
                   data: {
                     msg: 'Error: ' + err.error.message,
                     success: false,
-                    button: 'Got it!',
+                    button: 'Okay!',
                   },
                 });
               }

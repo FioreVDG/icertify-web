@@ -21,8 +21,6 @@ import { User } from 'src/app/models/user.interface';
 import { UtilService } from 'src/app/service/util/util.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExcelService } from 'src/app/service/excel/excel.service';
-import { L } from '@angular/cdk/keycodes';
-import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-transaction-history-table',
