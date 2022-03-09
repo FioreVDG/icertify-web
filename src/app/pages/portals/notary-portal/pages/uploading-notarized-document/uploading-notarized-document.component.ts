@@ -28,9 +28,9 @@ export class UploadingNotarizedDocumentComponent implements OnInit {
     pageSize: 10,
     pageIndex: 1,
     populate: [
-      {
-        field: '_createdBy',
-      },
+      // {
+      //   field: '_createdBy',
+      // },
     ],
     label: 'For Uploading',
   };
