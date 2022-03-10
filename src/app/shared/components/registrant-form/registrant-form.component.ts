@@ -295,6 +295,7 @@ export class RegistrantFormComponent implements OnInit {
           const id = res.env.user._id;
           this.api.document.updateSenderImages(id).subscribe((res) => {
             this.util.stopLoading(loader);
+            // console.log(res);
             this.dialog
               .open(ActionResultComponent, {
                 data: {
