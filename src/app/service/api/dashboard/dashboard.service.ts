@@ -18,4 +18,25 @@ export class DashboardService {
   newTransaction() {
     return this.http.start('get', '/dashboard/newTransaction');
   }
+  docReceiving() {
+    return this.http.start('get', '/dashboard/docReceiving');
+  }
+  batchDelivery() {
+    return this.http.start('get', '/dashboard/batchDelivery');
+  }
+  vidConference() {
+    return this.http.start('get', '/dashboard/vidConference');
+  }
+  docReceivingNotary() {
+    return this.http.start('get', '/dashboard/docReceivingNotary');
+  }
+  docReleasing() {
+    return this.http.start('get', '/dashboard/docReleasing');
+  }
+  transactionHistory() {
+    return this.http.start('get', '/dashboard/transactionHistory');
+  }
+  documentTracker() {
+    return this.http.start('get', '/dashboard/documentTracker');
+  }
 }
