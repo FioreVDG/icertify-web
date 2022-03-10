@@ -113,7 +113,7 @@ export class NotarialTableComponent implements OnInit {
                       data: {
                         msg: `Deleted Successfully!`,
                         success: true,
-                        button: 'Got it!',
+                        button: 'Okay!',
                       },
                     })
                     .afterClosed()
@@ -127,7 +127,7 @@ export class NotarialTableComponent implements OnInit {
                     data: {
                       msg: `${err.error.message}`,
                       success: false,
-                      button: 'Got it!',
+                      button: 'Okay!',
                     },
                   });
                 }

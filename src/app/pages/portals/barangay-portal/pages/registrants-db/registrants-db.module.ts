@@ -6,15 +6,18 @@ import { CommonModule } from '@angular/common';
 
 import { RegistrantsDbRoutingModule } from './registrants-db-routing.module';
 import { RegistrantsDbComponent } from './registrants-db.component';
+import { UploadCertOfIndigencyComponent } from './upload-cert-of-indigency/upload-cert-of-indigency.component';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
 @NgModule({
-  declarations: [RegistrantsDbComponent],
+  declarations: [RegistrantsDbComponent, UploadCertOfIndigencyComponent],
   imports: [
     CommonModule,
     RegistrantsDbRoutingModule,
     MaterialModule,
     ComponentModule,
     DialogsModule,
+    NgxDocViewerModule,
   ],
 })
 export class RegistrantsDbModule {}

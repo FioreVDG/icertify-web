@@ -353,7 +353,7 @@ export const DOCUMENT_TRACKER_CONFIG: Array<any> = [
           },
         ],
         useAsFilter: true,
-        choices: ['Notarized', 'Unnotarized', 'Pending for Notary', 'Skipped'],
+        choices: ['Notarized', 'Unnotarized', 'Skipped'],
       },
       {
         title: 'Remark',

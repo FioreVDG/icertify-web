@@ -1,0 +1,40 @@
+<div mat-dialog-title><h3>Upload Certificate of Indigency</h3></div>
+<mat-icon (click)="dialogRef.close(false)" class="close-btn" color="warn"
+  >close</mat-icon
+>
+<div align="center" class="grid">
+  <p *ngIf="!toUploadCOI" class="col-12">No File Uploaded</p>
+  <div align="center" class="col-12 preview">
+    <img [src]="toUploadCOI.link" *ngIf="toUploadCOI && toUploadCOI.isImage" />
+    <ngx-doc-viewer
+      class="docviewer"
+      *ngIf="toUploadCOI && !toUploadCOI.isImage"
+      style="min-width: 100%; min-height: 100%"
+      [url]="toUploadCOI.link"
+      viewer="google"
+    ></ngx-doc-viewer>
+    <button
+      color="primary"
+      mat-fab
+      (click)="uploadFile()"
+      matTooltip="Upload an image"
+    >
+      <mat-icon>upload</mat-icon>
+    </button>
+  </div>
+  <p class="col-12" style="margin: 0" *ngIf="toUploadCOI">
+    {{ toUploadCOI.name }}
+  </p>
+</div>
+<div mat-dialog-conent></div>
+<div mat-dialog-actions align="center">
+  <button
+    *ngIf="toUploadCOI"
+    mat-flat-button
+    color="primary"
+    (click)="onSave()"
+    [disabled]="uploading"
+  >
+    {{ uploading ? "Uploading..." : "Upload" }}
+  </button>
+</div>

@@ -11,6 +11,7 @@ import {
   FIND_WITHOUT_CERTIFICATE,
   FIND_COMPLETE,
 } from './registrant.config';
+import { UploadCertOfIndigencyComponent } from './upload-cert-of-indigency/upload-cert-of-indigency.component';
 
 @Component({
   selector: 'app-registrants-db',
@@ -127,6 +128,28 @@ export class RegistrantsDbComponent implements OnInit {
         this.dialog.open(RegistrantFormComponent, {
           data: { obj: event.obj, header: 'View Registration Details' },
         });
+
+        break;
+
+      case 'uploadCOI':
+        this.dialog
+          .open(UploadCertOfIndigencyComponent, {
+            data: {
+              obj: event.obj,
+            },
+          })
+          .afterClosed()
+          .subscribe((res: any) => {
+            if (res)
+              this.fetchData({
+                pageSize: 10,
+                pageIndex: 1,
+                populate: [],
+                bottomSheet: this.bsConfig,
+                label: this.currTable,
+              });
+          });
+        break;
     }
   }
 

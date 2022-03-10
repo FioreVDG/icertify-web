@@ -217,6 +217,8 @@ export class AddTransactionComponent implements OnInit {
   saveTransaction() {
     let toSaveData: any = {};
     toSaveData.sender = this.data;
+    if (!this.data.images.cert_of_indigency)
+      toSaveData.sender.images.delayedCOI = true;
     toSaveData.sender._senderId = this.data._id;
     toSaveData.videoOfSignature = this.videoOfSignature;
     toSaveData.documents = this.docsArray;
@@ -253,6 +255,7 @@ export class AddTransactionComponent implements OnInit {
           console.log(this.docsArray[0]);
           docLogs.docDetails = this.docsArray[0];
           docLogs.message = 'Received by Brgy Hall Staff';
+          docLogs._barangay = res.env.transaction._barangay;
           this.api.documentlogs.createDocumentLogs(docLogs).subscribe(
             (res: any) => {
               console.log(res);
