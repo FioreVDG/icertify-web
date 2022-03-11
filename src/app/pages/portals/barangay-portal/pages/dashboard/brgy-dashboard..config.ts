@@ -493,7 +493,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
     },
   },
   {
-    label: 'REGISTRATION DATABASE',
+    label: 'REGISTRANT DATABASE',
     reportKey: 'registrantDb',
     isLoading: false,
     role: ['Registrants Database'],
@@ -632,7 +632,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
     label: 'Batch Delivery Management',
     reportKey: 'batchDelivery',
     isLoading: false,
-    role: ['Batch Delivery'],
+    role: ['Batch Delivery Management'],
     reportCharts: [
       {
         chartKey: 'batch_delivery',
