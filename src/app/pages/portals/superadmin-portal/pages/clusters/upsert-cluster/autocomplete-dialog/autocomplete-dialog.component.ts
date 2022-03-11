@@ -98,7 +98,7 @@ export class AutocompleteDialogComponent implements OnInit {
       }
     }
 
-    this.getClusters();
+    // this.getClusters();
   }
 
   displayWith(option: any) {
@@ -110,14 +110,14 @@ export class AutocompleteDialogComponent implements OnInit {
     this.dialogRef.close(this.brgyCtrl.value);
   }
 
-  getClusters() {
-    this.api.cluster.getAll({ find: [] }).subscribe((res: any) => {
-      console.log(res);
+  // getClusters() {
+  //   this.api.cluster.getAll({ find: [] }).subscribe((res: any) => {
+  //     console.log(res);
 
-      if (res.env.clusters.length) {
-        for (let cluster of res.env.clusters) {
-        }
-      }
-    });
-  }
+  //     if (res.env.clusters.length) {
+  //       for (let cluster of res.env.clusters) {
+  //       }
+  //     }
+  //   });
+  // }
 }

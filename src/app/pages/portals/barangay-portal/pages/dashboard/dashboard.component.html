@@ -1,1 +1,66 @@
-<p>dashboard works!</p>
+<div class="grid">
+  <ng-container *ngFor="let conf of dashboardConfig">
+    <div
+      class="dashboard-card col-12"
+      *ngIf="me.isMain === true || checkRole(conf.role)"
+    >
+      <h4>{{ conf.label }}</h4>
+      <!-- CARDS -->
+
+      <div class="grid" *ngIf="conf.cardDetails">
+        <div
+          *ngFor="let cardConf of conf.cardDetails.config"
+          [class]="conf.cardDetails.class?.grid"
+        >
+          <div class="cards_upper">
+            <div class="col-12 card-label">
+              {{ cardConf.label }}
+            </div>
+            <div class="col-12 card-count">
+              {{ util.deepFind(this.reports[conf.reportKey], cardConf.key) }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHART -->
+      <div class="grid">
+        <div
+          [class]="chartConfig.class?.chartGrid"
+          *ngFor="let chartConfig of conf.reportCharts"
+        >
+          <div class="cards">
+            <h3 class="text-center mb-2" *ngIf="conf.isLoading">
+              Getting Results. . .
+            </h3>
+
+            <div *ngIf="!conf.isLoading">
+              <highcharts-chart
+                *ngIf="chartReports[chartConfig.chartKey]"
+                class="chart"
+                [Highcharts]="highcharts"
+                [options]="chartReports[chartConfig.chartKey]"
+              >
+              </highcharts-chart>
+            </div>
+
+            <div class="loading-container" *ngIf="conf.isLoading">
+              <div class="box">
+                <div class="white_circle">
+                  <span class="tower1"></span>
+                  <span class="tower2"></span>
+                  <span class="tower3"></span>
+                  <span class="tower4"></span>
+                </div>
+                <div class="o"></div>
+                <div class="m"></div>
+                <div class="n"></div>
+                <div class="l"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
