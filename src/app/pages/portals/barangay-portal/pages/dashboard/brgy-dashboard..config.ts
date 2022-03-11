@@ -218,6 +218,10 @@ export const TOTAL_DOCS_FILTER_KEYS: FILTER_KEYS[] = [
     id: 'totalDocsType.special_power_of_attorney_(spa)',
     label: 'Special Power of Attorney (SPA)',
   },
+  {
+    id: 'totalDocsType.others',
+    label: 'Others',
+  },
 ];
 export const DOCS_RECEIVING_FILTER_KEYS: FILTER_KEYS[] = [
   {
