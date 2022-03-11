@@ -440,7 +440,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
   {
     label: 'REGISTRATION',
     reportKey: 'registration',
-    isLoading: false,
+    isLoading: true,
     role: ['Registration'],
     reportCharts: [
       {
@@ -495,7 +495,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
   {
     label: 'REGISTRANT DATABASE',
     reportKey: 'registrantDb',
-    isLoading: false,
+    isLoading: true,
     role: ['Registrants Database'],
     reportCharts: [
       {
@@ -551,7 +551,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
   {
     label: 'NEW TRANSACTION',
     reportKey: 'newTransaction',
-    isLoading: false,
+    isLoading: true,
     role: ['New Transaction'],
     reportCharts: [
       {
@@ -591,7 +591,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
   {
     label: 'Document Receiving',
     reportKey: 'docReceiving',
-    isLoading: false,
+    isLoading: true,
     role: ['Document Receiving'],
     reportCharts: [
       {
@@ -631,7 +631,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
   {
     label: 'Batch Delivery Management',
     reportKey: 'batchDelivery',
-    isLoading: false,
+    isLoading: true,
     role: ['Batch Delivery Management'],
     reportCharts: [
       {
@@ -658,7 +658,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
   {
     label: 'Video Conferencing',
     reportKey: 'vidConference',
-    isLoading: false,
+    isLoading: true,
     role: ['Video Conferencing'],
     reportCharts: [
       {
@@ -686,7 +686,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
   {
     label: 'Document Receiving from Notary',
     reportKey: 'docReceivingNotary',
-    isLoading: false,
+    isLoading: true,
     role: ['Document Receiving from Notary'],
     reportCharts: [
       {
@@ -713,7 +713,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
   {
     label: 'Document Releasing to Indigent',
     reportKey: 'docReleasing',
-    isLoading: false,
+    isLoading: true,
     role: ['Document Releasing to Indigent'],
     reportCharts: [
       {
@@ -740,7 +740,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
   {
     label: 'Transaction History',
     reportKey: 'transactionHistory',
-    isLoading: false,
+    isLoading: true,
     role: ['Transaction History'],
     reportCharts: [
       {
@@ -782,7 +782,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
   {
     label: 'Document Tracker',
     reportKey: 'documentTracker',
-    isLoading: false,
+    isLoading: true,
     role: ['Document Tracker'],
     reportCharts: [
       {
