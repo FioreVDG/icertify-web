@@ -17,7 +17,13 @@ export type DASHBOARD_SERVICE =
   | 'docReceivingNotary'
   | 'docReleasing'
   | 'transactionHistory'
-  | 'documentTracker';
+  | 'documentTracker'
+  | 'notaryDocReceiving'
+  | 'notaryVidConference'
+  | 'notaryDocReleasing'
+  | 'notaryDocUploading'
+  | 'notaryTransactionHistory'
+  | 'notaryDocumentTracker';
 
 export interface MODULE_CONFIG {
   label: string;
