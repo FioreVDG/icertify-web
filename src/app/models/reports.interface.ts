@@ -39,6 +39,7 @@ interface CARD_DETAILS {
   };
 }
 interface REPORT_AND_CHARTS {
+  mainPath?: string;
   chartKey: string;
   filterKeys: FILTER_KEYS[];
   chartOptions: CHART_OPTIONS;
@@ -48,7 +49,7 @@ interface REPORT_AND_CHARTS {
 }
 export interface FILTER_KEYS {
   id: string;
-  ifValue?: string;
+  mainPath?: string;
   label: string;
 }
 export interface CHART_OPTIONS {

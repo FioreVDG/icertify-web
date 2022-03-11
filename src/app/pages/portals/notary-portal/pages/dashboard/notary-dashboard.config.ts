@@ -8,7 +8,7 @@ import {
 export const DOC_RECEIVING_MODULE: MODULE_CONFIG[] = [
   {
     label: 'Total Documents',
-    key: 'totalReceivedDocsToday.total',
+    key: 'totalReceivedDocsNew.total',
   },
   {
     label: 'Total Received Documents to Date',
@@ -21,14 +21,14 @@ export const DOC_RECEIVING_MODULE: MODULE_CONFIG[] = [
 ];
 
 // FILTER KEYS
-export const FOR_REGISTRATION_FILTER_KEYS: FILTER_KEYS[] = [
+export const DOC_RECEIVING_FILTER_KEYS: FILTER_KEYS[] = [
   {
-    id: 'registrantCertIndigencyTotal.withCertificate',
-    label: 'Complete Requirements',
+    id: 'totalReceivedDocsToday.received',
+    label: 'Received',
   },
   {
-    id: 'registrantCertIndigencyTotal.withoutCertificate',
-    label: 'W/O Certificate of Indigency',
+    id: 'totalReceivedDocsToday.for_receiving',
+    label: 'For Receiving',
   },
 ];
 
@@ -94,11 +94,11 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
     label: 'Document Receiving',
     reportKey: 'notaryDocReceiving',
     isLoading: false,
-    role: ['Registration'],
+    role: ['Document Receiving'],
     reportCharts: [
       {
         chartKey: 'doc_rec',
-        filterKeys: FOR_REGISTRATION_FILTER_KEYS,
+        filterKeys: DOC_RECEIVING_FILTER_KEYS,
         chartOptions: {
           chartOption: JSON.parse(JSON.stringify(PIE_CHART_OPTIONS)),
           xAxisTitle: 'Status',
