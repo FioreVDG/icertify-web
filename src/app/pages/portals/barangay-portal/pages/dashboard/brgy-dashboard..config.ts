@@ -643,7 +643,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
         filterKeys: BATCH_DELIVERY_STATUS_FILTER_KEYS,
         chartOptions: {
           chartOption: JSON.parse(JSON.stringify(PIE_CHART_OPTIONS)),
-          xAxisTitle: 'Document Type',
+          xAxisTitle: 'Status',
           chartType: 'pie',
           chartKey: 'batch_delivery',
         },
