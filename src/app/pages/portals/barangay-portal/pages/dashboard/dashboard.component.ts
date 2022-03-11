@@ -92,7 +92,7 @@ export class DashboardComponent implements OnInit {
     let totalValue = 0;
     let dispValue: string = '';
     filterKeys.forEach((itm) => {
-      totalValue += this.util.deepFind(currentUserReport, itm.id);
+      totalValue += +this.util.deepFind(currentUserReport, itm.id);
       if (this.util.deepFind(currentUserReport, itm.id)) {
         if (chartOptions.chartType === 'pie') {
           if (!columnData.length)
@@ -130,12 +130,17 @@ export class DashboardComponent implements OnInit {
     console.log(chartOptions.widthStatus);
 
     //Format TotalValue
+
     if (totalValue.toString().length >= 4 && totalValue.toString().length < 7)
       dispValue = (totalValue *= 0.001).toFixed(2).toString() + 'k';
     if (totalValue.toString().length >= 7)
       dispValue = (totalValue *= 0.000001).toFixed(2).toString() + 'm';
 
-    chartOptions.chartOption.title.text = `${chartOptions.xAxisTitle}<br><b style="font-size:28px">${totalValue}</b>`;
+    chartOptions.chartOption.title.text = `${
+      chartOptions.xAxisTitle
+    }<br><b style="font-size:28px">${
+      dispValue.length ? dispValue : totalValue
+    }</b>`;
     chartOptions.chartOption.title.widthAdjust =
       chartOptions.widthStatus || -400;
 

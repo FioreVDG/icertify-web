@@ -525,6 +525,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
             'Reason for delayed submission of Certificate of Indigency',
           chartType: 'pie',
           chartKey: 'registrants_reason',
+          widthStatus: -1200,
         },
         class: {
           chartGrid: 'col-12 md:col-6 mb-2 lg:col-12',
@@ -642,7 +643,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
     cardDetails: {
       config: BATCH_DELIVERY_MODULE,
       class: {
-        grid: 'col-4',
+        grid: 'col-4 md:col-6 mb-2 lg:col-4 sm:col-12',
       },
     },
   },
@@ -660,10 +661,10 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
           xAxisTitle: 'Status',
           chartType: 'pie',
           chartKey: 'vid_Conference',
+          widthStatus: -400,
         },
         class: {
-          chartGrid: 'col-12 md:col-6 mb-2',
-          widthStatus: '-400',
+          chartGrid: 'col-12 md:col-6 mb-2 lg:col-12',
         },
       },
     ],
@@ -690,7 +691,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
           chartKey: 'doc_rec_notary',
         },
         class: {
-          chartGrid: 'col-12 md:col-6 mb-2',
+          chartGrid: 'col-12 md:col-6 mb-2 lg:col-12',
         },
       },
     ],
@@ -717,7 +718,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
           chartKey: 'doc_releasing',
         },
         class: {
-          chartGrid: 'col-12 md:col-6 mb-2',
+          chartGrid: 'col-12 md:col-6 mb-2 lg:col-12',
         },
       },
     ],
@@ -787,14 +788,14 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
           widthStatus: -1200,
         },
         class: {
-          chartGrid: 'col-12 md:col-6 mb-2 md:col-12',
+          chartGrid: 'col-12 md:col-6 mb-2 lg:col-12',
         },
       },
     ],
     cardDetails: {
       config: DOC_TRACKER_MODULE,
       class: {
-        grid: 'col-12 md:col-6 mb-2',
+        grid: 'col-4 md:col-6 mb-2 lg:col-4 sm:col-12',
       },
     },
   },
