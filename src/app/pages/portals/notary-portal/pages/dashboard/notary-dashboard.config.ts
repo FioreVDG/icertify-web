@@ -48,6 +48,17 @@ export const DOC_RELEASING_MODULE: MODULE_CONFIG[] = [
     key: 'totalDeliveredDocumentsToDate.total',
   },
 ];
+export const DOC_UPLOADING_MODULE: MODULE_CONFIG[] = [
+  {
+    label: 'Total Documents for Uploading',
+    key: 'totalDocsUploading',
+  },
+
+  {
+    label: 'Total Uploaded Documents to Date',
+    key: 'totalUploadedDocsToDate',
+  },
+];
 
 // FILTER KEYS
 export const DOC_RECEIVING_FILTER_KEYS: FILTER_KEYS[] = [
@@ -78,6 +89,7 @@ export const DOC_RELEASING_FILTER_KEYS: FILTER_KEYS[] = [
     label: 'For Pick Up',
   },
 ];
+export const DOC_UPLOADING_FILTER_KEYS: FILTER_KEYS[] = [];
 export const PIE_CHART_OPTIONS = {
   chart: {
     plotBackgroundColor: null,
@@ -234,6 +246,35 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
       config: DOC_RELEASING_MODULE,
       class: {
         grid: 'col-4 md:col-6 mb-2 lg:col-4 sm:col-12',
+      },
+    },
+  },
+  {
+    label: 'Uploading of Documents',
+    reportKey: 'notaryDocUploading',
+    isLoading: true,
+    role: ['Uploading of Notarized Document'],
+    reportCharts: [
+      {
+        mainPath: 'totalDocsUploadPerBrgy',
+        chartKey: 'doc_uploading',
+        filterKeys: DOC_UPLOADING_FILTER_KEYS,
+        chartOptions: {
+          chartOption: JSON.parse(JSON.stringify(PIE_CHART_OPTIONS)),
+          xAxisTitle: 'No. of Documents for Uploading per Brgy',
+          chartType: 'pie',
+          chartKey: 'doc_uploading',
+          widthStatus: -1200,
+        },
+        class: {
+          chartGrid: 'col-12 md:col-12 mb-2 lg:col-12',
+        },
+      },
+    ],
+    cardDetails: {
+      config: DOC_UPLOADING_MODULE,
+      class: {
+        grid: 'col-6 md:col-6 mb-2 lg:col-6 sm:col-12',
       },
     },
   },
