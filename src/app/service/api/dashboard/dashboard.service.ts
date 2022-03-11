@@ -39,4 +39,22 @@ export class DashboardService {
   documentTracker() {
     return this.http.start('get', '/dashboard/documentTracker');
   }
+  notaryDocReceiving() {
+    return this.http.start('get', '/dashboard/notary/docReceiving');
+  }
+  notaryVidConference() {
+    return this.http.start('get', '/dashboard/notary/vidConference');
+  }
+  notaryDocReleasing() {
+    return this.http.start('get', '/dashboard/notary/docReleasing');
+  }
+  notaryDocUploading() {
+    return this.http.start('get', '/dashboard/notary/docUploading');
+  }
+  notaryTransactionHistory() {
+    return this.http.start('get', '/dashboard/notary/transactionHistory');
+  }
+  notaryDocumentTracker() {
+    return this.http.start('get', '/dashboard/notary/documentTracker');
+  }
 }

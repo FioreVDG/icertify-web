@@ -127,7 +127,7 @@ export class DashboardComponent implements OnInit {
 
     // Plot Chart Data
     const key = chartOptions.chartKey ? chartOptions.chartKey : userReportKey;
-    console.log(chartOptions.widthStatus);
+    // console.log(chartOptions.widthStatus);
 
     //Format TotalValue
 

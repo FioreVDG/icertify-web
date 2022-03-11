@@ -196,6 +196,10 @@ export const TOTAL_NEW_DOCS_FILTER_KEYS: FILTER_KEYS[] = [
     id: 'totalNewDocsType.special_power_of_attorney_(spa)',
     label: 'Special Power of Attorney (SPA)',
   },
+  {
+    id: 'totalNewDocsType.others',
+    label: 'Others',
+  },
 ];
 export const TOTAL_DOCS_FILTER_KEYS: FILTER_KEYS[] = [
   {
@@ -231,6 +235,10 @@ export const DOCS_RECEIVING_FILTER_KEYS: FILTER_KEYS[] = [
   {
     id: 'brgyReceivingTotalDocType.special_power_of_attorney_(spa)',
     label: 'Special Power of Attorney (SPA)',
+  },
+  {
+    id: 'brgyReceivingTotalDocType.others',
+    label: 'Others',
   },
 ];
 export const DOCS_RECEIVING_STATUS_FILTER_KEYS: FILTER_KEYS[] = [
