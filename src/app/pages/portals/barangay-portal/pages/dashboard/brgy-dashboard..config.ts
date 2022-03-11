@@ -44,7 +44,7 @@ export const DOC_RECEIVING_MODULE: MODULE_CONFIG[] = [
 export const BATCH_DELIVERY_MODULE: MODULE_CONFIG[] = [
   {
     label: 'Total Documents',
-    key: 'totalBatch.total',
+    key: 'totalBatchDeliveryDocs.total',
   },
   {
     label: 'Total Documents to Date',
@@ -52,7 +52,7 @@ export const BATCH_DELIVERY_MODULE: MODULE_CONFIG[] = [
   },
   {
     label: 'Total Batches to Date',
-    key: 'totalBatchDeliveryDocs.total',
+    key: 'totalBatch.total',
   },
 ];
 export const VIDEO_CONFERENCING_MODULE: MODULE_CONFIG[] = [
