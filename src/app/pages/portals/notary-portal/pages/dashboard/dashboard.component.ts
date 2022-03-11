@@ -23,6 +23,7 @@ export class DashboardComponent implements OnInit {
   chartReports: any = {};
   fetchCount = 0;
   myAccess: string[] = [];
+  brgyDesc: any[] = [];
   constructor(
     private api: ApiService,
     private store: Store<{ user: User }>,
@@ -31,16 +32,20 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.store.select('user').subscribe((res: User) => {
       this.me = res;
-      // console.log(res);
+      this.api.cluster.getOneNotary(this.me._notaryId).subscribe((res: any) => {
+        res.env.cluster.barangays.forEach((brgy: any) => {
+          this.brgyDesc.push(brgy._barangay.brgyDesc);
+        });
+        console.log(this.brgyDesc, 'cluster');
+        this.getReports();
+      });
       this.getRoles(
         this.me._role && this.me._role.access ? this.me._role.access : []
       );
       this.dashboardConfig = JSON.parse(JSON.stringify(DASHBOARD_CONFIG));
     });
 
-    setTimeout(() => {
-      this.getReports();
-    }, 3000 * this.fetchCount);
+    setTimeout(() => {}, 3000 * this.fetchCount);
   }
 
   getReports() {
@@ -51,6 +56,20 @@ export class DashboardComponent implements OnInit {
         // console.log(res);
         this.reports[report.reportKey] = res.env;
         for (let data of report.reportCharts) {
+          console.log(data, 'REPORT');
+          if (data.mainPath) {
+            this.brgyDesc.forEach((brgy) => {
+              data.filterKeys.push({
+                id: `${data.mainPath}.${brgy
+                  .toLowerCase()
+                  .split(' ')
+                  .join('_')
+                  .replace('.', '')}`,
+                label: brgy,
+              });
+            });
+          }
+
           const filteredKeys: FILTER_KEYS[] = data.filterKeys;
 
           const chartOption: CHART_OPTIONS = data.chartOptions;
@@ -91,6 +110,7 @@ export class DashboardComponent implements OnInit {
     let dispValue: string = '';
     filterKeys.forEach((itm) => {
       totalValue += +this.util.deepFind(currentUserReport, itm.id);
+
       if (this.util.deepFind(currentUserReport, itm.id)) {
         if (chartOptions.chartType === 'pie') {
           if (!columnData.length)
