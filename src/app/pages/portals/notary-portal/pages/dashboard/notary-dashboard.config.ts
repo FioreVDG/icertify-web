@@ -20,6 +20,21 @@ export const DOC_RECEIVING_MODULE: MODULE_CONFIG[] = [
   },
 ];
 
+export const VID_CONFERENCE_MODULE: MODULE_CONFIG[] = [
+  {
+    label: 'Total Documents to Schedule',
+    key: 'toScheduleDocsTotal',
+  },
+  {
+    label: 'Total Scheduled Meetings',
+    key: 'SchedDocsTotal',
+  },
+  {
+    label: 'Total Finished Meetings to Date',
+    key: 'totalFinishedMeetings.total',
+  },
+];
+
 // FILTER KEYS
 export const DOC_RECEIVING_FILTER_KEYS: FILTER_KEYS[] = [
   {
@@ -32,6 +47,7 @@ export const DOC_RECEIVING_FILTER_KEYS: FILTER_KEYS[] = [
   },
 ];
 
+export const TO_SCHEDULE_FILTER_KEYS: FILTER_KEYS[] = [];
 export const PIE_CHART_OPTIONS = {
   chart: {
     plotBackgroundColor: null,
@@ -97,6 +113,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
     role: ['Document Receiving'],
     reportCharts: [
       {
+        mainPath: 'SchedDocsPerBrgy',
         chartKey: 'doc_rec',
         filterKeys: DOC_RECEIVING_FILTER_KEYS,
         chartOptions: {
@@ -113,6 +130,35 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
     ],
     cardDetails: {
       config: DOC_RECEIVING_MODULE,
+      class: {
+        grid: 'col-4 md:col-6 mb-2 lg:col-4 sm:col-12',
+      },
+    },
+  },
+  {
+    label: 'Video Conferencing',
+    reportKey: 'notaryVidConference',
+    isLoading: false,
+    role: ['Video Conferencing'],
+    reportCharts: [
+      {
+        mainPath: 'SchedDocsPerBrgy',
+        chartKey: 'sched_docs',
+        filterKeys: TO_SCHEDULE_FILTER_KEYS,
+        chartOptions: {
+          chartOption: JSON.parse(JSON.stringify(PIE_CHART_OPTIONS)),
+          xAxisTitle: 'Status',
+          chartType: 'pie',
+          chartKey: 'sched_docs',
+          widthStatus: -1200,
+        },
+        class: {
+          chartGrid: 'col-12 md:col-6 mb-2 lg:col-12',
+        },
+      },
+    ],
+    cardDetails: {
+      config: VID_CONFERENCE_MODULE,
       class: {
         grid: 'col-12 md:col-6 mb-2 lg:col-4 sm:col-12',
       },
