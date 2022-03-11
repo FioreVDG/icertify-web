@@ -178,6 +178,14 @@ export class DocumentTrackerTableComponent implements OnInit {
             el._notaryId = el._notaryId ? el._notaryId : this.setting._notaryId;
           });
           this.dataSource = res.env.documents;
+
+          if (this.dataSource.length) {
+            this.dataSource.forEach((el: any) => {
+              if (el.documentType === 'Others')
+                el.documentType = `${el.documentType} (${el.documentTypeSpecific})`;
+            });
+          }
+
           this.dataLength = res.total;
         }
         console.log(this.dataSource);

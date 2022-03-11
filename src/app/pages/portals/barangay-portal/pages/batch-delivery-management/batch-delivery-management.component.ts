@@ -125,6 +125,15 @@ export class BatchDeliveryManagementComponent implements OnInit {
         this.dataSource =
           res.env && res.env.documents ? res.env.documents : res.folders;
 
+        if (res.env) {
+          if (this.dataSource.length) {
+            this.dataSource.forEach((el: any) => {
+              if (el.documentType === 'Others')
+                el.documentType = `${el.documentType} (${el.documentTypeSpecific})`;
+            });
+          }
+        }
+
         this.dataLength = res.total;
         this.loading = false;
         console.log('Here');

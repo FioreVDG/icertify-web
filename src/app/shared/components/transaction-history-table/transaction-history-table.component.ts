@@ -133,6 +133,14 @@ export class TransactionHistoryTableComponent implements OnInit {
       console.log(res);
       if (res.status == 'Success') {
         this.dataSource = res.env.documents;
+
+        if (this.dataSource.length) {
+          this.dataSource.forEach((el: any) => {
+            if (el.documentType === 'Others')
+              el.documentType = `${el.documentType} (${el.documentTypeSpecific})`;
+          });
+        }
+
         this.getImgLink();
         this.checkCertificateOfIndigency();
         this.checkNotarizedDocument();

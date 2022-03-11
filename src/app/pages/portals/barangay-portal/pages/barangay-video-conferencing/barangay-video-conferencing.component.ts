@@ -91,12 +91,20 @@ export class BarangayVideoConferencingComponent implements OnInit {
       query.find = query.find.concat(FINISHED_FIND);
     }
 
+    if (event.find) query.find = query.find.concat(event.find);
+
     console.log(query);
     this.api.document.getAll(query).subscribe(
       (res: any) => {
         this.loading = false;
         console.log(res);
         this.dataSource = res.env.documents;
+        if (this.dataSource.length) {
+          this.dataSource.forEach((el: any) => {
+            if (el.documentType === 'Others')
+              el.documentType = `${el.documentType} (${el.documentTypeSpecific})`;
+          });
+        }
         this.dataLength = res.total;
       },
       (err) => {
