@@ -239,7 +239,7 @@ export class VideoConferencingComponent implements OnInit {
         // this.selected.filter((o:any)=>)
       }
     });
-    console.log(this.selected);
+    // console.log(this.selected);
     // this.selected = event;
   }
   onSetSchedule() {

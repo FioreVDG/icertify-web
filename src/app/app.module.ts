@@ -27,7 +27,6 @@ const agoraConfig: AgoraConfig = {
     HttpClientModule,
     MaterialModule,
     SocketIoModule.forRoot(config),
-
     StoreModule.forRoot({}),
     NgxAgoraModule.forRoot(agoraConfig),
   ],

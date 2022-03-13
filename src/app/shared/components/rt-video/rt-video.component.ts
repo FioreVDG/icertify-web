@@ -195,6 +195,7 @@ export class RtVideoComponent implements OnInit {
           video: this.localVideo,
           screen: false,
         });
+        console.log(this.localStream);
         this.assignLocalStreamHandlers();
         // Join and publish methods added in this step
         this.initLocalStream(() =>
