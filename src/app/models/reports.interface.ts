@@ -23,7 +23,8 @@ export type DASHBOARD_SERVICE =
   | 'notaryDocReleasing'
   | 'notaryDocUploading'
   | 'notaryTransactionHistory'
-  | 'notaryDocumentTracker';
+  | 'notaryDocumentTracker'
+  | 'notaryReports';
 
 export interface MODULE_CONFIG {
   label: string;
