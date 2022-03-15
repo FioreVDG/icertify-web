@@ -8,6 +8,7 @@ import { NotaryPortalComponent } from './notary-portal.component';
 import { ComponentModule } from 'src/app/shared/components/component.module';
 import { StoreModule } from '@ngrx/store';
 import { userReducer } from 'src/app/store/user/user.reducer';
+import { ReportsComponent } from './pages/reports/reports.component';
 
 @NgModule({
   declarations: [NotaryPortalComponent],

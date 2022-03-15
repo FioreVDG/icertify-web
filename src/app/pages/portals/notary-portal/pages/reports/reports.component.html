@@ -1,0 +1,116 @@
+<div class="grid">
+  <div class="date col-12">
+    <mat-form-field
+      class="col-3"
+      appearance="fill"
+      [formGroup]="dateRange"
+      appearance="outline"
+    >
+      <mat-label>Enter a date range</mat-label>
+      <mat-date-range-input [rangePicker]="picker">
+        <input
+          matStartDate
+          placeholder="Start date"
+          formControlName="dateStart"
+        />
+        <input matEndDate placeholder="End date" formControlName="dateEnd" />
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+
+    <mat-form-field
+      class="col-2"
+      appearance="outline"
+      *ngFor="let conf of config"
+      [formGroup]="filter"
+    >
+      <mat-select [placeholder]="conf.placeholder" [formControlName]="conf.key">
+        <mat-option
+          (onSelectionChange)="onchange($event.source.value)"
+          *ngFor="let choices of conf.choices"
+          [value]="choices.value ? choices.value : choices"
+          >{{ choices.label ? choices.label : choices }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+    <button
+      mat-button
+      style="border: 1px solid #e55353"
+      class="col-2"
+      color="warn"
+      (click)="clear()"
+    >
+      Clear
+    </button>
+  </div>
+</div>
+<div [align]="'center'" style="margin-bottom: 1rem">
+  <button
+    [disabled]="!generated"
+    (click)="search()"
+    mat-raised-button
+    color="primary"
+  >
+    {{ !generated ? "Generating..." : "Generate Report" }}
+  </button>
+</div>
+<div class="grid">
+  <div class="dashboard-card col-12">
+    <!-- CARDS -->
+
+    <div class="grid">
+      <div class="col-12">
+        <div class="cards_upper">
+          <div class="col-12 card-label">Total Documents</div>
+          <div class="col-12 card-count">
+            {{
+              this.reports && this.reports.totalDocuments
+                ? this.reports.totalDocuments
+                : "Generating..."
+            }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- CHART -->
+  <div class="col-12">
+    <div class="grid">
+      <div
+        *ngFor="let chartConfig of chart"
+        [class]="chartConfig.chartOpt.class"
+      >
+        <div class="cards">
+          <h3 class="text-center mb-2" *ngIf="!generated">
+            Generating Reports. . .
+          </h3>
+
+          <div *ngIf="generated">
+            <highcharts-chart
+              class="chart"
+              [Highcharts]="highcharts"
+              [options]="chartConfig.chartOpt.chartOptions"
+            >
+            </highcharts-chart>
+          </div>
+
+          <div class="loading-container" *ngIf="!generated">
+            <div class="box">
+              <div class="white_circle">
+                <span class="tower1"></span>
+                <span class="tower2"></span>
+                <span class="tower3"></span>
+                <span class="tower4"></span>
+              </div>
+              <div class="o"></div>
+              <div class="m"></div>
+              <div class="n"></div>
+              <div class="l"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
