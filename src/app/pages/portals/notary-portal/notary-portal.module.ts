@@ -9,6 +9,7 @@ import { ComponentModule } from 'src/app/shared/components/component.module';
 import { StoreModule } from '@ngrx/store';
 import { userReducer } from 'src/app/store/user/user.reducer';
 import { ReportsComponent } from './pages/reports/reports.component';
+import { clusterReducer } from 'src/app/store/cluster/cluster.reducer';
 
 @NgModule({
   declarations: [NotaryPortalComponent],
@@ -18,6 +19,7 @@ import { ReportsComponent } from './pages/reports/reports.component';
     MaterialModule,
     ComponentModule,
     StoreModule.forFeature('user', userReducer),
+    StoreModule.forFeature('cluster', clusterReducer),
   ],
 })
 export class NotaryPortalModule {}
