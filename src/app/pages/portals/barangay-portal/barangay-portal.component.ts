@@ -1,4 +1,4 @@
-import { setCluster } from './../../../store/cluster/cluster';
+import { setCluster } from '../../../store/cluster/cluster.action';
 import { ApiService } from './../../../service/api/api.service';
 import { onMainContentChange } from './../../../animations/sidebar.animation';
 import { AreYouSureComponent } from './../../../shared/dialogs/are-you-sure/are-you-sure.component';

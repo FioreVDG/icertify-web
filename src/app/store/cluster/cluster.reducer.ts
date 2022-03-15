@@ -1,7 +1,7 @@
 import { Cluster } from './../../models/cluster.interface';
 import { Action, createReducer, on } from '@ngrx/store';
 import { User } from 'src/app/models/user.interface';
-import { resetCluster, setCluster } from './cluster';
+import { resetCluster, setCluster } from './cluster.action';
 
 const clusterInitialState: Cluster = {
   _id: '',

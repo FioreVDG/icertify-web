@@ -143,9 +143,15 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
     selected: true,
     bottomSheet: [
       {
-        label: 'View Document/Notarized Document',
+        label: 'View Document',
         action: 'viewDoc',
         icon: 'description',
+      },
+      {
+        label: 'View Screenshot/s',
+        action: 'viewSS',
+        icon: 'photo_library',
+        showIf: 'screenShots/>/0',
       },
       {
         label: 'View Proof of Identity',

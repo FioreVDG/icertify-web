@@ -66,6 +66,12 @@ export const ROLE_TABLE: Column[] = [
 export const ROLE_BOTTOMSHEET = [
   { label: 'Edit Details', action: 'update', icon: 'edit' },
   { label: 'Delete', action: 'delete', icon: 'delete' },
+  {
+    label: 'Delete',
+    action: 'delete',
+    icon: 'delete',
+    showIf: 'accessCount/=/0',
+  },
 ];
 
 export const ROLE_POPULATES: Populate[] = [

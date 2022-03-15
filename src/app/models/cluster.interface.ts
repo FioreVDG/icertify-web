@@ -23,7 +23,7 @@ export interface Cluster_Barangay {
   duration: number; //seconds
 }
 
-export enum USER_REDUCER_ACTIONS {
+export enum USER_REDUCER_ACTIONS {.
   SetCluster = 'SET_CLUSTER',
   ResetCluster = 'RESET_CLUSTER',
 }
