@@ -1,4 +1,4 @@
-import { setCluster } from './../../../store/cluster/cluster';
+import { setCluster } from '../../../store/cluster/cluster.action';
 import { ApiService } from './../../../service/api/api.service';
 import { AuthService } from './../../../service/auth/auth.service';
 import { Component, EventEmitter, OnInit } from '@angular/core';
