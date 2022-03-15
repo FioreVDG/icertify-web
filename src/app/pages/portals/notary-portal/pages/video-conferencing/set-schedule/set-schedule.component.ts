@@ -33,10 +33,13 @@ export class SetScheduleComponent implements OnInit {
     this.data.settings.barangays.forEach((doc: any) => {
       console.log(doc);
       let que: number = 1;
+      let queue: number = 1;
       this.data.selected.forEach((el: any) => {
         el._transactions.forEach((trans: any) => {
           trans.queue = que++;
           trans.duration = doc.duration;
+          trans._documents[0].queue = queue++;
+          trans._documents[0].duration = doc.duration;
         });
       });
       let findTemp: any = this.data.selected.find(
@@ -51,6 +54,7 @@ export class SetScheduleComponent implements OnInit {
   }
 
   computeStartTime(doc: any) {
+    console.log(doc);
     var date = new Date(this.schedule);
     var totalDurationToAdd = (doc.queue - 1) * doc.duration;
     date.setMinutes(date.getMinutes() + totalDurationToAdd);
@@ -118,12 +122,14 @@ export class SetScheduleComponent implements OnInit {
     let docLogs: any = [];
     let docIds: any = [];
     let tempDocIds: any = [];
+    let tempDocs: any = [];
     console.log(this.data.selected);
     this.data.selected.forEach((el: any) => {
       console.log(el);
       idsTemp.push(el._id);
       el._transactions.forEach((trans: any) => {
         console.log(trans);
+        tempDocs.push(trans._documents[0]);
         docIds.push(trans._documents[0]._id);
         docLogs.push({
           docDetails: trans._documents[0],
@@ -145,13 +151,14 @@ export class SetScheduleComponent implements OnInit {
       (res: any) => {
         console.log(res);
         let que: number = 1;
-        let apiQueries = tempDocIds.map((id: any) => {
+        let apiQueries = tempDocs.map((id: any) => {
           return this.api.document.update(
             {
               queue: que++,
               documentLogStatus: 'Video Conference Scheduled by Notarial Staff',
+              schedule: new Date(id.estimatedStart),
             },
-            id
+            id._id
           );
         });
         forkJoin(apiQueries).subscribe(
