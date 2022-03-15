@@ -159,6 +159,7 @@ export class DashboardComponent implements OnInit {
     }<br><b style="font-size:28px">${
       dispValue.length ? dispValue : totalValue
     }</b>`;
+    console.log(chartOptions.widthStatus);
     chartOptions.chartOption.title.widthAdjust =
       chartOptions.widthStatus || -400;
 

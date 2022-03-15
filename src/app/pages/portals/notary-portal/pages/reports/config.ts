@@ -95,7 +95,7 @@ export const CHART = [
     chartOpt: {
       chartKey: 'perType',
       title: 'Document Type',
-      y: -30,
+      y: -10,
       class: 'col-6 mb-2 md:col-6 sm:col-12 lg:col-6',
       chartOptions: JSON.parse(JSON.stringify(PIE_CHART_OPTIONS)),
 

@@ -370,7 +370,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
           xAxisTitle: 'No. of Documents per Brgy(To Schedule)',
           chartType: 'pie',
           chartKey: 'to_sched_docs',
-          widthStatus: -550,
+          widthStatus: -800,
         },
         class: {
           chartGrid: 'col-6 md:col-6 mb-2 lg:col-6',
@@ -385,7 +385,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
           xAxisTitle: 'No. of Meetings per Brgy(Scheduled)',
           chartType: 'pie',
           chartKey: 'sched_docs',
-          widthStatus: -550,
+          widthStatus: -800,
         },
         class: {
           chartGrid: 'col-6 md:col-6 mb-2 lg:col-6',
@@ -442,7 +442,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
           xAxisTitle: 'No. of Documents for Uploading per Brgy',
           chartType: 'pie',
           chartKey: 'doc_uploading',
-          widthStatus: -1200,
+          widthStatus: -1600,
         },
         class: {
           chartGrid: 'col-12 md:col-12 mb-2 lg:col-12',
@@ -498,7 +498,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
           xAxisTitle: 'Total Documents with Delayed Submission of Certificate',
           chartType: 'pie',
           chartKey: 'transac_delayed',
-          widthStatus: -1200,
+          widthStatus: -1800,
         },
         class: {
           chartGrid: 'col-12 md:col-12 mb-2 lg:col-12 sm:col-12',
@@ -526,7 +526,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
           xAxisTitle: 'Locations Status of Ongoing Documents',
           chartType: 'pie',
           chartKey: 'doc_tracker',
-          widthStatus: -1200,
+          widthStatus: -1800,
         },
         class: {
           chartGrid: 'col-12 md:col-6 mb-2 lg:col-12',

@@ -53,6 +53,7 @@ export class UpsertNotarialCommissionComponent implements OnInit {
     ibp_chapter_region: new FormControl('', Validators.required),
     ibp_chapter_city_prov: new FormControl('', Validators.required),
   });
+  show = false;
   ibp_chapter = IBP_CHAPTER_REGION_PROVINCE;
   ibp_provinces: AUTO_COMPLETE_FIELDS = {
     title: 'Select IBP City/Province',
