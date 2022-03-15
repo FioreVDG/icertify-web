@@ -182,6 +182,7 @@ export class NotarizedDocumentReleasingComponent implements OnInit {
                 return this.api.document.update(
                   {
                     documentLogStatus: 'Document Released to Indigent',
+                    locationStatus: 'Released to Indigent',
                   },
                   id
                 );
