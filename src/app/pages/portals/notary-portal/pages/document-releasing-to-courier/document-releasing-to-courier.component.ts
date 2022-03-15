@@ -22,6 +22,7 @@ import {
   NOTARY_DOC_RELEASING_TO_COURIER_CONFIG,
 } from './config';
 import { MarkAsEnrouteComponent } from './mark-as-enroute/mark-as-enroute.component';
+import { Cluster } from 'src/app/models/cluster.interface';
 
 @Component({
   selector: 'app-document-releasing-to-courier',
@@ -66,7 +67,8 @@ export class DocumentReleasingToCourierComponent implements OnInit {
     private auth: AuthService,
     private route: ActivatedRoute,
     private dbx: DropboxService,
-    private store: Store<{ user: User }>
+    private store: Store<{ user: User }>,
+    private cluster: Store<{ cluster: Cluster }>
   ) {}
 
   ngOnInit(): void {
@@ -138,9 +140,16 @@ export class DocumentReleasingToCourierComponent implements OnInit {
   getSettings(event: any) {
     this.store.select('user').subscribe((res: User) => {
       if (!this.setting) {
-        this.api.cluster.getOneNotary(res._notaryId).subscribe((res: any) => {
-          this.setting = res.env.cluster;
+        // this.api.cluster.getOneNotary(res._notaryId).subscribe((res: any) => {
+        //   this.setting = res.env.cluster;
+        //   this.addFilterChoices();
+        //   this.fetchData(event);
+        // });
+        this.cluster.select('cluster').subscribe((res: Cluster) => {
+          this.setting = res;
           this.addFilterChoices();
+
+          console.log(res);
           this.fetchData(event);
         });
       } else {
