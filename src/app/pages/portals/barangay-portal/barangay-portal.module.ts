@@ -1,3 +1,4 @@
+import { clusterReducer } from './../../../store/cluster/cluster.reducer';
 import { DialogsModule } from './../../../shared/dialogs/dialogs.module';
 import { ComponentModule } from './../../../shared/components/component.module';
 import { MaterialModule } from '../../../shared/material/material.module';
@@ -18,6 +19,7 @@ import { userReducer } from 'src/app/store/user/user.reducer';
     ComponentModule,
     DialogsModule,
     StoreModule.forFeature('user', userReducer),
+    StoreModule.forFeature('cluster', clusterReducer),
   ],
 })
 export class BarangayPortalModule {}

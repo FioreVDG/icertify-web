@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ViewBatchTransactionsComponent } from './view-batch-transactions/view-batch-transactions.component';
 import { QueryParams } from 'src/app/models/queryparams.interface';
 import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachments/view-attachments.component';
+import { Cluster } from 'src/app/models/cluster.interface';
 
 @Component({
   selector: 'app-barangay-video-conferencing',
@@ -45,6 +46,7 @@ export class BarangayVideoConferencingComponent implements OnInit {
   activeRooms: Array<any> = [];
   constructor(
     private api: ApiService,
+    private cluster: Store<{ cluster: Cluster }>,
     private store: Store<{ user: User }>,
     private dialog: MatDialog
   ) {}
@@ -55,14 +57,21 @@ export class BarangayVideoConferencingComponent implements OnInit {
       console.log(res);
       // this.fetchData(this.page);
     });
-    this.api.cluster
-      .getOne(this.me._barangay.brgyCode)
-      .subscribe((res: any) => {
-        this.settings = res.env.cluster;
-        console.log(this.settings);
-        this.getActive = true;
-        this.getActiveConference();
-      });
+    this.cluster.select('cluster').subscribe((res: Cluster) => {
+      this.settings = res;
+      console.log(res);
+      // this.fetchData(event);
+      this.getActive = true;
+      this.getActiveConference();
+    });
+    // this.api.cluster
+    //   .getOne(this.me._barangay.brgyCode)
+    //   .subscribe((res: any) => {
+    //     this.settings = res.env.cluster;
+    //     console.log(this.settings);
+    //     this.getActive = true;
+    //     this.getActiveConference();
+    //   });
   }
 
   fetchData(event: any) {

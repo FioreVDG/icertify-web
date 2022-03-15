@@ -21,6 +21,7 @@ import { User } from 'src/app/models/user.interface';
 import { UtilService } from 'src/app/service/util/util.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExcelService } from 'src/app/service/excel/excel.service';
+import { Cluster } from 'src/app/models/cluster.interface';
 
 @Component({
   selector: 'app-transaction-history-table',
@@ -50,6 +51,7 @@ export class TransactionHistoryTableComponent implements OnInit {
     private dialog: MatDialog,
     private dbx: DropboxService,
     private store: Store<{ user: User }>,
+    private cluster: Store<{ cluster: Cluster }>,
     public util: UtilService,
     public snackbar: MatSnackBar,
     private excel: ExcelService,
@@ -160,17 +162,22 @@ export class TransactionHistoryTableComponent implements OnInit {
   }
   getSettings(event: any) {
     this.store.select('user').subscribe((res: any) => {
-      console.log(res);
-      let api;
-      if (this.header === 'NOTARY') {
-        api = this.api.cluster.getOneNotary(res._notaryId);
-      } else {
-        api = this.api.cluster.getOne(res._barangay.brgyCode);
-      }
+      // console.log(res);
+      // let api;
+      // if (this.header === 'NOTARY') {
+      //   api = this.api.cluster.getOneNotary(res._notaryId);
+      // } else {
+      //   api = this.api.cluster.getOne(res._barangay.brgyCode);
+      // }
 
       if (!this.setting) {
-        api.subscribe((res: any) => {
-          this.setting = res.env.cluster;
+        // api.subscribe((res: any) => {
+        //   this.setting = res.env.cluster;
+        //   this.fetchData(event);
+        // });
+        this.cluster.select('cluster').subscribe((res: Cluster) => {
+          this.setting = res;
+          console.log(res);
           this.fetchData(event);
         });
       } else {

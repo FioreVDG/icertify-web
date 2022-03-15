@@ -11,6 +11,8 @@ import {
   MatDialogRef,
   MatDialog,
 } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
+import { User } from 'src/app/models/user.interface';
 
 @Component({
   selector: 'app-add-transaction',
@@ -35,6 +37,8 @@ export class AddTransactionComponent implements OnInit {
   brgyId: any;
   refCode: any;
   docs: Array<any> = [];
+  notaryName: string = '';
+  me: any;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<AddTransactionComponent>,
@@ -42,7 +46,8 @@ export class AddTransactionComponent implements OnInit {
     private dbx: DropboxService,
     private transaction: TransactionService,
     private util: UtilService,
-    private api: ApiService
+    private api: ApiService,
+    private store: Store<{ user: User }>
   ) {}
 
   ngOnInit(): void {
@@ -52,6 +57,18 @@ export class AddTransactionComponent implements OnInit {
     console.log(tempInfo);
     this.brgyId = JSON.parse(tempInfo);
     console.log(this.brgyId);
+
+    this.store.select('user').subscribe((res: User) => {
+      this.me = res;
+      if (!this.notaryName) {
+        this.api.cluster
+          .getOne(this.me._barangay.brgyCode)
+          .subscribe((res: any) => {
+            console.log(res);
+            this.notaryName = `Atty. ${res.env.cluster._notaryId.firstName} ${res.env.cluster._notaryId.lastName}`;
+          });
+      }
+    });
   }
 
   eventSelection(event: any) {

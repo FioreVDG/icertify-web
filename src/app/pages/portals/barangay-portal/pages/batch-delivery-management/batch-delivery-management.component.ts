@@ -23,6 +23,7 @@ import { UtilService } from 'src/app/service/util/util.service';
 import _ from 'lodash';
 import { Store } from '@ngrx/store';
 import { User } from 'src/app/models/user.interface';
+import { Cluster } from 'src/app/models/cluster.interface';
 
 @Component({
   selector: 'app-batch-delivery-management',
@@ -61,7 +62,7 @@ export class BatchDeliveryManagementComponent implements OnInit {
     private route: ActivatedRoute,
     private dbx: DropboxService,
     private util: UtilService,
-
+    private cluster: Store<{ cluster: Cluster }>,
     private store: Store<{ user: User }>
   ) {}
 
@@ -73,16 +74,27 @@ export class BatchDeliveryManagementComponent implements OnInit {
       console.log(me._barangay.brgyCode);
       this.me = me;
       if (!this.setting) {
-        this.api.cluster.getOne(me._barangay.brgyCode).subscribe((res: any) => {
-          console.log(res);
-          this.setting = res.env.cluster;
-          let resp: any = res.env.cluster.barangays.find(
+        this.cluster.select('cluster').subscribe((res: Cluster) => {
+          this.setting = res;
+          let resp: any = res.barangays.find(
             (i: any) => i._barangay.brgyCode === me._barangay.brgyCode
           );
           this.isLimit = resp.maxDoc;
           console.log(this.isLimit);
           this.fetchData(this.page);
         });
+
+        // this.api.cluster.getOne(me._barangay.brgyCode).subscribe((res: any) => {
+        //   console.log(res);
+        //   this.setting = res.env.cluster;
+        //   let resp: any = res.env.cluster.barangays.find(
+        //     (i: any) => i._barangay.brgyCode === me._barangay.brgyCode
+        //   );
+        //   this.isLimit = resp.maxDoc;
+        //   console.log(this.isLimit);
+
+        //   this.fetchData(this.page);
+        // });
       } else {
         this.fetchData(this.page);
       }

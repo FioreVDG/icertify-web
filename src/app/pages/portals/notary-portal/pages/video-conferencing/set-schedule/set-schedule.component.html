@@ -59,7 +59,9 @@
                       style="text-align: center"
                       *ngIf="schedule"
                     >
-                      {{ computeStartTime(doc) | date: "hh:mm a" }}
+                      {{
+                        computeStartTime(doc._documents[0]) | date: "hh:mm a"
+                      }}
                     </p>
                   </div>
                   <div class="col-2">
