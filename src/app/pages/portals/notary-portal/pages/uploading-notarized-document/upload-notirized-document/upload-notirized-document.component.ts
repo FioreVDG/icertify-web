@@ -69,7 +69,7 @@ export class UploadNotirizedDocumentComponent implements OnInit {
       dateUploaded: new Date(),
     };
     this.data.notarizedDocument['dropbox'] = this.toUploadDocument;
-    this.api.document.notarize(this.data, this.data._id).subscribe(
+    this.api.document.update(this.data, this.data._id).subscribe(
       (res: any) => {
         console.log(res);
         this.dialog.open(ActionResultComponent, {

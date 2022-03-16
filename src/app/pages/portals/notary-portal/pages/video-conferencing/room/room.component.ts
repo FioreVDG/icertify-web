@@ -563,24 +563,77 @@ export class RoomComponent implements OnInit {
     console.log(this.me.type);
     const loader = this.util.startLoading('Leaving...');
     console.log(this.currentRoom);
-    this.room.delete(this.currentRoom).subscribe(
-      (res: any) => {
-        console.log(res);
-        this.util.stopLoading(loader);
+    // let findFinished: any = this.transactions.filter((el: any) => {
+    //   return (el.transactionStatus = 'Pending');
+    // });
+
+    let query: any = {
+      find: [
+        {
+          field: '_notaryId',
+          operator: '=',
+          value: this.me._notaryId,
+        },
+      ],
+    };
+    this.conference.getScheduled(query).subscribe((res: any) => {
+      console.log(res);
+      console.log(this.currentSchedule);
+      let getCurrentSchedTemp: any = res.env.schedules.find(
+        (o: any) => o._id === this.currentSchedule._id
+      );
+      console.log(getCurrentSchedTemp);
+      if (getCurrentSchedTemp?.conferenceStatus === 'Pending') {
         this.dialogRef.close(true);
-      },
-      (err) => {
-        console.log(err);
         this.util.stopLoading(loader);
-        this.dialog.open(ActionResultComponent, {
-          data: {
-            msg: err.error.message || 'Server Error, Please try again!',
-            success: false,
-            button: 'Okay',
+        console.log('HIINDI NADELETE');
+      } else {
+        this.room.delete(this.currentRoom).subscribe(
+          (res: any) => {
+            console.log(res);
+            this.util.stopLoading(loader);
+            this.dialogRef.close(true);
+
+            console.log('NADELETE NA POTANGINA');
           },
-        });
+          (err) => {
+            console.log(err);
+            this.util.stopLoading(loader);
+            this.dialog.open(ActionResultComponent, {
+              data: {
+                msg: err.error.message || 'Server Error, Please try again!',
+                success: false,
+                button: 'Okay',
+              },
+            });
+          }
+        );
       }
-    );
+    });
+
+    // if (findFinished.length) {
+    //   this.dialogRef.close(true);
+    //   this.util.stopLoading(loader);
+    // } else {
+    //   this.room.delete(this.currentRoom).subscribe(
+    //     (res: any) => {
+    //       console.log(res);
+    //       this.util.stopLoading(loader);
+    //       this.dialogRef.close(true);
+    //     },
+    //     (err) => {
+    //       console.log(err);
+    //       this.util.stopLoading(loader);
+    //       this.dialog.open(ActionResultComponent, {
+    //         data: {
+    //           msg: err.error.message || 'Server Error, Please try again!',
+    //           success: false,
+    //           button: 'Okay',
+    //         },
+    //       });
+    //     }
+    //   );
+    // }
   }
 
   expandImg(event: string) {

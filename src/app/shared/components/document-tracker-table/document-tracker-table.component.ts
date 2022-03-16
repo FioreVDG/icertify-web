@@ -15,8 +15,7 @@ import {
   TRACKER_BOTTOMSHEET,
   NOTARY_FIND_ALL,
 } from './doc-tracker.config';
-import { E } from '@angular/cdk/keycodes';
-import { ThrowStmt } from '@angular/compiler';
+import { Cluster } from 'src/app/models/cluster.interface';
 
 @Component({
   selector: 'app-document-tracker-table',
@@ -50,6 +49,7 @@ export class DocumentTrackerTableComponent implements OnInit {
     private api: ApiService,
     private dialog: MatDialog,
     private util: UtilService,
+    private cluster: Store<{ cluster: Cluster }>,
     private store: Store<{ user: User }>
   ) {
     this.store.select('user').subscribe((res: any) => {
@@ -211,26 +211,13 @@ export class DocumentTrackerTableComponent implements OnInit {
   getSettings(event: any) {
     this.store.select('user').subscribe(
       (res: any) => {
-        let api = this.api.cluster.getOne('');
-        if (this.header === 'NOTARY') {
-          api = this.api.cluster.getOneNotary(res._notaryId);
-        } else {
-          api = this.api.cluster.getOne(res._barangay.brgyCode);
-        }
-
         if (!this.setting) {
-          api.subscribe(
-            (res: any) => {
-              this.setting = res.env.cluster;
-
-              this.filterColumn();
-              this.fetchData(event);
-            },
-            (err: any) => {
-              this.loading = false;
-              console.log(err);
-            }
-          );
+          this.cluster.select('cluster').subscribe((res: Cluster) => {
+            this.setting = res;
+            console.log(res);
+            this.filterColumn();
+            this.fetchData(event);
+          });
         } else {
           this.filterColumn();
           this.fetchData(event);

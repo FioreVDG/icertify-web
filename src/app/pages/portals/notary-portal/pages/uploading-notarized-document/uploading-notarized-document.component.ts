@@ -11,6 +11,7 @@ import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
 import { UtilService } from 'src/app/service/util/util.service';
 import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachments/view-attachments.component';
 import { FILT_BTN_CONFIG, FIND_FOR_UPLOADING, FIND_UPLOADED } from './config';
+import { Cluster } from 'src/app/models/cluster.interface';
 
 @Component({
   selector: 'app-uploading-notarized-document',
@@ -44,6 +45,7 @@ export class UploadingNotarizedDocumentComponent implements OnInit {
     private api: ApiService,
     private dialog: MatDialog,
     private store: Store<{ user: User }>,
+    private cluster: Store<{ cluster: Cluster }>,
     private util: UtilService,
     private dbx: DropboxService
   ) {}
@@ -121,9 +123,14 @@ export class UploadingNotarizedDocumentComponent implements OnInit {
   getSettings(event: any) {
     this.store.select('user').subscribe((res: User) => {
       if (!this.setting) {
-        this.api.cluster.getOneNotary(res._notaryId).subscribe((res: any) => {
-          this.setting = res.env.cluster;
-
+        // this.api.cluster.getOneNotary(res._notaryId).subscribe((res: any) => {
+        //   this.setting = res.env.cluster;
+        //   this.addFilterChoices();
+        //   this.fetchData(event);
+        // });
+        this.cluster.select('cluster').subscribe((res: Cluster) => {
+          this.setting = res;
+          console.log(res);
           this.addFilterChoices();
           this.fetchData(event);
         });
