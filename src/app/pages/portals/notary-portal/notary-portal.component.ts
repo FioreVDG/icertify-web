@@ -64,12 +64,9 @@ export class NotaryPortalComponent implements OnInit {
     this.getMe();
     const currRoute = this.router.url.split('/').pop();
     console.log(currRoute);
-    let temp: Array<String> = [];
-    this.notaryNav.forEach((i: any) => {
-      temp.push(i);
-    });
-
-    this.page = this.notaryNav.find((o: any) => o.route === currRoute);
+    this.page = JSON.parse(JSON.stringify(NOTARY_NAVS)).find(
+      (o: any) => o.route === currRoute
+    );
     if (this.page) this.routeLabel = this.page.label;
   }
 
@@ -92,7 +89,7 @@ export class NotaryPortalComponent implements OnInit {
           if (!this.me.isMain && this.me._role && this.me._role.access.length) {
             this.notaryNav = this.me._role.access;
           } else {
-            this.notaryNav = NOTARY_NAVS;
+            this.notaryNav = JSON.parse(JSON.stringify(NOTARY_NAVS));
           }
 
           this.loading = false;

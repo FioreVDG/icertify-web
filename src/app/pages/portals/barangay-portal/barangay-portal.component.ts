@@ -67,11 +67,10 @@ export class BarangayPortalComponent implements OnInit {
     this.getMe();
     const currRoute = this.router.url.split('/').pop();
     console.log(currRoute);
-    let temp: Array<String> = [];
-    this.barangayNav.forEach((i: any) => {
-      temp.push(i);
-    });
-    this.page = this.barangayNav.find((o: any) => o.route === currRoute);
+    this.page = JSON.parse(JSON.stringify(BARANGAY_NAVS)).find(
+      (o: any) => o.route === currRoute
+    );
+    console.log(this.page);
     if (this.page) this.routeLabel = this.page.label;
   }
 
