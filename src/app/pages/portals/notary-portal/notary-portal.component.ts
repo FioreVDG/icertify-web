@@ -17,11 +17,18 @@ import { NOTARY_MENU, NOTARY_MENU_COLORS } from 'src/app/config/USER_MENU';
 import { Store } from '@ngrx/store';
 import { resetUser, setUser } from 'src/app/store/user/user.action';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import {
+  animateText,
+  onMainContentChange,
+  onSideNavChange,
+} from 'src/app/animations/sidebar.animation';
+import { UtilService } from 'src/app/service/util/util.service';
 
 @Component({
   selector: 'app-notary-portal',
   templateUrl: './notary-portal.component.html',
   styleUrls: ['./notary-portal.component.scss'],
+  animations: [onSideNavChange, animateText, onMainContentChange],
 })
 export class NotaryPortalComponent implements OnInit {
   isExpanded: boolean = false;
@@ -35,6 +42,10 @@ export class NotaryPortalComponent implements OnInit {
   routeLabel: string = '';
   page: any;
 
+  public sideNavState: boolean = false;
+  public linkText: boolean = false;
+  public main: boolean = false;
+
   //For Menu
   notaryMenu = NOTARY_MENU;
   menuColors = NOTARY_MENU_COLORS;
@@ -45,7 +56,8 @@ export class NotaryPortalComponent implements OnInit {
     private dialog: MatDialog,
     private store: Store<{ user: User }>,
     private api: ApiService,
-    private sb: MatSnackBar
+    private sb: MatSnackBar,
+    private util: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -127,6 +139,15 @@ export class NotaryPortalComponent implements OnInit {
           this.router.navigate(['/login']);
         });
     }
+  }
+  onSinenavToggle() {
+    this.sideNavState = !this.sideNavState;
+    this.main = !this.main;
+
+    // setTimeout(() => {
+    this.linkText = this.sideNavState;
+    // }, 1000);
+    this.util.sideNavState$.next(this.sideNavState);
   }
 
   changeRoute(nav: any) {

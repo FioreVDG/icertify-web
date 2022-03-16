@@ -15,6 +15,11 @@
   font-weight: 500;
   font-size: 12.5px;
 }
+.light-disabled {
+  color: #a7a0a0;
+  font-weight: 500;
+  font-size: 12.5px;
+}
 .avatar {
   cursor: pointer;
 }
@@ -27,6 +32,7 @@ mat-sidenav-container {
     overflow-x: hidden;
     border: none;
     box-shadow: -4px 7px 26px 3px rgba(0, 0, 0, 0.1);
+    // width: auto;
   }
   .chevron-button {
     transition: 300ms ease-in-out;
@@ -46,7 +52,6 @@ mat-sidenav-container {
     transform: rotate(180deg);
   }
 }
-
 .logo-container {
   height: 3rem;
   width: 3rem;
@@ -55,7 +60,7 @@ mat-sidenav-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 0rem;
+  margin-left: 0.9rem;
   .img {
     width: auto;
     height: 75%;
@@ -69,7 +74,7 @@ mat-sidenav-container {
   justify-content: center;
   flex-direction: column;
   padding: 0rem 1.1rem;
-  margin-left: 0.7rem;
+  margin-left: 0.3rem;
   p {
     font-size: 9px;
     margin: 0;
