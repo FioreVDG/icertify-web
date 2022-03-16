@@ -1,6 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
 import { forkJoin } from 'rxjs';
+import { User } from 'src/app/models/user.interface';
 import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
 import { UtilService } from 'src/app/service/util/util.service';
 
@@ -14,14 +16,20 @@ export class ViewAttachmentsComponent implements OnInit {
   files: any[] = [];
   loader = this.util.startLoading('Loading...');
   testtt = 2;
+  me: any;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<ViewAttachmentsComponent>,
     private dbx: DropboxService,
-    private util: UtilService
+    private util: UtilService,
+    private store: Store<{ user: User }>
   ) {}
 
   ngOnInit(): void {
+    this.store.select('user').subscribe((res: User) => {
+      this.me = res;
+      console.log(res);
+    });
     console.log(this.data);
     if (this.data.documents) this.fetchAttachments(this.data.documents, 0);
     else {

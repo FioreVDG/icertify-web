@@ -61,7 +61,7 @@
     <div class="col-12">
       <ng-container *ngFor="let item of files; let i = index">
         <div class="grid">
-          <div *ngIf="!item.notarizedFile" class="col-6">
+          <div *ngIf="!item.notarizedFile" class="col-12">
             <p align="center">Uploaded Document</p>
             <div class="img-container">
               <mat-spinner
@@ -83,7 +83,7 @@
               ></ngx-doc-viewer>
             </div>
           </div>
-          <div *ngIf="item.notarizedFile" class="col-6">
+          <div *ngIf="item.notarizedFile" class="col-12">
             <p align="center">Uploaded Document</p>
             <div class="img-container">
               <mat-spinner
@@ -105,7 +105,7 @@
               ></ngx-doc-viewer>
             </div>
           </div>
-          <div *ngIf="item.notarizedFile" class="col-6">
+          <div *ngIf="item.notarizedFile && me.type == 'Notary'" class="col-12">
             <p align="center">Notarized Document</p>
             <div class="img-container">
               <mat-spinner

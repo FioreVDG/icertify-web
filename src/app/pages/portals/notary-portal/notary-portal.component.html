@@ -1,9 +1,20 @@
 <app-loading [label]="'Loading'" *ngIf="loading"></app-loading>
 <app-loading [label]="'Logging Out'" *ngIf="loggingOut"></app-loading>
-<mat-sidenav-container *ngIf="!loading && !loggingOut" autosize>
-  <mat-sidenav #sidenav mode="side" opened="true">
+<mat-sidenav-container style="overflow: hidden" *ngIf="!loading && !loggingOut">
+  <mat-sidenav
+    style="overflow: hidden"
+    #sidenav
+    mode="side"
+    opened="true"
+    (mouseenter)="onSinenavToggle()"
+    (mouseleave)="onSinenavToggle()"
+    [@onSideNavChange]="sideNavState ? 'open' : 'close'"
+  >
     <mat-nav-list style="padding-top: 0">
-      <mat-toolbar color="primary">
+      <mat-toolbar
+        color="primary"
+        style="border-right: 0.3px solid rgba(238, 238, 238, 0.171); padding: 0"
+      >
         <div class="logo-container">
           <img
             src="../../../assets/images/iCertify-logo.png"
@@ -11,7 +22,7 @@
             alt=""
           />
         </div>
-        <div *ngIf="isExpanded" class="logo-text">
+        <div *ngIf="isExpanded || sideNavState" class="logo-text">
           <h3>iCertify, Inc.</h3>
           <p>NOTARY</p>
         </div>
@@ -22,6 +33,7 @@
             style="height: 2.8rem; padding: 0"
             [routerLink]="item.route"
             (click)="changeRoute(item)"
+            [disabled]="item.disabled"
             routerLinkActive="router-active-link"
             *ngIf="
               !me.isMain && me._role && me._role.access
@@ -30,53 +42,78 @@
             "
           >
             <mat-icon
-              class="light"
+              [ngClass]="item.disabled ? 'light-disabled' : 'light'"
               fontSet="material-icons-outlined"
-              [matTooltip]="isExpanded ? '' : item.label"
-              matTooltipPosition="right"
               mat-list-icon
               >{{ item.icon }}</mat-icon
-            ><span *ngIf="isExpanded" class="light">{{ item.label }}</span>
+            ><span
+              [@animateText]="linkText ? 'show' : 'hide'"
+              [ngClass]="item.disabled ? 'light-disabled' : 'light'"
+              *ngIf="isExpanded || sideNavState"
+              >{{ item.label }}</span
+            >
           </mat-list-item>
         </ng-container>
       </div>
     </mat-nav-list>
   </mat-sidenav>
-
-  <mat-toolbar style="border-bottom: 0.5px #8f8f8f3f solid">
-    <mat-icon
+  <div>
+    <mat-toolbar
+      style="
+        border-bottom: 0.5px #8f8f8f3f solid;
+        position: sticky;
+        z-index: 99;
+        top: 0;
+        background: #fff;
+      "
+    >
+      <!-- <mat-icon
       class="chevron-button"
       (click)="isExpanded = !isExpanded"
       [ngClass]="{ rotated: isExpanded }"
       [matTooltip]="isExpanded ? 'Minimize sidebar' : 'Expand sidebar'"
       matTooltipPosition="right"
       >chevron_right</mat-icon
+    > -->
+      <div class="flex-stretch"></div>
+      <app-profile-menu
+        class="avatar"
+        *ngIf="me"
+        [me]="me"
+        [avatarColors]="menuColors"
+        [menuItems]="notaryMenu"
+        (onMenuClick)="menuClick($event)"
+      ></app-profile-menu>
+    </mat-toolbar>
+    <mat-toolbar
+      class="shadow-1"
+      style="
+        height: 2rem;
+        background: #fff;
+        color: #26184a;
+        position: sticky;
+        z-index: 99;
+      "
+      *ngIf="!navigationLoading"
     >
-    <div class="flex-stretch"></div>
-    <app-profile-menu
-      class="avatar"
-      *ngIf="me"
-      [me]="me"
-      [avatarColors]="menuColors"
-      [menuItems]="notaryMenu"
-      (onMenuClick)="menuClick($event)"
-    ></app-profile-menu>
-  </mat-toolbar>
-  <mat-toolbar style="height: 3rem; border-bottom: 3px solid #26184ab8">
-    <small style="font-size: 13px; letter-spacing: 0.1rem">{{
-      routeLabel
-    }}</small>
-    <div class="flex-stretch"></div>
-  </mat-toolbar>
-  <div *ngIf="!navigationLoading && !loggingOut" class="container-fluid">
-    <router-outlet></router-outlet>
-  </div>
-  <div style="overflow-x: hidden; overflow-y: hidden">
-    <app-loading
-      *ngIf="navigationLoading && !loggingOut"
-      [label]="'Navigating to'"
-      [route]="routeLabel"
-    ></app-loading>
+      <small style="font-size: 13px; letter-spacing: 0.1rem">{{
+        routeLabel
+      }}</small>
+      <div class="flex-stretch"></div>
+    </mat-toolbar>
+    <div
+      style="overflow: hidden"
+      *ngIf="!navigationLoading && !loggingOut"
+      class="container-fluid"
+    >
+      <router-outlet></router-outlet>
+    </div>
+    <div style="overflow-x: hidden; overflow-y: hidden">
+      <app-loading
+        [label]="'Navigating to'"
+        [route]="routeLabel"
+        *ngIf="navigationLoading && !loggingOut"
+      ></app-loading>
+    </div>
   </div>
 </mat-sidenav-container>
-<app-loading *ngIf="loggingOut" [label]="'Logging out'"></app-loading>
