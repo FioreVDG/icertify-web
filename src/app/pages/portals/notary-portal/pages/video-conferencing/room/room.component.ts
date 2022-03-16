@@ -172,25 +172,11 @@ export class RoomComponent implements OnInit {
     this.transactionCount = this.transactions.length;
     console.log(this.transactionCount);
     const loader = this.util.startLoading('Joining please wait...');
-
-    this.agora.getToken(schedule._id).subscribe(
-      //need na alisin itong agora token
-      (res: any) => {
-        if (res) {
-          console.log(res);
-          this.token = res.token;
-          // this.emitJoinRoomSocket(this.data);
-          this.getCurrentTransactionQueue(this.transactions);
-          this.joinRoom = true;
-          this.util.stopLoading(loader);
-          console.log(this.transactions);
-        }
-      },
-      (err) => {
-        console.log(err);
-        this.util.stopLoading(loader);
-      }
-    );
+    this.getCurrentTransactionQueue(this.transactions);
+    setTimeout(() => {
+      this.util.stopLoading(loader);
+      this.joinRoom = true;
+    }, 1500);
   }
 
   //Automatically proceed to current queue transaction
