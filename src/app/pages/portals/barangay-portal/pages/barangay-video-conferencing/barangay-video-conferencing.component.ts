@@ -9,10 +9,9 @@ import {
 import { Store } from '@ngrx/store';
 import { User } from 'src/app/models/user.interface';
 import { MatDialog } from '@angular/material/dialog';
-import { ViewBatchTransactionsComponent } from './view-batch-transactions/view-batch-transactions.component';
 import { QueryParams } from 'src/app/models/queryparams.interface';
-import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachments/view-attachments.component';
 import { Cluster } from 'src/app/models/cluster.interface';
+import { ViewScreenshotComponent } from 'src/app/shared/components/view-screenshot/view-screenshot.component';
 
 @Component({
   selector: 'app-barangay-video-conferencing',
@@ -133,7 +132,7 @@ export class BarangayVideoConferencingComponent implements OnInit {
   }
 
   onRowClick(event: any) {
-    console.log(event);
+    console.log('ETO UN', event);
     // this.dialog.open(ViewBatchTransactionsComponent, {
     //   data: event,
     //   height: 'auto',
@@ -143,11 +142,10 @@ export class BarangayVideoConferencingComponent implements OnInit {
     switch (event.action) {
       case 'join':
         break;
-      case 'view':
-        this.dialog.open(ViewAttachmentsComponent, {
+      case 'viewSS':
+        this.dialog.open(ViewScreenshotComponent, {
           data: {
-            documents: [event.obj],
-            refCode: event.obj.refCode,
+            document: event.obj,
           },
           height: 'auto',
           width: '70%',

@@ -15,12 +15,14 @@
         <td *ngIf="t.path">
           {{
             t.type !== "date"
-              ? util.deepFind(d, t.path)
-              : (util.deepFind(d, t.path) | date: "medium")
+              ? util.deepFind(d.docDetails, t.path)
+              : (util.deepFind(d.docDetails, t.path) | date: "medium")
           }}
         </td>
         <td *ngIf="t.paths">
-          <span *ngFor="let p of t.paths">{{ util.deepFind(d, p) }} </span>
+          <span *ngFor="let p of t.paths"
+            >{{ util.deepFind(d.docDetails, p) }}
+          </span>
         </td>
       </ng-container>
     </tr>
