@@ -234,5 +234,12 @@
 <!-- MAT MENUS -->
 <mat-menu #dates="matMenu">
   <div>Expected Start: {{ expectedStart * 1000 | date: "shortTime" }}</div>
-  <div>Next Indigent: {{ nextIndigent * 1000 | date: "shortTime" }}</div>
+  <div>
+    Next Indigent:
+    {{
+      nextIndigent === "Skipped" || nextIndigent === "N/A"
+        ? nextIndigent
+        : (nextIndigent * 1000 | date: "shortTime")
+    }}
+  </div>
 </mat-menu>

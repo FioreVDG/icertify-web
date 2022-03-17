@@ -27,6 +27,7 @@ import html2canvas from 'html2canvas';
 import { DocumentImageViewerComponent } from 'src/app/shared/dialogs/document-image-viewer/document-image-viewer.component';
 import { AnyFn } from '@ngrx/store/src/selector';
 import { Cluster } from 'src/app/models/cluster.interface';
+import { skip } from 'rxjs/operators';
 
 @Component({
   selector: 'app-room',
@@ -233,9 +234,9 @@ export class RoomComponent implements OnInit {
             parseInt(currentExistingTransaction._documents[0].queue) - 1;
           console.log(this.currentTransactionIndex);
           // this.checkScheduleTime();
-          this.initDates();
           this.selectDocumentToView(this.currentTransaction._documents[0]);
           this.getImages();
+          this.initDates();
         }
       } else this.nextTransaction();
     });
@@ -263,8 +264,34 @@ export class RoomComponent implements OnInit {
     this.expectedStart =
       new Date(this.currentTransaction._documents[0].schedule).getTime() / 1000;
     this.expectedStartE = this.expectedStart + this.allowance;
-    this.nextIndigent = this.expectedStart + duration;
+    if (
+      parseInt(this.currentTransaction._documents[0].queue) ===
+        this.transactionCount ||
+      this.currentTransaction._documents[0].documentStatus !==
+        'Pending for Notary'
+    ) {
+      if (this.skipCount > 0) {
+        if (
+          this.currentDocument.documentStatus === 'Skipped' &&
+          this.skipCount === 1
+        ) {
+          this.nextIndigent = 'N/A';
+        } else {
+          this.nextIndigent = 'Skipped';
+        }
+      } else this.nextIndigent = 'N/A';
+    } else {
+      this.nextIndigent = this.expectedStart + duration;
+    }
+
     if (this.runningDurInterval) clearInterval(this.runningDurInterval);
+    console.log(
+      this.currentTransaction._documents[0].queue,
+      this.transactionCount
+    );
+    console.log(this.currentTransaction._documents[0].documentStatus);
+    console.log('ASDASDSADAASDSADASDASD: ' + this.nextIndigent);
+
     this.runTimer();
   }
 
@@ -424,9 +451,9 @@ export class RoomComponent implements OnInit {
     console.log(this.currentTransaction);
     // this.checkScheduleTime();
     this.isIndigentJoined = false;
-    this.initDates();
     this.selectDocumentToView(this.currentTransaction._documents[0]);
     this.getImages();
+    this.initDates();
 
     // FOR ROOM HERE
     let notaryQuery: QueryParams = {
@@ -613,9 +640,7 @@ export class RoomComponent implements OnInit {
 
           this.actualStart = undefined;
           this.notarialStatus = undefined;
-          if (
-            (this.currentTransaction._documents[0].documentStatus = 'Skipped')
-          ) {
+          if (this.currentDocument.documentStatus === 'Skipped') {
             this.skipCount -= 1;
           }
           console.log(res);
