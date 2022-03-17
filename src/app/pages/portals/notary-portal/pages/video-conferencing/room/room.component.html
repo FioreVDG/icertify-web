@@ -159,7 +159,7 @@
           <b>{{ currentDocument.refCode }}</b>
         </p>
 
-        <!-- <div class="flex-stretch"></div>
+        <div class="flex-stretch"></div>
         <div style="width: 100%; display: flex"></div>
         <div style="width: 50%">
           <p>{{ runningDuration * 1000 | date: "mm:ss" }}</p>
@@ -171,7 +171,7 @@
               <mat-icon>info</mat-icon>
             </button>
           </p>
-        </div> -->
+        </div>
 
         <div class="flex-stretch"></div>
         <!-- <button
@@ -232,10 +232,6 @@
 
 <!-- MAT MENUS -->
 <mat-menu #dates="matMenu">
-  <div mat-menu-item>
-    Expected Start: {{ expectedStart * 1000 | date: "shortTime" }}
-  </div>
-  <div mat-menu-item>
-    Next Indigent: {{ nextIndigent * 1000 | date: "shortTime" }}
-  </div>
+  <div>Expected Start: {{ expectedStart * 1000 | date: "shortTime" }}</div>
+  <div>Next Indigent: {{ nextIndigent * 1000 | date: "shortTime" }}</div>
 </mat-menu>

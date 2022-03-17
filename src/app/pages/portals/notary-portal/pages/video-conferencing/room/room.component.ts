@@ -269,7 +269,7 @@ export class RoomComponent implements OnInit {
         this.actualStart = Date.now() / 1000;
         let currTime = this.actualStart;
         if (currTime > this.expectedStartE) {
-          this.notarialStatus = 'Late';
+          this.notarialStatus = 'Delay';
         } else if (
           currTime >= this.expectedStart &&
           currTime <= this.expectedStartE
