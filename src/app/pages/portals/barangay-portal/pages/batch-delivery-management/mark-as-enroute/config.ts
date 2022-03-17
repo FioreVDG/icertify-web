@@ -26,7 +26,7 @@ export const TABLE_CONFIG = [
   },
   {
     title: 'QC Indigent',
-    paths: ['sender.lastName', 'sender.firstName', 'sender.middleName'],
+    paths: ['sender.firstName', 'sender.middleName', 'sender.lastName'],
   },
   {
     title: 'Date and Time Received',
