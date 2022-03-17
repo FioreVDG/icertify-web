@@ -149,14 +149,6 @@ export const VIDEO_CONF_BARANGAY_TABLE: Array<FILTER_BUTTON_COLUMN> = [
         type: 'special',
         selected: true,
       },
-      // PAGAWA :)
-      {
-        title: 'Queue No.',
-        breakpoint: 'sm',
-        path: 'queue',
-        type: 'text',
-        selected: true,
-      },
       {
         title: 'Scheduled By',
         breakpoint: 'sm',
@@ -189,15 +181,32 @@ export const VIDEO_CONF_BARANGAY_TABLE: Array<FILTER_BUTTON_COLUMN> = [
           },
           {
             value: 'Unnotarized',
-            color: '#83b9a1' || 'green',
+            color: '#e58086' || 'red',
           },
         ],
+      },
+      {
+        title: 'Remarks',
+        breakpoint: 'sm',
+        path: 'remark',
+        type: 'text',
+        selected: false,
+      },
+      // PAGAWA :)
+      {
+        title: 'Queue No.',
+        breakpoint: 'sm',
+        path: 'queue',
+        type: 'text',
+        selected: false,
       },
     ],
     bottomSheet: [
       {
-        label: 'View Screenshot',
-        action: 'view',
+        label: 'View Screenshot/s',
+        action: 'viewSS',
+        icon: 'photo_library',
+        showIf: 'screenShots/>/0',
       },
     ],
   },
