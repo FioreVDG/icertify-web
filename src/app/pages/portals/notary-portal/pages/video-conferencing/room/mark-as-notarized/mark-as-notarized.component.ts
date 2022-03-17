@@ -47,8 +47,8 @@ export class MarkAsNotarizedComponent implements OnInit {
     console.log(event);
     let msg: string =
       this.data.type === 'Notarized'
-        ? `you want to notarized ${event.refCode}`
-        : `you want to mark as unnotarized ${event.refCode}`;
+        ? `notarized ${event.refCode}`
+        : `mark as unnotarized ${event.refCode}`;
     if (this.data.type)
       this.dialog
         .open(AreYouSureComponent, {
