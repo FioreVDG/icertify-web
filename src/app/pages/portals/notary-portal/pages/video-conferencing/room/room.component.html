@@ -158,6 +158,22 @@
           This is for Document with reference code:
           <b>{{ currentDocument.refCode }}</b>
         </p>
+
+        <div class="flex-stretch"></div>
+        <div style="width: 100%; display: flex"></div>
+        <div style="width: 40%">
+          <p>{{ runningDuration * 1000 | date: "mm:ss" }}</p>
+        </div>
+        <div style="width: 30%">
+          <p>
+            {{ notarialStatus }}
+            <button mat-icon-button [matMenuTriggerFor]="dates">
+              <mat-icon>info</mat-icon>
+            </button>
+          </p>
+        </div>
+        <div style="width: 30%">Skip: {{ skipCount }}</div>
+
         <div class="flex-stretch"></div>
         <!-- <button
           mat-icon-button
@@ -181,6 +197,7 @@
         <app-rt-video
           [channelName]="currentSchedule._id"
           (onLeaveMeeting)="leaveMeeting($event)"
+          (setActualDate)="setIndigentJoinDate()"
           [remoteDetails]="remoteCallDetails"
         ></app-rt-video>
         <div class="grid mt-3">
@@ -202,10 +219,10 @@
             <button
               mat-raised-button
               color=""
-              [disabled]="showSkipBtn()"
+              [disabled]="skipDisabled"
               (click)="skipDocument()"
             >
-              Skip document
+              Skip Document {{ skipDelay > 0 ? "(" + skipDelay + ")" : "" }}
             </button>
           </div>
         </div>
@@ -213,3 +230,16 @@
     </div>
   </mat-sidenav-container>
 </div>
+
+<!-- MAT MENUS -->
+<mat-menu #dates="matMenu">
+  <div>Expected Start: {{ expectedStart * 1000 | date: "shortTime" }}</div>
+  <div>
+    Next Indigent:
+    {{
+      nextIndigent === "Skipped" || nextIndigent === "N/A"
+        ? nextIndigent
+        : (nextIndigent * 1000 | date: "shortTime")
+    }}
+  </div>
+</mat-menu>
