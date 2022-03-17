@@ -26,6 +26,7 @@ import { User } from 'src/app/models/user.interface';
 import html2canvas from 'html2canvas';
 import { DocumentImageViewerComponent } from 'src/app/shared/dialogs/document-image-viewer/document-image-viewer.component';
 import { AnyFn } from '@ngrx/store/src/selector';
+import { Cluster } from 'src/app/models/cluster.interface';
 
 @Component({
   selector: 'app-room',
@@ -81,7 +82,7 @@ export class RoomComponent implements OnInit {
   query: QueryParams = { find: [] };
   remainingDocsChecker: any;
   showOverlay: boolean = false;
-
+  settings: any;
   constructor(
     public dialogRef: MatDialogRef<RoomComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -91,6 +92,7 @@ export class RoomComponent implements OnInit {
     private agora: AgoraService,
     private dbx: DropboxService,
     private socket: Socket,
+    private cluster: Store<{ cluster: Cluster }>,
     private store: Store<{ user: User }>,
     private dialog: MatDialog,
     private room: RoomService,
@@ -102,9 +104,13 @@ export class RoomComponent implements OnInit {
     this.store.select('user').subscribe((res: any) => {
       this.me = res;
     });
-    this.socketEventHandler();
-    this.getExpectedParticipants();
-    this.checkDocument();
+    this.cluster.select('cluster').subscribe((res: Cluster) => {
+      this.settings = res;
+      this.socketEventHandler();
+      this.getExpectedParticipants();
+      this.checkDocument();
+    });
+
     this.remainingDocsChecker = setInterval(() => {
       this.checkRemainingDocuments();
     }, 1000);
@@ -172,25 +178,11 @@ export class RoomComponent implements OnInit {
     this.transactionCount = this.transactions.length;
     console.log(this.transactionCount);
     const loader = this.util.startLoading('Joining please wait...');
-
-    this.agora.getToken(schedule._id).subscribe(
-      //need na alisin itong agora token
-      (res: any) => {
-        if (res) {
-          console.log(res);
-          this.token = res.token;
-          // this.emitJoinRoomSocket(this.data);
-          this.getCurrentTransactionQueue(this.transactions);
-          this.joinRoom = true;
-          this.util.stopLoading(loader);
-          console.log(this.transactions);
-        }
-      },
-      (err) => {
-        console.log(err);
-        this.util.stopLoading(loader);
-      }
-    );
+    this.getCurrentTransactionQueue(this.transactions);
+    setTimeout(() => {
+      this.util.stopLoading(loader);
+      this.joinRoom = true;
+    }, 1500);
   }
 
   //Automatically proceed to current queue transaction
@@ -220,12 +212,50 @@ export class RoomComponent implements OnInit {
           this.currentTransactionIndex =
             parseInt(currentExistingTransaction._documents[0].queue) - 1;
           console.log(this.currentTransactionIndex);
+          // this.checkScheduleTime();
           this.selectDocumentToView(this.currentTransaction._documents[0]);
           this.getImages();
         }
       } else this.nextTransaction();
     });
     console.log(this.currentTransaction);
+  }
+
+  checkScheduleTime() {
+    let duration = 0;
+    this.settings.barangays.forEach((el: any) => {
+      if (
+        el._barangay.brgyCode === this.currentTransaction._barangay.brgyCode
+      ) {
+        duration += el.duration * 60;
+      }
+    });
+
+    let currDateSeconds = Date.now() / 1000;
+    let schedule = this.currentTransaction._documents[0].schedule;
+    let schedDateSeconds = new Date(schedule).getTime() / 1000 + duration;
+    // console.log(duration);
+    // console.log(currDateSeconds);
+    // console.log(schedDateSeconds);
+
+    if (currDateSeconds > schedDateSeconds) {
+      this.dialog.open(ActionResultComponent, {
+        data: {
+          msg: 'Your schedule past the time limit',
+          success: true,
+          isOthers: true,
+          button: 'Okay',
+        },
+      });
+    } else {
+      console.log(
+        'TIMER:',
+        Math.floor(schedDateSeconds) - Math.floor(currDateSeconds)
+      );
+      setTimeout(() => {
+        this.checkScheduleTime();
+      }, 1000);
+    }
   }
 
   emitJoinRoomSocket(data: any) {
@@ -349,6 +379,7 @@ export class RoomComponent implements OnInit {
     this.currentTransaction = this.transactions[this.currentTransactionIndex];
     //CURRENT TRANSACTION HEREEEEEEEEEEEE
     console.log(this.currentTransaction);
+    // this.checkScheduleTime();
     this.selectDocumentToView(this.currentTransaction._documents[0]);
     this.getImages();
 
@@ -600,15 +631,12 @@ export class RoomComponent implements OnInit {
       if (getCurrentSchedTemp?.conferenceStatus === 'Pending') {
         this.dialogRef.close(true);
         this.util.stopLoading(loader);
-        console.log('HIINDI NADELETE');
       } else {
         this.room.delete(this.currentRoom).subscribe(
           (res: any) => {
             console.log(res);
             this.util.stopLoading(loader);
             this.dialogRef.close(true);
-
-            console.log('NADELETE NA POTANGINA');
           },
           (err) => {
             console.log(err);

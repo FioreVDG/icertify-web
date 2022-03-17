@@ -3,7 +3,6 @@
 <mat-sidenav-container style="overflow: hidden" *ngIf="!loading && !loggingOut">
   <mat-sidenav
     style="overflow: hidden"
-    class="nav"
     #sidenav
     mode="side"
     opened="true"
@@ -23,7 +22,6 @@
             alt=""
           />
         </div>
-
         <div *ngIf="isExpanded || sideNavState" class="logo-text">
           <h3>iCertify, Inc.</h3>
           <p>BARANGAY</p>
