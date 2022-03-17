@@ -83,6 +83,19 @@ export class RoomComponent implements OnInit {
   remainingDocsChecker: any;
   showOverlay: boolean = false;
   settings: any;
+
+  expectedStart: any;
+  expectedStartE: any;
+  actualStart: any;
+  isIndigentJoined: boolean = false;
+  nextIndigent: any;
+  notarialStatus: any;
+  allowance = 180;
+  runningDuration: number = 0;
+  runningDurInterval: any;
+  skipDelay = 10;
+  skipDisabled = true;
+
   constructor(
     public dialogRef: MatDialogRef<RoomComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -213,6 +226,7 @@ export class RoomComponent implements OnInit {
             parseInt(currentExistingTransaction._documents[0].queue) - 1;
           console.log(this.currentTransactionIndex);
           // this.checkScheduleTime();
+          this.initDates();
           this.selectDocumentToView(this.currentTransaction._documents[0]);
           this.getImages();
         }
@@ -221,22 +235,78 @@ export class RoomComponent implements OnInit {
     console.log(this.currentTransaction);
   }
 
+  setIndigentJoinDate() {
+    this.isIndigentJoined = true;
+    console.log('JOINEDDDDDDDDDDDDDD');
+  }
+
+  initDates() {
+    this.showSkipBtn();
+    let duration = 0;
+
+    this.settings.barangays.forEach((el: any) => {
+      if (
+        el._barangay.brgyCode === this.currentTransaction._barangay.brgyCode
+      ) {
+        duration = el.duration * 60;
+      }
+    });
+
+    this.runningDuration = 0;
+    this.expectedStart =
+      new Date(this.currentTransaction._documents[0].schedule).getTime() / 1000;
+    this.expectedStartE = this.expectedStart + this.allowance;
+    this.nextIndigent = this.expectedStart + duration;
+    if (this.runningDurInterval) clearInterval(this.runningDurInterval);
+    this.runTimer();
+  }
+
+  runTimer() {
+    this.runningDurInterval = setInterval(() => {
+      this.runningDuration += 1;
+
+      if (!this.isIndigentJoined) {
+        this.actualStart = Date.now() / 1000;
+        let currTime = this.actualStart;
+        if (currTime > this.expectedStartE) {
+          this.notarialStatus = 'Late';
+        } else if (
+          currTime >= this.expectedStart &&
+          currTime <= this.expectedStartE
+        ) {
+          this.notarialStatus = 'On Time';
+        } else if (currTime < this.expectedStart) {
+          this.notarialStatus = 'Early';
+        }
+      }
+
+      // console.log('DURATION: ', this.runningDuration);
+      // console.log('EXPECTEDSTART: ', this.expectedStart);
+      // console.log('NEXT INDIGENT:', this.nextIndigent);
+      // if (this.notarialStatus) {
+      //   console.log('STATUS:', this.notarialStatus);
+
+      //   console.log('ACTUALSTART: ', this.actualStart);
+      // }
+    }, 1000);
+    // setTimeout(() => {
+    //   if (!this.stopTimer) this.runTimer();
+    // }, 1000);
+  }
+
   checkScheduleTime() {
     let duration = 0;
     this.settings.barangays.forEach((el: any) => {
       if (
         el._barangay.brgyCode === this.currentTransaction._barangay.brgyCode
       ) {
-        duration += el.duration * 60;
+        duration = el.duration * 60;
       }
     });
 
     let currDateSeconds = Date.now() / 1000;
     let schedule = this.currentTransaction._documents[0].schedule;
     let schedDateSeconds = new Date(schedule).getTime() / 1000 + duration;
-    // console.log(duration);
-    // console.log(currDateSeconds);
-    // console.log(schedDateSeconds);
 
     if (currDateSeconds > schedDateSeconds) {
       this.dialog.open(ActionResultComponent, {
@@ -380,6 +450,8 @@ export class RoomComponent implements OnInit {
     //CURRENT TRANSACTION HEREEEEEEEEEEEE
     console.log(this.currentTransaction);
     // this.checkScheduleTime();
+    this.isIndigentJoined = false;
+    this.initDates();
     this.selectDocumentToView(this.currentTransaction._documents[0]);
     this.getImages();
 
@@ -512,6 +584,11 @@ export class RoomComponent implements OnInit {
                         response.env.document.documentStatus;
                       console.log(this.currentDocument);
                       console.log(this.currentTransaction);
+                      this.isIndigentJoined = false;
+
+                      clearInterval(this.runningDurInterval);
+                      this.actualStart = undefined;
+                      this.notarialStatus = undefined;
                     }
                   });
               }
@@ -557,6 +634,11 @@ export class RoomComponent implements OnInit {
       .afterClosed()
       .subscribe((res: any) => {
         if (res) {
+          // this.stopTimer = true;
+          clearInterval(this.runningDurInterval);
+
+          this.actualStart = undefined;
+          this.notarialStatus = undefined;
           console.log(res);
           console.log(this.currentDocument);
           this.currentDocument.documentStatus = res.data;
@@ -587,8 +669,19 @@ export class RoomComponent implements OnInit {
     let filtSkip: any = this.currentTransaction?._documents.filter(
       (o: any) => o.documentStatus === 'Skipped'
     );
-    if (filtSkip?.length) return true;
-    else return false;
+    if (filtSkip?.length) {
+      this.skipDisabled = true;
+      this.skipDelay = 0;
+    } else {
+      this.skipDelay = 10;
+      let interval = setInterval(() => {
+        this.skipDelay -= 1;
+        if (this.skipDelay === 0) {
+          clearInterval(interval);
+          this.skipDisabled = false;
+        }
+      }, 1000);
+    }
   }
 
   async getTempLink(data: any) {
@@ -611,7 +704,7 @@ export class RoomComponent implements OnInit {
     // let findFinished: any = this.transactions.filter((el: any) => {
     //   return (el.transactionStatus = 'Pending');
     // });
-
+    this.isIndigentJoined = false;
     let query: any = {
       find: [
         {
@@ -631,12 +724,20 @@ export class RoomComponent implements OnInit {
       if (getCurrentSchedTemp?.conferenceStatus === 'Pending') {
         this.dialogRef.close(true);
         this.util.stopLoading(loader);
+        clearInterval(this.runningDurInterval);
+
+        this.actualStart = undefined;
+        this.notarialStatus = undefined;
       } else {
         this.room.delete(this.currentRoom).subscribe(
           (res: any) => {
             console.log(res);
             this.util.stopLoading(loader);
             this.dialogRef.close(true);
+            clearInterval(this.runningDurInterval);
+
+            this.actualStart = undefined;
+            this.notarialStatus = undefined;
           },
           (err) => {
             console.log(err);

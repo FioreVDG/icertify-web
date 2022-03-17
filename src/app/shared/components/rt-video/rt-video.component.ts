@@ -47,6 +47,7 @@ export class RtVideoComponent implements OnInit {
   public localAudio = true;
   public localVideo = true;
 
+  @Output() setActualDate: any = new EventEmitter<any>();
   @Output() onLeaveMeeting: any = new EventEmitter<any>();
   @Output() kickIndigent: any = new EventEmitter<any>();
 
@@ -252,6 +253,7 @@ export class RtVideoComponent implements OnInit {
         stream
       );
       if (!this.remoteCalls.length) {
+        this.setActualDate.emit();
         this.remoteCalls.push({
           id: id,
           hasAudio: true,
@@ -410,7 +412,7 @@ export class RtVideoComponent implements OnInit {
       () => {
         this.dialog
           .open(AreYouSureComponent, {
-            data: { msg: 'you want to leave', isOthers: true },
+            data: { msg: 'to leave', isOthers: true },
           })
           .afterClosed()
           .subscribe((res: any) => {
