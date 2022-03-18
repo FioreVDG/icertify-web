@@ -412,7 +412,7 @@ export class RtVideoComponent implements OnInit {
       () => {
         this.dialog
           .open(AreYouSureComponent, {
-            data: { msg: 'to leave', isOthers: true },
+            data: { msg: 'leave', isOthers: true },
           })
           .afterClosed()
           .subscribe((res: any) => {
