@@ -11,7 +11,7 @@ import { AgoraConfig, NgxAgoraModule } from 'ngx-agora';
 import { NotfoundComponent } from './pages/notfound/notfound.component';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 const config: SocketIoConfig = {
-  url: 'https://icertify-server.herokuapp.com/', // socket server url;
+  url: 'http://localhost:3000/', // socket server url;
   options: {},
 };
 const agoraConfig: AgoraConfig = {

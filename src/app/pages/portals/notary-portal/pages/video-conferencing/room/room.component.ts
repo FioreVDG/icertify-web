@@ -174,6 +174,7 @@ export class RoomComponent implements OnInit {
   }
 
   joinMeeting(schedule: any) {
+    this.createSocketRoom();
     console.log(schedule);
     this.currentSchedule = schedule;
     console.log(this.currentSchedule._id);
@@ -196,6 +197,10 @@ export class RoomComponent implements OnInit {
       this.util.stopLoading(loader);
       this.joinRoom = true;
     }, 1500);
+  }
+
+  createSocketRoom() {
+    this.socket.emit('createRoom', this.me);
   }
 
   //Automatically proceed to current queue transaction
@@ -334,6 +339,21 @@ export class RoomComponent implements OnInit {
   socketEventHandler() {
     this.socket.fromEvent('createdMeeting').subscribe((res: any) => {
       console.log(res);
+    });
+    this.socket.fromEvent('triggerScreenshot').subscribe((res: any) => {
+      console.log('TRIGGER SCREENSHOT');
+      this.dialog
+        .open(CounterComponent, {
+          data: { ctr: 3 },
+          panelClass: 'dialog-transparent',
+          disableClose: true,
+        })
+        .afterClosed()
+        .subscribe((res: any) => {
+          if (res) {
+            this.takeScreenshot();
+          }
+        });
     });
   }
 
@@ -542,18 +562,7 @@ export class RoomComponent implements OnInit {
   }
 
   initiateCounter() {
-    this.dialog
-      .open(CounterComponent, {
-        data: { ctr: 3 },
-        panelClass: 'dialog-transparent',
-        disableClose: true,
-      })
-      .afterClosed()
-      .subscribe((res: any) => {
-        if (res) {
-          this.takeScreenshot();
-        }
-      });
+    this.socket.emit('takeScreenshot', this.me);
   }
 
   skipDocument() {

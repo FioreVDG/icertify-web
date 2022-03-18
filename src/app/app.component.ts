@@ -10,6 +10,6 @@ export class AppComponent {
   title = 'icertify-web';
   constructor(private socket: Socket) {}
   ngOnInit() {
-    this.socket.connect();
+    // this.socket.connect();
   }
 }

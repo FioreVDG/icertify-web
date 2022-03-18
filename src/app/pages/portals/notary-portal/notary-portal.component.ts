@@ -1,3 +1,4 @@
+import { Socket } from 'ngx-socket-io';
 import { setCluster } from '../../../store/cluster/cluster.action';
 import { ApiService } from './../../../service/api/api.service';
 import { AuthService } from './../../../service/auth/auth.service';
@@ -57,7 +58,8 @@ export class NotaryPortalComponent implements OnInit {
     private store: Store<{ user: User }>,
     private api: ApiService,
     private sb: MatSnackBar,
-    private util: UtilService
+    private util: UtilService,
+    private socket: Socket
   ) {}
 
   ngOnInit(): void {
