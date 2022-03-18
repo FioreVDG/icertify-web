@@ -1,3 +1,4 @@
+import { ViewScreenshotComponent } from 'src/app/shared/components/view-screenshot/view-screenshot.component';
 import { Component, Inject, OnInit } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
@@ -107,6 +108,9 @@ export class ViewTransactionComponent implements OnInit {
           event.obj._transactionId.videoOfSignature.path_display
         );
         break;
+      case 'viewScreenshot':
+        this.viewScreenshot(event);
+        break;
       default:
     }
   }
@@ -148,6 +152,16 @@ export class ViewTransactionComponent implements OnInit {
       data: {
         documents: [docs],
         refCode: refCode,
+      },
+      height: 'auto',
+      width: '70%',
+    });
+  }
+  viewScreenshot(event: any) {
+    console.log(event);
+    this.dialog.open(ViewScreenshotComponent, {
+      data: {
+        document: event.obj,
       },
       height: 'auto',
       width: '70%',
