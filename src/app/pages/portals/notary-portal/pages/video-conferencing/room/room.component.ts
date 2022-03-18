@@ -97,8 +97,6 @@ export class RoomComponent implements OnInit {
   skipDelay = 10;
   skipDisabled = true;
   skipCount = 0;
-  countSkipInterval: any;
-  stopCSInterval = false;
 
   constructor(
     public dialogRef: MatDialogRef<RoomComponent>,
@@ -526,11 +524,24 @@ export class RoomComponent implements OnInit {
       if (
         this.currentTransaction.sender.images &&
         this.currentTransaction.sender.images[image.fcname]
-      )
+      ) {
         image.url = await this.getTempLink(
           this.currentTransaction.sender.images[image.fcname].path_display
         );
-      else delete image.url;
+      } else {
+        delete image.url;
+      }
+
+      if (
+        image.fcname === 'cert_of_indigency' &&
+        this.currentTransaction.sender.images.reason_coi
+      ) {
+        delete image.url;
+        image.loaded = true;
+        image.reason_coi = this.currentTransaction.sender.images.reason_coi;
+      } else {
+        delete image.reason_coi;
+      }
     });
     if (this.currentTransaction.videoOfSignature.path_display)
       this.currentTransaction.vidURL = await this.getTempLink(
