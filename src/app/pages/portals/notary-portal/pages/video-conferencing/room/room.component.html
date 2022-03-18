@@ -161,10 +161,10 @@
 
         <div class="flex-stretch"></div>
         <div style="width: 100%; display: flex"></div>
-        <div style="width: 50%">
+        <div style="width: 40%">
           <p>{{ runningDuration * 1000 | date: "mm:ss" }}</p>
         </div>
-        <div style="width: 50%">
+        <div style="width: 30%">
           <p>
             {{ notarialStatus }}
             <button mat-icon-button [matMenuTriggerFor]="dates">
@@ -172,6 +172,7 @@
             </button>
           </p>
         </div>
+        <div style="width: 30%">Skip: {{ skipCount }}</div>
 
         <div class="flex-stretch"></div>
         <!-- <button
@@ -221,7 +222,7 @@
               [disabled]="skipDisabled"
               (click)="skipDocument()"
             >
-              Skip Document {{ skipDelay !== 0 ? "(" + skipDelay + ")" : "" }}
+              Skip Document {{ skipDelay > 0 ? "(" + skipDelay + ")" : "" }}
             </button>
           </div>
         </div>
@@ -233,5 +234,12 @@
 <!-- MAT MENUS -->
 <mat-menu #dates="matMenu">
   <div>Expected Start: {{ expectedStart * 1000 | date: "shortTime" }}</div>
-  <div>Next Indigent: {{ nextIndigent * 1000 | date: "shortTime" }}</div>
+  <div>
+    Next Indigent:
+    {{
+      nextIndigent === "Skipped" || nextIndigent === "N/A"
+        ? nextIndigent
+        : (nextIndigent * 1000 | date: "shortTime")
+    }}
+  </div>
 </mat-menu>

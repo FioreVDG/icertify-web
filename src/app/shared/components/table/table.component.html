@@ -42,18 +42,19 @@
         *ngIf="buttonConfig && checkedRows.selected.length"
         class="flex justify-content-end flex-wrap"
       >
-        <button
-          mat-raised-button
-          class="checkbox-btn"
-          *ngFor="let btn of buttonConfig.checkBoxBtnConfig"
-          (click)="checkBoxBtnClick(btn.action)"
-          [disabled]="isDisabled"
-        >
-          {{ btn.label }}
-          <span *ngIf="countSelected">
-            <b>({{ countSelected }})</b></span
+        <ng-container *ngFor="let btn of buttonConfig.checkBoxBtnConfig">
+          <button
+            mat-raised-button
+            class="checkbox-btn"
+            (click)="checkBoxBtnClick(btn.action)"
+            [disabled]="disableDownloadBtns"
           >
-        </button>
+            {{ btn.label }}
+            <span *ngIf="countSelected">
+              <b>({{ countSelected }})</b></span
+            >
+          </button>
+        </ng-container>
       </div>
       <button
         mat-mini-fab
@@ -247,6 +248,7 @@
           *ngIf="dataSource.length"
           color="primary"
           (click)="downloadExcel()"
+          [disabled]="disableDownloadBtns"
         >
           Download Table as Excel(.xlsx)
         </button>
