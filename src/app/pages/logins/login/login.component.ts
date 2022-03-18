@@ -1,3 +1,4 @@
+import { Socket } from 'ngx-socket-io';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -26,7 +27,8 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private util: UtilService,
-    private auth: AuthService
+    private auth: AuthService,
+    private socket: Socket
   ) {}
 
   ngOnInit(): void {
@@ -91,6 +93,7 @@ export class LoginComponent implements OnInit {
     this.isLoggingIn = true;
     this.auth.login(body, type).subscribe(
       (res: any) => {
+        this.socketConnection(res);
         console.log(res);
         this.isLoggingIn = false;
 
@@ -147,5 +150,8 @@ export class LoginComponent implements OnInit {
           });
       }
     );
+  }
+  socketConnection(data: any) {
+    this.socket.emit('loggedIn', data);
   }
 }
