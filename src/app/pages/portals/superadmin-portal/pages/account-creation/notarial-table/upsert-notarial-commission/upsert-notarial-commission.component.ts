@@ -289,19 +289,32 @@ export class UpsertNotarialCommissionComponent implements OnInit {
           if (this.data && this.data.obj) {
             api = this.api.user.updateUser(this.data.obj._id, toSaveData);
           }
-          api.subscribe((res: any) => {
-            this.dialog
-              .open(ActionResultComponent, {
+          api.subscribe(
+            (res: any) => {
+              this.dialog
+                .open(ActionResultComponent, {
+                  data: {
+                    success: true,
+                    button: 'Okay',
+                  },
+                })
+                .afterClosed()
+                .subscribe((res: any) => {
+                  this.dialogRef.close(true);
+                });
+            },
+            (err) => {
+              this.saving = false;
+              this.dialog.open(ActionResultComponent, {
                 data: {
-                  success: true,
+                  msg: `Error: ${err.error.message}`,
                   button: 'Okay',
+                  success: false,
                 },
-              })
-              .afterClosed()
-              .subscribe((res: any) => {
-                this.dialogRef.close(true);
+                disableClose: true,
               });
-          });
+            }
+          );
         }
       });
   }

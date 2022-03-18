@@ -14,4 +14,7 @@ export class ReportService {
       collection,
     });
   }
+  generateNotaryReport(query: string) {
+    return this.http.start('get', `/report/notaryReport${query}`);
+  }
 }

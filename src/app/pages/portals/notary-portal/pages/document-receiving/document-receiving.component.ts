@@ -18,6 +18,7 @@ import { TableComponent } from 'src/app/shared/components/table/table.component'
 import { TRANSAC_TABLE_COLUMN } from '../../../barangay-portal/pages/batch-delivery-management/batch-folder/config';
 import { Store } from '@ngrx/store';
 import { User } from 'src/app/models/user.interface';
+import { Cluster } from 'src/app/models/cluster.interface';
 
 @Component({
   selector: 'app-document-receiving',
@@ -64,7 +65,8 @@ export class DocumentReceivingComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     private util: UtilService,
-    private store: Store<{ user: User }>
+    private store: Store<{ user: User }>,
+    private cluster: Store<{ cluster: Cluster }>
   ) {}
 
   ngOnInit(): void {
@@ -92,13 +94,20 @@ export class DocumentReceivingComponent implements OnInit {
     this.store.select('user').subscribe((res: User) => {
       this.me = res;
       if (!this.settings) {
-        this.api.cluster
-          .getOneNotary(this.me._notaryId)
-          .subscribe((res: any) => {
-            this.settings = res.env.cluster;
-            this.addFilterChoices();
-            this.fetchData(event);
-          });
+        this.cluster.select('cluster').subscribe((res: Cluster) => {
+          this.settings = res;
+          this.addFilterChoices();
+          console.log(res);
+          this.fetchData(event);
+        });
+
+        // this.api.cluster
+        //   .getOneNotary(this.me._notaryId)
+        //   .subscribe((res: any) => {
+        //     this.settings = res.env.cluster;
+        //     this.addFilterChoices();
+        //     this.fetchData(event);
+        //   });
       } else {
         this.fetchData(event);
       }

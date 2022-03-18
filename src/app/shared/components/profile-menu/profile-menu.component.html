@@ -26,6 +26,9 @@
         {{ me.firstName + " " + me.lastName }}
       </mat-card-title>
       <mat-card-subtitle class="wrap">{{ me.mobileNumber }}</mat-card-subtitle>
+      <mat-card-subtitle *ngIf="me._role" class="wrap">{{
+        me._role.name
+      }}</mat-card-subtitle>
     </mat-card-header>
   </mat-card>
 

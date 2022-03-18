@@ -39,6 +39,7 @@ export class TableComponent implements OnInit {
   @Input() loading = false;
   @Input() hideSearch = false;
   @Input() downloadExcelBtn = false;
+  @Input() disableDownloadBtns = false;
   @Output() onDownloadExcelBtn = new EventEmitter<any>();
   @Output() onCheckBoxBtnClick: any = new EventEmitter<any>();
   @Output() onRowClick: any = new EventEmitter<any>();

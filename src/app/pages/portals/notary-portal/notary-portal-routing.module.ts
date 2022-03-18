@@ -1,3 +1,4 @@
+import { ReportsModule } from './pages/reports/reports.module';
 import { NotaryPortalComponent } from './notary-portal.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -60,6 +61,11 @@ const routes: Routes = [
           import(
             './pages/notary-document-tracker/notary-document-tracker.module'
           ).then((m) => m.NotaryDocumentTrackerModule),
+      },
+      {
+        path: 'reports',
+        loadChildren: () =>
+          import('./pages/reports/reports.module').then((m) => m.ReportsModule),
       },
     ],
   },

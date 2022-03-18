@@ -116,7 +116,7 @@ export class UpsertClusterComponent implements OnInit {
     _notaryId: new FormControl(this.data ? this.data._notaryId : '', [
       Validators.required,
     ]),
-    _riders: new FormArray([]),
+    _riders: new FormArray([], Validators.required),
     barangays: new FormArray([]),
     totalDuration: new FormControl(
       this.data ? this.data.totals.maxDuration : 0,

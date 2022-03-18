@@ -1,4 +1,4 @@
-import { setCluster } from './../../../store/cluster/cluster';
+import { setCluster } from '../../../store/cluster/cluster.action';
 import { ApiService } from './../../../service/api/api.service';
 import { AuthService } from './../../../service/auth/auth.service';
 import { Component, EventEmitter, OnInit } from '@angular/core';
@@ -17,11 +17,18 @@ import { NOTARY_MENU, NOTARY_MENU_COLORS } from 'src/app/config/USER_MENU';
 import { Store } from '@ngrx/store';
 import { resetUser, setUser } from 'src/app/store/user/user.action';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import {
+  animateText,
+  onMainContentChange,
+  onSideNavChange,
+} from 'src/app/animations/sidebar.animation';
+import { UtilService } from 'src/app/service/util/util.service';
 
 @Component({
   selector: 'app-notary-portal',
   templateUrl: './notary-portal.component.html',
   styleUrls: ['./notary-portal.component.scss'],
+  animations: [onSideNavChange, animateText, onMainContentChange],
 })
 export class NotaryPortalComponent implements OnInit {
   isExpanded: boolean = false;
@@ -35,6 +42,10 @@ export class NotaryPortalComponent implements OnInit {
   routeLabel: string = '';
   page: any;
 
+  public sideNavState: boolean = false;
+  public linkText: boolean = false;
+  public main: boolean = false;
+
   //For Menu
   notaryMenu = NOTARY_MENU;
   menuColors = NOTARY_MENU_COLORS;
@@ -45,19 +56,17 @@ export class NotaryPortalComponent implements OnInit {
     private dialog: MatDialog,
     private store: Store<{ user: User }>,
     private api: ApiService,
-    private sb: MatSnackBar
+    private sb: MatSnackBar,
+    private util: UtilService
   ) {}
 
   ngOnInit(): void {
     this.getMe();
     const currRoute = this.router.url.split('/').pop();
     console.log(currRoute);
-    let temp: Array<String> = [];
-    this.notaryNav.forEach((i: any) => {
-      temp.push(i);
-    });
-
-    this.page = this.notaryNav.find((o: any) => o.route === currRoute);
+    this.page = JSON.parse(JSON.stringify(NOTARY_NAVS)).find(
+      (o: any) => o.route === currRoute
+    );
     if (this.page) this.routeLabel = this.page.label;
   }
 
@@ -80,7 +89,7 @@ export class NotaryPortalComponent implements OnInit {
           if (!this.me.isMain && this.me._role && this.me._role.access.length) {
             this.notaryNav = this.me._role.access;
           } else {
-            this.notaryNav = NOTARY_NAVS;
+            this.notaryNav = JSON.parse(JSON.stringify(NOTARY_NAVS));
           }
 
           this.loading = false;
@@ -127,6 +136,15 @@ export class NotaryPortalComponent implements OnInit {
           this.router.navigate(['/login']);
         });
     }
+  }
+  onSinenavToggle() {
+    this.sideNavState = !this.sideNavState;
+    this.main = !this.main;
+
+    // setTimeout(() => {
+    this.linkText = this.sideNavState;
+    // }, 1000);
+    this.util.sideNavState$.next(this.sideNavState);
   }
 
   changeRoute(nav: any) {

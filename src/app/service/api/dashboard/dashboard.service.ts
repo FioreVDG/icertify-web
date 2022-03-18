@@ -57,4 +57,7 @@ export class DashboardService {
   notaryDocumentTracker() {
     return this.http.start('get', '/dashboard/notary/documentTracker');
   }
+  notaryReports() {
+    return this.http.start('get', '/dashboard/notary/dashboard');
+  }
 }

@@ -19,6 +19,7 @@ import { forkJoin } from 'rxjs';
 import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachments/view-attachments.component';
 import { Store } from '@ngrx/store';
 import { User } from 'src/app/models/user.interface';
+import { Cluster } from 'src/app/models/cluster.interface';
 
 @Component({
   selector: 'app-document-receiving',
@@ -43,7 +44,8 @@ export class DocumentReceivingComponent implements OnInit {
     private dialog: MatDialog,
     private util: UtilService,
     private dbx: DropboxService,
-    private store: Store<{ user: User }>
+    private store: Store<{ user: User }>,
+    private cluster: Store<{ cluster: Cluster }>
   ) {}
 
   ngOnInit(): void {
@@ -55,13 +57,19 @@ export class DocumentReceivingComponent implements OnInit {
     this.store.select('user').subscribe((res: User) => {
       this.me = res;
       if (!this.settings) {
-        this.api.cluster
-          .getOne(this.me._barangay.brgyCode)
-          .subscribe((res: any) => {
-            this.settings = res.env.cluster;
-            console.log(this.settings);
-            this.fetchData(event);
-          });
+        // this.api.cluster
+        //   .getOne(this.me._barangay.brgyCode)
+        //   .subscribe((res: any) => {
+        //     this.settings = res.env.cluster;
+        //     console.log(this.settings);
+        //     this.fetchData(event);
+        //   });
+
+        this.cluster.select('cluster').subscribe((res: Cluster) => {
+          this.settings = res;
+          console.log(res);
+          this.fetchData(event);
+        });
       } else {
         this.fetchData(event);
       }

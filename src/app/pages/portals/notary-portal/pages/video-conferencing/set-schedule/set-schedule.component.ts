@@ -131,6 +131,7 @@ export class SetScheduleComponent implements OnInit {
       el._transactions.forEach((trans: any) => {
         tempDocs.push(trans._documents[0]);
         console.log(trans);
+        tempDocs.push(trans._documents[0]);
         docIds.push(trans._documents[0]._id);
         docLogs.push({
           docDetails: trans._documents[0],

@@ -21,6 +21,7 @@ import { User } from 'src/app/models/user.interface';
 import { UtilService } from 'src/app/service/util/util.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExcelService } from 'src/app/service/excel/excel.service';
+import { Cluster } from 'src/app/models/cluster.interface';
 
 @Component({
   selector: 'app-transaction-history-table',
@@ -45,11 +46,14 @@ export class TransactionHistoryTableComponent implements OnInit {
   dataLength: number = 0;
   me: any;
   setting: any;
+  downloadTimeout: any;
+  disableDownloadBtns = false;
   constructor(
     private api: ApiService,
     private dialog: MatDialog,
     private dbx: DropboxService,
     private store: Store<{ user: User }>,
+    private cluster: Store<{ cluster: Cluster }>,
     public util: UtilService,
     public snackbar: MatSnackBar,
     private excel: ExcelService,
@@ -59,13 +63,13 @@ export class TransactionHistoryTableComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.header);
     if (this.header == 'NOTARY') {
-      this.filtBtnConfig = NOTARY_FILT_BTN_CONFIG;
+      this.filtBtnConfig = JSON.parse(JSON.stringify(NOTARY_FILT_BTN_CONFIG));
     } else {
       this.store.select('user').subscribe((me: any) => {
         console.log(me);
         this.me = me;
       });
-      this.filtBtnConfig = FILT_BTN_CONFIG;
+      this.filtBtnConfig = JSON.parse(JSON.stringify(FILT_BTN_CONFIG));
     }
   }
 
@@ -160,17 +164,22 @@ export class TransactionHistoryTableComponent implements OnInit {
   }
   getSettings(event: any) {
     this.store.select('user').subscribe((res: any) => {
-      console.log(res);
-      let api;
-      if (this.header === 'NOTARY') {
-        api = this.api.cluster.getOneNotary(res._notaryId);
-      } else {
-        api = this.api.cluster.getOne(res._barangay.brgyCode);
-      }
+      // console.log(res);
+      // let api;
+      // if (this.header === 'NOTARY') {
+      //   api = this.api.cluster.getOneNotary(res._notaryId);
+      // } else {
+      //   api = this.api.cluster.getOne(res._barangay.brgyCode);
+      // }
 
       if (!this.setting) {
-        api.subscribe((res: any) => {
-          this.setting = res.env.cluster;
+        // api.subscribe((res: any) => {
+        //   this.setting = res.env.cluster;
+        //   this.fetchData(event);
+        // });
+        this.cluster.select('cluster').subscribe((res: Cluster) => {
+          this.setting = res;
+          console.log(res);
           this.fetchData(event);
         });
       } else {
@@ -287,9 +296,7 @@ export class TransactionHistoryTableComponent implements OnInit {
   }
 
   async downloadNotarizedDocuments() {
-    let docs: any = [];
-    let getLink: any = [];
-
+    this.disableDownloadBtns = true;
     let toDownloads = await this.downloadFiles();
     console.log(toDownloads);
 
@@ -302,9 +309,29 @@ export class TransactionHistoryTableComponent implements OnInit {
           (document.body || document.documentElement).appendChild(a);
           a.click();
           (document.body || document.documentElement).removeChild(a);
-          console.log(res);
-        }, 500 * index + 1);
+          console.log('que:', index + 1);
+          console.log('downlaod length:', toDownloads.length);
+          if (index == toDownloads.length - 1) {
+            setTimeout(() => {
+              this.disableDownloadBtns = false;
+            }, 1000);
+          }
+        }, 1000 * index + 1);
       });
+
+      // let delay = false;
+      // for (let i = 0; i != toDownloads.length && !delay; i++) {
+      //   delay = true;
+      //   var a = document.createElement('a');
+      //   a.href = toDownloads[i].result.link;
+      //   a.target = '_parent';
+      //   (document.body || document.documentElement).appendChild(a);
+      //   a.click();
+      //   setTimeout(() => {
+      //     (document.body || document.documentElement).removeChild(a);
+      //     delay = false;
+      //   }, 1000);
+      // }
     }
 
     // forkJoin(getLink).subscribe((res) => {
@@ -322,7 +349,9 @@ export class TransactionHistoryTableComponent implements OnInit {
           .getTempLink(doc['notarizedDocument']['dropbox']['path_display'])
           .toPromise();
         toDownloadFile.push(res);
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     }
     return toDownloadFile;
   }
@@ -354,12 +383,28 @@ export class TransactionHistoryTableComponent implements OnInit {
   }
 
   onDownloadExcelBtn(event: any) {
+    this.disableDownloadBtns = true;
     console.log(event);
     var sb = this.snackbar.open('Exporting File. Please wait...', '', {
       verticalPosition: 'bottom',
     });
     let api: any;
     if (this.header == 'NOTARY') {
+      let brgyCodes: any[] = [];
+      if (this.setting) {
+        brgyCodes = this.setting.barangays.map((el: any) => {
+          return el._barangay.brgyCode;
+        });
+      }
+      if (brgyCodes) {
+        event.query.find = event.query.find.concat({
+          field: '_barangay.brgyCode',
+          operator: '[in]=',
+          value: brgyCodes.join(','),
+        });
+      }
+
+      console.log('NOTARY');
       if (event.label === 'Notarized') {
         event.query.find = event.query.find.concat(NOTARY_FIND_NOTARIZED);
         api = this.api.document.getAll(event.query);
@@ -371,13 +416,13 @@ export class TransactionHistoryTableComponent implements OnInit {
         api = this.api.document.getAll(event.query);
       }
     } else {
+      event.query.find.push({
+        field: '_barangay.brgyCode',
+        operator: '=',
+        value: this.me._barangay.brgyCode,
+      });
       if (event.label === 'Notarized') {
         event.query.find = event.query.find.concat(FIND_NOTARIZED);
-        event.query.find.push({
-          field: '_barangay.brgyCode',
-          operator: '=',
-          value: this.me._barangay.brgyCode,
-        });
         api = this.api.document.getAll(event.query);
       } else if (event.label === 'Unnotarized') {
         event.query.find = event.query.find.concat(FIND_UNNOTARIZED);
@@ -390,36 +435,56 @@ export class TransactionHistoryTableComponent implements OnInit {
     api.subscribe(
       (res: any) => {
         console.log(res);
-        var json: any = [];
-        res.env.documents.forEach((doc: any) => {
-          var exlObj: any = {};
-          event.columns.forEach((col: any) => {
-            if (col.type == 'text') {
-              exlObj[col.title] = this.util.deepFind(doc, col.path);
-            }
-            if (col.type == 'special') {
-              let spArray = [];
-              for (let c of col.paths) {
-                spArray.push(this.util.deepFind(doc, c));
-              }
-              console.log(spArray);
-              exlObj[col.title] = spArray.join(' ');
-            }
-            if (col.type == 'date') {
-              exlObj[col.title] =
-                new Date(this.util.deepFind(doc, col.path)).toDateString() +
-                ' - ' +
-                new Date(this.util.deepFind(doc, col.path)).toLocaleTimeString(
-                  'en-US'
-                );
-            }
+        if (res.env.documents.length) {
+          res.env.documents.forEach((el: any) => {
+            if (el.documentType === 'Others')
+              el.documentType = `${el.documentType} (${el.documentTypeSpecific})`;
           });
-          json.push(exlObj);
-        });
-        this.excel.exportAsExcelFile(json, new Date().toDateString());
+          res.env.documents.forEach((docObj: any) => {
+            docObj.sender.images['COIstatus'] = docObj.sender.images.reason_coi
+              ? 'To Follow'
+              : 'Uploaded';
+          });
+          res.env.documents.forEach((docObj: any) => {
+            docObj['notarizedDocumentStatus'] = docObj.notarizedDocument
+              ? 'Uploaded'
+              : 'For Uploading';
+          });
+          setTimeout(() => {
+            var json: any = [];
+            res.env.documents.forEach((doc: any) => {
+              var exlObj: any = {};
+              event.columns.forEach((col: any) => {
+                if (col.type == 'text') {
+                  exlObj[col.title] = this.util.deepFind(doc, col.path);
+                }
+                if (col.type == 'special') {
+                  let spArray = [];
+                  for (let c of col.paths) {
+                    spArray.push(this.util.deepFind(doc, c));
+                  }
+                  console.log(spArray);
+                  exlObj[col.title] = spArray.join(' ');
+                }
+                if (col.type == 'date') {
+                  exlObj[col.title] =
+                    new Date(this.util.deepFind(doc, col.path)).toDateString() +
+                    ' - ' +
+                    new Date(
+                      this.util.deepFind(doc, col.path)
+                    ).toLocaleTimeString('en-US');
+                }
+              });
+              json.push(exlObj);
+            });
+            this.excel.exportAsExcelFile(json, new Date().toDateString());
+            this.disableDownloadBtns = false;
+          }, 1500);
+        }
         sb.dismiss();
       },
       (err: any) => {
+        this.disableDownloadBtns = false;
         sb.dismiss();
         this.snackbar.open(
           'Something went wrong before downloading. Please try again later',
