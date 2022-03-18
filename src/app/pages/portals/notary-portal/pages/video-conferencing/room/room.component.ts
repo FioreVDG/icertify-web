@@ -316,7 +316,7 @@ export class RoomComponent implements OnInit {
           this.notarialStatus = 'Early';
         }
       }
-
+      console.log(this.runningDuration);
       // console.log('DURATION: ', this.runningDuration);
       // console.log('EXPECTEDSTART: ', this.expectedStart);
       // console.log('NEXT INDIGENT:', this.nextIndigent);
