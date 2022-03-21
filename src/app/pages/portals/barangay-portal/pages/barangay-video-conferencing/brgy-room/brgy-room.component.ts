@@ -68,7 +68,7 @@ export class BrgyRoomComponent implements OnInit {
     this.getRoomDetails();
   }
   ngOnDestroy() {
-    this.socket.removeAllListeners();
+    this.socket.removeAllListeners('triggerScreenshot');
   }
 
   joinMeeting() {
