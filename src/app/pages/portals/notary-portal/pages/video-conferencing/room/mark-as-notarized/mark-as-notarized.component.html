@@ -68,12 +68,7 @@
 </div>
 <div mat-dialog-actions align="center">
   <button mat-flat-button mat-dialog-close color="warn">Cancel</button>
-  <button
-    mat-flat-button
-    color="primary"
-    [disabled]="data.type !== 'Notarized' ? !others || !remark : false"
-    (click)="markDocument(data.document)"
-  >
+  <button mat-flat-button color="primary" (click)="markDocument(data.document)">
     {{
       data.type === "Notarized" ? "Mark as notarized" : "Mark as unnotarized"
     }}
