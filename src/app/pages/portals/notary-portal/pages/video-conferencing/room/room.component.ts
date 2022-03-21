@@ -813,4 +813,7 @@ export class RoomComponent implements OnInit {
       panelClass: 'dialog-transparent',
     });
   }
+  ngOnDestroy() {
+    this.socket.removeAllListeners('triggerScreenshot');
+  }
 }

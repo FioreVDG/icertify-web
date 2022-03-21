@@ -61,7 +61,8 @@ export class ReportsComponent implements OnInit {
     let qryString = '?';
     let array = [];
     for (let [key, value] of Object.entries(query)) {
-      if ((value && value !== 'All') || value !== '') {
+      console.log(value, key);
+      if ((value && value !== 'All') || value !== '' || value !== null) {
         array.push(key + '=' + value);
       }
     }
@@ -159,7 +160,14 @@ export class ReportsComponent implements OnInit {
     console.log(event);
   }
   clear() {
-    this.dateRange.reset();
-    this.filter.reset();
+    this.dateRange.reset({
+      dateStart: '',
+      dateEnd: '',
+    });
+    this.filter.reset({
+      documentType: '',
+      status: '',
+      barangay: '',
+    });
   }
 }

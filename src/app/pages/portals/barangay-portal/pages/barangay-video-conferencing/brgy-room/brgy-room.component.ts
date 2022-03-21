@@ -5,7 +5,7 @@ import { RoomService } from './../../../../../../service/api/room/room.service';
 import { AgoraService } from './../../../../../../service/api/agora/agora.service';
 import { UtilService } from './../../../../../../service/util/util.service';
 import { ConferenceService } from './../../../../../../service/api/conference/conference.service';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import {
   MatDialog,
   MatDialogRef,
@@ -67,6 +67,9 @@ export class BrgyRoomComponent implements OnInit {
     this.getExpectedParticipants();
     this.getRoomDetails();
   }
+  // ngOnDestroy() {
+  //   this.socket.removeAllListeners('triggerScreenshot');
+  // }
 
   joinMeeting() {
     this.socketJoinRoom();
