@@ -118,6 +118,7 @@ export class UsersTableComponent implements OnInit {
           brgyDetail: this.brgyDetail,
           accessRoles: this.accessRoles,
         },
+        disableClose: true,
       })
       .afterClosed()
       .subscribe(
