@@ -110,6 +110,7 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
   tableUpdateEmit(event: any) {
     event['label'] = event.label || this.currTable;
     console.log(event.populate);
+    this.appTable?.checkedRows.clear();
     this.fetchData(event);
     console.log(event);
   }

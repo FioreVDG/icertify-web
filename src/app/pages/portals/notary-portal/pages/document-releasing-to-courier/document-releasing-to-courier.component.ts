@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { forkJoin } from 'rxjs';
+import _ from 'lodash';
 import { QueryParams } from 'src/app/models/queryparams.interface';
 import { TableOutput } from 'src/app/models/tableemit.interface';
 import { User } from 'src/app/models/user.interface';
@@ -35,7 +36,7 @@ export class DocumentReleasingToCourierComponent implements OnInit {
   filtBtnConfig = NOTARY_DOC_RELEASING_TO_COURIER_CONFIG;
   isCheckbox: boolean = true;
   checkBoxDisableField = DOC_RELEASING_DISABLE_CHECKBOX;
-  selected = [];
+  selected: any[] = [];
   currTable: any;
   currPopulate: any;
   loading: boolean = true;
@@ -179,6 +180,8 @@ export class DocumentReleasingToCourierComponent implements OnInit {
   tableUpdateEmit(event: any) {
     event['label'] = event.label || this.currTable;
     console.log(event.populate);
+    this.appTable?.checkedRows.clear();
+    this.selected = [];
     this.getSettings(event);
     console.log(event);
   }
@@ -213,7 +216,11 @@ export class DocumentReleasingToCourierComponent implements OnInit {
 
   onCheckBoxSelect(event: any) {
     console.log(event);
-    this.selected = event;
+    event.forEach((i: any) => {
+      if (!_.some(this.selected, { _id: i._id })) {
+        this.selected.push(i);
+      }
+    });
   }
 
   onMark() {

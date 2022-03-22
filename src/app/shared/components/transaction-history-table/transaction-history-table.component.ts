@@ -48,6 +48,7 @@ export class TransactionHistoryTableComponent implements OnInit {
   setting: any;
   downloadTimeout: any;
   disableDownloadBtns = false;
+  tableFlag = false;
   constructor(
     private api: ApiService,
     private dialog: MatDialog,
@@ -71,6 +72,37 @@ export class TransactionHistoryTableComponent implements OnInit {
       });
       this.filtBtnConfig = JSON.parse(JSON.stringify(FILT_BTN_CONFIG));
     }
+    this.tableUpdateEmit(this.page);
+  }
+
+  filterColumn() {
+    if (this.header === 'BARANGAY') {
+      this.filtBtnConfig.forEach((el: any) => {
+        el.column.forEach((col: any) => {
+          if (col.path === '_barangay.brgyDesc') {
+            col.selected = false;
+            col.useAsFilter = false;
+          }
+        });
+      });
+    } else if (this.header === 'NOTARY') {
+      this.filtBtnConfig.forEach((el: any) => {
+        el.column.forEach((col: any) => {
+          if (col.path === '_barangay.brgyDesc') {
+            let brgyChoices: any[] = [];
+            if (this.setting) {
+              this.setting.barangays.forEach((barangay: any) => {
+                brgyChoices.push(barangay._barangay.brgyDesc);
+              });
+            }
+            console.log(this.setting);
+            col.choices = brgyChoices;
+          }
+        });
+      });
+    }
+    this.tableFlag = true;
+    console.log(this.filtBtnConfig);
   }
 
   fetchData(event: any) {
@@ -180,9 +212,13 @@ export class TransactionHistoryTableComponent implements OnInit {
         this.cluster.select('cluster').subscribe((res: Cluster) => {
           this.setting = res;
           console.log(res);
+          this.filterColumn();
+
           this.fetchData(event);
         });
       } else {
+        this.filterColumn();
+
         this.fetchData(event);
       }
     });
