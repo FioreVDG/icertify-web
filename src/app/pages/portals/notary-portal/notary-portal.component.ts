@@ -24,6 +24,7 @@ import {
   onSideNavChange,
 } from 'src/app/animations/sidebar.animation';
 import { UtilService } from 'src/app/service/util/util.service';
+import { ChangePasswordComponent } from 'src/app/shared/components/change-password/change-password.component';
 
 @Component({
   selector: 'app-notary-portal',
@@ -186,7 +187,27 @@ export class NotaryPortalComponent implements OnInit {
     }
   }
 
-  changePassword() {}
+  changePassword() {
+    this.dialog
+      .open(ChangePasswordComponent, {
+        disableClose: true,
+        width: '300px',
+        minWidth: '256px',
+        height: 'auto',
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          localStorage.removeItem('SESSION_CSURF_TOKEN');
+          localStorage.removeItem('SESSION_AUTH');
+          this.store.dispatch(resetUser());
+          this.loggingOut = true;
+          setTimeout(() => {
+            this.router.navigate(['/login']);
+          }, 1500);
+        }
+      });
+  }
   onLogout() {
     this.dialog
       .open(AreYouSureComponent, {
