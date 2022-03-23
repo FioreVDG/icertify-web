@@ -1,3 +1,4 @@
+import { ApiService } from 'src/app/service/api/api.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 
@@ -8,11 +9,36 @@ import { FormBuilder, FormControl } from '@angular/forms';
 })
 export class TrackerComponent implements OnInit {
   keyword = '';
-  constructor(private fb: FormBuilder) {}
+  searchClass = 'search-icon';
+  data: any;
+  constructor(private fb: FormBuilder, private api: ApiService) {}
 
+  loading = false;
   ngOnInit(): void {}
-  animate() {
-    let doc = document.getElementsByClassName('searchArea');
-    console.log(doc);
+  search() {
+    let el = document.getElementById('input-area');
+    el?.classList.remove('input');
+    el?.classList.add('input1');
+
+    let qry = {
+      find: [
+        {
+          field: 'docDetails.refCode',
+          value: this.keyword.toUpperCase(),
+          operator: '=',
+        },
+      ],
+    };
+    setTimeout(() => {
+      this.loading = true;
+      this.api.documentlogs.getDocumentLogs(qry).subscribe((res: any) => {
+        console.log(res);
+        setTimeout(() => {
+          this.data = res.env.documentLogs;
+
+          this.loading = false;
+        }, 3000);
+      });
+    }, 2000);
   }
 }

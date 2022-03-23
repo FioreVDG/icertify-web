@@ -1,7 +1,7 @@
 import { QueryParams } from 'src/app/models/queryparams.interface';
 import { ApiService } from 'src/app/service/api/api.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { FIND_NOTARY_ONLY } from './doc-viewer-logs.config';
 
 @Component({
@@ -10,6 +10,7 @@ import { FIND_NOTARY_ONLY } from './doc-viewer-logs.config';
   styleUrls: ['./document-logs-viewer.component.scss'],
 })
 export class DocumentLogsViewerComponent implements OnInit {
+  @Input() public obj: any;
   documentLogs: Array<any> = [];
   filteredFinal: any;
   loading: boolean = false;

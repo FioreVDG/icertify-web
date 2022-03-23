@@ -1,14 +1,32 @@
-<div class="searchArea">
+<div id="searchArea" *ngIf="!data">
   <input
+    id="input-area"
     class="input"
     type="text"
-    oninput="keyword.toUpperCase()"
+    (oninput)="keyword.toUpperCase()"
     [(ngModel)]="keyword"
     placeholder=" "
+    (keyup.enter)="
+      search();
+      searchClass === 'search-icon'
+        ? (searchClass = 'search-icon-bounce')
+        : (searchClass = 'search-icon')
+    "
   />
-  <div class="search-icon">
-    <mat-icon style="cursor: pointer" (click)="animate()"
-      >manage_search</mat-icon
-    >
+
+  <div id="icon-search" [class]="searchClass">
+    <mat-icon style="cursor: pointer">manage_search</mat-icon>
   </div>
+  <div id="generating" *ngIf="loading">
+    <h3>
+      Tracking Document: {{ keyword.toUpperCase()
+      }}<mat-icon class="moving-search-icon">search</mat-icon>
+    </h3>
+  </div>
+  <div style="top: 55%; position: absolute; left: 42.5%">
+    <button mat-raised-button>Search Document</button>
+  </div>
+</div>
+<div class="search-result" *ngIf="data">
+  <h3>Document</h3>
 </div>
