@@ -1,0 +1,14 @@
+<div class="searchArea">
+  <input
+    class="input"
+    type="text"
+    oninput="keyword.toUpperCase()"
+    [(ngModel)]="keyword"
+    placeholder=" "
+  />
+  <div class="search-icon">
+    <mat-icon style="cursor: pointer" (click)="animate()"
+      >manage_search</mat-icon
+    >
+  </div>
+</div>

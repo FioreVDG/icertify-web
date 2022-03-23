@@ -39,7 +39,7 @@
       style="border: 1px solid #e55353"
       class="col-2"
       color="warn"
-      [disabled]="!filter.dirty || !dateRange.dirty"
+      [disabled]="!filter.dirty && !dateRange.dirty"
       (click)="clear()"
     >
       Clear
