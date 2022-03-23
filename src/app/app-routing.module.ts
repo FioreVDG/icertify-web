@@ -49,6 +49,11 @@ const routes: Routes = [
       ),
   },
   {
+    path: 'tracker',
+    loadChildren: () =>
+      import('./pages/tracker/tracker.module').then((m) => m.TrackerModule),
+  },
+  {
     path: '404',
     component: NotfoundComponent,
   },
