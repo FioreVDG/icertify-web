@@ -313,6 +313,8 @@ export class AddTransactionComponent implements OnInit {
       document.createdAt
     ).toLocaleString()}.\n\nYour Document reference code is ${
       document.refCode
-    }\nPlease wait for the schedule  of your videoconference with Atty. Carlo Javier as part of the RON process of the document that you have submitted.\n\nYou can track your document through this link: http://www.trackmydocument.com\n\nFor more information, contact iCertify: 09123456789 Thank you. `;
+    }\nPlease wait for the schedule  of your videoconference with ${
+      this.notaryName
+    } as part of the RON process of the document that you have submitted.\n\nYou can track your document through this link: http://www.trackmydocument.com\n\nFor more information, contact iCertify: 09123456789 Thank you. `;
   }
 }
