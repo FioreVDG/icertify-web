@@ -163,6 +163,11 @@ export class SetScheduleComponent implements OnInit {
         });
         forkJoin(apiQueries).subscribe(
           (res: any) => {
+            // send sms here
+            this.api.sms
+              .sendVidConfSchedNotif({ documentIds: docIds })
+              .subscribe((res) => {});
+
             console.log(res);
           },
           (err) => {
