@@ -130,7 +130,7 @@ export class BarangayPortalComponent implements OnInit {
     const routes = ['batch-delivery-management', 'new-transaction'];
     if (error === 'Cluster not found!') {
       if (!this.me.isMain && this.me._role && this.me._role.access.length) {
-        this.barangayNav = this.me._role.access;
+        this.barangayNav = JSON.parse(JSON.stringify(this.me._role.access));
       } else {
         this.barangayNav = JSON.parse(JSON.stringify(BARANGAY_NAVS));
       }

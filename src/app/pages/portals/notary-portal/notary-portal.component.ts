@@ -90,7 +90,7 @@ export class NotaryPortalComponent implements OnInit {
           localStorage.setItem('BARANGAY_INFORMATION', JSON.stringify(this.me));
 
           if (!this.me.isMain && this.me._role && this.me._role.access.length) {
-            this.notaryNav = this.me._role.access;
+            this.notaryNav = JSON.parse(JSON.stringify(this.me._role.access));
           } else {
             this.notaryNav = JSON.parse(JSON.stringify(NOTARY_NAVS));
           }
