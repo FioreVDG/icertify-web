@@ -172,6 +172,10 @@ export class UsersTableComponent implements OnInit {
               obj: event.obj,
               action: event.action,
               accessRoles: this.accessRoles,
+              initial:
+                event.obj.type === 'Barangay' && event.obj.isMain
+                  ? true
+                  : false,
             },
           })
           .afterClosed()

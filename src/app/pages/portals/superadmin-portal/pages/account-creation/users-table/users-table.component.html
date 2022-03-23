@@ -22,3 +22,14 @@
   (onUpdateTableEmit)="onTableUpdate($event)"
   [loading]="loading"
 ></app-table>
+
+<div mat-dialog-actions align="center">
+  <button
+    *ngIf="data.backButtonEnable"
+    mat-stroked-button
+    mat-dialog-close
+    color="warn"
+  >
+    BACK
+  </button>
+</div>
