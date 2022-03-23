@@ -1,3 +1,4 @@
+@import "./../../../assets/styles/variables.scss";
 #searchArea {
   background-image: url("./../../../assets/images/iCertify-logo.png");
   background-size: 15rem;
@@ -36,7 +37,7 @@
     text-transform: uppercase;
     outline: none;
     color: #ffff;
-    animation: toRevertwidth 3s;
+    animation: toRevertwidth 2s;
   }
 
   .search-icon {
@@ -69,14 +70,31 @@
       font-size: 2rem !important;
       color: #532eaf;
     }
-    animation: bounce 3s;
+    animation: bounce 2s;
   }
 }
 .search-result {
+  background-image: url("./../../../assets/images/iCertify-logo.png");
+  background-size: 15rem;
   position: absolute;
-
   width: 100%;
   height: 100%;
+  background-repeat: no-repeat;
+  background-position: 32.5rem 20rem;
+  background-color: rgba(255, 255, 255, 0.7);
+  background-blend-mode: lighten;
+  animation: appear 3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.search-details {
+  color: $primary;
+}
+.search-btn {
+  display: none;
+  animation: disappear 3s;
+  opacity: 0;
 }
 #generating {
   animation: show 1s;
@@ -151,5 +169,21 @@
   }
   100% {
     transform: translate(-350px, -20px);
+  }
+}
+@keyframes disappear {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

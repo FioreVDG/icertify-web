@@ -24,9 +24,30 @@
     </h3>
   </div>
   <div style="top: 55%; position: absolute; left: 42.5%">
-    <button mat-raised-button>Search Document</button>
+    <button
+      id="search-btn"
+      mat-raised-button
+      (click)="
+        search();
+        searchClass === 'search-icon'
+          ? (searchClass = 'search-icon-bounce')
+          : (searchClass = 'search-icon')
+      "
+    >
+      Search Document
+    </button>
   </div>
 </div>
 <div class="search-result" *ngIf="data">
-  <h3>Document</h3>
+  <div class="search-details" *ngIf="data !== 'notFound'">
+    <h1>Document: {{ keyword.toUpperCase() }} Found!</h1>
+    <strong
+      ><p
+        style="text-align: center; cursor: pointer"
+        (click)="openDocLogsViewer()"
+      >
+        View Logs
+      </p></strong
+    >
+  </div>
 </div>
