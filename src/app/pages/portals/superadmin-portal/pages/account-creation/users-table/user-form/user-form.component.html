@@ -79,11 +79,10 @@
       mat-button
       color="primary"
       (click)="submit()"
-      [disabled]="
-        disAbler() || !(data.obj && data.obj.type !== 'QCLegal') || saving
-      "
+      [disabled]="disAbler() || saving"
     >
       {{ saving ? "Saving..." : "Save" }}
     </button>
   </mat-dialog-actions>
 </ng-container>
+<!-- !(data.obj && data.obj.type !== 'QCLegal')  -->
