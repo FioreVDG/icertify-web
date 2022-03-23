@@ -30,6 +30,7 @@ import { DocumentTrackerTableComponent } from './document-tracker-table/document
 import { TransactionHistoryTableComponent } from './transaction-history-table/transaction-history-table.component';
 import { ViewScreenshotComponent } from './view-screenshot/view-screenshot.component';
 import { ViewProofOfIdentityComponent } from './view-proof-of-identity/view-proof-of-identity.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { ViewProofOfIdentityComponent } from './view-proof-of-identity/view-proo
     TransactionHistoryTableComponent,
     ViewScreenshotComponent,
     ViewProofOfIdentityComponent,
+    ChangePasswordComponent,
   ],
   imports: [
     MaterialModule,

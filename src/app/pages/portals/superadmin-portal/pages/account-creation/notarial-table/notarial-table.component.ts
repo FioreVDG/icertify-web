@@ -146,7 +146,10 @@ export class NotarialTableComponent implements OnInit {
               userType: 'Notary',
               brgyInfo: event.obj._barangay,
             },
+
+            backButtonEnable: true,
           },
+          disableClose: true,
         });
         break;
       case 'accessroles':

@@ -80,7 +80,7 @@
       color="primary"
       (click)="submit()"
       [disabled]="
-        (disAbler() && !(data.obj && data.obj.type !== 'QCLegal')) || saving
+        disAbler() || !(data.obj && data.obj.type !== 'QCLegal') || saving
       "
     >
       {{ saving ? "Saving..." : "Save" }}
