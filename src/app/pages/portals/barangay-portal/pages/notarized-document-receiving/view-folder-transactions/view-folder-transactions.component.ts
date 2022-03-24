@@ -12,6 +12,7 @@ import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
 import { UtilService } from 'src/app/service/util/util.service';
 import { RegistrantFormComponent } from 'src/app/shared/components/registrant-form/registrant-form.component';
 import { ViewAttachmentsComponent } from 'src/app/shared/components/view-attachments/view-attachments.component';
+import { ViewScreenshotComponent } from 'src/app/shared/components/view-screenshot/view-screenshot.component';
 import { ViewVideoComponent } from 'src/app/shared/components/view-video/view-video.component';
 import { BrgyRoomComponent } from '../../barangay-video-conferencing/brgy-room/brgy-room.component';
 import {
@@ -146,6 +147,16 @@ export class ViewFolderTransactionsComponent implements OnInit {
         this.viewVideoOfSigning(
           event.obj._transactionId.videoOfSignature.path_display
         );
+        break;
+      case 'viewSS':
+        this.dialog.open(ViewScreenshotComponent, {
+          data: {
+            document: event.obj,
+          },
+          height: 'auto',
+          width: '70%',
+        });
+
         break;
       default:
     }

@@ -104,6 +104,7 @@ export class MarkAsEnrouteComponent implements OnInit {
                 console.log(res);
                 //DOCUMENT LOGS HERE
                 console.log(docLogs);
+
                 let apiQueries = docIds.map((id: any) => {
                   return this.api.document.update(
                     {
@@ -113,6 +114,7 @@ export class MarkAsEnrouteComponent implements OnInit {
                     id
                   );
                 });
+
                 forkJoin(apiQueries).subscribe(
                   (res: any) => {
                     console.log(res);
@@ -121,6 +123,14 @@ export class MarkAsEnrouteComponent implements OnInit {
                     console.log(err);
                   }
                 );
+
+                //sms
+                this.api.sms
+                  .sendEnrouteNotif({
+                    documentIds: docIds,
+                  })
+                  .subscribe((res) => {});
+                //doclogs
                 this.api.documentlogs.createDocumentLogsMany(docLogs).subscribe(
                   (res: any) => {
                     console.log(res);

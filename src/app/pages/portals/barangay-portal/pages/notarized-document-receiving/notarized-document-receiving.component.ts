@@ -110,6 +110,7 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
   tableUpdateEmit(event: any) {
     event['label'] = event.label || this.currTable;
     console.log(event.populate);
+    this.appTable?.checkedRows.clear();
     this.fetchData(event);
     console.log(event);
   }
@@ -160,64 +161,51 @@ export class NotarizedDocumentReceivingComponent implements OnInit {
             );
           });
 
-          let smsQueries = ids.map((id: any) => {
-            return this.api.sms.sendReleasingNotif({}, id);
-          });
-
           forkJoin(apiQueries).subscribe(
             (res: any) => {
-              forkJoin(smsQueries).subscribe(
-                (res) => {
+              console.log(res);
+              let apiQueries = docIds.map((id: any) => {
+                return this.api.document.update(
+                  {
+                    documentLogStatus:
+                      'Document Received from Notary by Brgy Hall Staff',
+                  },
+                  id
+                );
+              });
+              forkJoin(apiQueries).subscribe(
+                (res: any) => {
                   console.log(res);
-                  let apiQueries = docIds.map((id: any) => {
-                    return this.api.document.update(
-                      {
-                        documentLogStatus:
-                          'Document Received from Notary by Brgy Hall Staff',
-                      },
-                      id
-                    );
-                  });
-                  forkJoin(apiQueries).subscribe(
-                    (res: any) => {
-                      console.log(res);
-                    },
-                    (err: any) => {
-                      console.log(err);
-                    }
-                  );
-                  this.api.documentlogs
-                    .createDocumentLogsMany(docLogs)
-                    .subscribe(
-                      (res: any) => {
-                        console.log(res);
-                      },
-                      (err) => {
-                        console.log(err);
-                      }
-                    );
-                  this.util.stopLoading(loader);
-                  this.dialog
-                    .open(ActionResultComponent, {
-                      data: {
-                        success: true,
-                        msg: `Batch/es successfully marked as received!`,
-                        button: 'Okay',
-                      },
-                    })
-                    .afterClosed()
-                    .subscribe((res: any) => {
-                      this.appTable?.checkedRows.clear();
-                      this.selected = [];
-
-                      this.fetchData(this.page);
-                    });
                 },
-                (err) => {
-                  this.util.stopLoading(loader);
+                (err: any) => {
                   console.log(err);
                 }
               );
+              this.api.documentlogs.createDocumentLogsMany(docLogs).subscribe(
+                (res: any) => {
+                  console.log(res);
+                },
+                (err) => {
+                  console.log(err);
+                }
+              );
+              this.util.stopLoading(loader);
+              this.dialog
+                .open(ActionResultComponent, {
+                  data: {
+                    success: true,
+                    msg: `Batch/es successfully marked as received!`,
+                    button: 'Okay',
+                  },
+                })
+                .afterClosed()
+                .subscribe((res: any) => {
+                  this.appTable?.checkedRows.clear();
+                  this.selected = [];
+
+                  this.fetchData(this.page);
+                });
+
               console.log(res);
             },
             (err: any) => {

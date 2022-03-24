@@ -57,6 +57,7 @@ export class UserFormComponent implements OnInit {
     this.getRegions();
     this.initializeBrgyForm();
     this.initRoles();
+    // console.log(this.disAbler());
   }
 
   getRegions() {
@@ -78,6 +79,7 @@ export class UserFormComponent implements OnInit {
   formInitialized() {
     console.log('Initialized');
     this.formInitiated = true;
+    console.log(this.disAbler());
   }
   formListener(event: any) {
     console.log(event);
@@ -254,6 +256,8 @@ export class UserFormComponent implements OnInit {
   }
   disAbler() {
     console.log(this.data);
+    // console.log(this.userDetails);
+
     if (
       (this.data &&
         this.data.initial &&
@@ -265,7 +269,11 @@ export class UserFormComponent implements OnInit {
         this.data.obj.type === 'QCLegal')
     ) {
       console.log('WITHOUT ROLES');
-      if (this.userDetails.form.valid && this.brgyForm.valid) {
+      if (
+        this.userDetails.form.valid &&
+        this.brgyForm.valid &&
+        (this.userDetails.form.dirty || this.brgyForm.dirty)
+      ) {
         return false;
       } else return true;
     } else if (
@@ -278,7 +286,11 @@ export class UserFormComponent implements OnInit {
         this.data.obj &&
         this.data.obj.type !== 'QCLegal')
     ) {
-      if (this.userDetails.form.valid && this.brgyForm.valid) {
+      if (
+        this.userDetails.form.valid &&
+        this.brgyForm.valid &&
+        (this.brgyForm.dirty || this.userDetails.form.dirty)
+      ) {
         return false;
       } else return true;
     } else {
@@ -289,12 +301,19 @@ export class UserFormComponent implements OnInit {
         if (
           this.userDetails.form.valid &&
           this.brgyForm.valid &&
-          this.roleDetails.form.valid
+          this.roleDetails.form.valid &&
+          (this.userDetails.form.dirty ||
+            this.brgyForm.dirty ||
+            this.roleDetails.form.dirty)
         ) {
           return false;
         } else return true;
       } else {
-        if (this.userDetails.form.valid && this.brgyForm.valid) {
+        if (
+          this.userDetails.form.valid &&
+          this.brgyForm.valid &&
+          (this.userDetails.form.dirty || this.brgyForm.dirty)
+        ) {
           return false;
         } else return true;
       }

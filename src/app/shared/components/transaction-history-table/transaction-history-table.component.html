@@ -11,5 +11,6 @@
   [disableDownloadBtns]="disableDownloadBtns"
   [downloadExcelBtn]="true"
   (onDownloadExcelBtn)="onDownloadExcelBtn($event)"
+  *ngIf="tableFlag"
 >
 </app-table>

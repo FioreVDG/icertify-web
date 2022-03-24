@@ -1,3 +1,4 @@
+import { Socket } from 'ngx-socket-io';
 import { setCluster } from '../../../store/cluster/cluster.action';
 import { ApiService } from './../../../service/api/api.service';
 import { AuthService } from './../../../service/auth/auth.service';
@@ -23,6 +24,7 @@ import {
   onSideNavChange,
 } from 'src/app/animations/sidebar.animation';
 import { UtilService } from 'src/app/service/util/util.service';
+import { ChangePasswordComponent } from 'src/app/shared/components/change-password/change-password.component';
 
 @Component({
   selector: 'app-notary-portal',
@@ -57,7 +59,8 @@ export class NotaryPortalComponent implements OnInit {
     private store: Store<{ user: User }>,
     private api: ApiService,
     private sb: MatSnackBar,
-    private util: UtilService
+    private util: UtilService,
+    private socket: Socket
   ) {}
 
   ngOnInit(): void {
@@ -87,7 +90,7 @@ export class NotaryPortalComponent implements OnInit {
           localStorage.setItem('BARANGAY_INFORMATION', JSON.stringify(this.me));
 
           if (!this.me.isMain && this.me._role && this.me._role.access.length) {
-            this.notaryNav = this.me._role.access;
+            this.notaryNav = JSON.parse(JSON.stringify(this.me._role.access));
           } else {
             this.notaryNav = JSON.parse(JSON.stringify(NOTARY_NAVS));
           }
@@ -184,7 +187,27 @@ export class NotaryPortalComponent implements OnInit {
     }
   }
 
-  changePassword() {}
+  changePassword() {
+    this.dialog
+      .open(ChangePasswordComponent, {
+        disableClose: true,
+        width: '300px',
+        minWidth: '256px',
+        height: 'auto',
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          localStorage.removeItem('SESSION_CSURF_TOKEN');
+          localStorage.removeItem('SESSION_AUTH');
+          this.store.dispatch(resetUser());
+          this.loggingOut = true;
+          setTimeout(() => {
+            this.router.navigate(['/login']);
+          }, 1500);
+        }
+      });
+  }
   onLogout() {
     this.dialog
       .open(AreYouSureComponent, {

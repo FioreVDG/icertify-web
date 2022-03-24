@@ -31,7 +31,7 @@ export class NotarialTableComponent implements OnInit {
 
   openDialog() {
     this.dialog
-      .open(UpsertNotarialCommissionComponent)
+      .open(UpsertNotarialCommissionComponent, { disableClose: true })
       .afterClosed()
       .subscribe(
         (res: any) => {
@@ -146,7 +146,9 @@ export class NotarialTableComponent implements OnInit {
               userType: 'Notary',
               brgyInfo: event.obj._barangay,
             },
+            backButtonEnable: true,
           },
+          disableClose: true,
         });
         break;
       case 'accessroles':
@@ -157,6 +159,7 @@ export class NotarialTableComponent implements OnInit {
               userType: 'Notary',
               brgyInfo: event.obj._barangay,
             },
+            backButtonEnable: true,
           },
         });
         break;

@@ -71,8 +71,8 @@ export class RtVideoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.channelName);
-    console.log(this.remoteDetails);
+    // console.log(this.channelName);
+    // console.log(this.remoteDetails);
     this.startConference();
     this.flagInterval = setInterval(() => {
       this.detailChecker();
@@ -95,7 +95,7 @@ export class RtVideoComponent implements OnInit {
           .subscribe((res: any) => {
             if (res) {
               settings = res.env.cluster;
-              console.log(settings);
+              // console.log(settings);
               let query = {
                 find: [
                   {
@@ -105,12 +105,12 @@ export class RtVideoComponent implements OnInit {
                   },
                 ],
               };
-              console.log(query);
+              // console.log(query);
               this.room.get(query).subscribe((res: any) => {
-                console.log(res);
-                console.log(res.env.room[0].currentTransaction);
+                // console.log(res);
+                // console.log(res.env.room[0].currentTransaction);
                 let currRoomId: any = res.env.room[0].currentTransaction._id;
-                console.log(currRoomId);
+                // console.log(currRoomId);
                 let querys: any = {
                   find: [
                     {
@@ -122,7 +122,7 @@ export class RtVideoComponent implements OnInit {
                 };
                 this.conference.getScheduled(querys).subscribe((resp: any) => {
                   let schedules = resp.env.schedules;
-                  console.log(schedules);
+                  // console.log(schedules);
                   if (!schedules.length) {
                     this.leaveNow();
                     clearInterval(this.flagInterval);
@@ -132,17 +132,17 @@ export class RtVideoComponent implements OnInit {
                   let transactions: any = [];
 
                   schedules.forEach((sched: any) => {
-                    console.log(sched);
+                    // console.log(sched);
                     sched._folderIds.forEach((folder: any) => {
-                      console.log(folder);
+                      // console.log(folder);
                       // transactions = folder._transactions;
                       folder._transactions.forEach((trans: any) => {
                         transactions.push(trans);
                       });
-                      console.log(transactions);
+                      // console.log(transactions);
                     });
                   });
-                  console.log(transactions);
+                  // console.log(transactions);
                   findCurrentTransaction = transactions.find(
                     (trans: any) => trans._id === currRoomId
                   );
@@ -150,11 +150,11 @@ export class RtVideoComponent implements OnInit {
                     findCurrentTransaction &&
                     findCurrentTransaction.transactionStatus === 'Done'
                   ) {
-                    console.log(findCurrentTransaction);
-                    console.log(
-                      'TAPOS NA ITONG TRANSACTION',
-                      findCurrentTransaction
-                    );
+                    // console.log(findCurrentTransaction);
+                    // console.log(
+                    //   'TAPOS NA ITONG TRANSACTION',
+                    //   findCurrentTransaction
+                    // );
                     clearInterval(this.flagInterval);
                     this.leaveNow();
                   }
@@ -409,26 +409,26 @@ export class RtVideoComponent implements OnInit {
   }
 
   leave() {
-    this.client.leave(
-      () => {
-        this.dialog
-          .open(AreYouSureComponent, {
-            data: { msg: 'to leave', isOthers: true },
-          })
-          .afterClosed()
-          .subscribe((res: any) => {
-            if (res) {
+    this.dialog
+      .open(AreYouSureComponent, {
+        data: { msg: 'leave', isOthers: true },
+      })
+      .afterClosed()
+      .subscribe((res: any) => {
+        if (res) {
+          this.client.leave(
+            () => {
               this.onLeaveMeeting.emit();
               this.localStream.stop();
               this.localStream.close();
               console.log('Leave channel successfully');
+            },
+            (err) => {
+              console.log('Leave channel failed');
             }
-          });
-      },
-      (err) => {
-        console.log('Leave channel failed');
-      }
-    );
+          );
+        }
+      });
   }
 
   toggleAudio() {

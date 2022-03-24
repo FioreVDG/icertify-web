@@ -181,7 +181,8 @@ export class NotarizedDocumentReleasingComponent implements OnInit {
               let apiQueries = docIds.map((id: any) => {
                 return this.api.document.update(
                   {
-                    documentLogStatus: 'Document Released to Indigent',
+                    documentLogStatus:
+                      'Document Released to Indigent by Brgy Hall Staff',
                     locationStatus: 'Released to Indigent',
                   },
                   id

@@ -35,6 +35,7 @@ import { skip } from 'rxjs/operators';
   styleUrls: ['./room.component.scss'],
 })
 export class RoomComponent implements OnInit {
+  socketTrigger: any;
   @ViewChild('screen', { static: false }) screen: any;
   screenshot: any;
   // TODO: Create Interface for Schedule
@@ -97,8 +98,6 @@ export class RoomComponent implements OnInit {
   skipDelay = 10;
   skipDisabled = true;
   skipCount = 0;
-  countSkipInterval: any;
-  stopCSInterval = false;
 
   constructor(
     public dialogRef: MatDialogRef<RoomComponent>,
@@ -117,13 +116,14 @@ export class RoomComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.socketEventHandler();
     console.log(this.data);
     this.store.select('user').subscribe((res: any) => {
       this.me = res;
     });
     this.cluster.select('cluster').subscribe((res: Cluster) => {
       this.settings = res;
-      this.socketEventHandler();
+
       this.getExpectedParticipants();
       this.checkDocument();
     });
@@ -179,6 +179,7 @@ export class RoomComponent implements OnInit {
   }
 
   joinMeeting(schedule: any) {
+    this.createSocketRoom();
     console.log(schedule);
     this.currentSchedule = schedule;
     console.log(this.currentSchedule._id);
@@ -205,6 +206,10 @@ export class RoomComponent implements OnInit {
       this.util.stopLoading(loader);
       this.joinRoom = true;
     }, 1500);
+  }
+
+  createSocketRoom() {
+    this.socket.emit('createRoom', this.me);
   }
 
   //Automatically proceed to current queue transaction
@@ -314,7 +319,7 @@ export class RoomComponent implements OnInit {
           this.notarialStatus = 'Early';
         }
       }
-
+      console.log(this.runningDuration);
       // console.log('DURATION: ', this.runningDuration);
       // console.log('EXPECTEDSTART: ', this.expectedStart);
       // console.log('NEXT INDIGENT:', this.nextIndigent);
@@ -336,6 +341,23 @@ export class RoomComponent implements OnInit {
     this.socket.fromEvent('createdMeeting').subscribe((res: any) => {
       console.log(res);
     });
+    this.socketTrigger = this.socket
+      .fromEvent('triggerScreenshot')
+      .subscribe((res: any) => {
+        console.log('TRIGGER SCREENSHOT');
+        this.dialog
+          .open(CounterComponent, {
+            data: { ctr: 3 },
+            panelClass: 'dialog-transparent',
+            disableClose: true,
+          })
+          .afterClosed()
+          .subscribe((res: any) => {
+            if (res) {
+              this.takeScreenshot();
+            }
+          });
+      });
   }
 
   checkRemainingDocuments() {
@@ -527,11 +549,24 @@ export class RoomComponent implements OnInit {
       if (
         this.currentTransaction.sender.images &&
         this.currentTransaction.sender.images[image.fcname]
-      )
+      ) {
         image.url = await this.getTempLink(
           this.currentTransaction.sender.images[image.fcname].path_display
         );
-      else delete image.url;
+      } else {
+        delete image.url;
+      }
+
+      if (
+        image.fcname === 'cert_of_indigency' &&
+        this.currentTransaction.sender.images.reason_coi
+      ) {
+        delete image.url;
+        image.loaded = true;
+        image.reason_coi = this.currentTransaction.sender.images.reason_coi;
+      } else {
+        delete image.reason_coi;
+      }
     });
     if (this.currentTransaction.videoOfSignature.path_display)
       this.currentTransaction.vidURL = await this.getTempLink(
@@ -543,18 +578,7 @@ export class RoomComponent implements OnInit {
   }
 
   initiateCounter() {
-    this.dialog
-      .open(CounterComponent, {
-        data: { ctr: 3 },
-        panelClass: 'dialog-transparent',
-        disableClose: true,
-      })
-      .afterClosed()
-      .subscribe((res: any) => {
-        if (res) {
-          this.takeScreenshot();
-        }
-      });
+    this.socket.emit('takeScreenshot', this.me);
   }
 
   skipDocument() {
@@ -704,7 +728,7 @@ export class RoomComponent implements OnInit {
   }
 
   leaveMeeting(event: any) {
-    console.log(event);
+    this.socketTrigger.unsubscribe();
     console.log(this.me.type);
     const loader = this.util.startLoading('Leaving...');
     console.log(this.currentRoom);
@@ -794,4 +818,7 @@ export class RoomComponent implements OnInit {
       panelClass: 'dialog-transparent',
     });
   }
+  // ngOnDestroy() {
+  //   this.socket.removeAllListeners('triggerScreenshot');
+  // }
 }

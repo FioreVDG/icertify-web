@@ -209,8 +209,22 @@ export class RegistrantFormComponent implements OnInit {
         console.log(res);
         this.saving = false;
         let userData = res.env.data;
+
         if (res) {
           this.util.stopLoading(loader);
+          let smsData = {
+            mobileNumber: `+63${userData.mobileNumber}`,
+            message: `iCertify Account Successfully Registered!\n\nAccount for ${
+              userData.firstName
+            } ${
+              userData.lastName
+            } has been successfully registered on ${new Date(
+              userData.createdAt
+            ).toLocaleString()}.\n\nThe default password for this account is ${
+              res.env.password
+            }`,
+          };
+          this.api.sms.send(smsData).subscribe((res) => {});
           this.dialog
             .open(ActionResultComponent, {
               data: {

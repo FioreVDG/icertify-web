@@ -112,8 +112,7 @@ export class SetScheduleComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res: any) => {
-        console.log(res);
-        this.createSchedule();
+        if (res) this.createSchedule();
       });
   }
 
@@ -167,6 +166,11 @@ export class SetScheduleComponent implements OnInit {
         console.log(apiQueries);
         forkJoin(apiQueries).subscribe(
           (res: any) => {
+            // send sms here
+            this.api.sms
+              .sendVidConfSchedNotif({ documentIds: docIds })
+              .subscribe((res) => {});
+
             console.log(res);
           },
           (err) => {

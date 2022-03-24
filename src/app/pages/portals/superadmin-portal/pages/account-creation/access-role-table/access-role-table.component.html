@@ -13,3 +13,7 @@
   (onUpdateTableEmit)="fetchData($event)"
   [loading]="loading"
 ></app-table>
+
+<div *ngIf="data.backButtonEnable" mat-dialog-actions align="center">
+  <button mat-stroked-button mat-dialog-close color="warn">BACK</button>
+</div>

@@ -52,4 +52,12 @@ export class AuthService {
   registerUser(body: Object) {
     return this.http.post(this.url + '/auth/register', body, this.getHeaders());
   }
+
+  changePassword(body: Object) {
+    return this.http.post(
+      this.url + '/auth/updatePassword',
+      body,
+      this.getHeaders()
+    );
+  }
 }

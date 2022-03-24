@@ -4,7 +4,7 @@ import { SetScheduleComponent } from './set-schedule/set-schedule.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ApiService } from './../../../../../service/api/api.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FILT_BTN } from './config';
+import { FILT_BTN, SCHEDULED_COLUMNS } from './config';
 import { TableComponent } from 'src/app/shared/components/table/table.component';
 import { ViewTransactionComponent } from '../document-receiving/view-transaction/view-transaction.component';
 import { VIEW_TRANSACTION_TABLE } from '../document-receiving/view-transaction/config';
@@ -214,7 +214,13 @@ export class VideoConferencingComponent implements OnInit {
 
   onRowClick(event: any) {
     this.dialog.open(ViewTransactionComponent, {
-      data: { event, column: TRANSAC_TABLE_COLUMN },
+      data: {
+        event,
+        column:
+          this.currentTable === 'For Scheduling'
+            ? TRANSAC_TABLE_COLUMN
+            : SCHEDULED_COLUMNS,
+      },
       height: 'auto',
       width: '85%',
       disableClose: true,

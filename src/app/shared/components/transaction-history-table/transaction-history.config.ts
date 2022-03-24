@@ -436,6 +436,8 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         path: '_barangay.brgyDesc',
         type: 'text',
         selected: true,
+        useAsFilter: true,
+        choices: [],
       },
       {
         title: 'Document Type',
@@ -590,6 +592,8 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         path: '_barangay.brgyDesc',
         type: 'text',
         selected: true,
+        useAsFilter: true,
+        choices: [],
       },
       {
         title: 'Document Type',
@@ -725,6 +729,8 @@ export const NOTARY_FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         path: '_barangay.brgyDesc',
         type: 'text',
         selected: true,
+        useAsFilter: true,
+        choices: [],
       },
       {
         title: 'Document Type',

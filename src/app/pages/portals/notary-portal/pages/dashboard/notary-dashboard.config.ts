@@ -481,7 +481,7 @@ export const DASHBOARD_CONFIG: Array<MODULE_REPORTS> = [
         filterKeys: TRANSACTION_HISTORY_UPLOADED_FILTER_KEYS,
         chartOptions: {
           chartOption: JSON.parse(JSON.stringify(PIE_CHART_OPTIONS)),
-          xAxisTitle: 'Uploaded Notarized Documents',
+          xAxisTitle: 'Notarized Documents',
           chartType: 'pie',
           chartKey: 'transac_uploaded',
           widthStatus: -400,

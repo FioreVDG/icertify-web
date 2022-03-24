@@ -91,6 +91,7 @@
       <ng-container *ngFor="let image of _images; let i = index">
         <div class="img-wrap">
           <button
+            *ngIf="image.url"
             (click)="expandImg(image.url)"
             class="maximize"
             [disabled]="!image.loaded"
@@ -107,7 +108,13 @@
           <small *ngIf="!image.loaded" style="color: #fff; margin-top: 4.5rem">
             Image is loading...
           </small>
-          <img [src]="image.url" alt="" (load)="imageLoaded(i)" />
+          <img
+            *ngIf="!image.reason_coi"
+            [src]="image.url"
+            alt=""
+            (load)="imageLoaded(i)"
+          />
+          <small *ngIf="image.reason_coi">N/A : {{ image.reason_coi }}</small>
           <p class="img-label">{{ image.label }}</p>
         </div></ng-container
       >

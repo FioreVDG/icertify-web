@@ -84,6 +84,12 @@ export const FOLDER_TRANSACTION_TABLE: Column[] = [
 export const FOLDER_TRANSACTION_BOTTOMSHEET: BottomSheetItem[] = [
   { label: 'View Document/s', action: 'viewDoc', icon: 'description' },
   {
+    label: 'View Screenshot/s',
+    action: 'viewSS',
+    icon: 'photo_library',
+    showIf: 'screenShots/>/0',
+  },
+  {
     label: 'View Personal Information/Proof of Identity',
     action: 'viewInfo',
     icon: 'assignment_ind',

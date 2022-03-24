@@ -230,4 +230,15 @@ export class MarkAsNotarizedComponent implements OnInit {
     const blob = new Blob([int8Array], { type: 'image/png' });
     return blob;
   }
+  disabler() {
+    if (this.data.type !== 'Notarized') {
+      if (this.remark === 'Others') {
+        if (this.others === '') return true;
+        else return false;
+      } else {
+        if (this.remark === '') return true;
+        else return false;
+      }
+    } else return false;
+  }
 }
