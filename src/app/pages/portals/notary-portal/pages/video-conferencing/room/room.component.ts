@@ -35,6 +35,7 @@ import { skip } from 'rxjs/operators';
   styleUrls: ['./room.component.scss'],
 })
 export class RoomComponent implements OnInit {
+  socketTrigger: any;
   @ViewChild('screen', { static: false }) screen: any;
   screenshot: any;
   // TODO: Create Interface for Schedule
@@ -115,13 +116,14 @@ export class RoomComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.socketEventHandler();
     console.log(this.data);
     this.store.select('user').subscribe((res: any) => {
       this.me = res;
     });
     this.cluster.select('cluster').subscribe((res: Cluster) => {
       this.settings = res;
-      this.socketEventHandler();
+
       this.getExpectedParticipants();
       this.checkDocument();
     });
@@ -338,21 +340,23 @@ export class RoomComponent implements OnInit {
     this.socket.fromEvent('createdMeeting').subscribe((res: any) => {
       console.log(res);
     });
-    this.socket.fromEvent('triggerScreenshot').subscribe((res: any) => {
-      console.log('TRIGGER SCREENSHOT');
-      this.dialog
-        .open(CounterComponent, {
-          data: { ctr: 3 },
-          panelClass: 'dialog-transparent',
-          disableClose: true,
-        })
-        .afterClosed()
-        .subscribe((res: any) => {
-          if (res) {
-            this.takeScreenshot();
-          }
-        });
-    });
+    this.socketTrigger = this.socket
+      .fromEvent('triggerScreenshot')
+      .subscribe((res: any) => {
+        console.log('TRIGGER SCREENSHOT');
+        this.dialog
+          .open(CounterComponent, {
+            data: { ctr: 3 },
+            panelClass: 'dialog-transparent',
+            disableClose: true,
+          })
+          .afterClosed()
+          .subscribe((res: any) => {
+            if (res) {
+              this.takeScreenshot();
+            }
+          });
+      });
   }
 
   checkRemainingDocuments() {
@@ -723,7 +727,7 @@ export class RoomComponent implements OnInit {
   }
 
   leaveMeeting(event: any) {
-    console.log(event);
+    this.socketTrigger.unsubscribe();
     console.log(this.me.type);
     const loader = this.util.startLoading('Leaving...');
     console.log(this.currentRoom);
