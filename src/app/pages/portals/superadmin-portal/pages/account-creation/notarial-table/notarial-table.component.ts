@@ -31,7 +31,7 @@ export class NotarialTableComponent implements OnInit {
 
   openDialog() {
     this.dialog
-      .open(UpsertNotarialCommissionComponent)
+      .open(UpsertNotarialCommissionComponent, { disableClose: true })
       .afterClosed()
       .subscribe(
         (res: any) => {
