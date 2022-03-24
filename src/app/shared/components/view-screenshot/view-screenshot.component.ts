@@ -1,5 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
+import { User } from 'src/app/models/user.interface';
 import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
 import { PdfService } from 'src/app/service/pdf/pdf.service';
 import { UtilService } from 'src/app/service/util/util.service';
@@ -12,16 +14,23 @@ import { UtilService } from 'src/app/service/util/util.service';
 export class ViewScreenshotComponent implements OnInit {
   loading = false;
   screenShots: Array<any> = [];
+  me: any;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<ViewScreenshotComponent>,
     private dbx: DropboxService,
     private util: UtilService,
-    private pdf: PdfService
+    private pdf: PdfService,
+    private store: Store<{ user: User }>
   ) {}
 
   ngOnInit(): void {
     console.log(this.data);
+    this.store.select('user').subscribe((res: User) => {
+      this.me = res;
+      console.log(res);
+      // this.fetchData(this.page);
+    });
     this.fetchSSImages(this.data.document.screenShots);
   }
 

@@ -108,7 +108,7 @@ export class ViewTransactionComponent implements OnInit {
           event.obj._transactionId.videoOfSignature.path_display
         );
         break;
-      case 'viewScreenshot':
+      case 'viewSS':
         this.viewScreenshot(event);
         break;
       default:
