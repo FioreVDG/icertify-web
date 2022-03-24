@@ -111,8 +111,7 @@ export class SetScheduleComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((res: any) => {
-        console.log(res);
-        this.createSchedule();
+        if (res) this.createSchedule();
       });
   }
 
