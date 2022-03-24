@@ -86,12 +86,12 @@ export const VIDEO_CONF_BARANGAY_TABLE: Array<FILTER_BUTTON_COLUMN> = [
       //   selected: true,
       // },
     ],
-    bottomSheet: [
-      {
-        label: 'Join Video Conference',
-        action: 'join',
-      },
-    ],
+    // bottomSheet: [
+    //   {
+    //     label: 'Join Video Conference',
+    //     action: 'join',
+    //   },
+    // ],
   },
   {
     label: 'Finished',

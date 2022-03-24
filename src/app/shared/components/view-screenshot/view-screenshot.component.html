@@ -19,7 +19,7 @@
     </div>
   </div>
 </div>
-<div mat-dialog-actions align="center">
+<div *ngIf="me.type === 'Notary'" mat-dialog-actions align="center">
   <button
     mat-flat-button
     color="primary"

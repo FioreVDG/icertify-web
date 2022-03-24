@@ -96,6 +96,9 @@ export class MarkAsEnrouteComponent implements OnInit {
       locationStatus: 'Enroute to Barangay',
     };
     console.log(toAdd);
+    let smsQueries = this.data.selected.map((el: any) => {
+      return this.api.sms.sendReleasingNotif({}, el._id);
+    });
     let enrouteQueries = this.data.selected.map((el: any) => {
       return this.api.folder.enroute(toAdd, el._id);
     });
@@ -103,6 +106,7 @@ export class MarkAsEnrouteComponent implements OnInit {
     for (let item of this.obj) {
       item._transactions.forEach((el: any) => {
         docIds.push(el._documents[0]._id);
+
         docLogs.push({
           docDetails: el._documents[0],
           message: 'Marked as Enroute to Brgy Hall by Notarial Staff',
@@ -147,6 +151,7 @@ export class MarkAsEnrouteComponent implements OnInit {
                   console.log(err);
                 }
               );
+
               this.api.documentlogs.createDocumentLogsMany(docLogs).subscribe(
                 (resp: any) => {
                   console.log(resp);
@@ -155,6 +160,9 @@ export class MarkAsEnrouteComponent implements OnInit {
                   console.log(err);
                 }
               );
+
+              forkJoin(smsQueries).subscribe((res) => {});
+
               this.util.stopLoading(loader);
               this.dialog
                 .open(ActionResultComponent, {

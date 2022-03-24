@@ -126,7 +126,9 @@ export class MarkAsEnrouteComponent implements OnInit {
 
                 //sms
                 this.api.sms
-                  .sendEnrouteNotif({ documentIds: docIds })
+                  .sendEnrouteNotif({
+                    documentIds: docIds,
+                  })
                   .subscribe((res) => {});
                 //doclogs
                 this.api.documentlogs.createDocumentLogsMany(docLogs).subscribe(
