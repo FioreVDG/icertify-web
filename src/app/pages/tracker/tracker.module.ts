@@ -1,3 +1,4 @@
+import { ComponentModule } from 'src/app/shared/components/component.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/shared/material/material.module';
 import { NgModule } from '@angular/core';
@@ -14,6 +15,7 @@ import { TrackerComponent } from './tracker.component';
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
+    ComponentModule,
   ],
 })
 export class TrackerModule {}

@@ -83,6 +83,7 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
     RtVideoComponent,
     DocumentTrackerTableComponent,
     TransactionHistoryTableComponent,
+    DocumentLogsViewerComponent,
   ],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

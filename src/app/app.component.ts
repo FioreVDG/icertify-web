@@ -9,7 +9,5 @@ import { Socket } from 'ngx-socket-io';
 export class AppComponent {
   title = 'icertify-web';
   constructor(private socket: Socket) {}
-  ngOnInit() {
-    // this.socket.connect();
-  }
+  ngOnInit() {}
 }

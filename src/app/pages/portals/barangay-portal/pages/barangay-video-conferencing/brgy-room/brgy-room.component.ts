@@ -23,6 +23,7 @@ import { CounterComponent } from 'src/app/shared/dialogs/counter/counter.compone
 export class BrgyRoomComponent implements OnInit {
   joinRoom: boolean = false;
   locked: boolean = false;
+  socketTrigger: any;
   public videoOptions: MediaTrackConstraints = {
     width: { ideal: 2048 },
     height: { ideal: 876 },
@@ -198,6 +199,7 @@ export class BrgyRoomComponent implements OnInit {
 
   leaveMeeting(event: any) {
     // console.log(event);
+    this.socketTrigger.unsubscribe();
     const loader = this.util.startLoading('Leaving...');
     setTimeout(() => {
       this.util.stopLoading(loader);
@@ -219,20 +221,22 @@ export class BrgyRoomComponent implements OnInit {
     this.socket.fromEvent('createdMeeting').subscribe((res: any) => {
       console.log(res);
     });
-    this.socket.fromEvent('triggerScreenshot').subscribe((res: any) => {
-      console.log('TRIGGER SCREENSHOT');
-      this.dialog
-        .open(CounterComponent, {
-          data: { ctr: 3 },
-          panelClass: 'dialog-transparent',
-          disableClose: true,
-        })
-        .afterClosed()
-        .subscribe((res: any) => {
-          if (res) {
-            this.takeScreenshot();
-          }
-        });
-    });
+    this.socketTrigger = this.socket
+      .fromEvent('triggerScreenshot')
+      .subscribe((res: any) => {
+        console.log('TRIGGER SCREENSHOT');
+        this.dialog
+          .open(CounterComponent, {
+            data: { ctr: 3 },
+            panelClass: 'dialog-transparent',
+            disableClose: true,
+          })
+          .afterClosed()
+          .subscribe((res: any) => {
+            if (res) {
+              this.takeScreenshot();
+            }
+          });
+      });
   }
 }

@@ -408,26 +408,26 @@ export class RtVideoComponent implements OnInit {
   }
 
   leave() {
-    this.client.leave(
-      () => {
-        this.dialog
-          .open(AreYouSureComponent, {
-            data: { msg: 'leave', isOthers: true },
-          })
-          .afterClosed()
-          .subscribe((res: any) => {
-            if (res) {
+    this.dialog
+      .open(AreYouSureComponent, {
+        data: { msg: 'leave', isOthers: true },
+      })
+      .afterClosed()
+      .subscribe((res: any) => {
+        if (res) {
+          this.client.leave(
+            () => {
               this.onLeaveMeeting.emit();
               this.localStream.stop();
               this.localStream.close();
               console.log('Leave channel successfully');
+            },
+            (err) => {
+              console.log('Leave channel failed');
             }
-          });
-      },
-      (err) => {
-        console.log('Leave channel failed');
-      }
-    );
+          );
+        }
+      });
   }
 
   toggleAudio() {
