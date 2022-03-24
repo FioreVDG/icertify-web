@@ -307,7 +307,7 @@ export class AddTransactionComponent implements OnInit {
   }
 
   messageFormat(document: any) {
-    return `Good day ${
+    return `iCertify Successful Transaction\n\nGood day ${
       document.sender.firstName
     },\nThe document you submmitted has been succesfully received on ${new Date(
       document.createdAt
