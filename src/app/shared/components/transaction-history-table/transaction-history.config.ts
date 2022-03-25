@@ -143,6 +143,13 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
           },
         ],
       },
+      {
+        title: 'Remark',
+        breakpoint: 'sm',
+        path: 'remark',
+        type: 'text',
+        selected: true,
+      },
     ],
   },
   {
