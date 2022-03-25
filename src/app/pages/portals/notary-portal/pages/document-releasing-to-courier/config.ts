@@ -126,7 +126,7 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
           selected: true,
         },
         {
-          title: 'Marked as Enroute by',
+          title: 'Marked as Enrouted by',
           breakpoint: 'sm',
           path: '_enroutedByNotary',
           paths: ['_enroutedByNotary.lastName', '_enroutedByNotary.firstName'],
@@ -134,7 +134,7 @@ export const NOTARY_DOC_RELEASING_TO_COURIER_CONFIG: Array<FILTER_BUTTON_COLUMN>
           selected: true,
         },
         {
-          title: 'Pick up by',
+          title: 'Picked up by',
           breakpoint: 'sm',
           path: '_riderFromNotary',
           paths: ['_riderFromNotary.lastName', '_riderFromNotary.firstName'],
