@@ -134,7 +134,7 @@ export const FILT_BTN_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
       {
-        title: 'Pick up by',
+        title: 'Picked up by',
         breakpoint: 'sm',
         path: '_riderFromBarangay',
         paths: ['_riderFromBarangay.firstName', '_riderFromBarangay.lastName'],
