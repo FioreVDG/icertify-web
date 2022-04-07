@@ -45,7 +45,7 @@ export const NOTARY_DOC_RECEIVING_FILT_CONFIG: Array<FILTER_BUTTON_COLUMN> = [
         selected: true,
       },
       {
-        title: 'Pick up By',
+        title: 'Picked up By',
         breakpoint: 'sm',
         path: '_riderFromBarangay',
         paths: ['_riderFromBarangay.lastName', '_riderFromBarangay.firstName'],

@@ -77,6 +77,13 @@ export const VIDEO_CONF_BARANGAY_TABLE: Array<FILTER_BUTTON_COLUMN> = [
         type: 'special',
         selected: true,
       },
+      {
+        title: 'Schedule',
+        breakpoint: 'sm',
+        path: 'schedule',
+        type: 'date',
+        selected: true,
+      },
       // PAGAWA :)
       // {
       //   title: 'Schedule',
@@ -198,6 +205,13 @@ export const VIDEO_CONF_BARANGAY_TABLE: Array<FILTER_BUTTON_COLUMN> = [
         breakpoint: 'sm',
         path: 'queue',
         type: 'text',
+        selected: false,
+      },
+      {
+        title: 'Schedule',
+        breakpoint: 'sm',
+        path: 'schedule',
+        type: 'date',
         selected: false,
       },
     ],
