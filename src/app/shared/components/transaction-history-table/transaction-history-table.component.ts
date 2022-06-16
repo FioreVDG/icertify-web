@@ -419,6 +419,7 @@ export class TransactionHistoryTableComponent implements OnInit {
   }
 
   onDownloadExcelBtn(event: any) {
+    ///////////
     this.disableDownloadBtns = true;
     console.log(event);
     var sb = this.snackbar.open('Exporting File. Please wait...', '', {
