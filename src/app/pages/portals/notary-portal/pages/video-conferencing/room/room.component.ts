@@ -131,6 +131,7 @@ export class RoomComponent implements OnInit {
     this.remainingDocsChecker = setInterval(() => {
       this.checkRemainingDocuments();
     }, 1000);
+    console.log(this.me);
   }
 
   getExpectedParticipants() {

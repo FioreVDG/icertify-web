@@ -30,6 +30,7 @@ export class SetScheduleComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.data);
+    let transTemp: any = [];
     this.data.settings.barangays.forEach((doc: any) => {
       console.log(doc);
       let que: number = 1;
@@ -127,6 +128,7 @@ export class SetScheduleComponent implements OnInit {
       console.log(el);
       idsTemp.push(el._id);
       el._transactions.forEach((trans: any) => {
+        tempDocs.push(trans._documents[0]);
         console.log(trans);
         tempDocs.push(trans._documents[0]);
         docIds.push(trans._documents[0]._id);
@@ -140,6 +142,7 @@ export class SetScheduleComponent implements OnInit {
     console.log(docLogs);
     console.log(idsTemp);
     console.log(docIds);
+    console.log(tempDocs);
     tempDocIds = [...docIds];
     toSaveData.schedule = new Date(this.schedule);
     toSaveData._folderIds = idsTemp;
@@ -160,6 +163,7 @@ export class SetScheduleComponent implements OnInit {
             id._id
           );
         });
+        console.log(apiQueries);
         forkJoin(apiQueries).subscribe(
           (res: any) => {
             // send sms here
