@@ -112,10 +112,16 @@ export class ImageFormComponent implements OnInit {
       .afterClosed()
       .subscribe((res: any) => {
         if (res) {
+          console.log(res.result.name);
+          let fileNameArray = res.result.name.split('.');
+          let fileType = fileNameArray[fileNameArray.length - 1];
+          console.log(fileType);
+
           this.imgArray.forEach(async (img: any) => {
             if (fcname === img.fcname) {
               img.imgLink = await this.getTempLink(res.result.path_display);
               img.hasError = false;
+              img.fileType = fileType;
             }
           });
 
@@ -172,6 +178,7 @@ export class ImageFormComponent implements OnInit {
 
   imageLoaded(index: number) {
     this.imgArray[index].loaded = true;
+    console.log('loaded');
   }
 
   async getTempLink(data: any) {

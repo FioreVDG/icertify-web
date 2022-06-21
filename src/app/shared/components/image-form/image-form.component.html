@@ -80,11 +80,18 @@
           ></mat-spinner>
           <p *ngIf="image?.imgLink === ''">No Image Uploaded</p>
           <img
-            *ngIf="image?.imgLink !== ''"
+            *ngIf="image?.imgLink !== '' && image?.fileType !== 'pdf'"
             [src]="image?.imgLink"
             (load)="imageLoaded(i)"
             alt=""
           />
+          <ngx-doc-viewer
+            *ngIf="image?.imgLink !== '' && image?.fileType === 'pdf'"
+            style="min-width: 100%; min-height: 100%"
+            [url]="image?.imgLink"
+            (loaded)="imageLoaded(i)"
+            viewer="google"
+          ></ngx-doc-viewer>
           <button
             *ngIf="!image.disable"
             mat-fab
