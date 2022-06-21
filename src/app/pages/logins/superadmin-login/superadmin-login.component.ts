@@ -101,6 +101,7 @@ export class SuperadminLoginComponent implements OnInit {
             .afterClosed()
             .subscribe((res: any) => {
               this.credential.reset();
+              this.isLoggingIn = false;
             });
         }
       );

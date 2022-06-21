@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Dropbox } from 'dropbox';
 import { Observable } from 'rxjs';
 declare var require: any;
 
@@ -9,13 +10,20 @@ export class DropboxService {
   accessToken =
     'grG-786_nYcAAAAAAAAAASZmkKtn8u4U73zIEwMUfUMsl4vqhoEXmrSL68uswJ4I';
   dbx: any;
+  refreshToken =
+    'zbUskAqVKgYAAAAAAAAAAbEWrZY6_rhTHRum-6N8S7_5MkRz_WALjaXMw8N-oNVb';
+  accessTokenShortLived =
+    'sl.BHYVyH1BwV_6o4A83cnGc1mCFP6fhzZopMtsp14ny2ls-Cd8uDSlTTeId-RrTsGh6eYd3HtH7fFP3lXfzBiPR4GhYxKyO5uIFSAr_sVMr1-c9sV5j39BnCKdfrlvTBPyasGZuU6V';
 
   constructor() {
     let fetch = require('isomorphic-fetch');
     let Dropbox = require('dropbox').Dropbox;
     this.dbx = new Dropbox({
       fetch: fetch,
-      accessToken: this.accessToken,
+      accessToken: this.accessTokenShortLived,
+      refreshToken: this.refreshToken,
+      clientId: 'ludyjrwz63bgmoh',
+      clientSecret: 'q0ijdr9z26qnm9x',
     });
   }
 

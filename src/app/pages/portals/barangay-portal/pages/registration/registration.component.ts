@@ -7,6 +7,9 @@ import { UserService } from 'src/app/service/api/user/user.service';
 import { UtilService } from 'src/app/service/util/util.service';
 import { OtpComponent } from 'src/app/shared/components/otp/otp.component';
 import { ActionResultComponent } from 'src/app/shared/dialogs/action-result/action-result.component';
+import { ApiService } from 'src/app/service/api/api.service';
+import { Dropbox } from 'dropbox';
+import { DropboxService } from 'src/app/service/dropbox/dropbox.service';
 
 @Component({
   selector: 'app-registration',
@@ -21,10 +24,13 @@ export class RegistrationComponent implements OnInit {
   constructor(
     private util: UtilService,
     private user: UserService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private dbx: DropboxService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // this.dbx.getAccess().subscribe((res) => console.log(res));
+  }
   numberInputOnly(event: any) {
     return this.util.formNumberInputOnly(event);
   }
