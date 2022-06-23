@@ -56,7 +56,13 @@ export class ImageFormComponent implements OnInit {
     this.images.forEach((img) => {
       img.fields.forEach(async (field: any) => {
         let validators = field.validator || [];
+        let fileType = '';
         if (field.required) validators.push(Validators.required);
+
+        if (this.obj && this.obj[field.fcname]) {
+          let fileArrayName = this.obj[field.fcname]['name'].split('.');
+          fileType = fileArrayName[fileArrayName.length - 1];
+        }
 
         temp[field.fcname] = new FormControl(
           this.obj && this.obj[field.fcname] ? this.obj[field.fcname] : '',
@@ -74,6 +80,7 @@ export class ImageFormComponent implements OnInit {
             label: field.label,
             required: field.required,
             imgLink: tempImg ? tempImg : '',
+            fileType,
             show: true,
             disable: this.disable,
           });
@@ -84,6 +91,7 @@ export class ImageFormComponent implements OnInit {
             label: field.label,
             required: field.required,
             imgLink: tempImg ? tempImg : '',
+            fileType,
             show: field.show,
             disable: this.disable,
           });
